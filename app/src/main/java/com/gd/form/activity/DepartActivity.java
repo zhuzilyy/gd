@@ -5,8 +5,6 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 
 public class DepartActivity extends BaseActivity {
-    //测试push
-
     @Override
     protected void setStatusBar() {
 
