@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    android:orientation="vertical"
+    tools:context=".activity.HandOverActivity">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="押运交接"
+        android:background="@drawable/background_gradient_title"
+        android:paddingLeft="@dimen/d_20"
+        android:textSize="@dimen/d_20"
+        android:textColor="@color/write"
+        android:gravity="center_vertical"/>
+
+
+    <LinearLayout
+        android:layout_below="@id/tv_title"
+        android:id="@+id/ll_status"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="13">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_ll1_circular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:background="@drawable/circular_red"
+                    android:textSize="@dimen/d_18"
+                    android:text="1"/>
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/d_18"
+                    android:text="车辆信息"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_ll2_arrow"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textColor="@color/write"
+                android:text="----------------->"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_ll2_circular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:background="@drawable/circular_gray"
+                    android:textSize="@dimen/d_18"
+                    android:text="2"/>
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/d_18"
+                    android:text="人员认证"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textColor="@color/write"
+                android:text="----------------->"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:background="@drawable/circular_gray"
+                    android:textSize="@dimen/d_18"
+                    android:text="3"/>
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/d_18"
+                    android:text="物品认证"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textColor="@color/write"
+                android:text="----------------->"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:background="@drawable/circular_gray"
+                    android:textSize="@dimen/d_18"
+                    android:text="4"/>
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/d_18"
+                    android:text="网点认证"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textColor="@color/write"
+                android:text="----------------->"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:background="@drawable/circular_gray"
+                    android:textSize="@dimen/d_18"
+                    android:text="5"/>
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/d_18"
+                    android:text="完成"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_below="@id/ll_status"
+        android:id="@+id/ll1"
+        android:layout_marginLeft="@dimen/d_20"
+        android:layout_marginRight="@dimen/d_20"
+        android:layout_marginBottom="@dimen/d_70"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/write">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/s_30"
+            android:textColor="@color/colorText"
+            android:padding="@dimen/d_10"
+            android:text="等待扫描车辆..."/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/d_10"
+
+          >
+
+            <Button
+                android:id="@+id/bt_ll1_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+
+                android:text="通过" />
+            <Button
+                android:id="@+id/bt_ll1_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+
+                android:layout_marginBottom="10dp"
+
+                android:text="不通过" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_below="@id/ll_status"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/d_20"
+        android:layout_marginRight="@dimen/d_20"
+        android:layout_marginBottom="@dimen/d_70"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/write">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/s_30"
+            android:textColor="@color/colorText"
+            android:padding="@dimen/d_10"
+            android:text="等待人员认证..."/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/d_10"
+
+            >
+
+            <Button
+                android:id="@+id/bt_ll2_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+
+                android:text="通过" />
+            <Button
+                android:id="@+id/bt_ll2_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+
+                android:layout_marginBottom="10dp"
+
+                android:text="不通过" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_cancle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/button_ship"
+        android:textColor="@color/write"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/d_20"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:text="取消" />
+</RelativeLayout>

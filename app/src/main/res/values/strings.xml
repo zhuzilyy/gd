@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">gd</string>
+    <string name="app_name1">管道记录系统</string>
+    <string name="loading">请稍后......</string>
+    <string name="timeout">请求超时</string>
+    <string name="connect">无法连接服务器</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tab_menu_alert">提醒</string>
+    <string name="tab_menu_profile">信息</string>
+    <string name="tab_menu_pay">我的</string>
+    <string name="tab_menu_setting">设置</string>
+
+
+    <string name="tab_menu_work">工作管理</string>
+    <string name="tab_menu_message">消息</string>
+    <string name="tab_menu_other">其他</string>
+</resources>

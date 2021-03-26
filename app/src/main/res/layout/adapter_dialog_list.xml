@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/dialogListButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_45"
+        android:background="#FFFAFAFA"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#FF000000"
+        android:textSize="@dimen/s_16" />
+</LinearLayout>

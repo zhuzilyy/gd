@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_50"
+    android:gravity="center_vertical"
+    android:layout_marginRight="@dimen/d_16"
+    android:layout_marginEnd="@dimen/d_16"
+    >
+
+
+    <CheckBox
+        android:id="@+id/textChildCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_30"
+        android:button="@null"
+        android:background="@drawable/dialog_bottom_text_bg"
+        android:textColor="@color/main_radiobutton_text_color"
+        android:paddingTop="@dimen/d_5"
+        android:paddingBottom="@dimen/d_5"
+        android:gravity="center"
+        />
+
+
+</LinearLayout>

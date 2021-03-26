@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_marginLeft="@dimen/d_20"
+        android:layout_marginTop="@dimen/d_20"
+        android:text="电子化管道记录表单系统"
+        android:textColor="@color/write"
+        android:textSize="@dimen/s_24" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/write"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/d_5">
+
+            <TextView
+                android:layout_width="@dimen/d_15"
+                android:layout_height="@dimen/d_30"
+                android:background="#1A254B" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/d_20"
+                android:text="用户管理"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/s_20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:id="@+id/ll_useradd"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/user_add" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="用户新增"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/user_del" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="用户删除"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/user_update" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="用户修改"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:id="@+id/ll_depart"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/depart_update" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="部门维护"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_jobs"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/jobs_updata" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="岗位维护"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="@dimen/d_15"
+                android:layout_height="@dimen/d_30"
+                android:background="#3C9A04" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/d_20"
+                android:text="权限管理"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/s_20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/permissions" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="表单权限维护"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/cycle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="表单周期维护"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="@dimen/d_15"
+                android:layout_height="@dimen/d_30"
+                android:background="#CE8510" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/d_20"
+                android:text="管道记录表单管理"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/s_20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:id="@+id/ll_gd_check"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/gd_check" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="管道检查单"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_sgbh"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/gd_check" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="水工保护"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_sdwb"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/gd_check" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="隧道外部检查表"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

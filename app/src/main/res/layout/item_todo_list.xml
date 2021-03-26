@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="2">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="5dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorText"
+                android:text="任务类型:"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorText"
+                android:paddingLeft="30dp"
+                android:paddingBottom="5dp"
+                android:text="车牌号:"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorText"
+                android:paddingLeft="30dp"
+                android:paddingBottom="20dp"
+                android:text="身份证:"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/bt_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:text="查看" />
+            <Button
+                android:id="@+id/bt_do"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:text="办理" />
+            <Button
+                android:id="@+id/bt_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/button_ship"
+                android:textColor="@color/write"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+
+                android:text="人工处理" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_3"
+        android:background="#FFF3F3F3"/>
+</LinearLayout>
