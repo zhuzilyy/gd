@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.gd.form.activity.MainActivity;
 import com.gd.form.fragment.MessageFragment;
-import com.gd.form.fragment.OtherFragment;
+import com.gd.form.fragment.UserFragment;
 import com.gd.form.fragment.WorkFragment;
 
 /**
@@ -20,14 +20,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 3;
     private WorkFragment workFragment = null;
     private MessageFragment messageFragment = null;
-    private OtherFragment otherFragment = null;
+    private UserFragment userFragment = null;
 
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        workFragment = new WorkFragment();
         messageFragment = new MessageFragment();
-        otherFragment = new OtherFragment();
+        workFragment = new WorkFragment();
+        userFragment = new UserFragment();
     }
 
 
@@ -52,13 +52,13 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case MainActivity.PAGE_ONE:
-                fragment = workFragment;
-                break;
-            case MainActivity.PAGE_TWO:
                 fragment = messageFragment;
                 break;
+            case MainActivity.PAGE_TWO:
+                fragment = workFragment;
+                break;
             case MainActivity.PAGE_THREE:
-                fragment = otherFragment;
+                fragment = userFragment;
                 break;
         }
         return fragment;

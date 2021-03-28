@@ -14,7 +14,7 @@
     <string name="tab_menu_setting">设置</string>
 
 
-    <string name="tab_menu_work">工作管理</string>
     <string name="tab_menu_message">消息</string>
-    <string name="tab_menu_other">其他</string>
+    <string name="tab_menu_work">工作管理</string>
+    <string name="tab_menu_user">用户管理</string>
 </resources>

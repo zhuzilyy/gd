@@ -13,11 +13,6 @@
         android:background="@color/write"
         android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/rb_work"
-            style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_work"
-            android:text="@string/tab_menu_work" />
 
         <RadioButton
             android:id="@+id/rb_message"
@@ -27,10 +22,17 @@
 
 
         <RadioButton
-            android:id="@+id/rb_other"
+            android:id="@+id/rb_work"
             style="@style/tab_menu_item"
-            android:drawableTop="@drawable/tab_menu_other"
-            android:text="@string/tab_menu_other" />
+            android:drawableTop="@drawable/tab_menu_work"
+            android:text="@string/tab_menu_work" />
+
+
+        <RadioButton
+            android:id="@+id/rb_user"
+            style="@style/tab_menu_item"
+            android:drawableTop="@drawable/tab_menu_user"
+            android:text="@string/tab_menu_user" />
 
     </RadioGroup>
 

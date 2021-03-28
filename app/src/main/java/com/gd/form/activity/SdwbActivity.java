@@ -105,9 +105,13 @@ public class SdwbActivity extends BaseActivity {
             R.id.iv_gddz,
             R.id.iv_scfj,
             R.id.iv_tbrq,
+            R.id.iv_back,
     })
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.iv_location:
                 Bundle bundle=new Bundle();
                 openActivity(MapActivity.class, bundle, false);

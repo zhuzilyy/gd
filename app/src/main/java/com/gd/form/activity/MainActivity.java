@@ -28,8 +28,8 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
     RadioButton rb_work;
     @BindView(R.id.rb_message)
     RadioButton rb_message;
-    @BindView(R.id.rb_other)
-    RadioButton rb_other;
+    @BindView(R.id.rb_user)
+    RadioButton rb_user;
     @BindView(R.id.vpager)
     ViewPager vpager;
 
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
         rb_work.setChecked(true);
 
         vpager.setAdapter(mAdapter);
-        vpager.setCurrentItem(0);
+        vpager.setCurrentItem(PAGE_TWO);
         vpager.addOnPageChangeListener(this);
     }
 
@@ -81,13 +81,13 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
         if (state == 2) {
             switch (vpager.getCurrentItem()) {
                 case PAGE_ONE:
-                    rb_work.setChecked(true);
-                    break;
-                case PAGE_TWO:
                     rb_message.setChecked(true);
                     break;
+                case PAGE_TWO:
+                    rb_work.setChecked(true);
+                    break;
                 case PAGE_THREE:
-                    rb_other.setChecked(true);
+                    rb_user.setChecked(true);
                     break;
 
             }
@@ -98,17 +98,17 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
     @OnClick({
             R.id.rb_work,
             R.id.rb_message,
-            R.id.rb_other,
+            R.id.rb_user,
     })
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.rb_work:
-                vpager.setCurrentItem(PAGE_ONE);
-                break;
-            case R.id.rb_message:
                 vpager.setCurrentItem(PAGE_TWO);
                 break;
-            case R.id.rb_other:
+            case R.id.rb_message:
+                vpager.setCurrentItem(PAGE_ONE);
+                break;
+            case R.id.rb_user:
                 vpager.setCurrentItem(PAGE_THREE);
                 break;
         }

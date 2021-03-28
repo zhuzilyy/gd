@@ -1,7 +1,9 @@
 package com.gd.form.net;
 
+import com.gd.form.model.Department;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.model.ResultMsg;
 import com.google.gson.JsonObject;
@@ -68,8 +70,45 @@ public interface Api {
      * 根据管道线路id获取该管道桩信息接口
      * @return
      */
-    @GET("pipestakeinfoget.html")
+    @POST("pipestakeinfoget.html")
     Call<List<Pipestakeinfo>> pipestakeinfoget(@Body JsonObject jsonObject);
+
+
+    /**
+     *获取所有用户信息
+     * @return
+     */
+    @GET("pipemploysGetList.html")
+    Call<List<Pipemploys>> pipemploysGetList();
+
+    /**
+     *获取所有部门名称
+     * @return
+     */
+    @GET("pipedepartmentinfoGetList.html")
+    Call<List<Department>> pipedepartmentinfoGetList();
+
+    /**
+     *新增和修改用户
+     * @return
+     */
+    @POST("pipemploysAdd.html")
+    Call<ResultMsg> pipemploysAdd(@Body JsonObject jsonObject);
+
+    /**
+     *	删除用户
+     * @return
+     */
+    @POST("pipemploysDelete.html")
+    Call<ResultMsg> pipemploysDelete(@Body JsonObject jsonObject);
+
+
+    /**
+     *根据用户id获取用户信息：
+     * @return
+     */
+    @POST("pipemploysGetListByPrimaryKey.html")
+    Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Body JsonObject jsonObject);
 }
 
 

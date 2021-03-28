@@ -126,18 +126,12 @@ public class SgbhActivity extends BaseActivity {
                         Log.i("--------",list1.size()+"");
                         listPipelineinfo=list1;
                         pipLines=new String[list1.size()];
+                        pipeStakes=new String[list1.size()][];
                         for (int j=0;j<list1.size();j++){
                             pipLines[j]=list1.get(j).getName();
                             Log.i("--------pipLines",pipLines[j]+"");
+                            getPipestakeinfoRequest(list1.get(j).getId(),j);
                         }
-
-                        pipeStakes=new String[list1.size()][];
-                        pipeStakes[0]=new String[list1.size()];
-                        for (int j=0;j<list1.size();j++){
-                            pipeStakes[0][j]=list1.get(j).getName();
-                            Log.i("--------pipeStakes",pipeStakes[0][j]+"");
-                        }
-
 
 
                         Log.i("--------pipLines",pipLines.toString()+"");
@@ -145,21 +139,21 @@ public class SgbhActivity extends BaseActivity {
                 });
     }
 
-    private void getPipestakeinfoRequest(int i) {
+    private void getPipestakeinfoRequest(int id,int i) {
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", 1);
-        jsonObject.addProperty("name","陕京一线");
-        jsonObject.addProperty("desc","陕京一线");
+        jsonObject.addProperty("id", id);
         Net.create(Api.class).pipestakeinfoget(jsonObject)
-                .enqueue(new NetCallback<List<Pipestakeinfo>>(this,false) {
+                .enqueue(new NetCallback<List<Pipestakeinfo>>(this,true) {
                     @Override
                     public void onResponse(List<Pipestakeinfo> list2) {
                         Log.i("--------1",list2.size()+"");
-                        Log.i("--------2",list2.toString()+"");
+                        Log.i("--------1id",id+"");
 
+                        pipeStakes[i]=new String[list2.size()];
                         for (int j=0;j<list2.size();j++){
                             pipeStakes[i][j]=list2.get(j).getName();
+                            Log.i("--------pipeStakes",pipeStakes[i][j]+"");
                         }
                     }
                 });
@@ -185,9 +179,13 @@ public class SgbhActivity extends BaseActivity {
             R.id.iv_zh,
             R.id.iv_scfj,
             R.id.iv_tbrq,
+            R.id.iv_back,
     })
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.iv_location:
                 Bundle bundle=new Bundle();
                 openActivity(MapActivity.class, bundle, false);
@@ -230,7 +228,8 @@ public class SgbhActivity extends BaseActivity {
                 LinearLayout root = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.activity_expand, null);
                // TextView tv_tips = root.findViewById(R.id.tv_tips);
                 final ExpandableListView listView = (ExpandableListView) root.findViewById(R.id.expandable_list);
-                final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(Constant.BOOKS, Constant.FIGURES);
+            //    final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(Constant.BOOKS, Constant.FIGURES);
+                final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(pipLines, pipeStakes);
                 listView.setAdapter(adapter);
 
                 // 清除默认的 Indicator
@@ -257,7 +256,7 @@ public class SgbhActivity extends BaseActivity {
                 listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                        Toast.makeText(SgbhActivity.this, Constant.FIGURES[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });

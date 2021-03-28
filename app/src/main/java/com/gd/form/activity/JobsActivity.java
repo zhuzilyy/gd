@@ -52,13 +52,6 @@ public class JobsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        for (int i=1;i<=10;i++){
-//            JobsMy jobs=new JobsMy();
-//            jobs.setCode("XXXXXXXX"+i);
-//            jobs.setName("岗位"+i+"("+jobs.getCode()+")");
-//            list.add(jobs);
-//        }
-
 
         rv_jobs.setLayoutManager(new LinearLayoutManager(this));
         adapter = new JobsListAdapter(this, list, R.layout.item_jobs);
