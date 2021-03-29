@@ -433,6 +433,8 @@ public class MapActivity extends BaseActivity implements AMapLocationListener, L
     @OnClick({
             R.id.ll_rlt,
             R.id.ll_yqt,
+            R.id.tv_confirm,
+            R.id.iv_back,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -442,6 +444,12 @@ public class MapActivity extends BaseActivity implements AMapLocationListener, L
             case R.id.ll_yqt:
                 aMap.setMapType(AMap.MAP_TYPE_NORMAL);
                myLocationStyle.showMyLocation(true);
+                break;
+            case R.id.tv_confirm:
+                finish();
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
         }
     }

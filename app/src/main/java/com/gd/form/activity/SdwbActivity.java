@@ -99,12 +99,12 @@ public class SdwbActivity extends BaseActivity {
     }
 
     @OnClick({
-            R.id.iv_location,
-            R.id.iv_sdmc,
-            R.id.iv_sdwz,
-            R.id.iv_gddz,
-            R.id.iv_scfj,
-            R.id.iv_tbrq,
+            R.id.ll_location,
+            R.id.ll_sdmc,
+            R.id.ll_sdwz,
+            R.id.ll_gddz,
+            R.id.ll_scfj,
+            R.id.ll_tbrq,
             R.id.iv_back,
     })
     public void onClick(View view) {
@@ -112,11 +112,11 @@ public class SdwbActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_location:
+            case R.id.ll_location:
                 Bundle bundle=new Bundle();
                 openActivity(MapActivity.class, bundle, false);
                 break;
-            case R.id.iv_sdmc:
+            case R.id.ll_sdmc:
                 List<String> listM = new ArrayList<>();
 
                 listM.add("隧道1");
@@ -134,7 +134,7 @@ public class SdwbActivity extends BaseActivity {
                     dialog.dismiss();
                 });
                 break;
-            case R.id.iv_sdwz:
+            case R.id.ll_sdwz:
                 List<String> listCz = new ArrayList<>();
 
                 listCz.add("位置1");
@@ -150,7 +150,7 @@ public class SdwbActivity extends BaseActivity {
                     dialog.dismiss();
                 });
                 break;
-            case R.id.iv_gddz:
+            case R.id.ll_gddz:
                 List<String> listZh = new ArrayList<>();
 
                 listZh.add("作业区1");
@@ -171,10 +171,10 @@ public class SdwbActivity extends BaseActivity {
                 });
                 break;
 
-            case R.id.iv_tbrq:
+            case R.id.ll_tbrq:
                 pvTime.show(view);
                 break;
-            case R.id.iv_scfj:
+            case R.id.ll_scfj:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/*");//设置类型
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -192,7 +192,7 @@ public class SdwbActivity extends BaseActivity {
 
                 if (v.getId()==R.id.iv_jcsj){
                   //  tv_jcsj.setText(getTime(date));
-                } else if (v.getId()==R.id.iv_tbrq){
+                } else if (v.getId()==R.id.ll_tbrq){
                     tv_tbrq.setText(getTime(date));
                 }
                 Log.i("pvTime", "onTimeSelect");

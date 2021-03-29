@@ -55,6 +55,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_gddz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -89,7 +90,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_gddz"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -107,6 +108,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_sdmc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -141,7 +143,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_sdmc"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -158,6 +160,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_sdwz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -192,7 +195,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_sdwz"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -1232,6 +1235,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -1266,7 +1270,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_location"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -1283,6 +1287,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_scfj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -1316,7 +1321,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_scfj"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -1410,15 +1415,15 @@
                     android:singleLine="true"
                     android:text=""
                     />
+
                 <ImageView
                     android:id="@+id/iv_spr"
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -1428,6 +1433,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_tbrq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -1462,7 +1468,7 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_tbrq"
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"

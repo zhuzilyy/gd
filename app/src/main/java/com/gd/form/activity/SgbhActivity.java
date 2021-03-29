@@ -247,7 +247,9 @@ public class SgbhActivity extends BaseActivity {
                 listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                        Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
+                        tv_zh.setText(pipeStakes[groupPosition][childPosition]+"");
+                        confirmDialog.dismiss();
                         return true;
                     }
                 });
@@ -311,9 +313,9 @@ public class SgbhActivity extends BaseActivity {
             public void onTimeSelect(Date date, View v) {
                // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
 
-                if (v.getId()==R.id.iv_jcsj){
+                if (v.getId()==R.id.ll_jcsj){
                     tv_jcsj.setText(getTime(date));
-                } else if (v.getId()==R.id.iv_tbrq){
+                } else if (v.getId()==R.id.ll_tbrq){
                     tv_tbrq.setText(getTime(date));
                 }
                 Log.i("pvTime", "onTimeSelect");
