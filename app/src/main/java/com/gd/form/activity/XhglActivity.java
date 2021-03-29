@@ -1,11 +1,10 @@
 package com.gd.form.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;

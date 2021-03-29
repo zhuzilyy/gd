@@ -1,16 +1,13 @@
 package com.gd.form.activity;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -37,18 +34,13 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.demo.Constant;
-import com.gd.form.demo.IndicatorExpandActivity;
 import com.gd.form.demo.IndicatorExpandableListAdapter;
-import com.gd.form.model.Jobs;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipestakeinfo;
-import com.gd.form.model.ResultMsg;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.MessageEvent;
-import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.Util;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
@@ -109,7 +101,7 @@ public class SgbhActivity extends BaseActivity {
             }
         });
 
-        getPipelineinfoListRequest();
+        getPipelineInfoListRequest();
       //  getPipestakeinfoRequest(0);
 
 
@@ -117,7 +109,7 @@ public class SgbhActivity extends BaseActivity {
 
 
 
-    private void getPipelineinfoListRequest() {
+    private void getPipelineInfoListRequest() {
 
         Net.create(Api.class).pipelineinfosget()
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this,false) {
@@ -130,7 +122,7 @@ public class SgbhActivity extends BaseActivity {
                         for (int j=0;j<list1.size();j++){
                             pipLines[j]=list1.get(j).getName();
                             Log.i("--------pipLines",pipLines[j]+"");
-                            getPipestakeinfoRequest(list1.get(j).getId(),j);
+                            getPipeStakeInfoRequest(list1.get(j).getId(),j);
                         }
 
 
@@ -139,7 +131,7 @@ public class SgbhActivity extends BaseActivity {
                 });
     }
 
-    private void getPipestakeinfoRequest(int id,int i) {
+    private void getPipeStakeInfoRequest(int id,int i) {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
@@ -149,7 +141,6 @@ public class SgbhActivity extends BaseActivity {
                     public void onResponse(List<Pipestakeinfo> list2) {
                         Log.i("--------1",list2.size()+"");
                         Log.i("--------1id",id+"");
-
                         pipeStakes[i]=new String[list2.size()];
                         for (int j=0;j<list2.size();j++){
                             pipeStakes[i][j]=list2.get(j).getName();
@@ -172,13 +163,13 @@ public class SgbhActivity extends BaseActivity {
     }
 
     @OnClick({
-            R.id.iv_location,
-            R.id.iv_sgxs,
-            R.id.iv_cz,
-            R.id.iv_jcsj,
-            R.id.iv_zh,
-            R.id.iv_scfj,
-            R.id.iv_tbrq,
+            R.id.ll_location,
+            R.id.ll_sgxs,
+            R.id.ll_cz,
+            R.id.ll_jcsj,
+            R.id.ll_zh,
+            R.id.ll_scfj,
+            R.id.ll_tbrq,
             R.id.iv_back,
     })
     public void onClick(View view) {
@@ -186,11 +177,11 @@ public class SgbhActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_location:
+            case R.id.ll_location:
                 Bundle bundle=new Bundle();
                 openActivity(MapActivity.class, bundle, false);
                 break;
-            case R.id.iv_sgxs:
+            case R.id.ll_sgxs:
                 List<String> listM = new ArrayList<>();
 
                 listM.add("护岸、过水面");
@@ -207,7 +198,7 @@ public class SgbhActivity extends BaseActivity {
                     dialog.dismiss();
                 });
                 break;
-            case R.id.iv_cz:
+            case R.id.ll_cz:
                 List<String> listCz = new ArrayList<>();
 
                 listCz.add("浆砌石");
@@ -223,7 +214,7 @@ public class SgbhActivity extends BaseActivity {
                     dialog.dismiss();
                 });
                 break;
-            case R.id.iv_zh:
+            case R.id.ll_zh:
 
                 LinearLayout root = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.activity_expand, null);
                // TextView tv_tips = root.findViewById(R.id.tv_tips);
@@ -298,13 +289,13 @@ public class SgbhActivity extends BaseActivity {
 //                });
                 break;
 
-            case R.id.iv_jcsj:
+            case R.id.ll_jcsj:
                 pvTime.show(view);
                 break;
-            case R.id.iv_tbrq:
+            case R.id.ll_tbrq:
                 pvTime.show(view);
                 break;
-            case R.id.iv_scfj:
+            case R.id.ll_scfj:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/*");//设置类型
                 intent.addCategory(Intent.CATEGORY_OPENABLE);

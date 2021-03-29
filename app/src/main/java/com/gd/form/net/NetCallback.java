@@ -76,7 +76,6 @@ public abstract class NetCallback<T> extends BaseCallback<T> {
             ToastUtil.show(R.string.connect);
         }else{
             ToastUtil.show(t.getMessage());
-            Log.i("-------------->onFailure",t.getMessage()+"");
         }
     }
 

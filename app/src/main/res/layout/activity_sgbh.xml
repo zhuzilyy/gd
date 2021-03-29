@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -55,6 +53,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_zh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -89,7 +88,6 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_zh"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -107,6 +105,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_sgxs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -141,7 +140,6 @@
                     android:text=""
                     />
                 <ImageView
-                    android:id="@+id/iv_sgxs"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_marginRight="@dimen/d_10"
@@ -158,6 +156,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_cz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -209,6 +208,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_jcsj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -299,6 +299,7 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:button="@null"
                         android:checked="true"
+                        android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="是" />
@@ -308,6 +309,7 @@
                         android:id="@+id/rb_no"
                         android:layout_marginRight="@dimen/d_5"
                         android:button="@null"
+                        android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="否" />
@@ -364,6 +366,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -415,6 +418,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_scfj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -509,6 +513,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_spr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -560,6 +565,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_tbrq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"

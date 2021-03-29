@@ -2,22 +2,15 @@ package com.gd.form.activity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
-import com.gd.form.adapter.JobsListAdapter;
 import com.gd.form.adapter.UsersExpandableListAdapter;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.demo.IndicatorExpandableListAdapter;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
@@ -31,8 +24,6 @@ import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.AEADBadTagException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
