@@ -269,6 +269,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_job_fxgl"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -293,6 +294,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_job_ghg"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -327,6 +329,7 @@
             android:weightSum="3">
 
             <LinearLayout
+                android:id="@+id/ll_job_ffgl"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"

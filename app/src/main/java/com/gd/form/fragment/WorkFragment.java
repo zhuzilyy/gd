@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
+import com.gd.form.activity.FfglActivity;
+import com.gd.form.activity.FxglActivity;
+import com.gd.form.activity.GcglActivity;
 import com.gd.form.activity.GdCheckFormActivity;
+import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobActivity;
 import com.gd.form.activity.JobsActivity;
 import com.gd.form.activity.SdwbActivity;
@@ -62,7 +66,10 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_jobs,
             R.id.ll_sgbh,
             R.id.ll_job_xhgl,
-           // R.id.ll_sdwb,
+            R.id.ll_job_fxgl,
+            R.id.ll_job_ghg,
+            R.id.ll_job_ffgl,
+            R.id.ll_job_gcgl,
 
     })
     public void onClick(View view){
@@ -83,6 +90,18 @@ public class WorkFragment extends BaseFragment {
 //                break;
             case R.id.ll_job_xhgl:
                openActivity(XhglActivity.class);
+                break;
+            case R.id.ll_job_fxgl:
+               openActivity(FxglActivity.class);
+                break;
+            case R.id.ll_job_ghg:
+               openActivity(GhgActivity.class);
+                break;
+            case R.id.ll_job_ffgl:
+               openActivity(FfglActivity.class);
+                break;
+            case R.id.ll_job_gcgl:
+               openActivity(GcglActivity.class);
                 break;
         }
     }

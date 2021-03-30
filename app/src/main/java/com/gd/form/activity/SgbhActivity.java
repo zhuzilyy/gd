@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -28,18 +27,14 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
-import com.gd.form.adapter.ImagePickerAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.demo.IndicatorExpandableListAdapter;
-import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.net.Api;
@@ -48,14 +43,8 @@ import com.gd.form.net.NetCallback;
 import com.gd.form.utils.MessageEvent;
 import com.gd.form.utils.Util;
 import com.gd.form.view.ListDialog;
-import com.gd.form.view.SelectDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
-import com.lzy.imagepicker.view.CropImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -280,7 +269,9 @@ public class SgbhActivity extends BaseActivity implements ImagePickerAdapter.OnR
                 listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                        Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
+                        tv_zh.setText(pipeStakes[groupPosition][childPosition]+"");
+                        confirmDialog.dismiss();
                         return true;
                     }
                 });

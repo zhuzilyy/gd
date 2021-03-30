@@ -190,7 +190,6 @@ public class UsersActivity extends BaseActivity {
     @OnClick({
             R.id.iv_back,
             R.id.iv_add,
-
     })
     public void onClick(View view){
         switch (view.getId()) {

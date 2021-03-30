@@ -85,8 +85,8 @@ public class UserActivity extends BaseActivity {
     @OnClick({
             R.id.iv_back,
             R.id.bt_confirm,
-            R.id.iv_gwzc,
-            R.id.iv_bmmc,
+            R.id.ll_gwzc,
+            R.id.ll_bmmc,
 
     })
     public void onClick(View view){
@@ -128,7 +128,7 @@ public class UserActivity extends BaseActivity {
 
                 addRequest();
                 break;
-            case R.id.iv_gwzc:
+            case R.id.ll_gwzc:
 
                 if (dialog == null) {
                     dialog = new ListDialog(mContext);
@@ -143,7 +143,7 @@ public class UserActivity extends BaseActivity {
                 });
 
                 break;
-            case R.id.iv_bmmc:
+            case R.id.ll_bmmc:
 
                 if (dialog == null) {
                     dialog = new ListDialog(mContext);
