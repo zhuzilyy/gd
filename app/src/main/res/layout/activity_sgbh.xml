@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
@@ -437,6 +438,7 @@
                     android:textColor="#FF000000"
                     />
                 <TextView
+                    android:id="@+id/tv_fileName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -450,6 +452,7 @@
                     android:background="@null"
                     android:singleLine="true"
                     android:text=""
+                    android:ellipsize="end"
                     />
                 <ImageView
                     android:id="@+id/iv_scfj"
@@ -461,6 +464,42 @@
                     android:src="@mipmap/ic_next"
                     />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:background="#FFE5E5E5"
+                android:layout_marginLeft="@dimen/d_12"
+                android:layout_marginStart="@dimen/d_12"/>
+            <!--选择图片-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:text="上传图片"
+                    android:textSize="@dimen/s_16"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:layout_marginBottom="@dimen/d_10"
+                    android:textColor="#FF000000"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:choiceMode="singleChoice"
+                    android:divider="@null"
+                    android:fadingEdge="none"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbarStyle="outsideOverlay"
+                    app:spanCount="3"
+                    tools:listitem="@layout/list_item_image"/>
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
