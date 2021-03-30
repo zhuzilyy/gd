@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_24"
+        android:background="@drawable/title_shape_gradient"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/title_shape_gradient"
+        >
+        <ImageView
+            android:id="@+id/deviceOrderEditBackImageView"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_back"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginStart="@dimen/d_15"/>
+        <TextView
+            android:id="@+id/deviceOrderEditTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="选择文件"
+            android:textColor="#FFFFFF"
+            android:layout_marginRight="@dimen/d_40"
+            android:layout_marginEnd="@dimen/d_40"
+            android:textSize="@dimen/s_20"/>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFiles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_centerInParent="true"
+            android:text="没有文件"
+            android:id="@+id/tv_noData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -27,14 +28,18 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
+import com.gd.form.adapter.ImagePickerAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.demo.IndicatorExpandableListAdapter;
+import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.net.Api;
@@ -43,8 +48,14 @@ import com.gd.form.net.NetCallback;
 import com.gd.form.utils.MessageEvent;
 import com.gd.form.utils.Util;
 import com.gd.form.view.ListDialog;
+import com.gd.form.view.SelectDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
+import com.lzy.imagepicker.view.CropImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,7 +69,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SgbhActivity extends BaseActivity {
+public class SgbhActivity extends BaseActivity implements ImagePickerAdapter.OnRecyclerViewItemClickListener {
     @BindView(R.id.tv_location)
     TextView tv_location;
     @BindView(R.id.tv_sgxs)
@@ -71,18 +82,30 @@ public class SgbhActivity extends BaseActivity {
     TextView tv_tbrq;
     @BindView(R.id.tv_zh)
     TextView tv_zh;
+    @BindView(R.id.tv_fileName)
+    TextView tv_fileName;
     @BindView(R.id.rg_isgood)
     RadioGroup rg_isgood;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     private TimePickerView pvTime;
     private ListDialog dialog;
 
-    List<Pipelineinfo> listPipelineinfo=new ArrayList<>();
-    List<Pipestakeinfo> listPipestakeinfo=new ArrayList<>();
+    List<Pipelineinfo> listPipelineinfo = new ArrayList<>();
+    List<Pipestakeinfo> listPipestakeinfo = new ArrayList<>();
 
-    private  String[][] pipeStakes;
-    private  String[] pipLines;
+    private String[][] pipeStakes;
+    private String[] pipLines;
     private Dialog confirmDialog;
+    private int FILE_REQUEST_CODE = 100;
+    private int REQUEST_CODE_PREVIEW = 102;
+    private int REQUEST_CODE_SELECT = 103;
+    public static final int IMAGE_ITEM_ADD = -1;
+    private ImagePickerAdapter adapter;
+    private ArrayList<ImageItem> selImageList; //当前选择的所有图片
+    private int maxImgCount = 9;               //允许选择图片最大数
+    private ArrayList<ImageItem> images;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,64 +120,76 @@ public class SgbhActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
                 String sel = radioButton.getText().toString();
-                Log.i("-----------",sel);
             }
         });
 
         getPipelineInfoListRequest();
-      //  getPipestakeinfoRequest(0);
-
+        initImagePicker();
+        initWidget();
 
     }
 
+    private void initWidget() {
+        selImageList = new ArrayList<>();
+        adapter = new ImagePickerAdapter(this, selImageList, maxImgCount);
+        adapter.setOnItemClickListener(SgbhActivity.this);
 
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void initImagePicker() {
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());   //设置图片加载器
+        imagePicker.setShowCamera(true);                      //显示拍照按钮
+        imagePicker.setCrop(true);                           //允许裁剪（单选才有效）
+        imagePicker.setSaveRectangle(true);                   //是否按矩形区域保存
+        imagePicker.setSelectLimit(maxImgCount);              //选中数量限制
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+        imagePicker.setFocusWidth(800);                       //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setFocusHeight(800);                      //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setOutPutX(1000);                         //保存文件的宽度。单位像素
+        imagePicker.setOutPutY(1000);                         //保存文件的高度。单位像素
+    }
 
     private void getPipelineInfoListRequest() {
 
         Net.create(Api.class).pipelineinfosget()
-                .enqueue(new NetCallback<List<Pipelineinfo>>(this,false) {
+                .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list1) {
-                        Log.i("--------",list1.size()+"");
-                        listPipelineinfo=list1;
-                        pipLines=new String[list1.size()];
-                        pipeStakes=new String[list1.size()][];
-                        for (int j=0;j<list1.size();j++){
-                            pipLines[j]=list1.get(j).getName();
-                            Log.i("--------pipLines",pipLines[j]+"");
-                            getPipeStakeInfoRequest(list1.get(j).getId(),j);
+                        listPipelineinfo = list1;
+                        pipLines = new String[list1.size()];
+                        pipeStakes = new String[list1.size()][];
+                        for (int j = 0; j < list1.size(); j++) {
+                            pipLines[j] = list1.get(j).getName();
+                            getPipeStakeInfoRequest(list1.get(j).getId(), j);
                         }
-
-
-                        Log.i("--------pipLines",pipLines.toString()+"");
                     }
                 });
     }
 
-    private void getPipeStakeInfoRequest(int id,int i) {
+    private void getPipeStakeInfoRequest(int id, int i) {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
         Net.create(Api.class).pipestakeinfoget(jsonObject)
-                .enqueue(new NetCallback<List<Pipestakeinfo>>(this,true) {
+                .enqueue(new NetCallback<List<Pipestakeinfo>>(this, true) {
                     @Override
                     public void onResponse(List<Pipestakeinfo> list2) {
-                        Log.i("--------1",list2.size()+"");
-                        Log.i("--------1id",id+"");
-                        pipeStakes[i]=new String[list2.size()];
-                        for (int j=0;j<list2.size();j++){
-                            pipeStakes[i][j]=list2.get(j).getName();
-                            Log.i("--------pipeStakes",pipeStakes[i][j]+"");
+                        pipeStakes[i] = new String[list2.size()];
+                        for (int j = 0; j < list2.size(); j++) {
+                            pipeStakes[i][j] = list2.get(j).getName();
                         }
                     }
                 });
     }
 
 
-
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext,R.color.colorFF52A7F9));
+        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
 
     @Override
@@ -178,7 +213,7 @@ public class SgbhActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_location:
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 openActivity(MapActivity.class, bundle, false);
                 break;
             case R.id.ll_sgxs:
@@ -193,7 +228,6 @@ public class SgbhActivity extends BaseActivity {
                 dialog.setData(listM);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    Log.i("-------------",positionM+"");
                     tv_sgxs.setText(listM.get(positionM));
                     dialog.dismiss();
                 });
@@ -209,7 +243,6 @@ public class SgbhActivity extends BaseActivity {
                 dialog.setData(listCz);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    Log.i("-------------",positionM+"");
                     tv_cz.setText(listCz.get(positionM));
                     dialog.dismiss();
                 });
@@ -217,9 +250,9 @@ public class SgbhActivity extends BaseActivity {
             case R.id.ll_zh:
 
                 LinearLayout root = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.activity_expand, null);
-               // TextView tv_tips = root.findViewById(R.id.tv_tips);
+                // TextView tv_tips = root.findViewById(R.id.tv_tips);
                 final ExpandableListView listView = (ExpandableListView) root.findViewById(R.id.expandable_list);
-            //    final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(Constant.BOOKS, Constant.FIGURES);
+                //    final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(Constant.BOOKS, Constant.FIGURES);
                 final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(pipLines, pipeStakes);
                 listView.setAdapter(adapter);
 
@@ -235,7 +268,7 @@ public class SgbhActivity extends BaseActivity {
                 listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                     @Override
                     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                       // Log.d(TAG, "onGroupClick: groupPosition:" + groupPosition + ", id:" + id);
+                        // Log.d(TAG, "onGroupClick: groupPosition:" + groupPosition + ", id:" + id);
                         boolean groupExpanded = parent.isGroupExpanded(groupPosition);
                         adapter.setIndicatorState(groupPosition, groupExpanded);
                         // 请务必返回 false，否则分组不会展开
@@ -270,8 +303,6 @@ public class SgbhActivity extends BaseActivity {
                 }
 
 
-
-
 //                List<String> listZh = new ArrayList<>();
 //
 //                listZh.add("Lt0081+300");
@@ -296,28 +327,28 @@ public class SgbhActivity extends BaseActivity {
                 pvTime.show(view);
                 break;
             case R.id.ll_scfj:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/*");//设置类型
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("application/*");//设置类型
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intent, 1);
+                Intent intent = new Intent(SgbhActivity.this, SelectFileActivity.class);
+                startActivityForResult(intent, FILE_REQUEST_CODE);
                 break;
         }
     }
 
 
-    private void initTimePicker() {//Dialog 模式下，在底部弹出
+    private void initTimePicker() {
+        //Dialog 模式下，在底部弹出
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-               // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
-
-                if (v.getId()==R.id.iv_jcsj){
+                // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
+                if (v.getId() == R.id.iv_jcsj) {
                     tv_jcsj.setText(getTime(date));
-                } else if (v.getId()==R.id.iv_tbrq){
+                } else if (v.getId() == R.id.iv_tbrq) {
                     tv_tbrq.setText(getTime(date));
                 }
-                Log.i("pvTime", "onTimeSelect");
-
             }
         })
                 .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
@@ -371,13 +402,32 @@ public class SgbhActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            Log.i("------", "选择的文件Uri = " + data.toString());
-            //通过Uri获取真实路径
-            final String excelPath = getRealFilePath(this, data.getData());
-            Log.i("------", "excelPath = " + excelPath);//    /storage/emulated/0/test.xls
-
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            //添加图片返回
+            if (data != null && requestCode == REQUEST_CODE_SELECT) {
+                images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                if (images != null) {
+                    selImageList.addAll(images);
+                    adapter.setImages(selImageList);
+                }
+            }
+        } else if (resultCode == ImagePicker.RESULT_CODE_BACK) {
+            //预览图片返回
+            if (data != null && requestCode == REQUEST_CODE_PREVIEW) {
+                images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
+                if (images != null) {
+                    selImageList.clear();
+                    selImageList.addAll(images);
+                    adapter.setImages(selImageList);
+                }
+            }
+        } else if (resultCode == RESULT_OK) {
+            if (data != null && requestCode == FILE_REQUEST_CODE) {
+                String name = data.getStringExtra("fileName");
+                tv_fileName.setText(name);
+            }
         }
+
 
     }
 
@@ -415,5 +465,70 @@ public class SgbhActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent messageEvent) {
         tv_location.setText(messageEvent.getMessage());
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        switch (position) {
+            case IMAGE_ITEM_ADD:
+                List<String> names = new ArrayList<>();
+                names.add("拍照");
+                names.add("相册");
+                showDialog(new SelectDialog.SelectDialogListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position) {
+                            case 0: // 直接调起相机
+                                /**
+                                 * 0.4.7 目前直接调起相机不支持裁剪，如果开启裁剪后不会返回图片，请注意，后续版本会解决
+                                 *
+                                 * 但是当前直接依赖的版本已经解决，考虑到版本改动很少，所以这次没有上传到远程仓库
+                                 *
+                                 * 如果实在有所需要，请直接下载源码引用。
+                                 */
+                                //打开选择,本次允许选择的数量
+                                ImagePicker.getInstance().setSelectLimit(maxImgCount - selImageList.size());
+                                Intent intent = new Intent(SgbhActivity.this, ImageGridActivity.class);
+                                intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS, true); // 是否是直接打开相机
+                                startActivityForResult(intent, REQUEST_CODE_SELECT);
+                                break;
+                            case 1:
+                                //打开选择,本次允许选择的数量
+                                ImagePicker.getInstance().setSelectLimit(maxImgCount - selImageList.size());
+                                Intent intent1 = new Intent(SgbhActivity.this, ImageGridActivity.class);
+                                /* 如果需要进入选择的时候显示已经选中的图片，
+                                 * 详情请查看ImagePickerActivity
+                                 * */
+//                                intent1.putExtra(ImageGridActivity.EXTRAS_IMAGES,images);
+                                startActivityForResult(intent1, REQUEST_CODE_SELECT);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                }, names);
+
+
+                break;
+            default:
+                //打开预览
+                Intent intentPreview = new Intent(this, ImagePreviewDelActivity.class);
+                intentPreview.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, (ArrayList<ImageItem>) adapter.getImages());
+                intentPreview.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position);
+                intentPreview.putExtra(ImagePicker.EXTRA_FROM_ITEMS, true);
+                startActivityForResult(intentPreview, REQUEST_CODE_PREVIEW);
+                break;
+        }
+    }
+
+    private SelectDialog showDialog(SelectDialog.SelectDialogListener listener, List<String> names) {
+        SelectDialog dialog = new SelectDialog(this, R.style
+                .transparentFrameWindowStyle,
+                listener, names);
+        if (!this.isFinishing()) {
+            dialog.show();
+        }
+        return dialog;
     }
 }
