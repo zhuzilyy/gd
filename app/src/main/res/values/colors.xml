@@ -332,4 +332,6 @@
     <color name="text_bf">#bfbfbf</color>
     <color name="text_dh">#0061b2</color>
     <color name="color_green">#16d842</color>
+    <color name="color_blue_light">#0061b2</color>
+    <color name="color_blue_dark">#13227a</color>
 </resources>

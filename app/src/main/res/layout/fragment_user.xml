@@ -60,10 +60,10 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/d_30"
+                    android:layout_width="31dp"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/dbrw" />
+                    android:src="@mipmap/gwwh" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/cqrw" />
+                    android:src="@mipmap/rywh" />
 
                 <TextView
                     android:layout_width="wrap_content"

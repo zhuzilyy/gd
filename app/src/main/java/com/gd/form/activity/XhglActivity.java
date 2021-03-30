@@ -21,7 +21,7 @@ public class XhglActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
+        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.color_green));
     }
 
     @Override
