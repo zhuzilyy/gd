@@ -12,16 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.XhglActivity"
-          android:screenOrientation="portrait" />
-        <activity android:name=".activity.FxglActivity"
-          android:screenOrientation="portrait" />
-        <activity android:name=".activity.GhgActivity"
-          android:screenOrientation="portrait" />
-        <activity android:name=".activity.FfglActivity"
-          android:screenOrientation="portrait" />
-        <activity android:name=".activity.GcglActivity"
-          android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.XhglActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FxglActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GhgActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FfglActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GcglActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.DepartActivity" />
         <activity
             android:name=".activity.JobActivity"
