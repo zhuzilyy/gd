@@ -34,6 +34,11 @@ public class XhglActivity extends BaseActivity {
             R.id.iv_back,
             R.id.ll_sgbh,
             R.id.ll_sdwb,
+            R.id.ll_gdsm,
+            R.id.ll_zcny,
+            R.id.ll_wzwj,
+            R.id.ll_tbxj,
+            R.id.ll_wrj,
 
     })
     public void onClick(View view) {
@@ -42,10 +47,25 @@ public class XhglActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_sgbh:
-               openActivity(SgbhActivity.class);
+                openActivity(SgbhActivity.class);
                 break;
             case R.id.ll_sdwb:
-               openActivity(SdwbActivity.class);
+                openActivity(SdwbActivity.class);
+                break;
+            case R.id.ll_gdsm:
+                openActivity(PipelineDepthActivity.class);
+                break;
+            case R.id.ll_zcny:
+                openActivity(WeightCarActivity.class);
+                break;
+            case R.id.ll_wzwj:
+                openActivity(EndorsementActivity.class);
+                break;
+            case R.id.ll_tbxj:
+                openActivity(HikingCheckActivity.class);
+                break;
+            case R.id.ll_wrj:
+                openActivity(FlyRecordActivity.class);
                 break;
         }
     }

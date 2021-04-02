@@ -32,13 +32,23 @@ public class FfglActivity extends BaseActivity {
     @SuppressLint("NonConstantResourceId")
     @OnClick({
             R.id.iv_back,
-
-
+            R.id.ll_zone_electricity,
+            R.id.ll_insulating_property,
+            R.id.ll_gdsm,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_zone_electricity:
+                openActivity(ZoneElectricityActivity.class);
+                break;
+            case R.id.ll_insulating_property:
+                openActivity(InsulatingPropertyActivity.class);
+                break;
+            case R.id.ll_gdsm:
+                openActivity(DeviceActivity.class);
                 break;
 
         }

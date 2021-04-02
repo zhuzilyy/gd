@@ -44,6 +44,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_highZone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -87,6 +88,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_video_monitoring"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -94,7 +96,6 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
                 <ImageView
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"

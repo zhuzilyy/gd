@@ -1,6 +1,5 @@
 package com.gd.form.activity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -29,16 +28,25 @@ public class GhgActivity extends BaseActivity {
         return R.layout.activity_ghg;
     }
 
-    @SuppressLint("NonConstantResourceId")
     @OnClick({
             R.id.iv_back,
-
-
+            R.id.ll_highZone,
+            R.id.ll_video_monitoring,
+            R.id.ll_gdsm,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_highZone:
+                openActivity(HighZoneActivity.class);
+                break;
+            case R.id.ll_video_monitoring:
+                openActivity(VideoMonitoringActivity.class);
+                break;
+            case R.id.ll_gdsm:
+                openActivity(MonitoringRepairActivity.class);
                 break;
 
         }

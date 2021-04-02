@@ -32,6 +32,7 @@ public class GcglActivity extends BaseActivity {
     @SuppressLint("NonConstantResourceId")
     @OnClick({
             R.id.iv_back,
+            R.id.ll_engineering_field,
 
 
     })
@@ -39,6 +40,9 @@ public class GcglActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_engineering_field:
+                openActivity(EngineeringFieldActivity.class);
                 break;
 
         }

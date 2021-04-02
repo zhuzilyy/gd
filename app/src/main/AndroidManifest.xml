@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gd.form">
     <!-- 地图SDK（包含其搜索功能）需要的基础权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 地图包、搜索包需要的基础权限 -->
+    <!-- 定位包、导航包需要的额外权限（注：基础权限也需要） -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- 允许程序打开网络套接字 -->
     <application
         android:name=".app.App"
@@ -9,9 +15,26 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
+        <!-- 开发者申请的key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="bc65d6790229bdff986bcbdf2c863c0c" />
+        <service android:name="com.amap.api.location.APSService" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gd.form.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".activity.XhglActivity"
             android:screenOrientation="portrait" />
@@ -78,15 +101,51 @@
         <activity
             android:name=".activity.SelectFileActivity"
             android:screenOrientation="portrait" />
-        <!-- 开发者申请的key -->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="bc65d6790229bdff986bcbdf2c863c0c" />
-        <service android:name="com.amap.api.location.APSService" />
         <activity
-            android:name=".activity.WebViewActivity"
+            android:name=".activity.StationActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".activity.PipelineDepthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WeightCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EndorsementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HikingCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FlyRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WaterInsuranceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ConcealedWorkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HighZoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VideoMonitoringActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MonitoringRepairActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ZoneElectricityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InsulatingPropertyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EngineeringFieldActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

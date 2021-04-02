@@ -1,2 +1,2 @@
-include ':app', ':pickerview', ':wheelview'
+include ':app', ':pickerview', ':wheelview','gallerypick'
 

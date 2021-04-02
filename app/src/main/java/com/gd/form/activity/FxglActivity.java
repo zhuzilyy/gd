@@ -32,13 +32,20 @@ public class FxglActivity extends BaseActivity {
     @SuppressLint("NonConstantResourceId")
     @OnClick({
             R.id.iv_back,
-
+            R.id.ll_waterInsurance,
+            R.id.ll_concealed_work,
 
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_waterInsurance:
+                openActivity(WaterInsuranceActivity.class);
+                break;
+            case R.id.ll_concealed_work:
+                openActivity(ConcealedWorkActivity.class);
                 break;
 
         }

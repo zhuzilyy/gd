@@ -1,7 +1,36 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
+            storePassword '123456'
+            keyAlias = 'keys'
+            keyPassword '123456'
+        }
+        release {
+            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
+            storePassword '123456'
+            keyAlias = 'keys'
+            keyPassword '123456'
+        }
+    }
 
+
+//    signingConfigs {
+//        debug {
+//            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+//            storePassword '123456'
+//            keyAlias = 'keys'
+//            keyPassword '123456'
+//        }
+//        release {
+//            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+//            storePassword '123456'
+//            keyAlias = 'keys'
+//            keyPassword '123456'
+//        }
+//    }
 
     lintOptions{
         checkReleaseBuilds false
@@ -19,14 +48,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
-//        }
-//        debug {
-//            signingConfig signingConfigs.debug
-//        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
 
     // ButterKnife requires Java 8.
@@ -68,5 +97,10 @@ dependencies {
     //定位功能
     implementation 'com.amap.api:location:latest.integration'
 
+    implementation project(':gallerypick')
     implementation project(':pickerview')
+//    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.6.1'
+    implementation 'com.lzy.widget:imagepicker:0.6.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-11'
 }

@@ -44,6 +44,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_zone_electricity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -87,6 +88,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_insulating_property"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"

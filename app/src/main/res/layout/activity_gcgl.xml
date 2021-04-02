@@ -44,6 +44,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_engineering_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -75,7 +76,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="现场检查记录"
+                    android:text="交叉工程现场检查"
                     />
 
             </LinearLayout>

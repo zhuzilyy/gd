@@ -2,676 +2,685 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/write"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    android:background="@color/write">
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_50"
-        android:background="@color/colorFF52A7F9"
-        >
+        android:background="@color/colorFF52A7F9">
+
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="@dimen/d_24"
             android:layout_height="@dimen/d_24"
             android:layout_gravity="center"
-            android:src="@mipmap/ic_back"
+            android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
-            android:layout_marginStart="@dimen/d_15"/>
+            android:src="@mipmap/ic_back" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/d_40"
+            android:layout_marginRight="@dimen/d_40"
             android:gravity="center"
             android:text="水工保护巡检表"
             android:textColor="@color/write"
-            android:layout_marginRight="@dimen/d_40"
-            android:layout_marginEnd="@dimen/d_40"
-            android:textSize="@dimen/s_20"/>
+            android:textSize="@dimen/s_20" />
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_10"
-                android:background="#FFF3F3F3"
-                />
+                android:background="#FFF3F3F3" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_zh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="桩号"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_zh"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_sgxs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="水工形式"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_sgxs"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_cz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="材质"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_cz"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_cz"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_jcsj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="检查时间"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_jcsj"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_jcsj"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="是否完好"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <RadioGroup
                     android:id="@+id/rg_isgood"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:orientation="horizontal"
-                     >
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
 
                     <RadioButton
-                        android:drawableLeft="@drawable/radio_btn"
                         android:id="@+id/rb_yes"
-                        android:layout_marginRight="@dimen/d_5"
-                        android:button="@null"
-                        android:checked="true"
-                        android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
-                        android:drawableLeft="@drawable/radio_btn"
                         android:id="@+id/rb_no"
-                        android:layout_marginRight="@dimen/d_5"
-                        android:button="@null"
-                        android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
                         android:text="否" />
                 </RadioGroup>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="处理情况"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_clqk"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="请输入处理情况"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="坐标"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_location"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_location"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/location"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/location" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_scfj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="上传附件"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_fileName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    android:ellipsize="end"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_scfj"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
             <!--选择图片-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:text="上传图片"
-                    android:textSize="@dimen/s_16"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:layout_marginBottom="@dimen/d_10"
-                    android:textColor="#FF000000"
-                    />
+                android:orientation="vertical">
+               <RelativeLayout
+                   android:id="@+id/rl_selectImage"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <TextView
+                       android:layout_centerVertical="true"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="@dimen/d_15"
+                       android:layout_marginLeft="@dimen/d_15"
+                       android:layout_marginTop="@dimen/d_10"
+                       android:layout_marginBottom="@dimen/d_10"
+                       android:text="上传图片"
+                       android:textColor="#FF000000"
+                       android:textSize="@dimen/s_16" />
+
+                   <ImageView
+                       android:layout_alignParentRight="true"
+                       android:layout_centerVertical="true"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginEnd="@dimen/d_10"
+                       android:layout_marginRight="@dimen/d_10"
+                       android:src="@mipmap/ic_next" />
+               </RelativeLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:id="@+id/rvResultPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:choiceMode="singleChoice"
-                    android:divider="@null"
-                    android:fadingEdge="none"
-                    android:listSelector="@android:color/transparent"
-                    android:scrollbarStyle="outsideOverlay"
-                    app:spanCount="3"
-                    tools:listitem="@layout/list_item_image"/>
+                    android:paddingBottom="@dimen/d_5"
+                     />
             </LinearLayout>
 
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="填报人"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_tbr"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="请输入填报人"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_spr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="审批人"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_spr"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_spr"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <LinearLayout
                 android:id="@+id/ll_tbrq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="填报日期"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_tbrq"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
                 <ImageView
                     android:id="@+id/iv_tbrq"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginEnd="@dimen/d_10"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_next"
-                    />
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
-
 
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
+
             <Button
                 android:id="@+id/newClueSubmitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d_30"
-                android:layout_marginBottom="@dimen/d_30"
                 android:layout_marginStart="@dimen/d_30"
                 android:layout_marginLeft="@dimen/d_30"
+                android:layout_marginTop="@dimen/d_30"
                 android:layout_marginEnd="@dimen/d_30"
                 android:layout_marginRight="@dimen/d_30"
-                android:text="提交"
+                android:layout_marginBottom="@dimen/d_30"
                 android:background="@drawable/button_ship"
-                android:textSize="@dimen/s_18"
+                android:text="提交"
                 android:textColor="@color/write"
-                />
+                android:textSize="@dimen/s_18" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
