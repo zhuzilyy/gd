@@ -235,9 +235,11 @@ public class SgbhActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_location:
-                Bundle bundle = new Bundle();
-                openActivity(MapActivity.class, bundle, false);
+                openActivity(MapActivity.class);
+//                Bundle bundle = new Bundle();
+//                openActivity(Map1Activity.class, bundle, false);
                 break;
+
             case R.id.ll_sgxs:
                 List<String> listM = new ArrayList<>();
 
