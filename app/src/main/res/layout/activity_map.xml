@@ -1,94 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/write"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    android:background="@color/write">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d_50"
-            android:orientation="horizontal"
-            android:background="@color/colorFF52A7F9"
-            >
-                <ImageView
-                    android:id="@+id/iv_back"
-                    android:layout_width="@dimen/d_24"
-                    android:layout_height="@dimen/d_24"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_back"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="选择地址"
-                    android:textColor="@color/write"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:textSize="@dimen/s_20"/>
-
-                <TextView
-                    android:id="@+id/tv_confirm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_centerVertical="true"
-                    android:text="确定"
-                    android:textSize="@dimen/s_18"
-                    android:layout_alignParentRight="true"
-                    android:textColor="@color/write" />
-
-        </RelativeLayout>
-
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-        <com.amap.api.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </com.amap.api.maps.MapView>
-        <LinearLayout
-            android:id="@+id/ll_rlt"
-            android:layout_width="@dimen/d_40"
-            android:layout_height="@dimen/d_40"
-            android:background="@drawable/main_radio_group_bg"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/d_10"
-            android:layout_gravity="end">
-                <ImageView
-                    android:src="@mipmap/rlt"
-                    android:layout_margin="@dimen/d_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_below="@id/ll_rlt"
-            android:id="@+id/ll_yqt"
-            android:layout_marginTop="@dimen/d_2"
-            android:layout_width="@dimen/d_40"
-            android:layout_height="@dimen/d_40"
-            android:background="@drawable/main_radio_group_bg"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/d_10"
-            android:layout_gravity="end">
-                <ImageView
-                    android:src="@mipmap/yqt"
-                    android:layout_margin="@dimen/d_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-        </LinearLayout>
-</RelativeLayout>
-    </LinearLayout>
+    android:orientation="vertical">
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
