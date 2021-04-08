@@ -1,36 +1,36 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
-            storePassword '123456'
-            keyAlias = 'keys'
-            keyPassword '123456'
-        }
-        release {
-            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
-            storePassword '123456'
-            keyAlias = 'keys'
-            keyPassword '123456'
-        }
-    }
-
-
 //    signingConfigs {
 //        debug {
-//            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+//            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
 //            storePassword '123456'
 //            keyAlias = 'keys'
 //            keyPassword '123456'
 //        }
 //        release {
-//            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+//            storeFile file('/Users/jinzhuxue/Desktop/gd资料/keys.jks')
 //            storePassword '123456'
 //            keyAlias = 'keys'
 //            keyPassword '123456'
 //        }
 //    }
+
+
+    signingConfigs {
+        debug {
+            storeFile file('D:\\works\\sh\\keys.jks')
+            storePassword '123456'
+            keyAlias = 'keys'
+            keyPassword '123456'
+        }
+        release {
+            storeFile file('D:\\works\\sh\\keys.jks')
+            storePassword '123456'
+            keyAlias = 'keys'
+            keyPassword '123456'
+        }
+    }
 
     lintOptions{
         checkReleaseBuilds false
