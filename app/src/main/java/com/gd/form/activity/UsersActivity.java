@@ -38,6 +38,7 @@ public class UsersActivity extends BaseActivity {
     private  String[][] userNames;
     private  String[][] userNameIds;
     private  List<String> departList=new ArrayList<>();
+    private  List<String> departNameList=new ArrayList<>();
     private  List<String> nameList=new ArrayList<>();
     private  List<String> nameIdList=new ArrayList<>();
     private UsersExpandableListAdapter adapter;
@@ -139,23 +140,23 @@ public class UsersActivity extends BaseActivity {
 
 
                        for (int i=0;i<list.size();i++){
-                           if (!departList.contains(list.get(i).getDepartmentid()+"")){
-                                departList.add(list.get(i).getDepartmentid()+"");
+                           if (!departNameList.contains(list.get(i).getDeptname()+"")){
+                               departNameList.add(list.get(i).getDeptname()+"");
                            }
                        }
 
-                        departmentNames=new String[departList.size()];
-                        userNames=new String[departList.size()][];
-                        userNameIds=new String[departList.size()][];
-                       for (int j=0;j<departList.size();j++){
-                           departmentNames[j]=departList.get(j);
+                        departmentNames=new String[departNameList.size()];
+                        userNames=new String[departNameList.size()][];
+                        userNameIds=new String[departNameList.size()][];
+                       for (int j=0;j<departNameList.size();j++){
+                           departmentNames[j]=departNameList.get(j);
                        }
 
-                       for (int m=0;m<departList.size();m++){
+                       for (int m=0;m<departNameList.size();m++){
                            nameList.clear();
                            nameIdList.clear();
                            for (int n=0;n<list.size();n++){
-                               if (departList.get(m).equals(list.get(n).getDepartmentid()+"")){
+                               if (departNameList.get(m).equals(list.get(n).getDeptname()+"")){
                                    nameList.add(list.get(n).getName());
                                    nameIdList.add(list.get(n).getId());
                                }

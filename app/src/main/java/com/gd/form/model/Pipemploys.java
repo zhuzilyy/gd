@@ -11,6 +11,10 @@ public class Pipemploys
      */
     private String name;
     /**
+     * 岗位名称
+     */
+    private String proname;
+    /**
      * 岗位职责id
      */
     private Integer professionalid;
@@ -18,6 +22,10 @@ public class Pipemploys
      * 用户部门id
      */
     private Integer departmentid;
+    /**
+     * 用户部门名称
+     */
+    private String deptname;
     /**
      * 用户密码
      */
@@ -83,4 +91,20 @@ public class Pipemploys
         this.telenumber = telenumber;
     }
 
+
+    public String getProname() {
+        return proname;
+    }
+
+    public void setProname(String proname) {
+        this.proname = proname;
+    }
+
+    public String getDeptname() {
+        return deptname;
+    }
+
+    public void setDeptname(String deptname) {
+        this.deptname = deptname;
+    }
 }

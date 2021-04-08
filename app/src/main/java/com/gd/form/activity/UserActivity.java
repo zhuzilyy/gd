@@ -173,8 +173,8 @@ public class UserActivity extends BaseActivity {
                         Log.i("--------",resultMsg.size()+"");
                         et_user_id.setText(resultMsg.get(0).getId());
                         et_user_name.setText(resultMsg.get(0).getName());
-                        tv_gwzc.setText(resultMsg.get(0).getProfessionalid().toString());
-                        tv_bmmc.setText(resultMsg.get(0).getDepartmentid().toString());
+                        tv_gwzc.setText(resultMsg.get(0).getProname());
+                        tv_bmmc.setText(resultMsg.get(0).getDeptname());
                         et_user_pwd.setText(resultMsg.get(0).getPassword());
                         et_user_mail.setText(resultMsg.get(0).getMail());
                         et_user_tel.setText(resultMsg.get(0).getTelenumber());
