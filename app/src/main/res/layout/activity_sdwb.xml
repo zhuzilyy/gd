@@ -826,7 +826,7 @@
                 <RadioGroup
                     android:id="@+id/rg_gdrdgdd"
                     android:layout_width="@dimen/d_0"
-                    android:layout_height="75dp"
+                    android:layout_height="@dimen/d_90"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
@@ -1306,6 +1306,7 @@
                     android:textColor="#FF000000"
                     />
                 <TextView
+                    android:id="@+id/tv_fileName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -1382,6 +1383,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:id="@+id/ll_spr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"

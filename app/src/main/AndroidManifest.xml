@@ -182,9 +182,6 @@
         <activity
             android:name=".activity.EngineeringFieldActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.Map1Activity"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

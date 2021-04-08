@@ -4,20 +4,16 @@ import com.gd.form.model.Department;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
-import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.model.ResultMsg;
+import com.gd.form.model.StationNoModel;
 import com.google.gson.JsonObject;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.QueryMap;
 
 /**
  * <p>类描述：请求接口
@@ -70,8 +66,8 @@ public interface Api {
      * 根据管道线路id获取该管道桩信息接口
      * @return
      */
-    @POST("pipestakeinfoget.html")
-    Call<List<Pipestakeinfo>> pipestakeinfoget(@Body JsonObject jsonObject);
+    @POST("pipestakeinfogetMulti.html")
+    Call<List<StationNoModel>> pipestakeinfoget(@Body JsonObject jsonObject);
 
 
     /**

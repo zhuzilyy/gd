@@ -42,7 +42,7 @@ android {
     defaultConfig {
         applicationId "com.gd.form"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -91,15 +91,22 @@ dependencies {
 
     //沉浸式状态栏
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    //高德地图-3D地图
+//    implementation 'com.amap.api:3dmap:latest.integration'
+//    //定位功能
+//    implementation 'com.amap.api:location:latest.integration'
+//    //搜索功能
+//    implementation 'com.amap.api:search:latest.integration'
 
     //高德地图-3D地图
-    implementation 'com.amap.api:3dmap:latest.integration'
+    implementation 'com.amap.api:3dmap:7.8.0'
     //定位功能
-    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:location:5.2.0'
+    //搜索功能
+    implementation 'com.amap.api:search:7.7.0'
 
     implementation project(':gallerypick')
     implementation project(':pickerview')
-//    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.github.bumptech.glide:glide:3.6.1'
     implementation 'com.lzy.widget:imagepicker:0.6.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-11'

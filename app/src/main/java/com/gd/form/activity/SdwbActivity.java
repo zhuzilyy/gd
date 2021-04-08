@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,13 +28,8 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.utils.MessageEvent;
 import com.gd.form.view.ListDialog;
 import com.jaeger.library.StatusBarUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,26 +50,29 @@ public class SdwbActivity extends BaseActivity {
     TextView tv_tbrq;
     @BindView(R.id.tv_gddw)
     TextView tv_gddw;
+    @BindView(R.id.tv_fileName)
+    TextView tv_fileName;
+    @BindView(R.id.tv_spr)
+    TextView tv_spr;
     @BindView(R.id.rg_wgxw)
     RadioGroup rg_wgxw;
     @BindView(R.id.rg_sgss)
     RadioGroup rg_sgss;
-
+    private int SELECT_ADDRESS = 102;
+    private int FILE_REQUEST_CODE = 100;
     private TimePickerView pvTime;
     private ListDialog dialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         initTimePicker();
-
-
         rg_wgxw.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
                 String sel = radioButton.getText().toString();
-                Log.i("-----------",sel);
+                Log.i("-----------", sel);
             }
         });
 
@@ -82,7 +81,7 @@ public class SdwbActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
                 String sel = radioButton.getText().toString();
-                Log.i("-----------",sel);
+                Log.i("-----------", sel);
             }
         });
 
@@ -90,7 +89,7 @@ public class SdwbActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext,R.color.colorFF52A7F9));
+        StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
 
     @Override
@@ -106,6 +105,7 @@ public class SdwbActivity extends BaseActivity {
             R.id.ll_scfj,
             R.id.ll_tbrq,
             R.id.iv_back,
+            R.id.ll_spr,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -113,8 +113,8 @@ public class SdwbActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_location:
-                Bundle bundle=new Bundle();
-                openActivity(MapActivity.class, bundle, false);
+                Intent intent = new Intent(SdwbActivity.this, MapActivity.class);
+                startActivityForResult(intent, SELECT_ADDRESS);
                 break;
             case R.id.ll_sdmc:
                 List<String> listM = new ArrayList<>();
@@ -129,7 +129,6 @@ public class SdwbActivity extends BaseActivity {
                 dialog.setData(listM);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    Log.i("-------------",positionM+"");
                     tv_sdmc.setText(listM.get(positionM));
                     dialog.dismiss();
                 });
@@ -145,7 +144,6 @@ public class SdwbActivity extends BaseActivity {
                 dialog.setData(listCz);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    Log.i("-------------",positionM+"");
                     tv_sdwz.setText(listCz.get(positionM));
                     dialog.dismiss();
                 });
@@ -165,7 +163,6 @@ public class SdwbActivity extends BaseActivity {
                 dialog.setData(listZh);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    Log.i("-------------",positionM+"");
                     tv_gddw.setText(listZh.get(positionM));
                     dialog.dismiss();
                 });
@@ -175,10 +172,28 @@ public class SdwbActivity extends BaseActivity {
                 pvTime.show(view);
                 break;
             case R.id.ll_scfj:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/*");//设置类型
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, 1);
+                Intent intentAddress = new Intent(SdwbActivity.this, SelectFileActivity.class);
+                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("application/*");//设置类型
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intent, 1);
+                break;
+            case R.id.ll_spr:
+                List<String> sprList = new ArrayList<>();
+
+                sprList.add("张科长");
+                sprList.add("李组长");
+                sprList.add("王局长");
+                if (dialog == null) {
+                    dialog = new ListDialog(mContext);
+                }
+                dialog.setData(sprList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tv_spr.setText(sprList.get(positionM));
+                    dialog.dismiss();
+                });
                 break;
         }
     }
@@ -188,11 +203,9 @@ public class SdwbActivity extends BaseActivity {
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-               // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
-
-                if (v.getId()==R.id.iv_jcsj){
-                  //  tv_jcsj.setText(getTime(date));
-                } else if (v.getId()==R.id.ll_tbrq){
+                if (v.getId() == R.id.iv_jcsj) {
+                    //  tv_jcsj.setText(getTime(date));
+                } else if (v.getId() == R.id.ll_tbrq) {
                     tv_tbrq.setText(getTime(date));
                 }
                 Log.i("pvTime", "onTimeSelect");
@@ -250,12 +263,19 @@ public class SdwbActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            Log.i("------", "选择的文件Uri = " + data.toString());
-            //通过Uri获取真实路径
-            final String excelPath = getRealFilePath(this, data.getData());
-            Log.i("------", "excelPath = " + excelPath);//    /storage/emulated/0/test.xls
-
+        if (data == null) {
+            return;
+        }
+        if (requestCode == FILE_REQUEST_CODE) {
+            String name = data.getStringExtra("fileName");
+            tv_fileName.setText(name);
+            //选择桩号
+        } else if (requestCode == SELECT_ADDRESS) {
+            String latitude = data.getStringExtra("latitude");
+            String longitude = data.getStringExtra("longitude");
+            if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
+                tv_location.setText("经度:" + longitude + "   纬度:" + latitude);
+            }
         }
 
     }
@@ -281,18 +301,5 @@ public class SdwbActivity extends BaseActivity {
             }
         }
         return data;
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent messageEvent) {
-        tv_location.setText(messageEvent.getMessage());
     }
 }
