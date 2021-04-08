@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -42,17 +43,11 @@ import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
-import com.gd.form.utils.MessageEvent;
 import com.gd.form.view.ListDialog;
-import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +76,8 @@ public class SgbhActivity extends BaseActivity {
     RadioGroup rg_isgood;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_spr)
+    TextView tv_spr;
 
     private TimePickerView pvTime;
     private ListDialog dialog;
@@ -90,9 +87,9 @@ public class SgbhActivity extends BaseActivity {
 
     private String[][] pipeStakes;
     private String[] pipLines;
-    private Dialog confirmDialog;
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_STATION = 101;
+    private int SELECT_ADDRESS = 102;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> path;
@@ -102,11 +99,8 @@ public class SgbhActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         initTimePicker();
         path = new ArrayList<>();
-        confirmDialog = new Dialog(mContext, R.style.BottomDialog);
-
         rg_isgood.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -179,32 +173,35 @@ public class SgbhActivity extends BaseActivity {
         Net.create(Api.class).pipelineinfosget()
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
-                    public void onResponse(List<Pipelineinfo> list1) {
-                        listPipelineinfo = list1;
-                        pipLines = new String[list1.size()];
-                        pipeStakes = new String[list1.size()][];
-                        for (int j = 0; j < list1.size(); j++) {
-                            pipLines[j] = list1.get(j).getName();
-                            getPipeStakeInfoRequest(list1.get(j).getId(), j);
+                    public void onResponse(List<Pipelineinfo> list) {
+                        for (int i = 0; i <list.size() ; i++) {
+                            Log.i("tag",list.get(i).getName());
                         }
+//                        listPipelineinfo = list1;
+//                        pipLines = new String[list1.size()];
+//                        pipeStakes = new String[list1.size()][];
+//                        for (int j = 0; j < list1.size(); j++) {
+//                            pipLines[j] = list1.get(j).getName();
+//                            getPipeStakeInfoRequest(list1.get(j).getId(), j);
+//                        }
                     }
                 });
     }
 
     private void getPipeStakeInfoRequest(int id, int i) {
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", id);
-        Net.create(Api.class).pipestakeinfoget(jsonObject)
-                .enqueue(new NetCallback<List<Pipestakeinfo>>(this, true) {
-                    @Override
-                    public void onResponse(List<Pipestakeinfo> list2) {
-                        pipeStakes[i] = new String[list2.size()];
-                        for (int j = 0; j < list2.size(); j++) {
-                            pipeStakes[i][j] = list2.get(j).getName();
-                        }
-                    }
-                });
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("id", id);
+//        Net.create(Api.class).pipestakeinfoget(jsonObject)
+//                .enqueue(new NetCallback<List<Pipestakeinfo>>(this, true) {
+//                    @Override
+//                    public void onResponse(List<Pipestakeinfo> list2) {
+//                        pipeStakes[i] = new String[list2.size()];
+//                        for (int j = 0; j < list2.size(); j++) {
+//                            pipeStakes[i][j] = list2.get(j).getName();
+//                        }
+//                    }
+//                });
     }
 
 
@@ -228,6 +225,7 @@ public class SgbhActivity extends BaseActivity {
             R.id.ll_tbrq,
             R.id.iv_back,
             R.id.rl_selectImage,
+            R.id.ll_spr,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -235,9 +233,8 @@ public class SgbhActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_location:
-                openActivity(MapActivity.class);
-//                Bundle bundle = new Bundle();
-//                openActivity(Map1Activity.class, bundle, false);
+                Intent intent = new Intent(SgbhActivity.this, MapActivity.class);
+                startActivityForResult(intent, SELECT_ADDRESS);
                 break;
 
             case R.id.ll_sgxs:
@@ -272,87 +269,11 @@ public class SgbhActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_zh:
-                Intent intentStation = new Intent(this,StationActivity.class);
-                startActivityForResult(intentStation,SELECT_STATION);
-
-//                LinearLayout root = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.activity_expand, null);
-//                // TextView tv_tips = root.findViewById(R.id.tv_tips);
-//                final ExpandableListView listView = (ExpandableListView) root.findViewById(R.id.expandable_list);
-//                //    final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(Constant.BOOKS, Constant.FIGURES);
-//                final IndicatorExpandableListAdapter adapter = new IndicatorExpandableListAdapter(pipLines, pipeStakes);
-//                listView.setAdapter(adapter);
-//
-//                // 清除默认的 Indicator
-//                listView.setGroupIndicator(null);
-//
-//                int groupCount = listView.getCount();
-////                for (int i=0; i<groupCount; i++)
-////                {
-////                    listView.expandGroup(i);
-////                }
-//                //  设置分组项的点击监听事件
-//                listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//                    @Override
-//                    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-//                        // Log.d(TAG, "onGroupClick: groupPosition:" + groupPosition + ", id:" + id);
-//                        boolean groupExpanded = parent.isGroupExpanded(groupPosition);
-//                        adapter.setIndicatorState(groupPosition, groupExpanded);
-//                        // 请务必返回 false，否则分组不会展开
-//                        return false;
-//                    }
-//                });
-//
-//                //  设置子选项点击监听事件
-//                listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//                    @Override
-//                    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-//                        // Toast.makeText(SgbhActivity.this, pipeStakes[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
-//                        tv_zh.setText(pipeStakes[groupPosition][childPosition] + "");
-//                        confirmDialog.dismiss();
-//                        return true;
-//                    }
-//                });
-//
-//                //初始化视图
-//                confirmDialog.setContentView(root);
-//
-//                Window window = confirmDialog.getWindow();
-//                if (window != null) {
-//                    WindowManager.LayoutParams params = window.getAttributes();
-//                    params.gravity = Gravity.CENTER;
-//                    params.width = mContext.getResources().getDisplayMetrics().widthPixels - Util.dpToPx(mContext, (int) mContext.getResources().getDimension(R.dimen.d_30)); // 宽度
-//                    params.height = mContext.getResources().getDisplayMetrics().heightPixels - Util.dpToPx(mContext, (int) mContext.getResources().getDimension(R.dimen.d_120)); // 高度
-//                    window.setAttributes(params);
-//                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                }
-//
-//                if (confirmDialog != null && !confirmDialog.isShowing()) {
-//                    confirmDialog.show();
-//                }
-
-
-//                List<String> listZh = new ArrayList<>();
-//
-//                listZh.add("Lt0081+300");
-//                listZh.add("LT0081+1334");
-//                listZh.add("LTL0082");
-//                if (dialog == null) {
-//                    dialog = new ListDialog(mContext);
-//                }
-//                dialog.setData(listZh);
-//                dialog.show();
-//                dialog.setListItemClick(positionM -> {
-//                    Log.i("-------------",positionM+"");
-//                    tv_zh.setText(listZh.get(positionM));
-//                    dialog.dismiss();
-//                });
-
-
+                Intent intentStation = new Intent(this, StationActivity.class);
+                startActivityForResult(intentStation, SELECT_STATION);
                 break;
 
             case R.id.ll_jcsj:
-                pvTime.show(view);
-                break;
             case R.id.ll_tbrq:
                 pvTime.show(view);
                 break;
@@ -361,12 +282,28 @@ public class SgbhActivity extends BaseActivity {
 //                intent.setType("application/*");//设置类型
 //                intent.addCategory(Intent.CATEGORY_OPENABLE);
 //                startActivityForResult(intent, 1);
-                Intent intent = new Intent(SgbhActivity.this, SelectFileActivity.class);
-                startActivityForResult(intent, FILE_REQUEST_CODE);
+                Intent intentAddress = new Intent(SgbhActivity.this, SelectFileActivity.class);
+                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.rl_selectImage:
                 initPermissions();
 //                GalleryPick.getInstance().setGalleryConfig(galleryConfig).openCamera(this);
+                break;
+            case R.id.ll_spr:
+                List<String> sprList = new ArrayList<>();
+
+                sprList.add("张科长");
+                sprList.add("李组长");
+                sprList.add("王局长");
+                if (dialog == null) {
+                    dialog = new ListDialog(mContext);
+                }
+                dialog.setData(sprList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tv_spr.setText(sprList.get(positionM));
+                    dialog.dismiss();
+                });
                 break;
         }
     }
@@ -401,21 +338,18 @@ public class SgbhActivity extends BaseActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
-                if (v.getId() == R.id.iv_jcsj) {
+                if (v.getId() == R.id.ll_jcsj) {
                     tv_jcsj.setText(getTime(date));
-                } else if (v.getId() == R.id.iv_tbrq) {
+                } else if (v.getId() == R.id.ll_tbrq) {
                     tv_tbrq.setText(getTime(date));
                 }
             }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-                        Log.i("pvTime", "onTimeSelectChanged");
-                    }
-                })
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+        }).setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+            @Override
+            public void onTimeSelectChanged(Date date) {
+                Log.i("pvTime", "onTimeSelectChanged");
+            }
+        }).setType(new boolean[]{true, true, true, false, false, false}).isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .addOnCancelClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -454,22 +388,26 @@ public class SgbhActivity extends BaseActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if (data == null) {
             return;
         }
-        if (data != null) {
-            if(requestCode == FILE_REQUEST_CODE){
-                String name = data.getStringExtra("fileName");
-                tv_fileName.setText(name);
-                //选择桩号
-            }else if(requestCode == SELECT_STATION){
-                String stationName = data.getStringExtra("stationName");
-                tv_zh.setText(stationName);
+        if (requestCode == FILE_REQUEST_CODE) {
+            String name = data.getStringExtra("fileName");
+            tv_fileName.setText(name);
+            //选择桩号
+        } else if (requestCode == SELECT_STATION) {
+            String stationName = data.getStringExtra("stationName");
+            tv_zh.setText(stationName);
+        } else if (requestCode == SELECT_ADDRESS) {
+            String latitude = data.getStringExtra("latitude");
+            String longitude = data.getStringExtra("longitude");
+            if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
+                tv_location.setText("经度:" + longitude + "   纬度:" + latitude);
             }
-
         }
 
     }
@@ -495,18 +433,5 @@ public class SgbhActivity extends BaseActivity {
             }
         }
         return data;
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent messageEvent) {
-        tv_location.setText(messageEvent.getMessage());
     }
 }

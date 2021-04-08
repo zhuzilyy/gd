@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_50"
         android:background="@color/colorFF52A7F9">
@@ -28,6 +29,5 @@
             android:text="水工保护巡检表"
             android:textColor="@color/write"
             android:textSize="@dimen/s_20" />
-
     </LinearLayout>
 </LinearLayout>

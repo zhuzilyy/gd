@@ -6,6 +6,55 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorFF52A7F9">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:src="@mipmap/ic_back" />
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/d_40"
+            android:layout_marginRight="@dimen/d_40"
+            android:gravity="center"
+            android:text="水工保护巡检表"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_20" />
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_16" />
+    </RelativeLayout>
+    <TextView
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:layout_marginRight="@dimen/d_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginBottom="@dimen/d_5"
+        android:layout_marginTop="@dimen/d_5"
+        android:id="@+id/tv_currentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <com.amap.api.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"

@@ -215,7 +215,7 @@
             android:textSize="@dimen/s_16" />
 
         <TextView
-            android:id="@+id/tv_tbrq"
+            android:id="@+id/tv_date"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
