@@ -22,6 +22,7 @@ import com.gd.form.activity.JobActivity;
 import com.gd.form.activity.JobsActivity;
 import com.gd.form.activity.SdwbActivity;
 import com.gd.form.activity.SgbhActivity;
+import com.gd.form.activity.StandingBookActivity;
 import com.gd.form.activity.XhglActivity;
 import com.gd.form.adapter.TodoListAdapter;
 import com.gd.form.base.BaseFragment;
@@ -63,7 +64,7 @@ public class WorkFragment extends BaseFragment {
     @SuppressLint("NonConstantResourceId")
     @OnClick({
            // R.id.ll_gd_check,
-            R.id.ll_jobs,
+            R.id.ll_tz,
             R.id.ll_sgbh,
             R.id.ll_job_xhgl,
             R.id.ll_job_fxgl,
@@ -78,8 +79,8 @@ public class WorkFragment extends BaseFragment {
 //                Intent intent=new Intent(context,GdCheckFormActivity.class);
 //                context.startActivity(intent);
 //                break;
-            case R.id.ll_jobs:
-               openActivity(JobsActivity.class);
+            case R.id.ll_tz:
+               openActivity(StandingBookActivity.class);
                 break;
 
             case R.id.ll_sgbh:

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:orientation="horizontal"
+        android:background="@color/colorFF52A7F9"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_back"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginStart="@dimen/d_15"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="管道及附属设施台账"
+            android:textColor="@color/write"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="@dimen/s_20"/>
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:src="@mipmap/add"
+            android:layout_marginRight="@dimen/d_15"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/write" />
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/mainSearchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_9"
+                android:layout_marginLeft="@dimen/d_9"
+                android:layout_marginTop="@dimen/d_5"
+                android:layout_marginEnd="@dimen/d_9"
+                android:layout_marginRight="@dimen/d_9"
+                android:layout_marginBottom="@dimen/d_5"
+                android:background="@drawable/main_edit_bg"
+                android:drawableRight="@mipmap/main_search"
+                android:drawablePadding="@dimen/d_9"
+                android:hint="请输入搜索内容"
+                android:imeOptions="actionSearch"
+                android:padding="@dimen/d_6"
+                android:singleLine="true" />
+
+
+            <!--作业区-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="作业区"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="作业区"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
+            <!--管道名称-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="管道名称"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="管道名称"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--管道标识-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="管道标识"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="管道标识"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--管道标识基础信息-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="管道标识基础信息"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <Button
+                    android:id="@+id/bt_gdbs"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@drawable/button_ship"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="维护"
+                    android:textColor="@color/write"
+                    android:textSize="@dimen/s_16" />
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--处置结果-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="处置结果"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="处置结果"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--记录人-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="记录人"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="记录人"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <include layout="@layout/layout_common"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

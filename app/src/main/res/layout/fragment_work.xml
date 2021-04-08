@@ -48,10 +48,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:weightSum="3"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/ll_xhgl"
+                android:id="@+id/ll_tz"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -69,147 +70,18 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="巡护管理"
+                    android:text="台账管理"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_fxgl"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/jcfxgl" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:text="防汛管理"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_ghgqgl"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/jcghgqgl" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:text="高后果区管理"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
 
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:weightSum="3">
-            <LinearLayout
-                android:id="@+id/ll_sdgl"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/jcsdgl" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:text="隧道管理"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/ll_ffgl"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/jcffgl" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:text="防腐管理"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/ll_jobs"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/jobs_updata" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/d_10"
-                    android:text="岗位维护"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
