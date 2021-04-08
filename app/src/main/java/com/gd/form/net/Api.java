@@ -74,7 +74,8 @@ public interface Api {
      *获取所有用户信息
      * @return
      */
-    @GET("pipemploysGetList.html")
+   // @GET("pipemploysGetList.html")
+    @GET("pipemploysGetListUI.html")
     Call<List<Pipemploys>> pipemploysGetList();
 
     /**
@@ -103,7 +104,8 @@ public interface Api {
      *根据用户id获取用户信息：
      * @return
      */
-    @POST("pipemploysGetListByPrimaryKey.html")
+    //@POST("pipemploysGetListByPrimaryKey.html")
+    @POST("pipemploysGetListUIByPrimaryKey.html")
     Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Body JsonObject jsonObject);
 }
 
