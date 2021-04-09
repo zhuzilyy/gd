@@ -152,6 +152,15 @@
             android:name=".activity.VideoMonitoringActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.StandingBookActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeMarkerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeMarkerMeasureActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.MonitoringRepairActivity"
             android:screenOrientation="portrait" />
         <activity
