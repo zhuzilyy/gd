@@ -13,6 +13,7 @@
             android:layout_height="wrap_content">
             <!--检测日期-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -32,7 +33,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
@@ -55,6 +56,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -81,6 +83,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_partName"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -124,6 +127,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_status"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -166,6 +170,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_question"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"
@@ -210,6 +215,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_result"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"
@@ -253,6 +259,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_remark"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"

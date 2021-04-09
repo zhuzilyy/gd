@@ -16,25 +16,25 @@
 
     <!-- Normal Permissions 不需要运行时注册 -->
     <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 用于提高GPS定位速度 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 读取缓存数据 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:name=".app.App"
@@ -51,7 +51,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="a640c1c964abd678bd84032f0ad43bd0" />
         <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
-        <service android:name="com.amap.api.location.APSService"/>
+        <service android:name="com.amap.api.location.APSService" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.gd.form.fileprovider"
@@ -135,6 +135,7 @@
             android:name=".activity.PipelineDepthActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".activity.WeightCarActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -172,6 +173,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.EngineeringFieldActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproverActivity"
             android:screenOrientation="portrait" />
     </application>
 

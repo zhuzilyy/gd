@@ -34,6 +34,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_no"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -60,6 +61,7 @@
 
             <!--作业区-->
             <LinearLayout
+                android:id="@+id/ll_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -78,6 +80,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_area"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -111,6 +114,7 @@
 
             <!--管道名称-->
             <LinearLayout
+                android:id="@+id/ll_pipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -129,6 +133,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_pipeName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -181,6 +186,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_deviceNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -238,6 +244,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_position"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -282,6 +289,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_disturbance_voltage"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -339,6 +347,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_ground_position"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -383,6 +392,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_j_disturbance_voltage"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -427,6 +437,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_alternating_current"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -471,6 +482,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_dc"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -515,6 +527,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_ground_material"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -559,6 +572,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_ground_resistance"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -585,6 +599,7 @@
 
             <!--测试时间-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -628,6 +643,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -636,6 +652,7 @@
 
             <!--测试人-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -672,6 +689,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -681,6 +699,7 @@
 
             <!--位置-->
             <LinearLayout
+                android:id="@+id/ll_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -697,8 +716,8 @@
                     android:text="位置"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-
                 <TextView
+                    android:id="@+id/tv_address"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

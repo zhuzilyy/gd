@@ -13,6 +13,7 @@
             android:layout_height="wrap_content">
             <!--作业区-->
             <LinearLayout
+                android:id="@+id/ll_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -31,6 +32,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_area"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -62,6 +64,7 @@
                 android:background="#FFE5E5E5" />
             <!--天气情况-->
             <LinearLayout
+                android:id="@+id/ll_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -79,8 +82,10 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:layout_width="@dimen/d_0"
+
+                <TextView
+                    android:id="@+id/tv_weather"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -88,12 +93,19 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="天气情况"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
             <View
@@ -122,6 +134,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_personName"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -146,6 +159,7 @@
                 android:background="#FFE5E5E5" />
             <!--巡检日期-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -188,6 +202,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -213,27 +228,33 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_startStationNo"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="选择开始桩号"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_endStationNo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:background="@null"
-                    android:gravity="end"
+                    android:gravity="center"
                     android:singleLine="true"
-                    android:text=""
+                    android:text="选择结束桩号"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
             <View
@@ -262,6 +283,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_status"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -339,11 +361,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noExpose"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -403,11 +425,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noBuild"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -467,11 +489,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noCar"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -492,17 +514,16 @@
 
             <!--管道上方、两侧是否有新近翻挖动土迹象-->
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:text="管道上方、两侧是否有新近翻挖动土迹象"
@@ -511,7 +532,7 @@
 
                 <RadioGroup
                     android:id="@+id/rg_isNew"
-                    android:layout_width="@dimen/d_0"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -593,11 +614,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noIllegal"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -785,11 +806,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noChange"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -1105,11 +1126,11 @@
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
-                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
                     <RadioButton
+                        android:checked="true"
                         android:id="@+id/rb_noSafe"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -1149,6 +1170,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_questionDetail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"
@@ -1193,6 +1215,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_changeMethod"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"
@@ -1237,6 +1260,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_handleResult"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"

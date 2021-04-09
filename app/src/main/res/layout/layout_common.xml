@@ -109,6 +109,7 @@
         android:background="#FFE5E5E5" />
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80FFFFFF"
@@ -145,6 +146,7 @@
     </LinearLayout>
 
     <View
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_1"
         android:layout_marginStart="@dimen/d_12"
@@ -152,6 +154,7 @@
         android:background="#FFE5E5E5" />
 
     <LinearLayout
+        android:id="@+id/ll_spr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80FFFFFF"
@@ -169,9 +172,9 @@
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
-        <EditText
-            android:id="@+id/et_clqk"
-            android:layout_width="@dimen/d_0"
+        <TextView
+            android:id="@+id/tv_spr"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
@@ -179,11 +182,20 @@
             android:layout_marginRight="@dimen/d_15"
             android:layout_weight="1"
             android:background="@null"
+            android:ellipsize="end"
             android:gravity="end"
-            android:hint="请输入审批人"
             android:singleLine="true"
+            android:text=""
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />
+
+        <ImageView
+            android:layout_width="@dimen/d_18"
+            android:layout_height="@dimen/d_18"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:src="@mipmap/ic_next" />
 
     </LinearLayout>
 
@@ -196,6 +208,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_tbrq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -242,7 +255,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/newClueSubmitButton"
+        android:id="@+id/btn_commit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/d_30"

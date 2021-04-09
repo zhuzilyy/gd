@@ -31,6 +31,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_no"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -74,6 +75,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_position"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -118,6 +120,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_electrical_position"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -161,6 +164,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_basePosition"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -205,6 +209,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_ground"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -231,6 +236,7 @@
             <!--测试时间/天气/温度）-->
             <!--测试时间-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -273,6 +279,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -281,6 +288,7 @@
 
             <!--天气-->
             <LinearLayout
+                android:id="@+id/ll_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -298,8 +306,9 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:layout_width="@dimen/d_0"
+                <TextView
+                    android:id="@+id/tv_weather"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -307,12 +316,19 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="天气"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
             <View
@@ -342,6 +358,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_temperature"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -386,6 +403,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_person"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -429,6 +447,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_remark"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

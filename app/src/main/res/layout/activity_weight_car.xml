@@ -88,6 +88,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_pipeName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -140,6 +141,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_stationNo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -173,6 +175,7 @@
 
             <!--行政位置-->
             <LinearLayout
+                android:id="@+id/ll_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -190,21 +193,29 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="行政位置"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />"
 
             </LinearLayout>
 
@@ -234,6 +245,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_roadName"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -278,6 +290,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_roadWidth"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -323,6 +336,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_pipeDiameter"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -368,6 +382,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_depth"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -394,6 +409,7 @@
 
             <!--碾压频率（**次/小时）-->
             <LinearLayout
+                android:id="@+id/ll_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -412,6 +428,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_rate"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -528,6 +545,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_remark"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

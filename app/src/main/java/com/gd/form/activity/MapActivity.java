@@ -48,6 +48,7 @@ public class MapActivity extends BaseActivity implements AMapLocationListener {
     private MyLocationStyle myLocationStyle;
     private double latitude;
     private double longitude;
+    private String area;
     //声明mlocationClient对象
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
@@ -146,6 +147,7 @@ public class MapActivity extends BaseActivity implements AMapLocationListener {
                 Intent intent = new Intent();
                 intent.putExtra("latitude",latitude+"");
                 intent.putExtra("longitude",longitude+"");
+                intent.putExtra("area",area);
                 setResult(RESULT_OK,intent);
                 finish();
                 break;
@@ -354,8 +356,7 @@ public class MapActivity extends BaseActivity implements AMapLocationListener {
                 tvCurrentLocation.setText("当前地址:" + amapLocation.getAddress());
                 latitude = amapLocation.getLatitude();
                 longitude = amapLocation.getLongitude();
-                Log.i("tag","latitude==="+latitude);
-                Log.i("tag","longitude==="+longitude);
+                area = amapLocation.getAddress();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"

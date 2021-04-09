@@ -1,8 +1,10 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -12,13 +14,9 @@ import com.gd.form.adapter.UsersExpandableListAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.Pipemploys;
-import com.gd.form.model.ResultMsg;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
-import com.gd.form.utils.ToastUtil;
-import com.gd.form.view.ListDialog;
-import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -27,12 +25,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class UsersActivity extends BaseActivity {
+public class ApproverActivity extends BaseActivity {
     @BindView(R.id.lv_users)
     ExpandableListView lv_users;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     List<Jobs> list = new ArrayList<>();
-    private ListDialog dialog;
-
     private String[] departmentNames;
     private String[][] userNames;
     private String[][] userNameIds;
@@ -44,6 +42,7 @@ public class UsersActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvTitle.setText("审批人");
         //  设置分组项的点击监听事件
         lv_users.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -62,48 +61,17 @@ public class UsersActivity extends BaseActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 // Toast.makeText(UsersActivity.this, userNames[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
                 //  Toast.makeText(UsersActivity.this, userNameIds[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
-
-
-                List<String> listM = new ArrayList<>();
-
-                listM.add("修改");
-                listM.add("删除");
-                if (dialog == null) {
-                    dialog = new ListDialog(mContext);
-                }
-                dialog.setData(listM);
-                dialog.show();
-                dialog.setListItemClick(positionM -> {
-                    if (positionM == 0) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("id", userNameIds[groupPosition][childPosition]);
-                        openActivity(UserActivity.class, bundle, false);
-                    } else if (positionM == 1) {
-                        delRequest(userNameIds[groupPosition][childPosition]);
-                    }
-                    dialog.dismiss();
-                });
+                Intent intent = new Intent();
+                intent.putExtra("name",userNames[groupPosition][childPosition]);
+                intent.putExtra("id",userNameIds[groupPosition][childPosition]);
+                setResult(RESULT_OK,intent);
+                finish();
                 return true;
             }
         });
     }
 
-    private void delRequest(String id) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", id);
 
-        Net.create(Api.class).pipemploysDelete(jsonObject)
-                .enqueue(new NetCallback<ResultMsg>(this, true) {
-                    @Override
-                    public void onResponse(ResultMsg resultMsg) {
-                        ToastUtil.show(resultMsg.getMsg() + "");
-                        if (resultMsg.getCode() == 200) {
-                            getListRequest();
-                        }
-
-                    }
-                });
-    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -162,12 +130,11 @@ public class UsersActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_users;
+        return R.layout.activity_approver;
     }
 
     @OnClick({
             R.id.iv_back,
-            R.id.iv_add,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -175,7 +142,7 @@ public class UsersActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_add:
-                openActivity(UserActivity.class);
+
                 break;
 
         }

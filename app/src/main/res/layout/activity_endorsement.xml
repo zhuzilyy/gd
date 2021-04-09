@@ -33,6 +33,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_stationNo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -84,6 +85,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_des"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"
@@ -129,6 +131,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_record"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:layout_marginStart="@dimen/d_15"

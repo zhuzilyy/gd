@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,10 +40,10 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
-import com.gd.form.model.Pipestakeinfo;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.ListDialog;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
@@ -78,23 +79,23 @@ public class SgbhActivity extends BaseActivity {
     RecyclerView rvResultPhoto;
     @BindView(R.id.tv_spr)
     TextView tv_spr;
+    @BindView(R.id.et_clqk)
+    EditText et_clqk;
 
     private TimePickerView pvTime;
     private ListDialog dialog;
-
-    List<Pipelineinfo> listPipelineinfo = new ArrayList<>();
-    List<Pipestakeinfo> listPipestakeinfo = new ArrayList<>();
-
-    private String[][] pipeStakes;
-    private String[] pipLines;
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 102;
+    private int SELECT_APPROVER = 103;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> path;
     private GalleryConfig galleryConfig;
     private PhotoAdapter photoAdapter;
+    private String approverName;
+    private String approverId;
+    private boolean isComplete = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +113,24 @@ public class SgbhActivity extends BaseActivity {
         getPipelineInfoListRequest();
         initGallery();
         initConfig();
+        initListener();
+    }
+
+    //监听事件
+    private void initListener() {
+        rg_isgood.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yes:
+                        isComplete = true;
+                        break;
+                    case R.id.rb_no:
+                        isComplete = false;
+                        break;
+                }
+            }
+        });
     }
 
     private void initConfig() {
@@ -174,8 +193,8 @@ public class SgbhActivity extends BaseActivity {
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
-                        for (int i = 0; i <list.size() ; i++) {
-                            Log.i("tag",list.get(i).getName());
+                        for (int i = 0; i < list.size(); i++) {
+                            Log.i("tag", list.get(i).getName());
                         }
 //                        listPipelineinfo = list1;
 //                        pipLines = new String[list1.size()];
@@ -226,11 +245,19 @@ public class SgbhActivity extends BaseActivity {
             R.id.iv_back,
             R.id.rl_selectImage,
             R.id.ll_spr,
+            R.id.btn_commit,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            //保存提交
+            case R.id.btn_commit:
+                //数据上传
+                if(paramsIsComplete()){
+
+                }
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(SgbhActivity.this, MapActivity.class);
@@ -290,22 +317,39 @@ public class SgbhActivity extends BaseActivity {
 //                GalleryPick.getInstance().setGalleryConfig(galleryConfig).openCamera(this);
                 break;
             case R.id.ll_spr:
-                List<String> sprList = new ArrayList<>();
-
-                sprList.add("张科长");
-                sprList.add("李组长");
-                sprList.add("王局长");
-                if (dialog == null) {
-                    dialog = new ListDialog(mContext);
-                }
-                dialog.setData(sprList);
-                dialog.show();
-                dialog.setListItemClick(positionM -> {
-                    tv_spr.setText(sprList.get(positionM));
-                    dialog.dismiss();
-                });
+                Intent intentApprover = new Intent(SgbhActivity.this, ApproverActivity.class);
+                startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
         }
+    }
+
+    //检查参数是不是完整
+    private boolean paramsIsComplete() {
+        if (TextUtils.isEmpty(tv_zh.getText().toString())) {
+            ToastUtil.show("请选择桩号");
+            return false;
+        }
+        if (TextUtils.isEmpty(tv_sgxs.getText().toString())) {
+            ToastUtil.show("请选择水工形式");
+            return false;
+        }
+        if (TextUtils.isEmpty(tv_cz.getText().toString())) {
+            ToastUtil.show("请选择材质");
+            return false;
+        }
+        if (TextUtils.isEmpty(et_clqk.getText().toString())) {
+            ToastUtil.show("请输入处理情况");
+            return false;
+        }
+        if (TextUtils.isEmpty(tv_location.getText().toString())) {
+            ToastUtil.show("请选择坐标");
+            return false;
+        }
+        if (TextUtils.isEmpty(tv_spr.getText().toString())) {
+            ToastUtil.show("请选择审批人");
+            return false;
+        }
+        return true;
     }
 
     // 授权管理
@@ -407,6 +451,12 @@ public class SgbhActivity extends BaseActivity {
             String longitude = data.getStringExtra("longitude");
             if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
                 tv_location.setText("经度:" + longitude + "   纬度:" + latitude);
+            }
+        } else if (requestCode == SELECT_APPROVER) {
+            approverName = data.getStringExtra("name");
+            approverId = data.getStringExtra("id");
+            if (!TextUtils.isEmpty(approverName)) {
+                tv_spr.setText(approverName);
             }
         }
 

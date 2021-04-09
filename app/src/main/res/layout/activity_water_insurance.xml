@@ -13,6 +13,7 @@
             android:layout_height="wrap_content">
             <!--作业区-->
             <LinearLayout
+                android:id="@+id/ll_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -31,6 +32,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_area"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -82,6 +84,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_company"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -108,6 +111,7 @@
 
             <!--日期-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -150,6 +154,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -175,6 +180,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_name"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -199,6 +205,7 @@
                 android:background="#FFE5E5E5" />
             <!--天气-->
             <LinearLayout
+                android:id="@+id/ll_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -217,6 +224,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_weather"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -268,6 +276,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_area"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -312,6 +321,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_working_plane"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -339,6 +349,7 @@
 
             <!--桩号-->
             <LinearLayout
+                android:id="@+id/ll_zh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -356,8 +367,9 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:layout_width="@dimen/d_0"
+                <TextView
+                    android:id="@+id/tv_zh"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -365,12 +377,19 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="桩号"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
 
@@ -414,6 +433,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_problem"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_30"
                     android:layout_marginStart="@dimen/d_15"
@@ -519,6 +539,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_advice"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_30"
                     android:layout_marginStart="@dimen/d_15"
@@ -549,42 +570,65 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
+                android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:text="处理方式"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:layout_width="0dp"
+                <RadioGroup
+                    android:id="@+id/rg_handle"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
                     android:background="@null"
                     android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
+                    android:orientation="vertical"
                     android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_16">
 
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
+                    <RadioButton
+                        android:id="@+id/rb_mouth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="头通知施工单位整改" />
+
+                    <RadioButton
+                        android:id="@+id/rb_mouthUpload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:layout_marginTop="@dimen/d_2"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="头上报输气管理处" />
+                    <RadioButton
+                        android:id="@+id/rb_writeUpload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:layout_marginTop="@dimen/d_2"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="书面上报输气管理处" />
+                </RadioGroup>
 
             </LinearLayout>
             <View
@@ -614,6 +658,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_manager"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -659,6 +704,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_finishCount"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -718,6 +764,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:id="@+id/et_other"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_30"
                     android:layout_marginStart="@dimen/d_15"
@@ -745,6 +792,8 @@
 
             <!--选择图片-->
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_selectImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -787,6 +836,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -794,6 +844,8 @@
                 android:background="#FFE5E5E5" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/rvImportantPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/d_15"

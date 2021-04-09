@@ -126,22 +126,22 @@
                     android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
                     />
+
                 <TextView
                     android:id="@+id/tv_sdmc"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
-                    android:gravity="end"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
                     android:text=""
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
                 <ImageView
 
                     android:layout_width="@dimen/d_18"
@@ -248,9 +248,9 @@
 
                     <RadioButton
                         android:drawableRight="@drawable/radio_btn"
-
                         android:id="@+id/rb_yes"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.无违章采石、采矿、爆破行为" />
@@ -344,14 +344,16 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_thirdNo"
                         android:drawableRight="@drawable/radio_btn"
-
+                        android:checked="true"
                         android:button="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.无第三方施工行为" />
 
                     <RadioButton
+                        android:id="@+id/rb_thirdYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -439,8 +441,9 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_suspectNo"
                         android:drawableRight="@drawable/radio_btn"
-
+                        android:checked="true"
                         android:button="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -450,6 +453,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_suspectYes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="b.有可疑人员、车辆逗留现象" />
@@ -535,8 +539,9 @@
 
                     <RadioButton
                         android:drawableRight="@drawable/radio_btn"
-
+                        android:checked="true"
                         android:button="@null"
+                        android:id="@+id/rb_blockYes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.完好" />
@@ -545,6 +550,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_blockMiddle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="b.发生局部破损" />
@@ -552,6 +558,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_blockNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="c.发生大面积破损" />
@@ -638,8 +645,9 @@
 
                     <RadioButton
                         android:drawableRight="@drawable/radio_btn"
-
+                        android:checked="true"
                         android:button="@null"
+                        android:id="@+id/rb_caveNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.无裂缝、沉降，四周有无滑坡、水土流失" />
@@ -648,6 +656,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_caveMiddle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="b.有裂缝、沉降情况" />
@@ -655,6 +664,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_caveYes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="c.有滑坡、水土流失情况" />
@@ -739,8 +749,10 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_waterYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.完好，无破损" />
@@ -749,6 +761,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_waterMiddle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="b.局部损坏" />
@@ -756,6 +769,7 @@
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
+                        android:id="@+id/rb_waterNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="c.损坏严重，作用基本失效" />
@@ -840,13 +854,16 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_transitNo"
                         android:drawableRight="@drawable/radio_btn"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.无管道本体翘起、下沉，无管沟沉降" />
 
                     <RadioButton
+                        android:id="@+id/rb_transitMiddle"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -854,6 +871,7 @@
                         android:layout_height="wrap_content"
                         android:text="b.有管道本体偏离原有位置" />
                     <RadioButton
+                        android:id="@+id/rb_transitYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -941,13 +959,16 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_badNo"
                         android:drawableRight="@drawable/radio_btn"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.无异响、异味现象" />
 
                     <RadioButton
+                        android:id="@+id/rb_badYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -1036,13 +1057,16 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_gasYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.检测合格" />
 
                     <RadioButton
+                        android:id="@+id/rb_gasNo"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -1131,13 +1155,16 @@
                      >
 
                     <RadioButton
+                        android:id="@+id/rb_alarmYes"
                         android:drawableRight="@drawable/radio_btn"
                         android:button="@null"
+                        android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="a.外观完好" />
 
                     <RadioButton
+                        android:id="@+id/rb_alarmNo"
                         android:drawableRight="@drawable/radio_btn"
                         android:layout_marginTop="@dimen/d_5"
                         android:button="@null"
@@ -1209,7 +1236,7 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
-                    android:id="@+id/et_other_pro"
+                    android:id="@+id/et_other_problem"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -1222,7 +1249,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:hint="其他情况"
+                    android:hint="处理情况"
                     />
 
             </LinearLayout>
@@ -1339,6 +1366,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -1376,6 +1404,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
@@ -1435,6 +1464,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_tbrq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1483,13 +1513,14 @@
 
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
             <Button
-                android:id="@+id/newClueSubmitButton"
+                android:id="@+id/btn_commit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/d_30"

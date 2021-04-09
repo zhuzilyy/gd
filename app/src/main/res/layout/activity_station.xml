@@ -26,6 +26,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/stationRefreshLayout"
             android:layout_width="match_parent"
@@ -35,30 +36,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <ViewSwitcher
-                android:id="@+id/carListViewSwitcher"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="@dimen/d_10"
+                    android:background="#FFF3F3F3" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/d_10"
-                        android:background="#FFF3F3F3" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/stationRecycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </LinearLayout>
-
-                <include layout="@layout/view_no_data" />
-            </ViewSwitcher>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/stationRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
 
             <com.scwang.smartrefresh.layout.footer.ClassicsFooter
                 android:layout_width="match_parent"

@@ -37,18 +37,25 @@ public class StationActivity extends BaseActivity {
     RecyclerView stationRecycler;
     @BindView(R.id.mainSearchEditText)
     EditText mainSearchEditText;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     @BindView(R.id.stationRefreshLayout)
     SmartRefreshLayout stationRefreshLayout;
     private List<StationNoModel> stationNoModelList;
     private StationAdapter adapter;
+    private String selectTag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvTitle.setText("搜索桩号");
         initViews();
         initData();
+        if (getIntent() != null) {
+            selectTag = getIntent().getStringExtra("tag");
+        }
     }
 
     private void initData() {
@@ -61,6 +68,7 @@ public class StationActivity extends BaseActivity {
             public void onItemClickListener(View v, int position) {
                 Intent intent = new Intent();
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
+                intent.putExtra("selectTag", selectTag);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -75,6 +83,7 @@ public class StationActivity extends BaseActivity {
                 .enqueue(new NetCallback<List<StationNoModel>>(this, true) {
                     @Override
                     public void onResponse(List<StationNoModel> list) {
+                        stationNoModelList.clear();
                         if (list != null && list.size() > 0) {
                             stationRefreshLayout.setVisibility(View.VISIBLE);
                             llNoData.setVisibility(View.GONE);
