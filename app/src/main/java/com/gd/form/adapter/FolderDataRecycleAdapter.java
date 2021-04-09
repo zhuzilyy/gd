@@ -99,7 +99,7 @@ public class FolderDataRecycleAdapter extends RecyclerView.Adapter<FolderDataRec
                 tipDialog.dismiss();
                 Intent intent = new Intent();
                 intent.putExtra("fileName", file.getName());
-                intent.putExtra("selectFile", file);
+                intent.putExtra("selectFilePath", file.getAbsolutePath());
                 ((SelectFileActivity) mContext).setResult(Activity.RESULT_OK, intent);
                 ((SelectFileActivity) mContext).finish();
             }

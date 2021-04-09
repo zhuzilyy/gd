@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_50"
         android:background="@color/colorFF52A7F9">
 
         <ImageView
+            android:layout_centerVertical="true"
             android:id="@+id/iv_back"
             android:layout_width="@dimen/d_24"
             android:layout_height="@dimen/d_24"
@@ -20,6 +20,7 @@
             android:src="@mipmap/ic_back" />
 
         <TextView
+            android:layout_centerInParent="true"
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,5 +30,18 @@
             android:text="水工保护巡检表"
             android:textColor="@color/write"
             android:textSize="@dimen/s_20" />
-    </LinearLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center"
+            android:text="测量"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_16" />
+    </RelativeLayout>
 </LinearLayout>

@@ -51,7 +51,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/ll_xhgl"
+                android:id="@+id/ll_tzsj"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="巡护管理"
+                    android:text="台账设计"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 

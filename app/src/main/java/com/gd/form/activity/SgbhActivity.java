@@ -2,14 +2,9 @@ package com.gd.form.activity;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +25,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -38,13 +42,12 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
-import com.gd.form.model.Pipelineinfo;
-import com.gd.form.net.Api;
-import com.gd.form.net.Net;
-import com.gd.form.net.NetCallback;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.ListDialog;
+import com.gd.form.view.LoadView;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -96,21 +99,14 @@ public class SgbhActivity extends BaseActivity {
     private String approverName;
     private String approverId;
     private boolean isComplete = true;
-
+    private String selectFilePath;
+    private LoadView loadView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTimePicker();
         path = new ArrayList<>();
-        rg_isgood.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
-                String sel = radioButton.getText().toString();
-            }
-        });
-
-        getPipelineInfoListRequest();
+        loadView = new LoadView(this);
         initGallery();
         initConfig();
         initListener();
@@ -187,43 +183,6 @@ public class SgbhActivity extends BaseActivity {
 
     }
 
-    private void getPipelineInfoListRequest() {
-
-        Net.create(Api.class).pipelineinfosget()
-                .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
-                    @Override
-                    public void onResponse(List<Pipelineinfo> list) {
-                        for (int i = 0; i < list.size(); i++) {
-                            Log.i("tag", list.get(i).getName());
-                        }
-//                        listPipelineinfo = list1;
-//                        pipLines = new String[list1.size()];
-//                        pipeStakes = new String[list1.size()][];
-//                        for (int j = 0; j < list1.size(); j++) {
-//                            pipLines[j] = list1.get(j).getName();
-//                            getPipeStakeInfoRequest(list1.get(j).getId(), j);
-//                        }
-                    }
-                });
-    }
-
-    private void getPipeStakeInfoRequest(int id, int i) {
-
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("id", id);
-//        Net.create(Api.class).pipestakeinfoget(jsonObject)
-//                .enqueue(new NetCallback<List<Pipestakeinfo>>(this, true) {
-//                    @Override
-//                    public void onResponse(List<Pipestakeinfo> list2) {
-//                        pipeStakes[i] = new String[list2.size()];
-//                        for (int j = 0; j < list2.size(); j++) {
-//                            pipeStakes[i][j] = list2.get(j).getName();
-//                        }
-//                    }
-//                });
-    }
-
-
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -254,10 +213,21 @@ public class SgbhActivity extends BaseActivity {
                 break;
             //保存提交
             case R.id.btn_commit:
+                //首先要遍历上传图片或是文件
+                loadView.show();
+                if(path.size()>0){
+                    for (int i=0;i<path.size();i++){
+                        uploadFiles(TimeUtil.getCurrentTime()+"_waterProtectionPhoto",path.get(i));
+                    }
+                }
+                if(TextUtils.isEmpty(tv_fileName.getText().toString())){
+                    uploadFiles(TimeUtil.getCurrentTime()+"_waterProtectionFile",selectFilePath);
+                }
                 //数据上传
-                if(paramsIsComplete()){
+                if (paramsIsComplete()) {
 
                 }
+                loadView.dismiss();
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(SgbhActivity.this, MapActivity.class);
@@ -266,7 +236,6 @@ public class SgbhActivity extends BaseActivity {
 
             case R.id.ll_sgxs:
                 List<String> listM = new ArrayList<>();
-
                 listM.add("护岸、过水面");
                 listM.add("挡土墙");
                 listM.add("护坡");
@@ -305,16 +274,11 @@ public class SgbhActivity extends BaseActivity {
                 pvTime.show(view);
                 break;
             case R.id.ll_scfj:
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("application/*");//设置类型
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                startActivityForResult(intent, 1);
                 Intent intentAddress = new Intent(SgbhActivity.this, SelectFileActivity.class);
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.rl_selectImage:
                 initPermissions();
-//                GalleryPick.getInstance().setGalleryConfig(galleryConfig).openCamera(this);
                 break;
             case R.id.ll_spr:
                 Intent intentApprover = new Intent(SgbhActivity.this, ApproverActivity.class);
@@ -381,7 +345,6 @@ public class SgbhActivity extends BaseActivity {
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                // Toast.makeText(SgbhActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                 if (v.getId() == R.id.ll_jcsj) {
                     tv_jcsj.setText(getTime(date));
                 } else if (v.getId() == R.id.ll_tbrq) {
@@ -441,6 +404,7 @@ public class SgbhActivity extends BaseActivity {
         }
         if (requestCode == FILE_REQUEST_CODE) {
             String name = data.getStringExtra("fileName");
+            selectFilePath = data.getStringExtra("selectFilePath");
             tv_fileName.setText(name);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
@@ -462,26 +426,33 @@ public class SgbhActivity extends BaseActivity {
 
     }
 
-    public static String getRealFilePath(final Context context, final Uri uri) {
-        if (null == uri) return null;
-        final String scheme = uri.getScheme();
-        String data = null;
-        if (scheme == null)
-            data = uri.getPath();
-        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-            data = uri.getPath();
-        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
-            if (null != cursor) {
-                if (cursor.moveToFirst()) {
-                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                    if (index > -1) {
-                        data = cursor.getString(index);
-                    }
-                }
-                cursor.close();
+    //上传阿里云文件
+    public void uploadFiles(String fileName, String filePath) {
+        OSSCredentialProvider ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        OSS oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                Log.i("tag", "=getETag==" + result.getETag());
+                Log.i("tag", "=getRequestId==" + result.getRequestId());
             }
-        }
-        return data;
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+                    // 服务异常。
+                    Log.i("ErrorCode", serviceException.getErrorCode());
+                    Log.i("RequestId", serviceException.getRequestId());
+                    Log.i("HostId", serviceException.getHostId());
+                    Log.i("RawMessage", serviceException.getRawMessage());
+
+                }
+            }
+        });
     }
 }

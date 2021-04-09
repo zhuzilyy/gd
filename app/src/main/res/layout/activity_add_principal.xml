@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/layout_title"/>
-    <ScrollView
+    android:layout_height="match_parent"
+    android:background="@color/write"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!--工程名称-->
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,12 +32,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="工程名称"
+                    android:text="用户ID"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:id="@+id/et_name"
+                    android:id="@+id/et_user_id"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -40,21 +46,22 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="工程名称"
+                    android:hint="请输入用户ID"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--施工单位-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,12 +76,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="施工单位"
+                    android:text="用户名"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:id="@+id/et_companyName"
+                    android:id="@+id/et_user_name"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -83,23 +90,23 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="施工单位"
+                    android:hint="请输入用户名"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--日期-->
+
             <LinearLayout
-                android:visibility="gone"
+                android:id="@+id/ll_gwzc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -113,11 +120,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="日期"
+                    android:text="岗位职称"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:id="@+id/tv_gwzc"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -133,24 +141,24 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/d_10"
                     android:layout_marginRight="@dimen/d_10"
                     android:src="@mipmap/ic_next" />
-
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--桩号-->
+
             <LinearLayout
-                android:id="@+id/ll_stationNo"
+                android:id="@+id/ll_bmmc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -164,13 +172,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="桩号"
+                    android:text="部门名称"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-
                 <TextView
-                    android:id="@+id/tv_stationNo"
+                    android:id="@+id/tv_bmmc"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -186,72 +193,22 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/d_10"
                     android:layout_marginRight="@dimen/d_10"
                     android:src="@mipmap/ic_next" />
-
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--施工地点-->
-            <LinearLayout
-                android:id="@+id/ll_area"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="施工地点"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:id="@+id/tv_area"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-            <!--隐蔽内容-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -266,12 +223,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="隐蔽内容"
+                    android:text="密码"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:id="@+id/et_hideContent"
+                    android:id="@+id/et_user_pwd"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -280,67 +237,9 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="隐蔽内容"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <!--附图及说明-->
-            <TextView
-                android:layout_marginBottom="@dimen/d_10"
-                android:layout_marginTop="@dimen/d_10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/d_15"
-                android:layout_marginLeft="@dimen/d_15"
-                android:text="附图及说明"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:textSize="@dimen/s_16" />
-
-            <!--检查内容及其存在的问题-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="备注"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_5"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="left"
-                    android:hint="备注"
+                    android:hint="请输入密码"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
@@ -354,9 +253,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-            <!--选择图片-->
             <LinearLayout
-                android:id="@+id/ll_selectPic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -370,12 +267,13 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="添加照片"
+                    android:text="邮箱"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:layout_width="0dp"
+                <EditText
+                    android:id="@+id/et_user_mail"
+                    android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -384,20 +282,13 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="end"
+                    android:hint="请输入邮箱"
                     android:singleLine="true"
-                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -405,61 +296,65 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvResultPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/d_15"
-                android:layout_marginRight="@dimen/d_15"
-                android:paddingBottom="@dimen/d_5" />
-
-            <!--检查意见-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                >
+                android:paddingBottom="@dimen/d_12">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="检查意见"
+                    android:text="电话"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:id="@+id/et_advice"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_30"
+                    android:id="@+id/et_user_tel"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_5"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="left"
-                    android:hint="检查意见"
+                    android:gravity="end"
+                    android:hint="请输入电话"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <include layout="@layout/layout_common"/>
+
+
+            <Button
+                android:id="@+id/bt_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_30"
+                android:layout_marginLeft="@dimen/d_30"
+                android:layout_marginTop="@dimen/d_30"
+                android:layout_marginEnd="@dimen/d_30"
+                android:layout_marginRight="@dimen/d_30"
+                android:layout_marginBottom="@dimen/d_30"
+                android:background="@drawable/button_ship"
+                android:text="确 定"
+                android:textColor="@color/write"
+                android:textSize="@dimen/s_18" />
         </LinearLayout>
-
-    </ScrollView>
-
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

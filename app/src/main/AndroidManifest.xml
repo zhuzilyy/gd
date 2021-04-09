@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.gd.form">
     <!-- 地图SDK（包含其搜索功能）需要的基础权限 -->
     <!-- 允许程序打开网络套接字 -->
@@ -18,23 +19,14 @@
     <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于提高GPS定位速度 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 读取缓存数据 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-
     <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".app.App"
@@ -135,9 +127,9 @@
             android:name=".activity.PipelineDepthActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:windowSoftInputMode="adjustPan"
             android:name=".activity.WeightCarActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.EndorsementActivity"
             android:screenOrientation="portrait" />
@@ -176,6 +168,40 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ApproverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MeasureRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeMeasureActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.PipeTagActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StandingBookActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeMeasureDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipePrincipalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddPrincipalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeStandingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddStandingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeWindVaneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddWindVaneActivity"
             android:screenOrientation="portrait" />
     </application>
 
