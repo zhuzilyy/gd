@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class StationActivity extends BaseActivity {
     @BindView(R.id.stationRecycler)
@@ -68,6 +69,8 @@ public class StationActivity extends BaseActivity {
             public void onItemClickListener(View v, int position) {
                 Intent intent = new Intent();
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
+                intent.putExtra("stationId", stationNoModelList.get(position).getId()+"");
+                intent.putExtra("pipeId", stationNoModelList.get(position).getPipeid()+"");
                 intent.putExtra("selectTag", selectTag);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -128,5 +131,15 @@ public class StationActivity extends BaseActivity {
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_station;
+    }
+    @OnClick({
+            R.id.iv_back,
+    })
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+        }
     }
 }

@@ -1,21 +1,34 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.view.LoadView;
+import com.gd.form.constants.Constant;
+import com.gd.form.model.LoginModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 
 public class LoginActivity extends BaseActivity {
-    String uniqueId="";
-    private LoadView loading;
+    @BindView(R.id.et_username)
+    EditText etUserName;
+    @BindView(R.id.et_pwd)
+    EditText etPwd;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,17 +49,43 @@ public class LoginActivity extends BaseActivity {
     @OnClick({
             R.id.bt_login,
     })
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.bt_login:
-
-                Bundle bundle=new Bundle();
-                //bundle.putString("msg",loginBeanObj.getRealName());
-                openActivity(MainActivity.class, bundle, true);
+                if (TextUtils.isEmpty(etUserName.getText().toString())) {
+                    ToastUtil.show("请输入用户名");
+                    return;
+                }
+                if (TextUtils.isEmpty(etPwd.getText().toString())) {
+                    ToastUtil.show("请输入密码");
+                    return;
+                }
+                login(etUserName.getText().toString(), etPwd.getText().toString());
                 break;
 
         }
     }
 
+    //登录
+    private void login(String userName, String pwd) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", userName);
+        jsonObject.addProperty("password", pwd);
+        Net.create(Api.class).login(jsonObject)
+                .enqueue(new NetCallback<LoginModel>(this, true) {
+                    @Override
+                    public void onResponse(LoginModel loginModel) {
+                        if(loginModel.getCode() == Constant.SUCCESS_CODE){
+                            SPUtil.put(LoginActivity.this,"token",loginModel.getMsg());
+                            SPUtil.put(LoginActivity.this,"userId",userName);
+                            ToastUtil.show("登录成功");
+                            openActivity(MainActivity.class);
+                        }else{
+                            ToastUtil.show(loginModel.getMsg());
+                        }
+                    }
+                });
+
+    }
 
 }

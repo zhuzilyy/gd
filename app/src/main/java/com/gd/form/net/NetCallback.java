@@ -6,12 +6,9 @@ import android.util.Log;
 
 import com.gd.form.R;
 import com.gd.form.utils.ToastUtil;
-import com.google.gson.Gson;
 
-import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-import java.net.URLDecoder;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -39,6 +36,7 @@ public abstract class NetCallback<T> extends BaseCallback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         super.onResponse(call, response);
+        Log.i("tag",response.body().toString());
         if(response.code()==200){
             T body = response.body();
 

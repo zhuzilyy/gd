@@ -36,7 +36,7 @@ public class StandingBookActivity extends BaseActivity {
 
     @OnClick({
             R.id.iv_back,
-            R.id.ll_pipeTag,
+            R.id.ll_pipeTagBaseInfo,
             R.id.ll_pipePerson,
             R.id.ll_station,
             R.id.ll_wind_vane,
@@ -46,7 +46,7 @@ public class StandingBookActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.ll_pipeTag:
+            case R.id.ll_pipeTagBaseInfo:
                 openActivity(PipeTagActivity.class);
                 break;
             case R.id.ll_pipePerson:

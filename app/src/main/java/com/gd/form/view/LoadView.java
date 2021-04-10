@@ -16,7 +16,6 @@ import com.gd.form.R;
 public class LoadView extends Dialog {
 
     private Context context;
-
     public LoadView(Context context) {
         super(context);
         this.context=context;
@@ -50,4 +49,5 @@ public class LoadView extends Dialog {
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;
     }
+
 }

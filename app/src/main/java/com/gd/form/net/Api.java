@@ -2,9 +2,11 @@ package com.gd.form.net;
 
 import com.gd.form.model.Department;
 import com.gd.form.model.Jobs;
+import com.gd.form.model.LoginModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
+import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
 import com.google.gson.JsonObject;
 
@@ -24,16 +26,18 @@ public interface Api {
 
     /**
      * 登录请求
+     *
      * @param jsonObject 登录参数
      */
-    @POST("loginController.do?loginApp")
-    Call<String> login(@Body JsonObject jsonObject);
+    @POST("pipemploysVerification.html")
+    Call<LoginModel> login(@Body JsonObject jsonObject);
+
     @POST("androidTroubleformController.do?getAllDeparts")
     Call<String> getAllDeparts();
 
-
     /**
-     *获取所有岗位职称
+     * 获取所有岗位职称
+     *
      * @return
      */
     @GET("professionalinfoget.html")
@@ -41,14 +45,16 @@ public interface Api {
 
 
     /**
-     *岗位职称增加.修改
+     * 岗位职称增加.修改
+     *
      * @return
      */
     @POST("professionalinfoAdd.html")
     Call<ResultMsg> professionalinfoAdd(@Body JsonObject jsonObject);
 
     /**
-     *岗位职称删除
+     * 岗位职称删除
+     *
      * @return
      */
     @POST("professionalinfodelete.html")
@@ -56,7 +62,8 @@ public interface Api {
 
 
     /**
-     *获取所有管道信息
+     * 获取所有管道信息
+     *
      * @return
      */
     @GET("pipelineinfosget.html")
@@ -64,6 +71,7 @@ public interface Api {
 
     /**
      * 根据管道线路id获取该管道桩信息接口
+     *
      * @return
      */
     @POST("pipestakeinfogetMulti.html")
@@ -71,29 +79,33 @@ public interface Api {
 
 
     /**
-     *获取所有用户信息
+     * 获取所有用户信息
+     *
      * @return
      */
-   // @GET("pipemploysGetList.html")
+    // @GET("pipemploysGetList.html")
     @GET("pipemploysGetListUI.html")
     Call<List<Pipemploys>> pipemploysGetList();
 
     /**
-     *获取所有部门名称
+     * 获取所有部门名称
+     *
      * @return
      */
     @GET("pipedepartmentinfoGetList.html")
     Call<List<Department>> pipedepartmentinfoGetList();
 
     /**
-     *新增和修改用户
+     * 新增和修改用户
+     *
      * @return
      */
     @POST("pipemploysAdd.html")
     Call<ResultMsg> pipemploysAdd(@Body JsonObject jsonObject);
 
     /**
-     *	删除用户
+     * 删除用户
+     *
      * @return
      */
     @POST("pipemploysDelete.html")
@@ -101,12 +113,18 @@ public interface Api {
 
 
     /**
-     *根据用户id获取用户信息：
+     * 根据用户id获取用户信息：
+     *
      * @return
      */
-    //@POST("pipemploysGetListByPrimaryKey.html")
     @POST("pipemploysGetListUIByPrimaryKey.html")
     Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Body JsonObject jsonObject);
+    /**
+     * 水工保护表单提交
+     * @return
+     */
+    @POST("w001_dataformdataAdd.html")
+    Call<ServerModel> commitWaterProtection(@Body JsonObject jsonObject);
 }
 
 

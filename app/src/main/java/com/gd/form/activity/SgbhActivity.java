@@ -44,10 +44,18 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.ServerModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.LoadingUtil;
+import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.gd.form.view.LoadView;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -98,18 +106,34 @@ public class SgbhActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private String approverName;
     private String approverId;
-    private boolean isComplete = true;
     private String selectFilePath;
     private LoadView loadView;
+    private List<String> nameList;
+    private String stationId, pipeId, location;
+    private String isFull = "是";
+    private String token, userId;
+    private String ossFilePath;
+    private LoadingUtil loadingUtil;
+    private OSSCredentialProvider ossCredentialProvider;
+    private OSS oss;
+    private String selectFileName;
+    private Dialog mWeiboDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTimePicker();
         path = new ArrayList<>();
+        nameList = new ArrayList<>();
         loadView = new LoadView(this);
+        loadingUtil = new LoadingUtil(loadView, SgbhActivity.this);
+        token = (String) SPUtil.get(SgbhActivity.this, "token", "");
+        userId = (String) SPUtil.get(SgbhActivity.this, "userId", "");
         initGallery();
         initConfig();
         initListener();
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+
     }
 
     //监听事件
@@ -119,10 +143,10 @@ public class SgbhActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_yes:
-                        isComplete = true;
+                        isFull = "是";
                         break;
                     case R.id.rb_no:
-                        isComplete = false;
+                        isFull = "否";
                         break;
                 }
             }
@@ -164,6 +188,13 @@ public class SgbhActivity extends BaseActivity {
                     path.add(s);
                 }
                 photoAdapter.notifyDataSetChanged();
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(SgbhActivity.this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                for (int i = 0; i < path.size(); i++) {
+                    String suffix = path.get(i).substring(path.get(i).length() - 4);
+                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                }
+
             }
 
             @Override
@@ -213,27 +244,14 @@ public class SgbhActivity extends BaseActivity {
                 break;
             //保存提交
             case R.id.btn_commit:
-                //首先要遍历上传图片或是文件
-                loadView.show();
-                if(path.size()>0){
-                    for (int i=0;i<path.size();i++){
-                        uploadFiles(TimeUtil.getCurrentTime()+"_waterProtectionPhoto",path.get(i));
-                    }
-                }
-                if(TextUtils.isEmpty(tv_fileName.getText().toString())){
-                    uploadFiles(TimeUtil.getCurrentTime()+"_waterProtectionFile",selectFilePath);
-                }
-                //数据上传
                 if (paramsIsComplete()) {
-
+                    commit();
                 }
-                loadView.dismiss();
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(SgbhActivity.this, MapActivity.class);
                 startActivityForResult(intent, SELECT_ADDRESS);
                 break;
-
             case R.id.ll_sgxs:
                 List<String> listM = new ArrayList<>();
                 listM.add("护岸、过水面");
@@ -285,6 +303,55 @@ public class SgbhActivity extends BaseActivity {
                 startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
         }
+    }
+
+    //提交数据
+    private void commit() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("pipeid", Integer.valueOf(pipeId));
+        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
+        jsonObject.addProperty("hydraulicform", tv_sgxs.getText().toString());
+        jsonObject.addProperty("material", tv_cz.getText().toString());
+        jsonObject.addProperty("condition", isFull);
+        jsonObject.addProperty("solution", et_clqk.getText().toString());
+        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approverId);
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("picturepath", photoSb.toString());
+        } else {
+            jsonObject.addProperty("picturepath", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            jsonObject.addProperty("filepath", ossFilePath);
+        } else {
+            jsonObject.addProperty("filepath", "00");
+        }
+        Log.i("tag", "111444444==" + jsonObject.toString());
+        Net.create(Api.class).commitWaterProtection(jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        Log.i("tag", result.getCode() + "=====33==");
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            finish();
+                        }
+
+                    }
+                });
+
     }
 
     //检查参数是不是完整
@@ -403,16 +470,22 @@ public class SgbhActivity extends BaseActivity {
             return;
         }
         if (requestCode == FILE_REQUEST_CODE) {
-            String name = data.getStringExtra("fileName");
+            selectFileName = data.getStringExtra("fileName");
             selectFilePath = data.getStringExtra("selectFilePath");
-            tv_fileName.setText(name);
+            tv_fileName.setText(selectFileName);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(SgbhActivity.this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
+            stationId = data.getStringExtra("stationId");
+            pipeId = data.getStringExtra("pipeId");
             String stationName = data.getStringExtra("stationName");
             tv_zh.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
+            location = longitude + "," + latitude;
             if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
                 tv_location.setText("经度:" + longitude + "   纬度:" + latitude);
             }
@@ -428,28 +501,49 @@ public class SgbhActivity extends BaseActivity {
 
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
-        OSSCredentialProvider ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
-        OSS oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
         // 此处调用异步上传方法
         OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
-                Log.i("tag", "=getETag==" + result.getETag());
-                Log.i("tag", "=getRequestId==" + result.getRequestId());
+                nameList.add(fileName);
+                if (nameList.size() == path.size()) {
+                    WeiboDialogUtils.closeDialog(mWeiboDialog);
+                }
             }
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
                 // 请求异常。
                 if (clientException != null) {
                     // 本地异常，如网络异常等。
                 }
                 if (serviceException != null) {
-                    // 服务异常。
-                    Log.i("ErrorCode", serviceException.getErrorCode());
-                    Log.i("RequestId", serviceException.getRequestId());
-                    Log.i("HostId", serviceException.getHostId());
-                    Log.i("RawMessage", serviceException.getRawMessage());
+
+
+                }
+            }
+        });
+
+    }
+    public void uploadOffice(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                ossFilePath = fileName;
+                WeiboDialogUtils.closeDialog(mWeiboDialog);
+            }
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
 
                 }
             }
