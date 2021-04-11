@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,16 +22,32 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -56,21 +74,10 @@ public class WaterInsuranceActivity extends BaseActivity {
     TextView tvSpr;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
-    private List<Department> departmentList;
-    private ListDialog dialog;
-    private int FILE_REQUEST_CODE = 100;
-    private int SELECT_STATION = 101;
-    private int SELECT_APPROVER = 102;
-    private int SELECT_ADDRESS = 103;
-    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
-    private String approverName;
-    private String approverId;
-    private IHandlerCallBack iHandlerCallBack;
-    private List<String> path;
-    private GalleryConfig galleryConfig;
-    private PhotoAdapter photoAdapter;
     @BindView(R.id.et_company)
     EditText etCompany;
     @BindView(R.id.et_name)
@@ -91,6 +98,34 @@ public class WaterInsuranceActivity extends BaseActivity {
     EditText etOther;
     @BindView(R.id.rg_handle)
     RadioGroup rgHandle;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+
+    private List<Department> departmentList;
+    private ListDialog dialog;
+    private int FILE_REQUEST_CODE = 100;
+    private int SELECT_STATION = 101;
+    private int SELECT_APPROVER = 102;
+    private int SELECT_ADDRESS = 103;
+    private int SELECT_AREA = 104;
+    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private String approverName;
+    private String approverId;
+    private Dialog mWeiboDialog;
+    private OSSCredentialProvider ossCredentialProvider;
+    private OSS oss;
+    private String token, userId;
+    private String ossFilePath;
+    private String selectFileName;
+    private String selectFilePath;
+    private IHandlerCallBack iHandlerCallBack;
+    private List<String> path;
+    private GalleryConfig galleryConfig;
+    private PhotoAdapter photoAdapter;
+    private List<String> nameList;
+    private int departmentId;
+    private String stationId;
+    private String handlemode = "头通知施工单位整改";
 
     @Override
     protected void setStatusBar() {
@@ -107,8 +142,14 @@ public class WaterInsuranceActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("水工施工检查日志");
+        llLocation.setVisibility(View.GONE);
         dialog = new ListDialog(this);
         path = new ArrayList<>();
+        nameList = new ArrayList<>();
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         //获取管道单位
         pipeDepartmentInfoGetList();
         initGallery();
@@ -122,10 +163,13 @@ public class WaterInsuranceActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_mouth:
+                        handlemode = "头通知施工单位整改";
                         break;
                     case R.id.rb_mouthUpload:
+                        handlemode = "头上报输气管理处";
                         break;
                     case R.id.rb_writeUpload:
+                        handlemode = "书面上报输气管理处";
                         break;
                 }
             }
@@ -147,17 +191,21 @@ public class WaterInsuranceActivity extends BaseActivity {
                 .filePath("/Gallery/Pictures")// 图片存放路径
                 .build();
 
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvResultPhoto.setLayoutManager(gridLayoutManager);
         photoAdapter = new PhotoAdapter(this, path);
         rvResultPhoto.setAdapter(photoAdapter);
+
     }
+
 
     private void initGallery() {
         iHandlerCallBack = new IHandlerCallBack() {
             @Override
             public void onStart() {
+
             }
 
             @Override
@@ -167,6 +215,12 @@ public class WaterInsuranceActivity extends BaseActivity {
                     path.add(s);
                 }
                 photoAdapter.notifyDataSetChanged();
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(WaterInsuranceActivity.this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                for (int i = 0; i < path.size(); i++) {
+                    String suffix = path.get(i).substring(path.get(i).length() - 4);
+                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                }
             }
 
             @Override
@@ -183,8 +237,8 @@ public class WaterInsuranceActivity extends BaseActivity {
 
             }
         };
-
     }
+
 
     private void pipeDepartmentInfoGetList() {
         Net.create(Api.class).pipedepartmentinfoGetList()
@@ -204,15 +258,22 @@ public class WaterInsuranceActivity extends BaseActivity {
             R.id.ll_location,
             R.id.ll_spr,
             R.id.ll_scfj,
-            R.id.ll_selectPic,
+            R.id.ll_address,
+            R.id.btn_commit,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_address:
+                Intent intentArea = new Intent(this, MapActivity.class);
+                startActivityForResult(intentArea, SELECT_AREA);
+                break;
             case R.id.btn_commit:
-                paramsComplete();
+                if (paramsComplete()) {
+                    commit();
+                }
                 break;
             case R.id.ll_scfj:
                 Intent intentAddress = new Intent(this, SelectFileActivity.class);
@@ -227,7 +288,6 @@ public class WaterInsuranceActivity extends BaseActivity {
                 startActivityForResult(intent, SELECT_ADDRESS);
                 break;
             case R.id.ll_selectImage:
-            case R.id.ll_selectPic:
                 initPermissions();
                 break;
             case R.id.ll_zh:
@@ -250,15 +310,18 @@ public class WaterInsuranceActivity extends BaseActivity {
                 break;
             case R.id.ll_area:
                 List<String> areaList = new ArrayList<>();
+                List<Integer> idList = new ArrayList<>();
                 if (departmentList != null && departmentList.size() > 0) {
                     for (int i = 0; i < departmentList.size(); i++) {
                         areaList.add(departmentList.get(i).getName());
+                        idList.add(departmentList.get(i).getId());
                     }
                 }
                 dialog.setData(areaList);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvArea.setText(areaList.get(positionM));
+                    departmentId = idList.get(positionM);
                     dialog.dismiss();
                 });
                 break;
@@ -314,15 +377,68 @@ public class WaterInsuranceActivity extends BaseActivity {
             ToastUtil.show("请输入施工动态、其它人员巡视情况");
             return false;
         }
-        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请选择坐标");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
+//            ToastUtil.show("请选择坐标");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
         }
         return true;
+    }
+
+    private void commit() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("departmentid", departmentId);
+        jsonObject.addProperty("constructionunit", etCompany.getText().toString());
+        jsonObject.addProperty("constructionname", etName.getText().toString());
+        jsonObject.addProperty("weathers", tvWeather.getText().toString());
+        jsonObject.addProperty("constructionface", etWorkingPlane.getText().toString());
+        jsonObject.addProperty("weathers", tvWeather.getText().toString());
+        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
+        jsonObject.addProperty("col1", etProblem.getText().toString());
+        jsonObject.addProperty("col1handle", etAdvice.getText().toString());
+        jsonObject.addProperty("handlemode", handlemode);
+        jsonObject.addProperty("constructionhandler", etManager.getText().toString());
+        jsonObject.addProperty("col2", etFinishCount.getText().toString());
+        jsonObject.addProperty("col3", etOther.getText().toString());
+        jsonObject.addProperty("col3picture", "00");
+        jsonObject.addProperty("locate", "天通苑");
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approverId);
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("col1picture", photoSb.toString());
+        } else {
+            jsonObject.addProperty("col1picture", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            jsonObject.addProperty("filepath", ossFilePath);
+        } else {
+            jsonObject.addProperty("filepath", "00");
+        }
+        Net.create(Api.class).commitWaterInsurance(token, jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            finish();
+                        }
+
+                    }
+                });
     }
 
     //授权管理
@@ -356,10 +472,15 @@ public class WaterInsuranceActivity extends BaseActivity {
             return;
         }
         if (requestCode == FILE_REQUEST_CODE) {
-            String name = data.getStringExtra("fileName");
-            tvFileName.setText(name);
+            selectFileName = data.getStringExtra("fileName");
+            selectFilePath = data.getStringExtra("selectFilePath");
+            tvFileName.setText(selectFileName);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
+            stationId = data.getStringExtra("stationId");
             String stationName = data.getStringExtra("stationName");
             tvStationNo.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
@@ -374,7 +495,64 @@ public class WaterInsuranceActivity extends BaseActivity {
             if (!TextUtils.isEmpty(approverName)) {
                 tvSpr.setText(approverName);
             }
+        } else if (requestCode == SELECT_AREA) {
+            String area = data.getStringExtra("area");
+            tvAddress.setText(area);
         }
 
+    }
+
+    //上传阿里云文件
+    public void uploadFiles(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                nameList.add(fileName);
+                if (nameList.size() == path.size()) {
+                    WeiboDialogUtils.closeDialog(mWeiboDialog);
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
+
+    }
+
+    public void uploadOffice(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                ossFilePath = fileName;
+                WeiboDialogUtils.closeDialog(mWeiboDialog);
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
     }
 }

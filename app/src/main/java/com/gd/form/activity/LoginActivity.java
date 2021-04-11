@@ -80,6 +80,7 @@ public class LoginActivity extends BaseActivity {
                             SPUtil.put(LoginActivity.this,"userId",userName);
                             ToastUtil.show("登录成功");
                             openActivity(MainActivity.class);
+                            finish();
                         }else{
                             ToastUtil.show(loginModel.getMsg());
                         }

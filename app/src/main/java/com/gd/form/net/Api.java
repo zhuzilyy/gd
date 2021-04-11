@@ -15,6 +15,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -119,12 +120,102 @@ public interface Api {
      */
     @POST("pipemploysGetListUIByPrimaryKey.html")
     Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Body JsonObject jsonObject);
+
     /**
      * 水工保护表单提交
+     *
      * @return
      */
     @POST("w001_dataformdataAdd.html")
-    Call<ServerModel> commitWaterProtection(@Body JsonObject jsonObject);
+    Call<ServerModel> commitWaterProtection(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 隧道外部表单提交
+     *
+     * @return
+     */
+    @POST("w002_dataformdataAdd.html")
+    Call<ServerModel> commitTunnel(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 重车表单提交
+     *
+     * @return
+     */
+    @POST("w004_dataformdataAdd.html")
+    Call<ServerModel> commitWeightCar(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 违规违建表单提交
+     *
+     * @return
+     */
+    @POST("w005_dataformdataAdd.html")
+    Call<ServerModel> commitIllegalBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 违规违建表单提交
+     *
+     * @return
+     */
+    @POST("w006_dataformdataAdd.html")
+    Call<ServerModel> commitHiking(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 隐蔽工程
+     *
+     * @return
+     */
+    @POST("w016_dataformdataAdd.html")
+    Call<ServerModel> commitConcealedWork(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 高后果区徒步巡检表
+     *
+     * @return
+     */
+    @POST("w009_dataformdataAdd.html")
+    Call<ServerModel> commitHighZone(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 高后果区视频监控
+     *
+     * @return
+     */
+    @POST("w010_dataformdataAdd.html")
+    Call<ServerModel> commitVideo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+
+    /**
+     * 区域阴保电位测试记录表
+     *
+     * @return
+     */
+    @POST("w012_dataformdataAdd.html")
+    Call<ServerModel> commitZoneElectricity(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    /**
+     * 阀室绝缘件性能测试记录表
+     *
+     * @return
+     */
+    @POST("w013_dataformdataAdd.html")
+    Call<ServerModel> commitProperty(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 去耦合测试器
+     *
+     * @return
+     */
+    @POST("w014_dataformdataAdd.html")
+    Call<ServerModel> commitDevice(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    /**
+     *
+     *水保工程施工监理日志
+     * @return
+     */
+    @POST("w015_dataformdataAdd.html")
+    Call<ServerModel> commitWaterInsurance(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 

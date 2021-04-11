@@ -48,13 +48,11 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
-import com.gd.form.utils.LoadingUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
-import com.gd.form.view.LoadView;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
@@ -106,17 +104,15 @@ public class SgbhActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private String approverName;
     private String approverId;
-    private String selectFilePath;
-    private LoadView loadView;
     private List<String> nameList;
     private String stationId, pipeId, location;
     private String isFull = "是";
     private String token, userId;
     private String ossFilePath;
-    private LoadingUtil loadingUtil;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
     private String selectFileName;
+    private String selectFilePath;
     private Dialog mWeiboDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,8 +120,6 @@ public class SgbhActivity extends BaseActivity {
         initTimePicker();
         path = new ArrayList<>();
         nameList = new ArrayList<>();
-        loadView = new LoadView(this);
-        loadingUtil = new LoadingUtil(loadView, SgbhActivity.this);
         token = (String) SPUtil.get(SgbhActivity.this, "token", "");
         userId = (String) SPUtil.get(SgbhActivity.this, "userId", "");
         initGallery();
@@ -338,12 +332,10 @@ public class SgbhActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "111444444==" + jsonObject.toString());
-        Net.create(Api.class).commitWaterProtection(jsonObject)
+        Net.create(Api.class).commitWaterProtection(token,jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        Log.i("tag", result.getCode() + "=====33==");
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             finish();

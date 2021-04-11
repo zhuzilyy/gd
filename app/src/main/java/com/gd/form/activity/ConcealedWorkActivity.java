@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +21,30 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.ServerModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -36,18 +57,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ConcealedWorkActivity extends BaseActivity {
-    private int FILE_REQUEST_CODE = 100;
-    private int SELECT_STATION = 101;
-    private int SELECT_APPROVER = 102;
-    private int SELECT_ADDRESS = 103;
-    private int SELECT_AREA = 104;
-    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
-    private String approverName;
-    private String approverId;
-    private IHandlerCallBack iHandlerCallBack;
-    private List<String> path;
-    private GalleryConfig galleryConfig;
-    private PhotoAdapter photoAdapter;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_stationNo)
@@ -72,6 +81,33 @@ public class ConcealedWorkActivity extends BaseActivity {
     EditText etRemark;
     @BindView(R.id.et_advice)
     EditText etAdvice;
+    @BindView(R.id.et_site_supervision)
+    EditText etSiteSupervision;
+    @BindView(R.id.et_site_manager)
+    EditText etSiteManager;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+    private int FILE_REQUEST_CODE = 100;
+    private int SELECT_STATION = 101;
+    private int SELECT_APPROVER = 102;
+    private int SELECT_ADDRESS = 103;
+    private int SELECT_AREA = 104;
+    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private String approverName;
+    private String approverId;
+    private IHandlerCallBack iHandlerCallBack;
+    private List<String> path;
+    private GalleryConfig galleryConfig;
+    private PhotoAdapter photoAdapter;
+    private Dialog mWeiboDialog;
+    private OSSCredentialProvider ossCredentialProvider;
+    private OSS oss;
+    private String token, userId;
+    private String ossFilePath;
+    private String selectFileName;
+    private String selectFilePath;
+    private String stationId, location;
+    private List<String> nameList;
 
     @Override
     protected void setStatusBar() {
@@ -88,8 +124,14 @@ public class ConcealedWorkActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("隐蔽工程检查");
         path = new ArrayList<>();
+        nameList = new ArrayList<>();
+        llLocation.setVisibility(View.GONE);
         initGallery();
         initConfig();
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
     }
 
     private void initConfig() {
@@ -127,6 +169,12 @@ public class ConcealedWorkActivity extends BaseActivity {
                     path.add(s);
                 }
                 photoAdapter.notifyDataSetChanged();
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(ConcealedWorkActivity.this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                for (int i = 0; i < path.size(); i++) {
+                    String suffix = path.get(i).substring(path.get(i).length() - 4);
+                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                }
             }
 
             @Override
@@ -161,7 +209,9 @@ public class ConcealedWorkActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_commit:
-                paramsComplete();
+                if (paramsComplete()) {
+                    commit();
+                }
                 break;
             case R.id.ll_selectPic:
                 initPermissions();
@@ -189,6 +239,54 @@ public class ConcealedWorkActivity extends BaseActivity {
         }
     }
 
+    private void commit() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("constructionunit", etCompanyName.getText().toString());
+        jsonObject.addProperty("constructionname", etName.getText().toString());
+        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
+        jsonObject.addProperty("hidecontent", etHideContent.getText().toString());
+        jsonObject.addProperty("desc", etRemark.getText().toString());
+        jsonObject.addProperty("inspectcontent", etAdvice.getText().toString());
+        jsonObject.addProperty("supervision", etSiteSupervision.getText().toString());
+        jsonObject.addProperty("director", etSiteManager.getText().toString());
+        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approverId);
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("picturepath", photoSb.toString());
+        } else {
+            jsonObject.addProperty("picturepath", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            jsonObject.addProperty("filepath", ossFilePath);
+        } else {
+            jsonObject.addProperty("filepath", "00");
+        }
+        Log.i("tag", "1111=" + jsonObject.toString());
+        Net.create(Api.class).commitConcealedWork(token, jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            finish();
+                        }
+
+                    }
+                });
+    }
+
     private boolean paramsComplete() {
         if (TextUtils.isEmpty(etName.getText().toString())) {
             ToastUtil.show("请输入工程名称");
@@ -214,14 +312,22 @@ public class ConcealedWorkActivity extends BaseActivity {
             ToastUtil.show("请输入备注");
             return false;
         }
+        if (TextUtils.isEmpty(etSiteSupervision.getText().toString())) {
+            ToastUtil.show("请输入现场监理");
+            return false;
+        }
+        if (TextUtils.isEmpty(etSiteManager.getText().toString())) {
+            ToastUtil.show("请输入作业区主任");
+            return false;
+        }
         if (TextUtils.isEmpty(etAdvice.getText().toString())) {
             ToastUtil.show("请输入检查意见");
             return false;
         }
-        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请选择坐标");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
+//            ToastUtil.show("请选择坐标");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
@@ -260,15 +366,21 @@ public class ConcealedWorkActivity extends BaseActivity {
             return;
         }
         if (requestCode == FILE_REQUEST_CODE) {
-            String name = data.getStringExtra("fileName");
-            tvFileName.setText(name);
+            selectFileName = data.getStringExtra("fileName");
+            selectFilePath = data.getStringExtra("selectFilePath");
+            tvFileName.setText(selectFileName);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
+            stationId = data.getStringExtra("stationId");
             String stationName = data.getStringExtra("stationName");
             tvStationNo.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
+            location = longitude + "," + latitude;
             if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude)) {
                 tvLocation.setText("经度:" + longitude + "   纬度:" + latitude);
             }
@@ -280,8 +392,63 @@ public class ConcealedWorkActivity extends BaseActivity {
             }
         } else if (requestCode == SELECT_AREA) {
             String area = data.getStringExtra("area");
+            location = area;
             tvArea.setText(area);
         }
 
+    }
+
+    //上传阿里云文件
+    public void uploadFiles(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                nameList.add(fileName);
+                if (nameList.size() == path.size()) {
+                    WeiboDialogUtils.closeDialog(mWeiboDialog);
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
+
+    }
+
+    public void uploadOffice(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                ossFilePath = fileName;
+                WeiboDialogUtils.closeDialog(mWeiboDialog);
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
     }
 }

@@ -69,8 +69,8 @@ public class StationActivity extends BaseActivity {
             public void onItemClickListener(View v, int position) {
                 Intent intent = new Intent();
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
-                intent.putExtra("stationId", stationNoModelList.get(position).getId()+"");
-                intent.putExtra("pipeId", stationNoModelList.get(position).getPipeid()+"");
+                intent.putExtra("stationId", stationNoModelList.get(position).getId() + "");
+                intent.putExtra("pipeId", stationNoModelList.get(position).getPipeid() + "");
                 intent.putExtra("selectTag", selectTag);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -88,10 +88,15 @@ public class StationActivity extends BaseActivity {
                     public void onResponse(List<StationNoModel> list) {
                         stationNoModelList.clear();
                         if (list != null && list.size() > 0) {
-                            stationRefreshLayout.setVisibility(View.VISIBLE);
-                            llNoData.setVisibility(View.GONE);
-                            stationNoModelList.addAll(list);
-                            adapter.notifyDataSetChanged();
+                            if (list.size() > 50) {
+                                ToastUtil.show("根据关键字搜索结果大于50条不能正常显示，请输入更详细的关键字进行搜索");
+                            } else {
+                                stationRefreshLayout.setVisibility(View.VISIBLE);
+                                llNoData.setVisibility(View.GONE);
+                                stationNoModelList.addAll(list);
+                                adapter.notifyDataSetChanged();
+                            }
+
                         } else {
                             stationRefreshLayout.setVisibility(View.GONE);
                             llNoData.setVisibility(View.VISIBLE);
@@ -132,13 +137,22 @@ public class StationActivity extends BaseActivity {
     protected int getActLayoutId() {
         return R.layout.activity_station;
     }
+
     @OnClick({
             R.id.iv_back,
+            R.id.btn_search,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.btn_search:
+                if (TextUtils.isEmpty(mainSearchEditText.getText().toString())) {
+                    ToastUtil.show("请输入搜索内容");
+                    return;
+                }
+                getData(mainSearchEditText.getText().toString().trim());
                 break;
         }
     }

@@ -36,7 +36,6 @@ public abstract class NetCallback<T> extends BaseCallback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         super.onResponse(call, response);
-        Log.i("tag",response.body().toString());
         if(response.code()==200){
             T body = response.body();
 
