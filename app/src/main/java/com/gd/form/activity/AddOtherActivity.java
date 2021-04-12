@@ -26,7 +26,6 @@ public class AddOtherActivity extends BaseActivity {
     protected int getActLayoutId() {
         return R.layout.activity_add_other;
     }
-//    btn_advocacyBoardChange
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

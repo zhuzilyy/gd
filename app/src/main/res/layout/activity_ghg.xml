@@ -129,6 +129,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_gdsm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,6 +166,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_0_5"
                 android:background="#FFE5E5E5"

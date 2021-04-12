@@ -239,6 +239,15 @@
         <activity
             android:name=".activity.PipeOtherActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeTunnelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeBuildingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeHighZoneActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

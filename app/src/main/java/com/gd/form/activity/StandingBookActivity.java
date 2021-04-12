@@ -20,6 +20,30 @@ public class StandingBookActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.iv_right)
     ImageView ivRight;
+    @BindView(R.id.tv_pipeTagBaseInfo)
+    TextView tvPipeTagBaseInfo;
+    @BindView(R.id.tv_pipePerson)
+    TextView tvPipePerson;
+    @BindView(R.id.tv_station)
+    TextView tvStation;
+    @BindView(R.id.tv_highZone)
+    TextView tvHighZone;
+    @BindView(R.id.tv_building)
+    TextView tvBuilding;
+    @BindView(R.id.tv_tunnel)
+    TextView tvTunnel;
+    @BindView(R.id.tv_windVane)
+    TextView tvWindVane;
+    @BindView(R.id.tv_advocacyBoard)
+    TextView tvAdvocacyBoard;
+    @BindView(R.id.tv_videoMonitoring)
+    TextView tvVideoMonitoring;
+    @BindView(R.id.tv_water)
+    TextView tvWater;
+    @BindView(R.id.tv_well)
+    TextView tvWell;
+    @BindView(R.id.tv_other)
+    TextView tvOther;
 
     @Override
     protected void setStatusBar() {
@@ -98,27 +122,33 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //高后果区信息查看
             case R.id.btn_highZoneCheck:
-
+                bundle.putString("tag", "check");
+                openActivity(PipeHighZoneActivity.class, bundle);
                 break;
             //高后果区信息维护
             case R.id.btn_highZoneChange:
-
+                bundle.putString("tag", "add");
+                openActivity(PipeHighZoneActivity.class, bundle);
                 break;
             //违章建筑信息查看
             case R.id.btn_buildingCheck:
-
+                bundle.putString("tag", "check");
+                openActivity(PipeBuildingActivity.class, bundle);
                 break;
             //违章建筑信息维护
             case R.id.btn_buildingChange:
-
+                bundle.putString("tag", "add");
+                openActivity(PipeBuildingActivity.class, bundle);
                 break;
             //隧道信息查看
             case R.id.btn_tunnelCheck:
-
+                bundle.putString("tag", "check");
+                openActivity(PipeTunnelActivity.class, bundle);
                 break;
             //隧道信息维护
             case R.id.btn_tunnelChange:
-
+                bundle.putString("tag", "add");
+                openActivity(PipeTunnelActivity.class, bundle);
                 break;
             //风向标信息查看
             case R.id.btn_windVaneCheck:

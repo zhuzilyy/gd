@@ -62,7 +62,7 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/jcxhgl" />
+                    android:src="@mipmap/jcfxgl" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,6 +76,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/ll_fxgl"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -101,6 +102,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/ll_ghgqgl"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -129,6 +131,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="horizontal"
@@ -354,6 +357,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_job_gcgl"
                 android:layout_width="0dp"
                 android:layout_height="80dp"

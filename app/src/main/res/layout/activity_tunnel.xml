@@ -1,50 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    android:background="@color/write">
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
     <LinearLayout
+        android:id="@+id/ll_search"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d_50"
-        android:background="@color/color_green"
-        >
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/d_24"
-            android:layout_height="@dimen/d_24"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_back"
-            android:layout_marginLeft="@dimen/d_15"
-            android:layout_marginStart="@dimen/d_15"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="巡护管理"
-            android:textColor="@color/write"
-            android:layout_marginRight="@dimen/d_40"
-            android:layout_marginEnd="@dimen/d_40"
-            android:textSize="@dimen/s_20"/>
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/mainSearchEditText"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_9"
+            android:layout_marginLeft="@dimen/d_9"
+            android:layout_marginTop="@dimen/d_5"
+            android:layout_marginEnd="@dimen/d_9"
+            android:layout_marginRight="@dimen/d_9"
+            android:layout_marginBottom="@dimen/d_5"
+            android:background="@drawable/main_edit_bg"
+            android:drawableRight="@mipmap/main_search"
+            android:drawablePadding="@dimen/d_9"
+            android:hint="请输入隧道名称"
+            android:imeOptions="actionSearch"
+            android:padding="@dimen/d_6"
+            android:singleLine="true" />
+        <Button
+            android:background="@drawable/bg_search"
+            android:layout_marginRight="@dimen/d_10"
+            android:textColor="#fff"
+            android:id="@+id/btn_search"
+            android:text="搜索"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"/>
 
     </LinearLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
+            <!--所属管道-->
             <LinearLayout
-                android:id="@+id/ll_sgbh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -52,43 +56,45 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/sgbh" />
-                <TextView
+                    android:text="所属管道"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_belongPipe"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="水工保护巡检表"
+                    android:hint="所属管道"
                     />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
 
 
+            <!--桩号/位置-->
             <LinearLayout
-                android:id="@+id/ll_sdwb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -96,42 +102,45 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/sdwb" />
-                <TextView
+                    android:text="桩号/位置"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_stationNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="隧道外部检查表"
+                    android:hint="桩号/位置"
                     />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
+
+
+            <!--隧道名称-->
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/ll_gdsm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -139,43 +148,44 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/gdsm" />
-                <TextView
+                    android:text="隧道名称"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_pipeName"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="管道埋深及地面标识信息记录表"
+                    android:hint="隧道名称"
                     />
 
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
 
+            <!--隧道长度-->
             <LinearLayout
-                android:id="@+id/ll_zcny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -183,42 +193,44 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/zcny" />
-                <TextView
+                    android:text="隧道长度"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_pipeDepth"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="重车碾压调查表"
+                    android:hint="隧道长度"
                     />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
 
+            <!--管道在隧道内的架设方式-->
             <LinearLayout
-                android:id="@+id/ll_wzwj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -226,41 +238,44 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/wzwj" />
-                <TextView
+                    android:text="管道在隧道内的架设方式"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_method"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="违章违建处理记录"
+                    android:hint="管道在隧道内的架设方式"
                     />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
+
+            <!--隧道及隧道口情况-->
             <LinearLayout
-                android:id="@+id/ll_tbxj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -268,132 +283,59 @@
                 android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
                 >
-
-                <ImageView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/tbxj" />
-                <TextView
+                    android:text="隧道及隧道口情况"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_status"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="@dimen/s_16"
                     android:textColor="#A6000000"
-                    android:gravity="center|left"
+                    android:gravity="end"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="徒步巡检表（结对子）"
+                    android:hint="隧道及隧道口情况"
                     />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
+                android:layout_height="@dimen/d_1"
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
 
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/ll_wrj"
+            <Button
+                android:id="@+id/btn_commit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
-
-                <ImageView
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/wrj" />
-                <TextView
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="center|left"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:background="@null"
-                    android:singleLine="true"
-                    android:text="无人机飞行记录"
-                    />
-
-            </LinearLayout>
-            <View
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
-                android:background="#FFE5E5E5"
-                android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/ll_dzr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
-
-                <ImageView
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                     android:src="@mipmap/dzrxj"/>
-                <TextView
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="center|left"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:background="@null"
-                    android:singleLine="true"
-                    android:text="段长日巡检表"
-                    />
-
-            </LinearLayout>
-            <View
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_0_5"
-                android:background="#FFE5E5E5"
-                android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
-
-
+                android:layout_marginTop="@dimen/d_30"
+                android:layout_marginBottom="@dimen/d_30"
+                android:layout_marginStart="@dimen/d_30"
+                android:layout_marginLeft="@dimen/d_30"
+                android:layout_marginEnd="@dimen/d_30"
+                android:layout_marginRight="@dimen/d_30"
+                android:text="保存"
+                android:background="@drawable/button_ship"
+                android:textSize="@dimen/s_18"
+                android:textColor="@color/write"
+                />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>
