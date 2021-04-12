@@ -43,5 +43,16 @@
             android:text="测量"
             android:textColor="@color/write"
             android:textSize="@dimen/s_16" />
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/d_10"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/iv_right"
+            android:scaleType="center"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:src="@mipmap/add" />
     </RelativeLayout>
 </LinearLayout>

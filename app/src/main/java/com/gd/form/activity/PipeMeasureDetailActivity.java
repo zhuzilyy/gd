@@ -24,7 +24,7 @@ public class PipeMeasureDetailActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_pipe_measure;
+        return R.layout.activity_pipe_measure_detail;
     }
 
     @Override

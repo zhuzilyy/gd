@@ -189,9 +189,6 @@
             android:name=".activity.PipeTagActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.StandingBookActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.PipeMeasureDetailActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -211,6 +208,36 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddWindVaneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddAdvocacyBoardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeAdvocacyBoardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeWaterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddWaterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddWellActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeWellActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddOtherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeOtherActivity"
             android:screenOrientation="portrait" />
     </application>
 

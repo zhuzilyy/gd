@@ -35,6 +35,7 @@ public class ApproverActivity extends BaseActivity {
     private String[][] userNames;
     private String[][] userNameIds;
     private List<String> departNameList = new ArrayList<>();
+    private List<String> departIdList = new ArrayList<>();
     private List<String> nameList = new ArrayList<>();
     private List<String> nameIdList = new ArrayList<>();
     private UsersExpandableListAdapter adapter;
@@ -64,6 +65,8 @@ public class ApproverActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("name",userNames[groupPosition][childPosition]);
                 intent.putExtra("id",userNameIds[groupPosition][childPosition]);
+                intent.putExtra("departmentId", departIdList.get(groupPosition));
+                intent.putExtra("departmentName", departNameList.get(groupPosition));
                 setResult(RESULT_OK,intent);
                 finish();
                 return true;
@@ -89,6 +92,7 @@ public class ApproverActivity extends BaseActivity {
                         for (int i = 0; i < list.size(); i++) {
                             if (!departNameList.contains(list.get(i).getDeptname() + "")) {
                                 departNameList.add(list.get(i).getDeptname() + "");
+                                departIdList.add(list.get(i).getDepartmentid()+"");
                             }
                         }
 

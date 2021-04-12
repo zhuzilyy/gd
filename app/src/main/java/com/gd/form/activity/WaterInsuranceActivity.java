@@ -414,7 +414,7 @@ public class WaterInsuranceActivity extends BaseActivity {
         jsonObject.addProperty("col2", etFinishCount.getText().toString());
         jsonObject.addProperty("col3", etOther.getText().toString());
         jsonObject.addProperty("col3picture", "00");
-        jsonObject.addProperty("locate", "天通苑");
+        jsonObject.addProperty("locate", tvAddress.getText().toString());
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);

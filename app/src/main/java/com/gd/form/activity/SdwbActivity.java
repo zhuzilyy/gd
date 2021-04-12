@@ -155,7 +155,7 @@ public class SdwbActivity extends BaseActivity {
     private String selectFileName;
     private String selectFilePath;
     private String stationId, pipeId, location;
-    private int selectPipeId;
+    private int selectPipeId,departmentId;
     private String col1 = "无违章采石、采矿、爆破行为";
     private String col2 = "无第三方施工行为";
     private String col3 = "无可疑人员、车辆逗留现象";
@@ -491,15 +491,18 @@ public class SdwbActivity extends BaseActivity {
                 break;
             case R.id.ll_gddz:
                 List<String> areaList = new ArrayList<>();
+                List<Integer> departmentIdList = new ArrayList<>();
                 if (departmentList != null && departmentList.size() > 0) {
                     for (int i = 0; i < departmentList.size(); i++) {
                         areaList.add(departmentList.get(i).getName());
+                        departmentIdList.add(departmentList.get(i).getId());
                     }
                 }
                 dialog.setData(areaList);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tv_gddw.setText(areaList.get(positionM));
+                    departmentId = departmentIdList.get(positionM);
                     dialog.dismiss();
                 });
                 break;
@@ -535,7 +538,7 @@ public class SdwbActivity extends BaseActivity {
         }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("pipeid", selectPipeId);
-        jsonObject.addProperty("pipeName", tv_sdmc.getText().toString());
+        jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("pipelength", et_pipeLength.getText().toString());
         jsonObject.addProperty("col1", col1);

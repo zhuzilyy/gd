@@ -233,4 +233,20 @@
         android:layout_marginLeft="@dimen/d_12"
         android:background="#FFE5E5E5" />
 
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/d_30"
+        android:layout_marginLeft="@dimen/d_30"
+        android:layout_marginTop="@dimen/d_30"
+        android:layout_marginEnd="@dimen/d_30"
+        android:layout_marginRight="@dimen/d_30"
+        android:layout_marginBottom="@dimen/d_30"
+        android:background="@drawable/button_ship"
+        android:text="保存"
+        android:textColor="@color/write"
+        android:textSize="@dimen/s_18" />
+
 </LinearLayout>

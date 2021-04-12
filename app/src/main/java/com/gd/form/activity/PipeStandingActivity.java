@@ -47,8 +47,6 @@ public class PipeStandingActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("站场或阀室");
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("添加");
         initViews();
         initData();
     }

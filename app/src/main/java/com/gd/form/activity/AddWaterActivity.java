@@ -11,15 +11,12 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.jaeger.library.StatusBarUtil;
 
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PipeMeasureActivity extends BaseActivity {
+public class AddWaterActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_right)
-    TextView tvRight;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -27,29 +24,22 @@ public class PipeMeasureActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_pipe_measure;
+        return R.layout.activity_add_water;
     }
-
+//    btn_advocacyBoardChange
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("管道标志测量");
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("测量记录");
+        tvTitle.setText("添加水工(含其他)保护形势");
     }
     @OnClick({
             R.id.iv_back,
-            R.id.tv_right,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.tv_right:
-                openActivity(MeasureRecordActivity.class);
-                break;
-
         }
     }
 }

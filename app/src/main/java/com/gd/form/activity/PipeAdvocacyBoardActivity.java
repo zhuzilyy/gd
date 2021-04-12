@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
-import com.gd.form.adapter.PrincipalAdapter;
+import com.gd.form.adapter.VideoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -22,16 +22,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PipeWindVaneActivity extends BaseActivity {
+public class PipeAdvocacyBoardActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_right)
-    TextView tvRight;
-    @BindView(R.id.windVaneRecycler)
-    RecyclerView windVaneRecycler;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    private PrincipalAdapter adapter;
+    private VideoAdapter adapter;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -39,24 +38,25 @@ public class PipeWindVaneActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_pipe_wind_vane;
+        return R.layout.activity_pipe_advocacy_board;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("风向标");
+        tvTitle.setText("宣传栏");
         initViews();
         initData();
     }
+
     private void initData() {
         List<String> values = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
-            values.add("风向标" + i);
+            values.add("宣传栏" + i);
         }
-        windVaneRecycler.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new PrincipalAdapter(mContext, values, R.layout.adapter_item_wind_vane);
-        windVaneRecycler.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        adapter = new VideoAdapter(mContext, values, R.layout.adapter_item_video);
+        recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
@@ -78,15 +78,11 @@ public class PipeWindVaneActivity extends BaseActivity {
 
     @OnClick({
             R.id.iv_back,
-            R.id.tv_right,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
-                break;
-            case R.id.tv_right:
-                openActivity(AddWindVaneActivity.class);
                 break;
         }
     }

@@ -397,7 +397,7 @@ public class DeviceActivity extends BaseActivity {
         jsonObject.addProperty("col6", etDc.getText().toString());
         jsonObject.addProperty("landmaterial", etGroundMaterial.getText().toString());
         jsonObject.addProperty("landresis", etGroundResistance.getText().toString());
-        jsonObject.addProperty("locate", "天通苑");
+        jsonObject.addProperty("locate", tvAddress.getText().toString());
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);

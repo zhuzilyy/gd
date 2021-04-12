@@ -25,8 +25,6 @@ import butterknife.OnClick;
 public class PipePrincipalActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_right)
-    TextView tvRight;
     @BindView(R.id.principalRecycler)
     RecyclerView principalRecycler;
     @BindView(R.id.refreshLayout)
@@ -42,13 +40,10 @@ public class PipePrincipalActivity extends BaseActivity {
     protected int getActLayoutId() {
         return R.layout.activity_pipe_princpal;
     }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道负责人");
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("添加");
         initViews();
         initData();
     }
@@ -82,16 +77,13 @@ public class PipePrincipalActivity extends BaseActivity {
 
     @OnClick({
             R.id.iv_back,
-            R.id.tv_right,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.tv_right:
-                openActivity(AddPrincipalActivity.class);
-                break;
+
         }
     }
 }
