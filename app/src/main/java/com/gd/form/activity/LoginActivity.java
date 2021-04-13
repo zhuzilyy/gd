@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -28,13 +29,18 @@ public class LoginActivity extends BaseActivity {
     EditText etUserName;
     @BindView(R.id.et_pwd)
     EditText etPwd;
+    @BindView(R.id.cb_rememberPwd)
+    CheckBox cb_rememberPwd;
+    private String userName, pwd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        userName = (String) SPUtil.get(LoginActivity.this, "userName", "");
+        pwd = (String) SPUtil.get(LoginActivity.this, "pwd", "");
+        etUserName.setText(userName);
+        etPwd.setText(pwd);
     }
-
 
     @Override
     protected void setStatusBar() {
@@ -60,6 +66,13 @@ public class LoginActivity extends BaseActivity {
                     ToastUtil.show("请输入密码");
                     return;
                 }
+                if (cb_rememberPwd.isChecked()) {
+                    SPUtil.put(LoginActivity.this, "userName", etUserName.getText().toString());
+                    SPUtil.put(LoginActivity.this, "pwd", etPwd.getText().toString());
+                } else {
+                    SPUtil.put(LoginActivity.this, "userName", "");
+                    SPUtil.put(LoginActivity.this, "pwd", "");
+                }
                 login(etUserName.getText().toString(), etPwd.getText().toString());
                 break;
 
@@ -75,13 +88,13 @@ public class LoginActivity extends BaseActivity {
                 .enqueue(new NetCallback<LoginModel>(this, true) {
                     @Override
                     public void onResponse(LoginModel loginModel) {
-                        if(loginModel.getCode() == Constant.SUCCESS_CODE){
-                            SPUtil.put(LoginActivity.this,"token",loginModel.getMsg());
-                            SPUtil.put(LoginActivity.this,"userId",userName);
+                        if (loginModel.getCode() == Constant.SUCCESS_CODE) {
+                            SPUtil.put(LoginActivity.this, "token", loginModel.getMsg());
+                            SPUtil.put(LoginActivity.this, "userId", userName);
                             ToastUtil.show("登录成功");
                             openActivity(MainActivity.class);
                             finish();
-                        }else{
+                        } else {
                             ToastUtil.show(loginModel.getMsg());
                         }
                     }

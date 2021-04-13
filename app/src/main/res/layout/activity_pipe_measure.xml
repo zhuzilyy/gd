@@ -176,7 +176,7 @@
             android:background="@null"
             android:ellipsize="end"
             android:gravity="end"
-            android:hint="测量埋深(m)-光缆埋深"
+            android:hint="埋深不足(m)"
             android:singleLine="true"
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />

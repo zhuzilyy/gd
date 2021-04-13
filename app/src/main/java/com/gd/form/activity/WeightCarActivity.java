@@ -115,6 +115,7 @@ public class WeightCarActivity extends BaseActivity {
     private GalleryConfig galleryConfig;
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -144,6 +145,7 @@ public class WeightCarActivity extends BaseActivity {
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
     }
+
     private void initGallery() {
         iHandlerCallBack = new IHandlerCallBack() {
             @Override
@@ -204,6 +206,7 @@ public class WeightCarActivity extends BaseActivity {
         photoAdapter = new PhotoAdapter(this, path);
         rvResultPhoto.setAdapter(photoAdapter);
     }
+
     private void initListener() {
         rgProtect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -362,7 +365,6 @@ public class WeightCarActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitWeightCar(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -427,6 +429,7 @@ public class WeightCarActivity extends BaseActivity {
         }
         return true;
     }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -450,6 +453,7 @@ public class WeightCarActivity extends BaseActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -487,6 +491,7 @@ public class WeightCarActivity extends BaseActivity {
         }
 
     }
+
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
@@ -515,6 +520,7 @@ public class WeightCarActivity extends BaseActivity {
         });
 
     }
+
     public void uploadOffice(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
         // 此处调用异步上传方法

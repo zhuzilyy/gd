@@ -576,12 +576,10 @@ public class SdwbActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "111444444==" + jsonObject.toString());
         Net.create(Api.class).commitTunnel(token,jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        Log.i("tag", result.getCode() + "=====33==");
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             finish();

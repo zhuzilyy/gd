@@ -3,9 +3,11 @@ package com.gd.form.net;
 import com.gd.form.model.Department;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
+import com.gd.form.model.MeasureRecordModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
+import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
 import com.google.gson.JsonObject;
@@ -186,7 +188,6 @@ public interface Api {
     Call<ServerModel> commitVideo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
-
     /**
      * 区域阴保电位测试记录表
      *
@@ -194,6 +195,7 @@ public interface Api {
      */
     @POST("w012_dataformdataAdd.html")
     Call<ServerModel> commitZoneElectricity(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
     /**
      * 阀室绝缘件性能测试记录表
      *
@@ -209,13 +211,54 @@ public interface Api {
      */
     @POST("w014_dataformdataAdd.html")
     Call<ServerModel> commitDevice(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
     /**
+     * 水保工程施工监理日志
      *
-     *水保工程施工监理日志
      * @return
      */
     @POST("w015_dataformdataAdd.html")
     Call<ServerModel> commitWaterInsurance(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 添加管道标识
+     *
+     * @return
+     */
+    @POST("pipestakeinfoAdd.html")
+    Call<ServerModel> addPipeStakeInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 添加测量记录
+     *
+     * @return
+     */
+    @POST("measurerecordsAdd.html")
+    Call<ServerModel> addMeasureRecords(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 查询测量记录
+     *
+     * @return
+     */
+    @POST("measurerecordsselectListBystakeid.html")
+    Call<List<MeasureRecordModel>> getMeasureRecordList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取测量记录详情
+     *
+     * @return
+     */
+    @POST("measurerecordsselectByStakeDate.html")
+    Call<MeasureRecordModel> getMeasureRecordDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 根据桩号名称和pipeid搜索数据
+     *
+     * @return
+     */
+    @POST("pipestakeinfoBookgetMulti.html")
+    Call<SearchStationModel> searchStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 

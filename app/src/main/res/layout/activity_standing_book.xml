@@ -10,25 +10,29 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/mainSearchEditText"
+
+        <TextView
+            android:id="@+id/mainSearchTextView"
             android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_9"
             android:layout_marginLeft="@dimen/d_9"
             android:layout_marginTop="@dimen/d_5"
             android:layout_marginEnd="@dimen/d_9"
             android:layout_marginRight="@dimen/d_9"
             android:layout_marginBottom="@dimen/d_5"
+            android:layout_weight="4"
             android:background="@drawable/main_edit_bg"
             android:drawableRight="@mipmap/main_search"
             android:drawablePadding="@dimen/d_9"
-            android:hint="请输入要搜索的设施台账"
+            android:hint="请输入桩号"
             android:imeOptions="actionSearch"
             android:padding="@dimen/d_6"
             android:singleLine="true" />
+
         <Button
+            android:visibility="gone"
             android:background="@drawable/bg_search"
             android:layout_marginRight="@dimen/d_10"
             android:textColor="#fff"
@@ -85,6 +89,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
@@ -139,6 +144,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
@@ -193,6 +199,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
@@ -226,7 +233,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="管道标识基础信息 (2)"
+                    android:text="管道标识基础信息"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 

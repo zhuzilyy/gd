@@ -1,6 +1,8 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +12,13 @@ import androidx.core.content.ContextCompat;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchStationModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -44,6 +53,11 @@ public class StandingBookActivity extends BaseActivity {
     TextView tvWell;
     @BindView(R.id.tv_other)
     TextView tvOther;
+    @BindView(R.id.mainSearchTextView)
+    TextView mainSearchTextView;
+    private int SELECT_STATION = 100;
+    private String pipeId, stationId;
+    private String token, userId;
 
     @Override
     protected void setStatusBar() {
@@ -60,6 +74,8 @@ public class StandingBookActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道及附属设施台账");
         ivRight.setVisibility(View.VISIBLE);
+        token = (String) SPUtil.get(StandingBookActivity.this, "token", "");
+        userId = (String) SPUtil.get(StandingBookActivity.this, "userId", "");
     }
 
     @OnClick({
@@ -89,10 +105,16 @@ public class StandingBookActivity extends BaseActivity {
             R.id.btn_wellChange,
             R.id.btn_otherCheck,
             R.id.btn_otherChange,
+            R.id.ll_search,
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
+            //管道标识基础信息查看
+            case R.id.ll_search:
+                Intent intentStation = new Intent(this, StationActivity.class);
+                startActivityForResult(intentStation, SELECT_STATION);
+                break;
             //管道标识基础信息查看
             case R.id.btn_infoCheck:
                 bundle.putString("tag", "check");
@@ -110,7 +132,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //管道责任人查看维护
             case R.id.btn_personChange:
-                openActivity(AddPrincipalActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddPrincipalActivity.class);
+                }
                 break;
             //站场或阀室查看
             case R.id.btn_stationCheck:
@@ -118,7 +142,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //站场或阀室维护
             case R.id.btn_stationChange:
-                openActivity(AddStandingActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddStandingActivity.class);
+                }
                 break;
             //高后果区信息查看
             case R.id.btn_highZoneCheck:
@@ -127,8 +153,10 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //高后果区信息维护
             case R.id.btn_highZoneChange:
-                bundle.putString("tag", "add");
-                openActivity(PipeHighZoneActivity.class, bundle);
+                if (isCanAddProperty()) {
+                    bundle.putString("tag", "add");
+                    openActivity(PipeHighZoneActivity.class, bundle);
+                }
                 break;
             //违章建筑信息查看
             case R.id.btn_buildingCheck:
@@ -137,8 +165,10 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //违章建筑信息维护
             case R.id.btn_buildingChange:
-                bundle.putString("tag", "add");
-                openActivity(PipeBuildingActivity.class, bundle);
+                if (isCanAddProperty()) {
+                    bundle.putString("tag", "add");
+                    openActivity(PipeBuildingActivity.class, bundle);
+                }
                 break;
             //隧道信息查看
             case R.id.btn_tunnelCheck:
@@ -147,8 +177,10 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //隧道信息维护
             case R.id.btn_tunnelChange:
-                bundle.putString("tag", "add");
-                openActivity(PipeTunnelActivity.class, bundle);
+                if (isCanAddProperty()) {
+                    bundle.putString("tag", "add");
+                    openActivity(PipeTunnelActivity.class, bundle);
+                }
                 break;
             //风向标信息查看
             case R.id.btn_windVaneCheck:
@@ -156,7 +188,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //风向标信息维护
             case R.id.btn_windVaneChange:
-                openActivity(AddWindVaneActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddWindVaneActivity.class);
+                }
                 break;
             //宣传栏信息查看
             case R.id.btn_advocacyBoardCheck:
@@ -164,7 +198,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //宣传栏信息维护
             case R.id.btn_advocacyBoardChange:
-                openActivity(AddAdvocacyBoardActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddAdvocacyBoardActivity.class);
+                }
                 break;
             //视频监控信息查看
             case R.id.btn_videoCheck:
@@ -172,7 +208,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //视频监控信息维护
             case R.id.btn_videoChange:
-                openActivity(AddVideoActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddVideoActivity.class);
+                }
                 break;
             //水工保护信息查看
             case R.id.btn_waterCheck:
@@ -180,7 +218,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //水工保护信息维护
             case R.id.btn_waterChange:
-                openActivity(AddWaterActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddWaterActivity.class);
+                }
                 break;
             //人井(盘缆点)桩
             case R.id.btn_wellCheck:
@@ -188,7 +228,9 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //人井(盘缆点)桩
             case R.id.btn_wellChange:
-                openActivity(AddWellActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddWellActivity.class);
+                }
                 break;
             //其他(隧道、地震监测等设备设施)
             case R.id.btn_otherCheck:
@@ -196,12 +238,52 @@ public class StandingBookActivity extends BaseActivity {
                 break;
             //其他(隧道、地震监测等设备设施)
             case R.id.btn_otherChange:
-                openActivity(AddOtherActivity.class);
+                if (isCanAddProperty()) {
+                    openActivity(AddOtherActivity.class);
+                }
                 break;
             case R.id.iv_back:
                 finish();
                 break;
 
         }
+    }
+
+    public boolean isCanAddProperty() {
+        if (TextUtils.isEmpty(stationId)) {
+            ToastUtil.show("请先选择要维护的桩号");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        if (requestCode == SELECT_STATION) {
+            String stationName = data.getStringExtra("stationName");
+            pipeId = data.getStringExtra("pipeId");
+            stationId = data.getStringExtra("stationId");
+            mainSearchTextView.setText(stationName);
+            //获取数据
+            searchStation(pipeId, mainSearchTextView.getText().toString());
+        }
+    }
+
+    private void searchStation(String pipeId, String keyword) {
+        JsonObject params = new JsonObject();
+        params.addProperty("pipeid", Integer.valueOf(pipeId));
+        params.addProperty("name", keyword);
+        Net.create(Api.class).searchStation(token, params)
+                .enqueue(new NetCallback<SearchStationModel>(this, true) {
+                    @Override
+                    public void onResponse(SearchStationModel result) {
+
+
+                    }
+                });
     }
 }

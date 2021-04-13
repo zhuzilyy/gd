@@ -13,6 +13,12 @@ import com.gd.form.R;
 import com.gd.form.adapter.MeasuerRecordAdapter;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.MeasureRecordModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -30,6 +36,7 @@ public class MeasureRecordActivity extends BaseActivity {
     @BindView(R.id.stationRefreshLayout)
     SmartRefreshLayout stationRefreshLayout;
     private MeasuerRecordAdapter adapter;
+    private String token, userId;
 
     @Override
     protected void setStatusBar() {
@@ -45,6 +52,8 @@ public class MeasureRecordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("测量记录");
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
         initViews();
         initData();
 
@@ -64,6 +73,16 @@ public class MeasureRecordActivity extends BaseActivity {
                 openActivity(PipeMeasureDetailActivity.class);
             }
         });
+        //获取测量数据
+        JsonObject params = new JsonObject();
+        Net.create(Api.class).getMeasureRecordList(token, params)
+                .enqueue(new NetCallback<List<MeasureRecordModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<MeasureRecordModel> list) {
+
+
+                    }
+                });
     }
 
     private void initViews() {

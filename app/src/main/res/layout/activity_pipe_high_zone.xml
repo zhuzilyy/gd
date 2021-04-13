@@ -53,6 +53,7 @@
             android:orientation="vertical">
             <!--管道名称-->
             <LinearLayout
+                android:id="@+id/ll_pipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -70,9 +71,10 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:id="@+id/et_pipeName"
-                    android:layout_width="@dimen/d_0"
+
+                <TextView
+                    android:id="@+id/tv_pipeName"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -81,13 +83,20 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="end"
-                    android:hint="所属管道"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
-            </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"

@@ -468,9 +468,10 @@
                     android:textSize="@dimen/s_16" />
 
 
-                <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="0dp"
+
+                <EditText
+                    android:id="@+id/et_location"
+                    android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -478,13 +479,16 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:ellipsize="end"
                     android:gravity="end"
+                    android:hint="行政位置"
                     android:singleLine="true"
-                    android:text=""
                     android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"

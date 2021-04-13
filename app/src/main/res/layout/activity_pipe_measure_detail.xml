@@ -77,8 +77,8 @@
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
-        <EditText
-            android:id="@+id/et_pipeDepth"
+        <TextView
+            android:id="@+id/tv_pipeDepth"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
@@ -121,8 +121,8 @@
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
-        <EditText
-            android:id="@+id/et_opticalCableDepth"
+        <TextView
+            android:id="@+id/tv_opticalCableDepth"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
@@ -166,7 +166,7 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
-            android:id="@+id/et_depthNotEnough"
+            android:id="@+id/tv_depthNotEnough"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
@@ -210,7 +210,7 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
-            android:id="@+id/et_method"
+            android:id="@+id/tv_method"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_15"
