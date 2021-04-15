@@ -79,7 +79,7 @@ public class MeasureRecordActivity extends BaseActivity {
         });
         //获取测量数据
         JsonObject params = new JsonObject();
-        params.addProperty("stakeid", Double.parseDouble(stationId));
+        params.addProperty("stakeid", Integer.parseInt(stationId));
         Net.create(Api.class).getMeasureRecords(token, params)
                 .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override

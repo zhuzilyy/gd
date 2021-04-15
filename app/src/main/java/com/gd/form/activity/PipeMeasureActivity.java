@@ -26,6 +26,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
 import com.google.gson.JsonObject;
@@ -33,8 +34,6 @@ import com.jaeger.library.StatusBarUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -188,28 +187,28 @@ public class PipeMeasureActivity extends BaseActivity {
             ToastUtil.show("管道埋深不能为空");
             return false;
         }
-//        if(isNumeric(etPipeDepth.getText().toString())){
-//            ToastUtil.show("管道埋深据格式不正确");
-//            return false;
-//        }
+        if (!NumberUtil.isNumber(etPipeDepth.getText().toString())) {
+            ToastUtil.show("管道埋深据格式不正确");
+            return false;
+        }
 
         if (TextUtils.isEmpty(etOpticalCableDepth.getText().toString())) {
             ToastUtil.show("光缆埋深不能为空");
             return false;
         }
-//        if (isNumeric(etOpticalCableDepth.getText().toString())) {
-//            ToastUtil.show("光缆埋深数据格式不正确");
-//            return false;
-//        }
+        if (!NumberUtil.isNumber(etOpticalCableDepth.getText().toString())) {
+            ToastUtil.show("光缆埋深数据格式不正确");
+            return false;
+        }
 
         if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
             ToastUtil.show("埋深不足(m)不能为空");
             return false;
         }
-//        if (isNumeric(etDepthNotEnough.getText().toString())) {
-//            ToastUtil.show("埋深不足(m)数据格式不正确");
-//            return false;
-//        }
+        if (!NumberUtil.isNumber(etDepthNotEnough.getText().toString())) {
+            ToastUtil.show("埋深不足(m)数据格式不正确");
+            return false;
+        }
 
         if (TextUtils.isEmpty(etMethod.getText().toString())) {
             ToastUtil.show("处理措施");
@@ -217,13 +216,6 @@ public class PipeMeasureActivity extends BaseActivity {
         }
         return true;
     }
-    public boolean isNumeric(String str) {
-        Pattern pattern = Pattern.compile("[0-9]+");
-        Matcher matcher = pattern.matcher(str);
-        boolean result = matcher.matches();
 
-        return result;
-
-    }
 
 }

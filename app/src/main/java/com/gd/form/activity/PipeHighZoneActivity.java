@@ -19,15 +19,19 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.HighZoneModel;
+import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -82,6 +86,8 @@ public class PipeHighZoneActivity extends BaseActivity {
     private String stationId, pipeId, pipeName;
     private String token, userId, highZoneId;
     private final int SEARCH_HIGHZONE = 100;
+    private List<Pipelineinfo> pipelineInfoList;
+    private ListDialog dialog;
 
     @Override
     protected void setStatusBar() {
@@ -97,13 +103,19 @@ public class PipeHighZoneActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initListener();
+        getPipelineInfoListRequest();
         tvTitle.setText("高后果区");
+        dialog = new ListDialog(this);
         if (getIntent() != null) {
             stationId = getIntent().getExtras().getString("stationId");
             pipeId = getIntent().getExtras().getString("pipeId");
             pipeName = getIntent().getExtras().getString("pipeName");
-            tvPipeName.setText(pipeName);
+            highZoneId = getIntent().getExtras().getString("highZoneId");
             String tag = getIntent().getExtras().getString("tag");
+            //根据接口获取数据
+            if (!TextUtils.isEmpty(highZoneId)) {
+                getHighZoneData(highZoneId);
+            }
             if ("add".equals(tag)) {
                 btnCommit.setVisibility(View.VISIBLE);
                 llSearch.setVisibility(View.VISIBLE);
@@ -125,8 +137,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 rgIsAdd.setEnabled(true);
                 etType.setEnabled(true);
                 llPipeName.setEnabled(true);
-            } else if (("check".equals(tag))) {
-                highZoneId = getIntent().getExtras().getString("highZoneId");
+            } else if ("check".equals(tag)) {
                 btnCommit.setVisibility(View.GONE);
                 llSearch.setVisibility(View.GONE);
                 etHighZoneName.setEnabled(false);
@@ -148,15 +159,22 @@ public class PipeHighZoneActivity extends BaseActivity {
                 etType.setEnabled(false);
                 etType.setEnabled(false);
                 llPipeName.setEnabled(false);
-                //根据接口获取数据
-                if (!TextUtils.isEmpty(highZoneId)) {
-                    getHighZoneData(highZoneId);
-                }
             }
         }
         token = (String) SPUtil.get(PipeHighZoneActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeHighZoneActivity.this, "userId", "");
 
+    }
+
+    private void getPipelineInfoListRequest() {
+
+        Net.create(Api.class).pipelineinfosget()
+                .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
+                    @Override
+                    public void onResponse(List<Pipelineinfo> list) {
+                        pipelineInfoList = list;
+                    }
+                });
     }
 
     private void getHighZoneData(String highZoneId) {
@@ -168,6 +186,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                     public void onResponse(List<HighZoneModel> result) {
                         if (result != null && result.size() > 0) {
                             HighZoneModel highZoneModel = result.get(0);
+                            tvPipeName.setText(highZoneModel.getPipedesc());
                             etHighZoneName.setText(highZoneModel.getName());
                             etLocation.setText(highZoneModel.getLocationdesc());
                             etLength.setText(highZoneModel.getLength() + "");
@@ -212,11 +231,29 @@ public class PipeHighZoneActivity extends BaseActivity {
             R.id.iv_back,
             R.id.btn_commit,
             R.id.ll_search,
+            R.id.ll_pipeName,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_pipeName:
+                List<String> pipeList = new ArrayList<>();
+                List<Integer> pipeIdList = new ArrayList<>();
+                if (pipelineInfoList != null && pipelineInfoList.size() > 0) {
+                    for (int i = 0; i < pipelineInfoList.size(); i++) {
+                        pipeList.add(pipelineInfoList.get(i).getName());
+                        pipeIdList.add(pipelineInfoList.get(i).getId());
+                    }
+                }
+                dialog.setData(pipeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvPipeName.setText(pipeList.get(positionM));
+                    pipeId = pipeIdList.get(positionM) + "";
+                    dialog.dismiss();
+                });
                 break;
             case R.id.ll_search:
                 Intent intent = new Intent(PipeHighZoneActivity.this, SearchHighZoneActivity.class);
@@ -232,9 +269,14 @@ public class PipeHighZoneActivity extends BaseActivity {
 
     private void addHighZone() {
         JsonObject params = new JsonObject();
-        params.addProperty("id", 0);
+        if(TextUtils.isEmpty(highZoneId)){
+            params.addProperty("id", 0);
+        }else{
+            params.addProperty("id", Integer.parseInt(highZoneId));
+        }
         params.addProperty("stakeid", Integer.valueOf(stationId));
         params.addProperty("pipeid", Integer.valueOf(pipeId));
+        params.addProperty("pipedesc", tvPipeName.getText().toString());
         params.addProperty("name", etHighZoneName.getText().toString());
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("length", Double.parseDouble(etLength.getText().toString()));
@@ -285,11 +327,11 @@ public class PipeHighZoneActivity extends BaseActivity {
             ToastUtil.show("请输入长度");
             return false;
         }
-//        if (isNumeric(etLength.getText().toString())) {
-//            ToastUtil.show("长度格式不正确，请输入数字");
-//            return false;
-//
-//        }
+        if (!NumberUtil.isNumber(etLength.getText().toString())) {
+            ToastUtil.show("长度格式不正确");
+            return false;
+
+        }
         if (TextUtils.isEmpty(etLevel.getText().toString())) {
             ToastUtil.show("请输入高后果区等级");
             return false;
@@ -322,11 +364,11 @@ public class PipeHighZoneActivity extends BaseActivity {
             ToastUtil.show("请输入管道壁厚");
             return false;
         }
-//        if (isNumeric(etPly.getText().toString())) {
-//            ToastUtil.show("管道壁厚格式不正确，请输入数字");
-//            return false;
-//
-//        }
+        if (!NumberUtil.isNumber(etPly.getText().toString())) {
+            ToastUtil.show("管道壁厚格式不正确");
+            return false;
+
+        }
         if (TextUtils.isEmpty(etRelativeAreaLevel.getText().toString())) {
             ToastUtil.show("请输入对应设计地区等级");
             return false;

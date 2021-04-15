@@ -29,7 +29,7 @@ public class MeasureRecordAdapter extends BaseRecyclerViewAdapter<MeasureModel> 
         TextView tvName = viewHolder.getView(R.id.tv_name);
         TextView tvTime = viewHolder.getView(R.id.tv_time);
         String time = TimeUtil.longToFormatTime(value.getMeasuredate().getTime());
-        tvName.setText("测量人: "+value.getTester()+"");
+        tvName.setText("测量人: "+value.getTester());
         tvTime.setText("测量时间: "+time);
         viewHolder.getContentView().setOnClickListener(view -> {
             if (onItemClickListener != null) {

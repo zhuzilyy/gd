@@ -67,6 +67,7 @@ public class StationActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
+                  //跳转到标识列表界面
                 Intent intent = new Intent();
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
                 intent.putExtra("stationId", stationNoModelList.get(position).getId() + "");
@@ -121,6 +122,7 @@ public class StationActivity extends BaseActivity {
                                           KeyEvent event) {
                 if (TextUtils.isEmpty(v.getText().toString())) {
                     ToastUtil.show("请输入搜索内容");
+                    return false;
                 }
                 getData(v.getText().toString().trim());
                 return false;

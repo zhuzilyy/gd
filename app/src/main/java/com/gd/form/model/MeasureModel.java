@@ -6,7 +6,7 @@ public class MeasureModel {
     private double lockdeep;
     private double pipedeep;
     private String resolution;
-    private double tester;
+    private String tester;
     public MeasureDateModel getMeasuredate() {
         return measuredate;
     }
@@ -47,11 +47,11 @@ public class MeasureModel {
         this.resolution = resolution;
     }
 
-    public double getTester() {
+    public String getTester() {
         return tester;
     }
 
-    public void setTester(double tester) {
+    public void setTester(String tester) {
         this.tester = tester;
     }
 }

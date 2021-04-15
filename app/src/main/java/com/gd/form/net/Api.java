@@ -232,6 +232,14 @@ public interface Api {
     Call<ServerModel> addPipeStakeInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
+     * 修改管道标识
+     *
+     * @return
+     */
+    @POST("pipestakeinfoUpdateBaseinfo.html")
+    Call<ServerModel> updatePipeStakeInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
      * 添加测量记录
      *
      * @return

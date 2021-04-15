@@ -456,6 +456,8 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
                     android:id="@+id/et_missLength"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -501,6 +503,8 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
                     android:id="@+id/et_minDistance"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -546,6 +550,8 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
                     android:id="@+id/et_missArea"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"

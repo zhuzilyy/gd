@@ -64,7 +64,6 @@ public class PipeWindVaneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("风向标");
         initViews();
-        initData();
         token = (String) SPUtil.get(PipeWindVaneActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeWindVaneActivity.this, "userId", "");
         if (getIntent() != null) {
@@ -72,8 +71,8 @@ public class PipeWindVaneActivity extends BaseActivity {
             pipeId = getIntent().getExtras().getString("pipeId");
             windVane = getIntent().getExtras().getString("windVanes");
         }
+        initData();
     }
-
     private void initData() {
         windVaneList = new ArrayList<>();
         windVaneRecycler.setLayoutManager(new LinearLayoutManager(mContext));

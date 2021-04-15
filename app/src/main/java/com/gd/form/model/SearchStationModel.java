@@ -1,6 +1,8 @@
 package com.gd.form.model;
 
-public class SearchStationModel {
+import java.io.Serializable;
+
+public class SearchStationModel implements Serializable {
     private  int id;
     private String name;
     private int departmentid;

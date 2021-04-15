@@ -75,6 +75,8 @@ public class StandingBookActivity extends BaseActivity {
     private MyReceiver myReceiver;
     private int departmentId;
     private String highZoneId, buildingId, stationName;
+    private SearchStationModel searchStationModel;
+    private String newPipeTagId;
 
     @Override
     protected void setStatusBar() {
@@ -97,6 +99,10 @@ public class StandingBookActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.update");
         registerReceiver(myReceiver, intentFilter);
+
+        IntentFilter intentFilterAdd = new IntentFilter();
+        intentFilter.addAction("com.action.add");
+        registerReceiver(myReceiver, intentFilterAdd);
     }
 
     @OnClick({
@@ -141,17 +147,39 @@ public class StandingBookActivity extends BaseActivity {
             //管道标识基础信息查看
             case R.id.btn_infoCheck:
                 bundle.putString("tag", "check");
+                bundle.putString("pipeName", pipeName);
+                bundle.putString("departmentId", departmentId + "");
+                bundle.putString("stationName", stationName);
+                bundle.putString("departmentName", departmentName);
+                bundle.putString("newPipeTagId", newPipeTagId);
+                bundle.putSerializable("searchStationModel", searchStationModel);
                 if (isCanAddProperty()) {
                     openActivity(PipeTagActivity.class, bundle);
                 }
                 break;
             //管道标识基础信息维护
             case R.id.btn_infoChange:
-            case R.id.iv_right:
                 bundle.putString("tag", "add");
+                bundle.putString("pipeName", pipeName);
+                bundle.putString("departmentId", departmentId + "");
+                bundle.putString("stationName", stationName);
+                bundle.putString("pipeId", pipeId);
+                bundle.putString("departmentName", departmentName);
+                bundle.putString("newPipeTagId", newPipeTagId);
+                bundle.putSerializable("searchStationModel", searchStationModel);
                 if (isCanAddProperty()) {
                     openActivity(PipeTagActivity.class, bundle);
                 }
+                break;
+            case R.id.iv_right:
+                bundle.putString("tag", "new");
+                bundle.putString("pipeName", pipeName);
+                bundle.putString("departmentId", departmentId + "");
+                bundle.putString("stationName", stationName);
+                bundle.putString("departmentName", departmentName);
+                bundle.putString("pipeId", pipeId);
+                bundle.putSerializable("searchStationModel", searchStationModel);
+                openActivity(PipeTagActivity.class, bundle);
                 break;
             //管道责任人查看
             case R.id.btn_personCheck:
@@ -195,6 +223,7 @@ public class StandingBookActivity extends BaseActivity {
             //高后果区信息维护
             case R.id.btn_highZoneChange:
                 bundle.putString("pipeName", pipeName);
+                bundle.putString("highZoneId", highZoneId);
                 if (isCanAddProperty()) {
                     bundle.putString("tag", "add");
                     openActivity(PipeHighZoneActivity.class, bundle);
@@ -367,12 +396,15 @@ public class StandingBookActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("id", Integer.valueOf(stationId));
-        Log.i("tag", "params===" + params);
+        Log.i("tag", params.toString() + "=333====");
         Net.create(Api.class).searchStation(token, params)
                 .enqueue(new NetCallback<List<SearchStationModel>>(this, true) {
                     @Override
                     public void onResponse(List<SearchStationModel> result) {
                         SearchStationModel model = result.get(0);
+                        Log.i("tag",model.getId()+"===getId===");
+                        searchStationModel = model;
+                        stationName = model.getName();
                         String desc = model.getDesc();
                         highZoneId = model.getHighareasid();
                         buildingId = model.getLegalconstructionid();
@@ -394,64 +426,64 @@ public class StandingBookActivity extends BaseActivity {
                         tvPipeTag.setText(model.getName());
                         //管道责任人
                         pipeOwners = model.getPipeowners();
-                        String[] pipeOwnersArr = pipeOwners.split(";");
                         if (!TextUtils.isEmpty(pipeOwners)) {
+                            String[] pipeOwnersArr = pipeOwners.split(";");
                             tvPipePerson.setText("管道责任人(" + pipeOwnersArr.length + ")");
                         } else {
                             tvPipePerson.setText("管道责任人");
                         }
                         //站场或阀室
                         stations = model.getStations();
-                        String[] stationArr = stations.split(";");
                         if (!TextUtils.isEmpty(stations)) {
+                            String[] stationArr = stations.split(";");
                             tvStation.setText("站场或阀室(" + stationArr.length + ")");
                         } else {
                             tvStation.setText("站场或阀室");
                         }
                         //风向标
                         windVanes = model.getWindvanes();
-                        String[] windVanesArr = windVanes.split(";");
                         if (!TextUtils.isEmpty(windVanes)) {
+                            String[] windVanesArr = windVanes.split(";");
                             tvWindVane.setText("风向标(" + windVanesArr.length + ")");
                         } else {
                             tvWindVane.setText("风向标");
                         }
                         //宣传栏
                         advocacyBoard = model.getPedurail();
-                        String[] advocacyBoardArray = advocacyBoard.split(";");
                         if (!TextUtils.isEmpty(advocacyBoard)) {
-                            tvAdvocacyBoard.setText("宣传栏(" + advocacyBoardArray.length + ")");
+                            String[] advocacyBoardArray = advocacyBoard.split(";");
+                            tvAdvocacyBoard.setText("宣教栏(" + advocacyBoardArray.length + ")");
                         } else {
-                            tvAdvocacyBoard.setText("宣传栏");
+                            tvAdvocacyBoard.setText("宣教栏");
                         }
                         //视频监控
                         viewMonitor = model.getViewmonitor();
-                        String[] monitorArr = viewMonitor.split(";");
                         if (!TextUtils.isEmpty(viewMonitor)) {
+                            String[] monitorArr = viewMonitor.split(";");
                             tvVideoMonitoring.setText("视频监控(" + monitorArr.length + ")");
                         } else {
                             tvVideoMonitoring.setText("视频监控");
                         }
                         //水工(含其他)保护形势
                         waterProtect = model.getWaterprotect();
-                        String[] waterArr = waterProtect.split(";");
                         if (!TextUtils.isEmpty(waterProtect)) {
+                            String[] waterArr = waterProtect.split(";");
                             tvWater.setText("水工(含其他)保护形势(" + waterArr.length + ")");
                         } else {
                             tvWater.setText("水工(含其他)保护形势");
                         }
                         //人井(盘缆点)桩
                         well = model.getManpile();
-                        String[] wellArr = well.split(";");
                         if (!TextUtils.isEmpty(well)) {
+                            String[] wellArr = well.split(";");
                             tvWell.setText("人井(盘缆点)桩(" + wellArr.length + ")");
                         } else {
                             tvWell.setText("人井(盘缆点)桩");
                         }
                         //其他(隧道、地震监测等设备设施)
                         other = model.getOthers();
-                        String[] otherArr = other.split(";");
                         if (!TextUtils.isEmpty(other)) {
+                            String[] otherArr = other.split(";");
                             tvOther.setText("其他(隧道、地震监测等设备设施)(" + otherArr.length + ")");
                         } else {
                             tvOther.setText("其他(隧道、地震监测等设备设施)");
@@ -463,8 +495,16 @@ public class StandingBookActivity extends BaseActivity {
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //获取数据
-            searchStation(pipeId, stationId);
+            if (intent == null) {
+                return;
+            }
+            if (intent.getAction().equals("com.action.update")) {
+                //获取数据
+                searchStation(pipeId, stationId);
+            } else if (intent.getAction().equals("com.action.add")) {
+                newPipeTagId = intent.getStringExtra("id");
+            }
+
         }
     }
 

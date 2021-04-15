@@ -91,7 +91,6 @@ public class SearchHighZoneActivity extends BaseActivity {
             }
         });
     }
-
     @OnClick({
             R.id.iv_back,
             R.id.btn_search,

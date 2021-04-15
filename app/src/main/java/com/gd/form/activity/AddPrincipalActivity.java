@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -96,11 +97,13 @@ public class AddPrincipalActivity extends BaseActivity {
         } else {
             params.addProperty("pipeowners", departmentName + ":" + approverName);
         }
-
+        Log.i("tag","params===2222"+params.toString());
         Net.create(Api.class).addPrincipal(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
+                        Log.i("tag",result.getCode()+"=44==");
+                        Log.i("tag",result.getMsg()+"==44=");
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();

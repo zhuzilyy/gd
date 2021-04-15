@@ -28,16 +28,20 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.BuildingModel;
+import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +101,8 @@ public class PipeBuildingActivity extends BaseActivity {
     private TimePickerView pvTime;
     private String token, userId, buildingId, stationId, pipeId, pipeName, stationName;
     private final int SEARCH_BUILDING = 100;
-
+    private List<Pipelineinfo> pipelineInfoList;
+    private ListDialog dialog;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -113,7 +118,9 @@ public class PipeBuildingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initListener();
         initTimePicker();
+        getPipelineInfoListRequest();
         tvTitle.setText("违规违建");
+        dialog = new ListDialog(this);
         if (getIntent() != null) {
             String tag = getIntent().getExtras().getString("tag");
             buildingId = getIntent().getExtras().getString("buildingId");
@@ -121,8 +128,10 @@ public class PipeBuildingActivity extends BaseActivity {
             pipeId = getIntent().getExtras().getString("pipeId");
             String pipeName = getIntent().getExtras().getString("pipeName");
             String stationName = getIntent().getExtras().getString("stationName");
-            tvPipeName.setText(pipeName);
             etStartStationNo.setText(stationName);
+            if (!TextUtils.isEmpty(buildingId)) {
+                getBuildingData(buildingId);
+            }
             if ("add".equals(tag)) {
                 btnCommit.setVisibility(View.VISIBLE);
                 llSearch.setVisibility(View.VISIBLE);
@@ -144,6 +153,7 @@ public class PipeBuildingActivity extends BaseActivity {
                 etBeforeChangeMethod.setEnabled(true);
                 etChangeMethod.setEnabled(true);
                 llTime.setEnabled(true);
+                llPipeName.setEnabled(true);
                 rbNo.setEnabled(true);
                 rbYes.setEnabled(true);
             } else if (("check".equals(tag))) {
@@ -166,18 +176,25 @@ public class PipeBuildingActivity extends BaseActivity {
                 etRiskType.setEnabled(false);
                 etBeforeChangeMethod.setEnabled(false);
                 etChangeMethod.setEnabled(false);
+                llPipeName.setEnabled(false);
                 rbNo.setEnabled(false);
                 rbYes.setEnabled(false);
                 llTime.setEnabled(false);
-                if(!TextUtils.isEmpty(buildingId)){
-                    getBuildingData(buildingId);
-                }
             }
         }
         token = (String) SPUtil.get(PipeBuildingActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeBuildingActivity.this, "userId", "");
     }
+    private void getPipelineInfoListRequest() {
 
+        Net.create(Api.class).pipelineinfosget()
+                .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
+                    @Override
+                    public void onResponse(List<Pipelineinfo> list) {
+                        pipelineInfoList = list;
+                    }
+                });
+    }
     private void initTimePicker() {
         //Dialog 模式下，在底部弹出
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
@@ -254,7 +271,7 @@ public class PipeBuildingActivity extends BaseActivity {
                             if (!TextUtils.isEmpty(pipeDesc)) {
                                 String[] descArr = pipeDesc.split(":");
                                 tvPipeName.setText(descArr[0]);
-                                etStartStationNo.setText(descArr[1]);
+//                                etStartStationNo.setText(descArr[1]);
                             }
                             etLocation.setText(buildingModel.getLocationdesc());
                             etPipeProperty.setText(buildingModel.getOverpropety());
@@ -292,6 +309,23 @@ public class PipeBuildingActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_pipeName:
+                List<String> pipeList = new ArrayList<>();
+                List<Integer> pipeIdList = new ArrayList<>();
+                if (pipelineInfoList != null && pipelineInfoList.size() > 0) {
+                    for (int i = 0; i < pipelineInfoList.size(); i++) {
+                        pipeList.add(pipelineInfoList.get(i).getName());
+                        pipeIdList.add(pipelineInfoList.get(i).getId());
+                    }
+                }
+                dialog.setData(pipeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvPipeName.setText(pipeList.get(positionM));
+                    pipeId = pipeIdList.get(positionM) + "";
+                    dialog.dismiss();
+                });
+                break;
             case R.id.btn_commit:
                 if (paramsComplete()) {
                     addBuilding();
@@ -309,7 +343,11 @@ public class PipeBuildingActivity extends BaseActivity {
 
     private void addBuilding() {
         JsonObject params = new JsonObject();
-        params.addProperty("id", 0);
+        if (TextUtils.isEmpty(buildingId)) {
+            params.addProperty("id", 0);
+        } else {
+            params.addProperty("id", Integer.parseInt(buildingId));
+        }
         params.addProperty("stakeid", Integer.valueOf(stationId));
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("locationdesc", etLocation.getText().toString());
@@ -377,12 +415,24 @@ public class PipeBuildingActivity extends BaseActivity {
             ToastUtil.show("请输入占压或安全距离不足长度(m)");
             return false;
         }
+        if (!NumberUtil.isNumber(etMissLength.getText().toString())) {
+            ToastUtil.show("占压或安全距离格式不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etMinDistance.getText().toString())) {
             ToastUtil.show("请输入与管道最小间距(m)");
             return false;
         }
+        if (!NumberUtil.isNumber(etMinDistance.getText().toString())) {
+            ToastUtil.show("与管道最小间距格式不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etMissArea.getText().toString())) {
             ToastUtil.show("请输入占压或安全距离不足面积(㎡)");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etMissArea.getText().toString())) {
+            ToastUtil.show("占压或安全距离不足面积格式不正确");
             return false;
         }
         if (TextUtils.isEmpty(etPersonActivity.getText().toString())) {
@@ -418,8 +468,8 @@ public class PipeBuildingActivity extends BaseActivity {
         if (data == null) {
             return;
         }
-        if(requestCode == SEARCH_BUILDING){
-            BuildingModel buildingModel = (BuildingModel)data.getSerializableExtra("building");
+        if (requestCode == SEARCH_BUILDING) {
+            BuildingModel buildingModel = (BuildingModel) data.getSerializableExtra("building");
             String pipeDesc = buildingModel.getPipedesc();
             if (!TextUtils.isEmpty(pipeDesc)) {
                 String[] descArr = pipeDesc.split(":");

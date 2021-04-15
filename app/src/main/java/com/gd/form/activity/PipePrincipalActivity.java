@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -127,6 +128,7 @@ public class PipePrincipalActivity extends BaseActivity {
             }
             params.addProperty("pipeowners", ownersSb.toString());
         }
+        Log.i("tag","params==="+params.toString());
         Net.create(Api.class).addPrincipal(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

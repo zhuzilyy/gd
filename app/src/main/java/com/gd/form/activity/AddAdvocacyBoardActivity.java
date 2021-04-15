@@ -46,7 +46,7 @@ public class AddAdvocacyBoardActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("添加宣传栏");
+        tvTitle.setText("添加宣教栏");
         token = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "token", "");
         userId = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "userId", "");
         if (getIntent() != null) {

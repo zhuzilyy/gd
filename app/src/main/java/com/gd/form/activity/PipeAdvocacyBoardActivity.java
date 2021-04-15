@@ -60,7 +60,7 @@ public class PipeAdvocacyBoardActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("宣传栏");
+        tvTitle.setText("宣教栏");
         advocacyBoardList = new ArrayList<>();
         token = (String) SPUtil.get(PipeAdvocacyBoardActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeAdvocacyBoardActivity.this, "userId", "");

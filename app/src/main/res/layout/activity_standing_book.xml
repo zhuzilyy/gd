@@ -681,7 +681,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="宣传栏"
+                    android:text="宣教栏"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
