@@ -363,10 +363,10 @@ public class DeviceActivity extends BaseActivity {
             ToastUtil.show("请输入当前位置");
             return false;
         }
-        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请输入当前坐标");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
+//            ToastUtil.show("请输入当前坐标");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;

@@ -77,6 +77,8 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
+            android:inputType="numberDecimal"
+            android:digits="1234567890."
             android:id="@+id/et_pipeDepth"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
@@ -121,6 +123,8 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
+            android:inputType="numberDecimal"
+            android:digits="1234567890."
             android:id="@+id/et_opticalCableDepth"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
@@ -165,6 +169,8 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
+            android:inputType="numberDecimal"
+            android:digits="1234567890."
             android:id="@+id/et_depthNotEnough"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
@@ -209,6 +215,8 @@
             android:textSize="@dimen/s_16" />
 
         <EditText
+            android:inputType="numberDecimal"
+            android:digits="1234567890."
             android:id="@+id/et_method"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"

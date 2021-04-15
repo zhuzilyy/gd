@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="线路名称" />
+
+        <TextView
+            android:id="@+id/tv_pipeName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical"
+            android:text="线路名称" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="高后果区名称" />
+
+        <TextView
+            android:id="@+id/tv_highZoneName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center_vertical|right"
+            android:text="占压名称" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="地址" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center_vertical|right"
+            android:text="地址" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_10"
+        android:background="#ececec" />
+
+</LinearLayout>

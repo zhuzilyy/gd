@@ -33,6 +33,8 @@ import com.jaeger.library.StatusBarUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -53,7 +55,8 @@ public class PipeMeasureActivity extends BaseActivity {
     @BindView(R.id.et_method)
     EditText etMethod;
     private TimePickerView pvTime;
-    private String token, userId;
+    private String token, userId, stationId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -73,6 +76,9 @@ public class PipeMeasureActivity extends BaseActivity {
         initTimePicker();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
+        if (getIntent() != null) {
+            stationId = getIntent().getExtras().getString("stationId");
+        }
     }
 
     @OnClick({
@@ -90,19 +96,22 @@ public class PipeMeasureActivity extends BaseActivity {
                 pvTime.show(view);
                 break;
             case R.id.btn_commit:
-                if(paramsComplete()){
+                if (paramsComplete()) {
                     commit();
                 }
                 break;
             case R.id.tv_right:
-                openActivity(MeasureRecordActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("stationId", stationId);
+                openActivity(MeasureRecordActivity.class, bundle);
                 break;
 
         }
     }
+
     private void commit() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("stakeid", "stakeid");
+        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("measuredate", tvTime.getText().toString());
         jsonObject.addProperty("tester", userId);
         jsonObject.addProperty("pipedeep", etPipeDepth.getText().toString());
@@ -120,6 +129,7 @@ public class PipeMeasureActivity extends BaseActivity {
                     }
                 });
     }
+
     private void initTimePicker() {
         //Dialog 模式下，在底部弹出
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
@@ -173,30 +183,47 @@ public class PipeMeasureActivity extends BaseActivity {
             ToastUtil.show("请选择测量时间");
             return false;
         }
+
         if (TextUtils.isEmpty(etPipeDepth.getText().toString())) {
-            ToastUtil.show("请输入实测埋深(m)-管道埋深");
+            ToastUtil.show("管道埋深不能为空");
             return false;
         }
-        if (TextUtils.isEmpty(etPipeDepth.getText().toString())) {
-            ToastUtil.show("请输入实测埋深(m)-管道埋深");
-            return false;
-        }
+//        if(isNumeric(etPipeDepth.getText().toString())){
+//            ToastUtil.show("管道埋深据格式不正确");
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(etOpticalCableDepth.getText().toString())) {
-            ToastUtil.show("测量埋深(m)-光缆埋深");
+            ToastUtil.show("光缆埋深不能为空");
             return false;
         }
+//        if (isNumeric(etOpticalCableDepth.getText().toString())) {
+//            ToastUtil.show("光缆埋深数据格式不正确");
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
-            ToastUtil.show("埋深不足(m)");
+            ToastUtil.show("埋深不足(m)不能为空");
             return false;
         }
-        if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
-            ToastUtil.show("埋深不足(m)");
-            return false;
-        }
+//        if (isNumeric(etDepthNotEnough.getText().toString())) {
+//            ToastUtil.show("埋深不足(m)数据格式不正确");
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(etMethod.getText().toString())) {
             ToastUtil.show("处理措施");
             return false;
         }
         return true;
     }
+    public boolean isNumeric(String str) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(str);
+        boolean result = matcher.matches();
+
+        return result;
+
+    }
+
 }

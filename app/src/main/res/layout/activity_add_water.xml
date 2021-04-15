@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
-            android:text="名称"
+            android:text="添加水工保护"
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
@@ -35,7 +35,7 @@
             android:background="@null"
             android:ellipsize="end"
             android:gravity="end"
-            android:hint="名称"
+            android:hint="添加水工保护"
             android:singleLine="true"
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />

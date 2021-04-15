@@ -26,7 +26,7 @@ public class VideoAdapter extends BaseRecyclerViewAdapter<String> {
     protected void bindData(BaseViewHolder viewHolder, String value, int position) {
         TextView tvRecord = viewHolder.getView(R.id.tv_value);
         tvRecord.setText(value);
-        viewHolder.getContentView().setOnClickListener(view -> {
+        viewHolder.getContentView().findViewById(R.id.tv_delete).setOnClickListener(view -> {
             if(onItemClickListener!=null){
                 onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());
             }

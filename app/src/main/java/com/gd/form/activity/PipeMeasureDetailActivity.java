@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,13 +10,16 @@ import androidx.core.content.ContextCompat;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.model.MeasureRecordModel;
+import com.gd.form.model.MeasureModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +38,7 @@ public class PipeMeasureDetailActivity extends BaseActivity {
     @BindView(R.id.tv_method)
     TextView tvMethod;
     private String token, userId;
+    private String stationId, time;
 
     @Override
     protected void setStatusBar() {
@@ -51,18 +56,32 @@ public class PipeMeasureDetailActivity extends BaseActivity {
         tvTitle.setText("测量记录详情");
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
-        getDetail();
+        if (getIntent() != null) {
+            stationId = getIntent().getExtras().getString("stationId");
+            time = getIntent().getExtras().getString("time");
+            Log.i("tag","stationId=="+stationId);
+            Log.i("tag","time=="+time);
+        }
+        getDetail(stationId, time);
     }
 
-    private void getDetail() {
+    private void getDetail(String stationId, String time) {
         //获取测量数据
         JsonObject params = new JsonObject();
+        params.addProperty("stakeid", stationId);
+        params.addProperty("measuredate",TimeUtil.longToFormatTimeHMS(Long.parseLong(time)));
         Net.create(Api.class).getMeasureRecordDetail(token, params)
-                .enqueue(new NetCallback<MeasureRecordModel>(this, true) {
+                .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override
-                    public void onResponse(MeasureRecordModel recordModel) {
-
-
+                    public void onResponse(List<MeasureModel> list) {
+                        if(list!=null && list.size()>0){
+                            MeasureModel measureModel = list.get(0);
+                            tvTime.setText(TimeUtil.longToFormatTime(measureModel.getMeasuredate().getTime()));
+                            tvPipeDepth.setText(measureModel.getPipedeep()+"");
+                            tvOpticalCableDepth.setText(measureModel.getCabledeep()+"");
+                            tvDepthNotEnough.setText(measureModel.getLockdeep()+"");
+                            tvMethod.setText(measureModel.getResolution());
+                        }
                     }
                 });
     }

@@ -10,7 +10,8 @@
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <EditText
+        <TextView
+            android:gravity="center_vertical"
             android:id="@+id/mainSearchEditText"
             android:layout_width="0dp"
             android:layout_weight="4"
@@ -28,16 +29,6 @@
             android:imeOptions="actionSearch"
             android:padding="@dimen/d_6"
             android:singleLine="true" />
-        <Button
-            android:background="@drawable/bg_search"
-            android:layout_marginRight="@dimen/d_10"
-            android:textColor="#fff"
-            android:id="@+id/btn_search"
-            android:text="搜索"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="30dp"/>
-
     </LinearLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -67,6 +58,7 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
+                    android:enabled="false"
                     android:id="@+id/et_belongPipe"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -108,7 +100,7 @@
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
-                    android:text="桩号/位置"
+                    android:text="桩号位置"
                     android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
                     />
@@ -126,7 +118,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:hint="桩号/位置"
+                    android:hint="桩号位置"
                     />
 
             </LinearLayout>
@@ -204,6 +196,8 @@
                     android:textColor="#FF000000"
                     />
                 <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
                     android:id="@+id/et_pipeDepth"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -228,52 +222,6 @@
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
-
-            <!--管道在隧道内的架设方式-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_gravity="center"
-                    android:text="管道在隧道内的架设方式"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#FF000000"
-                    />
-                <EditText
-                    android:id="@+id/et_method"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:background="@null"
-                    android:singleLine="true"
-                    android:hint="管道在隧道内的架设方式"
-                    />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
-                android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
-
             <!--隧道及隧道口情况-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -318,6 +266,50 @@
                 android:background="#FFE5E5E5"
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
+            <!--管道在隧道内的架设方式-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:text="管道在隧道内的架设方式"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#FF000000"
+                    />
+                <EditText
+                    android:id="@+id/et_method"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/s_16"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:hint="管道在隧道内的架设方式"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:background="#FFE5E5E5"
+                android:layout_marginLeft="@dimen/d_12"
+                android:layout_marginStart="@dimen/d_12"/>
+
+
 
             <Button
                 android:id="@+id/btn_commit"

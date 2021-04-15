@@ -79,7 +79,7 @@ public class PipeTagActivity extends BaseActivity {
     private int departmentId, pipeId;
     private ListDialog dialog;
     private String token, userId;
-
+    private String stationId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -101,6 +101,7 @@ public class PipeTagActivity extends BaseActivity {
         dialog = new ListDialog(this);
         if (getIntent() != null) {
             String tag = getIntent().getExtras().getString("tag");
+            stationId = getIntent().getExtras().getString("stationId");
             if (!TextUtils.isEmpty(tag)) {
                 //查看
                 if (tag.equals("check")) {
@@ -168,8 +169,6 @@ public class PipeTagActivity extends BaseActivity {
             R.id.iv_back,
             R.id.tv_right,
             R.id.btn_commit,
-            R.id.ll_area,
-            R.id.ll_pipeName,
             R.id.ll_groundTagType,
             R.id.ll_landForm,
     })
@@ -217,7 +216,9 @@ public class PipeTagActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_right:
-                openActivity(PipeMeasureActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("stationId",stationId);
+                openActivity(PipeMeasureActivity.class,bundle);
                 break;
             case R.id.ll_area:
                 List<String> areaList = new ArrayList<>();

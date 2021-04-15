@@ -248,6 +248,15 @@
         <activity
             android:name=".activity.PipeHighZoneActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchBuildingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchHighZoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchTunnelActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

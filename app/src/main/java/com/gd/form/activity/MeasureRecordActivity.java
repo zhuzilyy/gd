@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
-import com.gd.form.adapter.MeasuerRecordAdapter;
+import com.gd.form.adapter.MeasureRecordAdapter;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.model.MeasureRecordModel;
+import com.gd.form.model.MeasureModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -35,8 +35,9 @@ public class MeasureRecordActivity extends BaseActivity {
     RecyclerView recordRecycler;
     @BindView(R.id.stationRefreshLayout)
     SmartRefreshLayout stationRefreshLayout;
-    private MeasuerRecordAdapter adapter;
-    private String token, userId;
+    private MeasureRecordAdapter adapter;
+    private String token, userId, stationId;
+    private List<MeasureModel> measureModelList;
 
     @Override
     protected void setStatusBar() {
@@ -52,34 +53,41 @@ public class MeasureRecordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("测量记录");
+        measureModelList = new ArrayList<>();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
+        if (getIntent() != null) {
+            stationId = getIntent().getExtras().getString("stationId");
+        }
         initViews();
         initData();
 
     }
 
     private void initData() {
-        List<String> values = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
-            values.add("测量记录" + i);
-        }
         recordRecycler.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new MeasuerRecordAdapter(mContext, values, R.layout.adapter_item_measure_record);
+        adapter = new MeasureRecordAdapter(mContext, measureModelList, R.layout.adapter_item_measure_record);
         recordRecycler.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                openActivity(PipeMeasureDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("stationId",stationId);
+                bundle.putString("time",measureModelList.get(position).getMeasuredate().getTime()+"");
+                openActivity(PipeMeasureDetailActivity.class,bundle);
             }
         });
         //获取测量数据
         JsonObject params = new JsonObject();
-        Net.create(Api.class).getMeasureRecordList(token, params)
-                .enqueue(new NetCallback<List<MeasureRecordModel>>(this, true) {
+        params.addProperty("stakeid", Double.parseDouble(stationId));
+        Net.create(Api.class).getMeasureRecords(token, params)
+                .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override
-                    public void onResponse(List<MeasureRecordModel> list) {
-
+                    public void onResponse(List<MeasureModel> list) {
+                        if (list != null && list.size() > 0) {
+                            measureModelList.addAll(list);
+                            adapter.notifyDataSetChanged();
+                        }
 
                     }
                 });
