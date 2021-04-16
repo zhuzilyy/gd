@@ -54,8 +54,8 @@ public class PipeTagActivity extends BaseActivity {
     LinearLayout llLocation;
     @BindView(R.id.ll_stationNo)
     LinearLayout llStationNo;
-    @BindView(R.id.tv_stationNo)
-    TextView tvStationNo;
+    @BindView(R.id.et_stationNo)
+    EditText etStationNo;
     @BindView(R.id.et_kgInfo)
     EditText etKgInfo;
     @BindView(R.id.et_corner)
@@ -126,11 +126,11 @@ public class PipeTagActivity extends BaseActivity {
                     tvArea.setText("暂无");
                 }
                 tvPipeName.setText(pipeName);
-                tvStationNo.setText(stationName);
+                etStationNo.setText(stationName);
             }
             if (searchStationModel != null) {
                 tvPipeName.setText(pipeName);
-                tvStationNo.setText(stationName);
+                etStationNo.setText(stationName);
                 tvGroundTagType.setText(searchStationModel.getStaketype());
                 etKgInfo.setText(searchStationModel.getMileageinfo());
                 etCorner.setText(searchStationModel.getCornerinfo());
@@ -150,7 +150,7 @@ public class PipeTagActivity extends BaseActivity {
                 llGroundTagType.setEnabled(false);
                 llLandForm.setEnabled(false);
                 llLocation.setEnabled(false);
-                tvStationNo.setEnabled(false);
+                etStationNo.setEnabled(false);
                 etKgInfo.setEnabled(false);
                 etCorner.setEnabled(false);
                 etLongitude.setEnabled(false);
@@ -160,16 +160,19 @@ public class PipeTagActivity extends BaseActivity {
                 etPhone.setEnabled(false);
                 etRemark.setEnabled(false);
                 etLocation.setEnabled(false);
+                etStationNo.setEnabled(false);
+                llStationNo.setEnabled(false);
                 llStationNo.setEnabled(false);
             } else if (tag.equals("add")) {
                 tvRight.setVisibility(View.VISIBLE);
                 tvRight.setText("测量");
                 llArea.setEnabled(true);
+                etStationNo.setEnabled(true);
                 llPipeName.setEnabled(false);
                 llGroundTagType.setEnabled(true);
                 llLandForm.setEnabled(true);
                 llLocation.setEnabled(true);
-                tvStationNo.setEnabled(true);
+                etStationNo.setEnabled(true);
                 etKgInfo.setEnabled(true);
                 etCorner.setEnabled(true);
                 etLongitude.setEnabled(true);
@@ -215,17 +218,16 @@ public class PipeTagActivity extends BaseActivity {
             R.id.ll_landForm,
             R.id.ll_area,
             R.id.ll_pipeName,
-            R.id.ll_stationNo,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.ll_stationNo:
-                Intent intentStation = new Intent(this, StationActivity.class);
-                startActivityForResult(intentStation, SELECT_STATION);
-                break;
+//            case R.id.ll_stationNo:
+//                Intent intentStation = new Intent(this, StationActivity.class);
+//                startActivityForResult(intentStation, SELECT_STATION);
+//                break;
             case R.id.ll_pipeName:
                 List<String> pipeList = new ArrayList<>();
                 List<Integer> pipeIdList = new ArrayList<>();
@@ -311,7 +313,7 @@ public class PipeTagActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
-        jsonObject.addProperty("name", tvStationNo.getText().toString());
+        jsonObject.addProperty("name", etStationNo.getText().toString());
         jsonObject.addProperty("staketype", tvGroundTagType.getText().toString());
         jsonObject.addProperty("mileageinfo", etKgInfo.getText().toString());
         jsonObject.addProperty("cornerinfo", etCorner.getText().toString());
@@ -374,8 +376,8 @@ public class PipeTagActivity extends BaseActivity {
             ToastUtil.show("请选择管道");
             return false;
         }
-        if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
-            ToastUtil.show("请选择桩号");
+        if (TextUtils.isEmpty(etStationNo.getText().toString())) {
+            ToastUtil.show("请输入桩号");
             return false;
         }
         if (TextUtils.isEmpty(tvGroundTagType.getText().toString())) {
@@ -429,16 +431,16 @@ public class PipeTagActivity extends BaseActivity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {
-            return;
-        }
-        if (requestCode == SELECT_STATION) {
-            stationId = data.getStringExtra("stationId");
-            String stationName = data.getStringExtra("stationName");
-            tvStationNo.setText(stationName);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (data == null) {
+//            return;
+//        }
+//        if (requestCode == SELECT_STATION) {
+//            stationId = data.getStringExtra("stationId");
+//            String stationName = data.getStringExtra("stationName");
+//            etStationNo.setText(stationName);
+//        }
+//    }
 }

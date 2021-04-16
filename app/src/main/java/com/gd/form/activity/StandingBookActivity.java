@@ -388,8 +388,6 @@ public class StandingBookActivity extends BaseActivity {
             stationName = data.getStringExtra("stationName");
             pipeId = data.getStringExtra("pipeId");
             stationId = data.getStringExtra("stationId");
-            Log.i("tag",stationId+"==stationId===");
-            Log.i("tag",pipeId+"==pipeId===");
             mainSearchTextView.setText(stationName);
             //获取数据
             searchStation(pipeId, stationId);
@@ -400,6 +398,7 @@ public class StandingBookActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("id", Integer.valueOf(stationId));
+        Log.i("tag","params=="+params);
         Net.create(Api.class).searchStation(token, params)
                 .enqueue(new NetCallback<List<SearchStationModel>>(this, true) {
                     @Override
@@ -490,6 +489,24 @@ public class StandingBookActivity extends BaseActivity {
                                 tvOther.setText("其他(隧道、地震监测等设备设施)(" + otherArr.length + ")");
                             } else {
                                 tvOther.setText("其他(隧道、地震监测等设备设施)");
+                            }
+                            //高后果区
+                            if(TextUtils.isEmpty(model.getHighareasid())){
+                                tvHighZone.setText("高后果区(无)");
+                            }else{
+                                tvHighZone.setText("高后果区(有)");
+                            }
+                            //隧道
+                            if(TextUtils.isEmpty(model.getPipeaccountid())){
+                                tvTunnel.setText("隧道(无)");
+                            }else{
+                                tvTunnel.setText("隧道(有)");
+                            }
+                            //违章建筑
+                            if(TextUtils.isEmpty(model.getLegalconstructionid())){
+                                tvBuilding.setText("违章建筑(无)");
+                            }else{
+                                tvBuilding.setText("违章建筑(有)");
                             }
                         }
                     }
