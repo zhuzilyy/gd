@@ -85,7 +85,6 @@ public class PipeTunnelActivity extends BaseActivity {
             stationId = getIntent().getExtras().getString("stationId");
             pipeId = getIntent().getExtras().getString("pipeId");
             String pipeName = getIntent().getExtras().getString("pipeName");
-            tvPipeName.setText(pipeName);
             if (!TextUtils.isEmpty(tunnelId)) {
                 getTunnelData(tunnelId);
             }
@@ -133,11 +132,13 @@ public class PipeTunnelActivity extends BaseActivity {
                     public void onResponse(List<TunnelModel> result) {
                         if (result != null && result.size() > 0) {
                             TunnelModel tunnelModel = result.get(0);
+                            Log.i("tag",tunnelModel.getTunneldesc()+"==3333===");
                             etStationNo.setText(tunnelModel.getLocation());
                             etPipeName.setText(tunnelModel.getPipename());
                             etPipeDepth.setText(tunnelModel.getPipelength() + "");
                             etStatus.setText(tunnelModel.getPipesituation());
                             etMethod.setText(tunnelModel.getSetupmode());
+                            tvPipeName.setText(tunnelModel.getTunneldesc());
                         }
                     }
                 });

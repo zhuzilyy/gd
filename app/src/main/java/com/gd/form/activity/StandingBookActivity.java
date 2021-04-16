@@ -153,6 +153,7 @@ public class StandingBookActivity extends BaseActivity {
                 bundle.putString("departmentName", departmentName);
                 bundle.putString("newPipeTagId", newPipeTagId);
                 bundle.putSerializable("searchStationModel", searchStationModel);
+                bundle.putSerializable("stationId", stationId);
                 if (isCanAddProperty()) {
                     openActivity(PipeTagActivity.class, bundle);
                 }
@@ -165,6 +166,7 @@ public class StandingBookActivity extends BaseActivity {
                 bundle.putString("stationName", stationName);
                 bundle.putString("pipeId", pipeId);
                 bundle.putString("departmentName", departmentName);
+                bundle.putString("stationId", stationId);
                 bundle.putString("newPipeTagId", newPipeTagId);
                 bundle.putSerializable("searchStationModel", searchStationModel);
                 if (isCanAddProperty()) {
@@ -386,6 +388,8 @@ public class StandingBookActivity extends BaseActivity {
             stationName = data.getStringExtra("stationName");
             pipeId = data.getStringExtra("pipeId");
             stationId = data.getStringExtra("stationId");
+            Log.i("tag",stationId+"==stationId===");
+            Log.i("tag",pipeId+"==pipeId===");
             mainSearchTextView.setText(stationName);
             //获取数据
             searchStation(pipeId, stationId);
@@ -396,97 +400,97 @@ public class StandingBookActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("id", Integer.valueOf(stationId));
-        Log.i("tag", params.toString() + "=333====");
         Net.create(Api.class).searchStation(token, params)
                 .enqueue(new NetCallback<List<SearchStationModel>>(this, true) {
                     @Override
                     public void onResponse(List<SearchStationModel> result) {
-                        SearchStationModel model = result.get(0);
-                        Log.i("tag",model.getId()+"===getId===");
-                        searchStationModel = model;
-                        stationName = model.getName();
-                        String desc = model.getDesc();
-                        highZoneId = model.getHighareasid();
-                        buildingId = model.getLegalconstructionid();
-                        tunnelId = model.getPipeaccountid();
-                        String[] descArr = desc.split(":");
-                        departmentName = descArr[0];
-                        departmentId = model.getDepartmentid();
-                        pipeName = descArr[1];
-                        if (!departmentName.equals("null")) {
-                            tvArea.setText(departmentName);
-                        } else {
-                            tvArea.setText("暂无");
-                        }
-                        if (!pipeName.equals("null")) {
-                            tvPipeName.setText(pipeName);
-                        } else {
-                            tvPipeName.setText("暂无");
-                        }
-                        tvPipeTag.setText(model.getName());
-                        //管道责任人
-                        pipeOwners = model.getPipeowners();
-                        if (!TextUtils.isEmpty(pipeOwners)) {
-                            String[] pipeOwnersArr = pipeOwners.split(";");
-                            tvPipePerson.setText("管道责任人(" + pipeOwnersArr.length + ")");
-                        } else {
-                            tvPipePerson.setText("管道责任人");
-                        }
-                        //站场或阀室
-                        stations = model.getStations();
-                        if (!TextUtils.isEmpty(stations)) {
-                            String[] stationArr = stations.split(";");
-                            tvStation.setText("站场或阀室(" + stationArr.length + ")");
-                        } else {
-                            tvStation.setText("站场或阀室");
-                        }
-                        //风向标
-                        windVanes = model.getWindvanes();
-                        if (!TextUtils.isEmpty(windVanes)) {
-                            String[] windVanesArr = windVanes.split(";");
-                            tvWindVane.setText("风向标(" + windVanesArr.length + ")");
-                        } else {
-                            tvWindVane.setText("风向标");
-                        }
-                        //宣传栏
-                        advocacyBoard = model.getPedurail();
-                        if (!TextUtils.isEmpty(advocacyBoard)) {
-                            String[] advocacyBoardArray = advocacyBoard.split(";");
-                            tvAdvocacyBoard.setText("宣教栏(" + advocacyBoardArray.length + ")");
-                        } else {
-                            tvAdvocacyBoard.setText("宣教栏");
-                        }
-                        //视频监控
-                        viewMonitor = model.getViewmonitor();
-                        if (!TextUtils.isEmpty(viewMonitor)) {
-                            String[] monitorArr = viewMonitor.split(";");
-                            tvVideoMonitoring.setText("视频监控(" + monitorArr.length + ")");
-                        } else {
-                            tvVideoMonitoring.setText("视频监控");
-                        }
-                        //水工(含其他)保护形势
-                        waterProtect = model.getWaterprotect();
-                        if (!TextUtils.isEmpty(waterProtect)) {
-                            String[] waterArr = waterProtect.split(";");
-                            tvWater.setText("水工(含其他)保护形势(" + waterArr.length + ")");
-                        } else {
-                            tvWater.setText("水工(含其他)保护形势");
-                        }
-                        //人井(盘缆点)桩
-                        well = model.getManpile();
-                        if (!TextUtils.isEmpty(well)) {
-                            String[] wellArr = well.split(";");
-                            tvWell.setText("人井(盘缆点)桩(" + wellArr.length + ")");
-                        } else {
-                            tvWell.setText("人井(盘缆点)桩");
-                        }
-                        //其他(隧道、地震监测等设备设施)
-                        other = model.getOthers();
-                        if (!TextUtils.isEmpty(other)) {
-                            String[] otherArr = other.split(";");
-                            tvOther.setText("其他(隧道、地震监测等设备设施)(" + otherArr.length + ")");
-                        } else {
-                            tvOther.setText("其他(隧道、地震监测等设备设施)");
+                        if(result!=null && result.size()>0){
+                            SearchStationModel model = result.get(0);
+                            searchStationModel = model;
+                            stationName = model.getName();
+                            String desc = model.getDesc();
+                            highZoneId = model.getHighareasid();
+                            buildingId = model.getLegalconstructionid();
+                            tunnelId = model.getPipeaccountid();
+                            String[] descArr = desc.split(":");
+                            departmentName = descArr[0];
+                            departmentId = model.getDepartmentid();
+                            pipeName = descArr[1];
+                            if (!departmentName.equals("null")) {
+                                tvArea.setText(departmentName);
+                            } else {
+                                tvArea.setText("暂无");
+                            }
+                            if (!pipeName.equals("null")) {
+                                tvPipeName.setText(pipeName);
+                            } else {
+                                tvPipeName.setText("暂无");
+                            }
+                            tvPipeTag.setText(model.getName());
+                            //管道责任人
+                            pipeOwners = model.getPipeowners();
+                            if (!TextUtils.isEmpty(pipeOwners)) {
+                                String[] pipeOwnersArr = pipeOwners.split(";");
+                                tvPipePerson.setText("管道责任人(" + pipeOwnersArr.length + ")");
+                            } else {
+                                tvPipePerson.setText("管道责任人");
+                            }
+                            //站场或阀室
+                            stations = model.getStations();
+                            if (!TextUtils.isEmpty(stations)) {
+                                String[] stationArr = stations.split(";");
+                                tvStation.setText("站场或阀室(" + stationArr.length + ")");
+                            } else {
+                                tvStation.setText("站场或阀室");
+                            }
+                            //风向标
+                            windVanes = model.getWindvanes();
+                            if (!TextUtils.isEmpty(windVanes)) {
+                                String[] windVanesArr = windVanes.split(";");
+                                tvWindVane.setText("风向标(" + windVanesArr.length + ")");
+                            } else {
+                                tvWindVane.setText("风向标");
+                            }
+                            //宣传栏
+                            advocacyBoard = model.getPedurail();
+                            if (!TextUtils.isEmpty(advocacyBoard)) {
+                                String[] advocacyBoardArray = advocacyBoard.split(";");
+                                tvAdvocacyBoard.setText("宣教栏(" + advocacyBoardArray.length + ")");
+                            } else {
+                                tvAdvocacyBoard.setText("宣教栏");
+                            }
+                            //视频监控
+                            viewMonitor = model.getViewmonitor();
+                            if (!TextUtils.isEmpty(viewMonitor)) {
+                                String[] monitorArr = viewMonitor.split(";");
+                                tvVideoMonitoring.setText("视频监控(" + monitorArr.length + ")");
+                            } else {
+                                tvVideoMonitoring.setText("视频监控");
+                            }
+                            //水工(含其他)保护形势
+                            waterProtect = model.getWaterprotect();
+                            if (!TextUtils.isEmpty(waterProtect)) {
+                                String[] waterArr = waterProtect.split(";");
+                                tvWater.setText("水工(含其他)保护形势(" + waterArr.length + ")");
+                            } else {
+                                tvWater.setText("水工(含其他)保护形势");
+                            }
+                            //人井(盘缆点)桩
+                            well = model.getManpile();
+                            if (!TextUtils.isEmpty(well)) {
+                                String[] wellArr = well.split(";");
+                                tvWell.setText("人井(盘缆点)桩(" + wellArr.length + ")");
+                            } else {
+                                tvWell.setText("人井(盘缆点)桩");
+                            }
+                            //其他(隧道、地震监测等设备设施)
+                            other = model.getOthers();
+                            if (!TextUtils.isEmpty(other)) {
+                                String[] otherArr = other.split(";");
+                                tvOther.setText("其他(隧道、地震监测等设备设施)(" + otherArr.length + ")");
+                            } else {
+                                tvOther.setText("其他(隧道、地震监测等设备设施)");
+                            }
                         }
                     }
                 });

@@ -165,7 +165,7 @@ public class PipeTagActivity extends BaseActivity {
                 tvRight.setVisibility(View.VISIBLE);
                 tvRight.setText("测量");
                 llArea.setEnabled(true);
-                llPipeName.setEnabled(true);
+                llPipeName.setEnabled(false);
                 llGroundTagType.setEnabled(true);
                 llLandForm.setEnabled(true);
                 llLocation.setEnabled(true);
@@ -324,9 +324,7 @@ public class PipeTagActivity extends BaseActivity {
         jsonObject.addProperty("landtel", etPhone.getText().toString());
         jsonObject.addProperty("remarks", etRemark.getText().toString());
         if ("add".equals(tag)) {
-            if (!TextUtils.isEmpty(newPipeTagId)) {
-                jsonObject.addProperty("id", newPipeTagId);
-            }
+            jsonObject.addProperty("id", Integer.parseInt(stationId));
         }
         Log.i("tag", "jsonObject==" + jsonObject);
         //新增
@@ -342,13 +340,13 @@ public class PipeTagActivity extends BaseActivity {
                                 sendBroadcast(intent);
                                 finish();
                             } else {
-                                ToastUtil.show("保存失败");
+                                ToastUtil.show(result.getMsg());
                             }
                         }
                     });
             //更新
         } else if ("add".equals(tag)) {
-            Net.create(Api.class).addPipeStakeInfo(token, jsonObject)
+            Net.create(Api.class).updatePipeStakeInfo(token, jsonObject)
                     .enqueue(new NetCallback<ServerModel>(this, true) {
                         @Override
                         public void onResponse(ServerModel result) {
@@ -359,7 +357,7 @@ public class PipeTagActivity extends BaseActivity {
                                 sendBroadcast(intent);
                                 finish();
                             } else {
-                                ToastUtil.show("保存失败");
+                                ToastUtil.show(result.getMsg());
                             }
                         }
                     });
