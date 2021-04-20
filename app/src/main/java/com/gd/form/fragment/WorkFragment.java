@@ -10,6 +10,7 @@ import com.gd.form.activity.FxglActivity;
 import com.gd.form.activity.GcglActivity;
 import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
+import com.gd.form.activity.SearchDataActivity;
 import com.gd.form.activity.SgbhActivity;
 import com.gd.form.activity.StandingBookActivity;
 import com.gd.form.activity.XhglActivity;
@@ -47,6 +48,7 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_job_ffgl,
             R.id.ll_job_gcgl,
             R.id.ll_tzsj,
+            R.id.ll_search_data,
 
     })
     public void onClick(View view) {
@@ -58,7 +60,10 @@ public class WorkFragment extends BaseFragment {
             case R.id.ll_jobs:
                 openActivity(JobsActivity.class);
                 break;
-
+                //数据查询
+            case R.id.ll_search_data:
+                openActivity(SearchDataActivity.class);
+                break;
             case R.id.ll_sgbh:
                 openActivity(SgbhActivity.class);
                 break;

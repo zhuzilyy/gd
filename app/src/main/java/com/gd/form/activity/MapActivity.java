@@ -96,18 +96,6 @@ public class MapActivity extends BaseActivity implements AMapLocationListener {
                     BACKGROUND_LOCATION_PERMISSION
             };
         }
-
-
-//        List<LatLng> latLngs = new ArrayList<LatLng>();
-//        latLngs.add(new LatLng(39.999391, 116.135972));
-//        latLngs.add(new LatLng(39.898323, 116.057694));
-//        latLngs.add(new LatLng(39.900430, 116.265061));
-//        latLngs.add(new LatLng(39.955192, 116.140092));
-//        latLngs.add(new LatLng(40.079192, 116.408637));
-//        latLngs.add(new LatLng(40.059192, 116.488637));
-//        latLngs.add(new LatLng(40.129192, 116.518637));
-//        Polyline polyline = aMap.addPolyline(new PolylineOptions().
-//                addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
     }
 
     /**

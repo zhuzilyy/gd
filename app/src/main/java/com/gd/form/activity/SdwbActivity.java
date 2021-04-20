@@ -50,6 +50,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -604,6 +605,10 @@ public class SdwbActivity extends BaseActivity {
         }
         if (TextUtils.isEmpty(et_pipeLength.getText().toString())) {
             ToastUtil.show("请输入管道长度");
+            return false;
+        }
+        if(!NumberUtil.isNumber(et_pipeLength.getText().toString())){
+            ToastUtil.show("管道长度输入格式不正确");
             return false;
         }
         if (TextUtils.isEmpty(et_wgxw_problem.getText().toString())) {

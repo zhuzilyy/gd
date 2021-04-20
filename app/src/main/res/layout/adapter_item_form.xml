@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="创建时间" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical"
+            android:text="创建时间" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="创建人姓名" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center_vertical|right"
+            android:text="创建人姓名" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="表单类型" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="center_vertical|right"
+            android:text="表单类型" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_10"
+        android:background="#ececec" />
+
+
+</LinearLayout>

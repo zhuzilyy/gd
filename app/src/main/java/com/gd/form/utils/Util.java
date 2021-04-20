@@ -321,5 +321,15 @@ public class Util {
         }
         return result;
     }
+    public static String getApprovalStatus(int resultCode){
+        if(resultCode == 0){
+            return "不同意";
+        }else if(resultCode == 1){
+            return "同意";
+        }else if(resultCode == 3){
+            return "未批复";
+        }
+        return "";
+    }
 
 }

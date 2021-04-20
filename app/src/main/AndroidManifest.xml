@@ -31,11 +31,11 @@
     <application
         android:name=".app.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!-- 开发者申请的key -->
@@ -98,11 +98,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -257,6 +253,36 @@
         <activity
             android:name=".activity.SearchTunnelActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchDataActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FormActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveWaterProtectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TaskStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveFormActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveTunnelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

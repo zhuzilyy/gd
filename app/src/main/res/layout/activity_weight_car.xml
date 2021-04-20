@@ -586,7 +586,7 @@
                         android:layout_marginLeft="@dimen/d_15"
                         android:layout_marginTop="@dimen/d_10"
                         android:layout_marginBottom="@dimen/d_10"
-                        android:text="上传图片"
+                        android:text="添加照片"
                         android:textColor="#FF000000"
                         android:textSize="@dimen/s_16" />
 

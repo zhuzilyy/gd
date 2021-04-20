@@ -148,7 +148,7 @@ public class HighZoneActivity extends BaseActivity {
     private String ossFilePath;
     private String selectFileName;
     private String selectFilePath;
-    private String startStationId, endStationId, location;
+    private String startStationId, endStationId, location,pipeId;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> path;
     private GalleryConfig galleryConfig;
@@ -560,7 +560,7 @@ public class HighZoneActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("pipeid",startStationId);
+        jsonObject.addProperty("pipeid",Integer.valueOf(pipeId));
         jsonObject.addProperty("fromstakeid", Integer.valueOf(startStationId));
         jsonObject.addProperty("tostakeid", Integer.valueOf(endStationId));
         jsonObject.addProperty("departmentid", departmentId);
@@ -707,6 +707,7 @@ public class HighZoneActivity extends BaseActivity {
                 if (selectTag.equals("start")) {
                     tvStartStationNo.setText(stationName);
                     startStationId = data.getStringExtra("stationId");
+                    pipeId = data.getStringExtra("pipeId");
                 } else {
                     tvEndStationNo.setText(stationName);
                     endStationId = data.getStringExtra("stationId");

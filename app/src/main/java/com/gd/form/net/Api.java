@@ -2,6 +2,7 @@ package com.gd.form.net;
 
 import com.gd.form.model.BuildingModel;
 import com.gd.form.model.Department;
+import com.gd.form.model.FormModel;
 import com.gd.form.model.HighZoneModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
@@ -9,10 +10,15 @@ import com.gd.form.model.MeasureModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
+import com.gd.form.model.SearchArea;
+import com.gd.form.model.SearchForm;
+import com.gd.form.model.SearchPerson;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
+import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
+import com.gd.form.model.WaterProtectionModel;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -424,6 +430,54 @@ public interface Api {
      */
     @POST("pipeaccountGetByKey.html")
     Call<List<TunnelModel>> getTunnelData(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 查询界面查看作业区
+     *
+     * @return
+     */
+    @POST("PipedepartmentinfoGetByemployid.html")
+    Call<List<SearchArea>> getSearchArea(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 查询界面人员名称
+     *
+     * @return
+     */
+    @POST("pipemploysGetListBydeptid.html")
+    Call<List<SearchPerson>> getSearchPerson(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取工单类型
+     *
+     * @return
+     */
+    @POST("dataformbaseinfogetAll.html")
+    Call<List<SearchForm>> getSearchForm(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取所有类型的工作单
+     *
+     * @return
+     */
+    @POST("DataFormMultiGetList.html")
+    Call<List<FormModel>> getAllForms(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 水工保护巡检表
+     *
+     * @return
+     */
+    @POST("W001GetdataByKey.html")
+    Call<WaterProtectionModel> getWaterProtectionDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 隧道外部巡检表
+     *
+     * @return
+     */
+    @POST("W002GetdataByKey.html")
+    Call<TunnelDetailModel> getTunnelDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

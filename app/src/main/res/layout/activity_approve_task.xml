@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#80FFFFFF"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/d_12"
+        android:paddingBottom="@dimen/d_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:text="审批意见"
+            android:textColor="#FF000000"
+            android:textSize="@dimen/s_16" />
+
+        <EditText
+            android:id="@+id/et_advice"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_50"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginTop="@dimen/d_10"
+            android:layout_marginEnd="@dimen/d_15"
+            android:layout_marginRight="@dimen/d_15"
+            android:background="@null"
+            android:gravity="left|top"
+            android:hint="请输入审批意见"
+            android:maxLines="2"
+            android:textColor="#A6000000"
+            android:textSize="@dimen/s_16" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_1"
+        android:layout_marginLeft="@dimen/d_12"
+        android:layout_marginRight="@dimen/d_12"
+        android:background="#FFE5E5E5" />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <Button
+           android:id="@+id/btn_agree"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="@dimen/d_40"
+           android:layout_marginStart="@dimen/d_30"
+           android:layout_marginLeft="@dimen/d_0"
+           android:layout_marginTop="@dimen/d_30"
+           android:layout_marginEnd="@dimen/d_30"
+           android:layout_marginRight="@dimen/d_30"
+           android:layout_marginBottom="@dimen/d_30"
+           android:background="@drawable/button_ship"
+           android:text="同意"
+           android:textColor="@color/write"
+           android:textSize="@dimen/s_18" />
+       <Button
+           android:id="@+id/btn_refuse"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="@dimen/d_40"
+           android:layout_marginStart="@dimen/d_30"
+           android:layout_marginLeft="@dimen/d_30"
+           android:layout_marginTop="@dimen/d_30"
+           android:layout_marginEnd="@dimen/d_30"
+           android:layout_marginRight="@dimen/d_30"
+           android:layout_marginBottom="@dimen/d_30"
+           android:background="@drawable/button_ship"
+           android:text="拒绝"
+           android:textColor="@color/write"
+           android:textSize="@dimen/s_18" />
+
+   </LinearLayout>
+
+</LinearLayout>
