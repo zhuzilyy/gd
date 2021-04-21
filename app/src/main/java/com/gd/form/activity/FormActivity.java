@@ -98,13 +98,31 @@ public class FormActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
-                Log.i("tag","formId=="+formModelList.get(position).getFormid());
+                Log.i("tag", "formId==" + formModelList.get(position).getFormid());
                 switch (type) {
                     case "W001":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
                         break;
                     case "W002":
                         openActivity(ApproveTunnelActivity.class, bundle);
+                        break;
+                    case "W004":
+                        openActivity(ApproveWeightCarActivity.class, bundle);
+                        break;
+                    case "W005":
+                        openActivity(ApproveBuildingActivity.class, bundle);
+                        break;
+                    case "W006":
+                        openActivity(ApproveHikingActivity.class, bundle);
+                        break;
+                    case "W015":
+                        openActivity(ApproveWaterActivity.class, bundle);
+                        break;
+                    case "W016":
+                        openActivity(ApproveHiddenActivity.class, bundle);
+                        break;
+                    case "W009":
+                        openActivity(ApproveHighZoneActivity.class, bundle);
                         break;
                 }
             }

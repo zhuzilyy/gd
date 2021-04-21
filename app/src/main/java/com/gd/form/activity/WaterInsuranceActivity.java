@@ -405,7 +405,6 @@ public class WaterInsuranceActivity extends BaseActivity {
         jsonObject.addProperty("constructionname", etName.getText().toString());
         jsonObject.addProperty("weathers", tvWeather.getText().toString());
         jsonObject.addProperty("constructionface", etWorkingPlane.getText().toString());
-        jsonObject.addProperty("weathers", tvWeather.getText().toString());
         jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("col1", etProblem.getText().toString());
         jsonObject.addProperty("col1handle", etAdvice.getText().toString());

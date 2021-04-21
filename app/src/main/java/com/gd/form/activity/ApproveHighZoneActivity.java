@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -22,8 +23,8 @@ import com.bumptech.glide.Glide;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.model.TunnelDataDetail;
-import com.gd.form.model.TunnelDetailModel;
+import com.gd.form.model.HighZoneDetail;
+import com.gd.form.model.HighZoneDetailModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -38,59 +39,53 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ApproveTunnelActivity extends BaseActivity {
+public class ApproveHighZoneActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_departmentName)
-    TextView tvDepartmentName;
-    @BindView(R.id.tv_pipeName)
-    TextView tvPipeName;
-    @BindView(R.id.tv_tunnelLocation)
-    TextView tvTunnelLocation;
-    @BindView(R.id.tv_pipeLength)
-    TextView tvPipeLength;
-    @BindView(R.id.tv_illegal)
-    TextView tvIllegal;
-    @BindView(R.id.tv_illegal_des)
-    TextView tvIllegalDes;
-    @BindView(R.id.tv_third)
-    TextView tvThird;
-    @BindView(R.id.tv_third_problem)
-    TextView tvThirdProblem;
+    @BindView(R.id.tv_area)
+    TextView tvArea;
+    @BindView(R.id.tv_weather)
+    TextView tvWeather;
+    @BindView(R.id.tv_startStationNo)
+    TextView tvStationNo;
+    @BindView(R.id.tv_status)
+    TextView tvStatus;
+    @BindView(R.id.tv_bare)
+    TextView tvBare;
+    @BindView(R.id.tv_machine)
+    TextView tvMachine;
     @BindView(R.id.tv_suspicious)
     TextView tvSuspicious;
-    @BindView(R.id.tv_suspicious_problem)
-    TextView tvSuspiciousProblem;
-    @BindView(R.id.tv_seal)
-    TextView tvSeal;
-    @BindView(R.id.tv_seal_problem)
-    TextView tvSealProblem;
-    @BindView(R.id.tv_cave)
-    TextView tvCave;
-    @BindView(R.id.tv_cave_problem)
-    TextView tvCaveProblem;
+    @BindView(R.id.tv_new)
+    TextView tvNew;
+    @BindView(R.id.tv_illegal)
+    TextView tvIllegal;
+    @BindView(R.id.tv_complete)
+    TextView tvComplete;
     @BindView(R.id.tv_water)
     TextView tvWater;
-    @BindView(R.id.tv_water_problem)
-    TextView tvWaterProblem;
-    @BindView(R.id.tv_transition)
-    TextView tvTransition;
-    @BindView(R.id.tv_transition_problem)
-    TextView tvTransitionProblem;
-    @BindView(R.id.tv_smell)
-    TextView tvSmell;
-    @BindView(R.id.tv_smell_problem)
-    TextView tvSmellProblem;
-    @BindView(R.id.tv_gas)
-    TextView tvGas;
-    @BindView(R.id.tv_gas_problem)
-    TextView tvGasProblem;
-    @BindView(R.id.tv_arm)
-    TextView tvArm;
-    @BindView(R.id.tv_arm_problem)
-    TextView tvArmProblem;
-    @BindView(R.id.tv_other_problem)
-    TextView tvOtherProblem;
+    @BindView(R.id.tv_relative)
+    TextView tvRelative;
+    @BindView(R.id.tv_change)
+    TextView tvChange;
+    @BindView(R.id.tv_add)
+    TextView tvAdd;
+    @BindView(R.id.tv_car)
+    TextView tvCar;
+    @BindView(R.id.tv_timely)
+    TextView tvTimely;
+    @BindView(R.id.tv_wear)
+    TextView tvWear;
+    @BindView(R.id.tv_record)
+    TextView tvRecord;
+    @BindView(R.id.tv_other)
+    TextView tvOther;
+    @BindView(R.id.tv_detail)
+    TextView tvDetail;
+    @BindView(R.id.tv_method)
+    TextView tvMethod;
+    @BindView(R.id.tv_result)
+    TextView tvResult;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -105,14 +100,18 @@ public class ApproveTunnelActivity extends BaseActivity {
     Button btnApprove;
     @BindView(R.id.map)
     MapView mapView;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+    @BindView(R.id.view_location)
+    View viewLocation;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
     private String formId;
     private String token, userId;
-    private MarkerOptions markerOption;
-    private AMap aMap;
     private PhotoAdapter photoAdapter;
     private List<String> path;
+    private MarkerOptions markerOption;
+    private AMap aMap;
 
     @Override
     protected void setStatusBar() {
@@ -121,18 +120,18 @@ public class ApproveTunnelActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_approval_tunnel;
+        return R.layout.activity_approve_high_zone;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("隧道外部检查表");
+        tvTitle.setText("高后果区徒步巡检表");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
-        token = (String) SPUtil.get(ApproveTunnelActivity.this, "token", "");
-        userId = (String) SPUtil.get(ApproveTunnelActivity.this, "userId", "");
+        token = (String) SPUtil.get(ApproveHighZoneActivity.this, "token", "");
+        userId = (String) SPUtil.get(ApproveHighZoneActivity.this, "userId", "");
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             String tag = bundle.getString("tag");
@@ -162,46 +161,40 @@ public class ApproveTunnelActivity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Net.create(Api.class).getTunnelDetail(token, params)
-                .enqueue(new NetCallback<TunnelDetailModel>(this, true) {
+        Net.create(Api.class).getHighZoneDetail(token, params)
+                .enqueue(new NetCallback<HighZoneDetailModel>(this, true) {
                     @Override
-                    public void onResponse(TunnelDetailModel model) {
+                    public void onResponse(HighZoneDetailModel model) {
                         if (model != null) {
+                            HighZoneDetail dataDetail = model.getDatadetail();
                             if (!TextUtils.isEmpty(model.getDeptString())) {
-                                tvDepartmentName.setText(model.getDeptString().split(":")[1]);
+                                tvArea.setText(model.getDeptString().split(":")[1]);
                             }
-
-                            if (!TextUtils.isEmpty(model.getPipeString())) {
-                                tvPipeName.setText(model.getPipeString().split(":")[1]);
-                            }
-
+                            tvWeather.setText(dataDetail.getWeathers());
                             if (!TextUtils.isEmpty(model.getStakeString())) {
-                                tvTunnelLocation.setText(model.getStakeString().split(":")[1]);
+                                tvStationNo.setText(model.getStakeString().split(";")[0].split(":")[1]
+                                        + "到" + model.getStakeString().split(";")[1].split(":")[1]);
                             }
-                            TunnelDataDetail dataDetail = model.getDatadetail();
-                            tvPipeLength.setText(dataDetail.getPipelength());
-                            tvIllegal.setText(dataDetail.getCol1());
-                            tvIllegalDes.setText(dataDetail.getCol1desc());
-                            tvThird.setText(dataDetail.getCol2());
-                            tvThirdProblem.setText(dataDetail.getCol2desc());
+                            tvBare.setText(dataDetail.getCol1());
+                            tvMachine.setText(dataDetail.getCol2());
                             tvSuspicious.setText(dataDetail.getCol3());
-                            tvSuspiciousProblem.setText(dataDetail.getCol3desc());
-                            tvSeal.setText(dataDetail.getCol4());
-                            tvSealProblem.setText(dataDetail.getCol4desc());
-                            tvCave.setText(dataDetail.getCol5());
-                            tvCaveProblem.setText(dataDetail.getCol5desc());
-                            tvWater.setText(dataDetail.getCol6());
-                            tvWaterProblem.setText(dataDetail.getCol6desc());
-                            tvTransition.setText(dataDetail.getCol7());
-                            tvTransitionProblem.setText(dataDetail.getCol7desc());
-                            tvSmell.setText(dataDetail.getCol8());
-                            tvSmellProblem.setText(dataDetail.getCol8desc());
-                            tvGas.setText(dataDetail.getCol9());
-                            tvGasProblem.setText(dataDetail.getCol9desc());
-                            tvArm.setText(dataDetail.getCol10());
-                            tvArmProblem.setText(dataDetail.getCol10desc());
-                            tvOtherProblem.setText(dataDetail.getCol11());
-                            String location = model.getDatadetail().getLocate();
+                            tvNew.setText(dataDetail.getCol4());
+                            tvIllegal.setText(dataDetail.getCol5());
+                            tvComplete.setText(dataDetail.getCol6());
+                            tvWater.setText(dataDetail.getCol7());
+                            tvRelative.setText(dataDetail.getCol8());
+                            tvChange.setText(dataDetail.getCol9());
+                            tvAdd.setText(dataDetail.getCol10());
+                            tvCar.setText(dataDetail.getCol11());
+                            tvTimely.setText(dataDetail.getCol12());
+                            tvWear.setText(dataDetail.getCol13());
+                            tvRecord.setText(dataDetail.getCol14());
+                            tvOther.setText(dataDetail.getCol15());
+                            tvDetail.setText(dataDetail.getProblemdetail());
+                            tvMethod.setText(dataDetail.getSolutions());
+                            tvResult.setText(dataDetail.getResultdetail());
+                            tvStatus.setText(dataDetail.getConditions());
+                            String location = dataDetail.getLocate();
                             if (!TextUtils.isEmpty(location)) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
@@ -246,7 +239,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
                             //显示审批图片
                             if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveTunnelActivity.this).
+                                Glide.with(ApproveHighZoneActivity.this).
                                         load(model.getDatapproval().getSignfilepath()).
                                         into(ivApproveStatus);
                             }
@@ -295,5 +288,4 @@ public class ApproveTunnelActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
 }

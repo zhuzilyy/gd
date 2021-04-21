@@ -1,9 +1,13 @@
 package com.gd.form.net;
 
+import com.gd.form.model.BuildingDetailModel;
 import com.gd.form.model.BuildingModel;
 import com.gd.form.model.Department;
 import com.gd.form.model.FormModel;
+import com.gd.form.model.HiddenDetailModel;
+import com.gd.form.model.HighZoneDetailModel;
 import com.gd.form.model.HighZoneModel;
+import com.gd.form.model.HikingDetailModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
@@ -18,7 +22,9 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
+import com.gd.form.model.WaterDetailModel;
 import com.gd.form.model.WaterProtectionModel;
+import com.gd.form.model.WeightCarDetailModel;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -478,6 +484,55 @@ public interface Api {
      */
     @POST("W002GetdataByKey.html")
     Call<TunnelDetailModel> getTunnelDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 重车碾压
+     *
+     * @return
+     */
+    @POST("W004GetdataByKey.html")
+    Call<WeightCarDetailModel> getWeightCarDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 违章违建
+     *
+     * @return
+     */
+    @POST("W005GetdataByKey.html")
+    Call<BuildingDetailModel> getBuildingDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 徒步巡检
+     *
+     * @return
+     */
+    @POST("W006GetdataByKey.html")
+    Call<HikingDetailModel> getHikingDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 水工施工日志
+     *
+     * @return
+     */
+    @POST("W015GetdataByKey.html")
+    Call<WaterDetailModel> getWaterDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 隐蔽工程检查
+     *
+     * @return
+     */
+    @POST("W016GetdataByKey.html")
+    Call<HiddenDetailModel> getHiddenDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 高后果区
+     *
+     * @return
+     */
+    @POST("W009GetdataByKey.html")
+    Call<HighZoneDetailModel> getHighZoneDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

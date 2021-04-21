@@ -275,6 +275,24 @@
             android:name=".activity.ApproveTunnelActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ApproveWeightCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveBuildingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveHikingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveWaterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveHiddenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveHighZoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

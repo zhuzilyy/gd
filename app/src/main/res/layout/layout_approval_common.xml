@@ -48,6 +48,7 @@
         android:layout_height="@dimen/d_300" />
 
     <View
+        android:id="@+id/view_location"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_1"
         android:layout_marginStart="@dimen/d_12"
