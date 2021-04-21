@@ -56,7 +56,7 @@
         android:background="#FFE5E5E5" />
 
     <LinearLayout
-        android:id="@+id/ll_scfj"
+        android:id="@+id/ll_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80FFFFFF"

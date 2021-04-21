@@ -1,5 +1,7 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -85,6 +87,7 @@ public class ApproveWeightCarActivity extends BaseActivity {
     private AMap aMap;
     private PhotoAdapter photoAdapter;
     private List<String> path;
+    private String filePath;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -168,6 +171,7 @@ public class ApproveWeightCarActivity extends BaseActivity {
                                     tvFileName.setText("无");
                                 } else {
                                     tvFileName.setText(model.getDataupload().getFilename());
+                                    filePath = model.getDataupload().getFilepath();
                                 }
                             } else {
                                 tvFileName.setText("无");
@@ -207,6 +211,7 @@ public class ApproveWeightCarActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_back,
+            R.id.ll_file,
             R.id.btn_approve})
     public void click(View view) {
         switch (view.getId()) {
@@ -215,6 +220,13 @@ public class ApproveWeightCarActivity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 openActivity(ApproveFormActivity.class);
+                break;
+            case R.id.ll_file:
+                if(!TextUtils.isEmpty(filePath)){
+                    Uri uri = Uri.parse(filePath);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
                 break;
 
         }

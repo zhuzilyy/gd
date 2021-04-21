@@ -1,5 +1,7 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -73,6 +75,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
     private AMap aMap;
     private PhotoAdapter photoAdapter;
     private List<String> path;
+    private String filePath;
 
     @Override
     protected void setStatusBar() {
@@ -142,18 +145,19 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                                 aMap.addMarker(markerOption);
                             }
                             //上传的文件
-                            if (model.getDataupload()!= null) {
+                            if (model.getDataupload() != null) {
                                 if ("00".equals(model.getDataupload().getFilename())) {
                                     tvFileName.setText("无");
                                 } else {
                                     tvFileName.setText(model.getDataupload().getFilename());
+                                    filePath = model.getDataupload().getFilepath();
                                 }
                             } else {
                                 tvFileName.setText("无");
                             }
 
                             //上传的图片
-                            if (model.getDataupload()!=null) {
+                            if (model.getDataupload() != null) {
                                 if ("00".equals(model.getDataupload().getPicturepath())) {
                                     tvPhoto.setText("无");
                                 } else {
@@ -185,7 +189,8 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_back,
-            R.id.btn_approve})
+            R.id.btn_approve,
+            R.id.ll_file,})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -193,6 +198,13 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 openActivity(ApproveFormActivity.class);
+                break;
+            case R.id.ll_file:
+                if (!TextUtils.isEmpty(filePath)) {
+                    Uri uri = Uri.parse(filePath);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
                 break;
 
         }

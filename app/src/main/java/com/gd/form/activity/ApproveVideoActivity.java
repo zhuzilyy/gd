@@ -24,8 +24,8 @@ import com.bumptech.glide.Glide;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.model.HikingDetail;
-import com.gd.form.model.HikingDetailModel;
+import com.gd.form.model.VideoDetail;
+import com.gd.form.model.VideoDetailModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -40,51 +40,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ApproveHikingActivity extends BaseActivity {
+public class ApproveVideoActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_pipeName)
     TextView tvPipeName;
-    @BindView(R.id.tv_startStationNo)
-    TextView tvStartStationNo;
-    @BindView(R.id.tv_endStationNo)
-    TextView tvEndStationNo;
-    @BindView(R.id.tv_allowPeople)
-    TextView tvAllowPeople;
-    @BindView(R.id.tv_area)
-    TextView tvArea;
-    @BindView(R.id.tv_bare)
-    TextView tvBare;
-    @BindView(R.id.tv_machine)
-    TextView tvMachine;
-    @BindView(R.id.tv_suspicious)
-    TextView tvSuspicious;
-    @BindView(R.id.tv_new)
-    TextView tvNew;
-    @BindView(R.id.tv_complete)
-    TextView tvComplete;
-    @BindView(R.id.tv_useful)
-    TextView tvUseful;
-    @BindView(R.id.tv_correct)
-    TextView tvCorrect;
-    @BindView(R.id.tv_water)
-    TextView tvWater;
-    @BindView(R.id.tv_relative)
-    TextView tvRelative;
-    @BindView(R.id.tv_building)
-    TextView tvBuilding;
-    @BindView(R.id.tv_car)
-    TextView tvCar;
-    @BindView(R.id.tv_timely)
-    TextView tvTimely;
-    @BindView(R.id.tv_wear)
-    TextView tvWear;
-    @BindView(R.id.tv_record)
-    TextView tvRecord;
-    @BindView(R.id.tv_other)
-    TextView tvOther;
-    @BindView(R.id.tv_advice)
-    TextView tvAdvice;
+    @BindView(R.id.tv_highZoneName)
+    TextView tvHighZoneName;
+    @BindView(R.id.tv_des)
+    TextView tvDes;
+    @BindView(R.id.tv_confirmPeople)
+    TextView tvConfirmPeople;
+    @BindView(R.id.tv_result)
+    TextView tvResult;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -115,18 +83,18 @@ public class ApproveHikingActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_approve_hiking;
+        return R.layout.activity_approve_video;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("徒步巡检表");
+        tvTitle.setText("视频监控查看记录");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
-        token = (String) SPUtil.get(ApproveHikingActivity.this, "token", "");
-        userId = (String) SPUtil.get(ApproveHikingActivity.this, "userId", "");
+        token = (String) SPUtil.get(ApproveVideoActivity.this, "token", "");
+        userId = (String) SPUtil.get(ApproveVideoActivity.this, "userId", "");
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             String tag = bundle.getString("tag");
@@ -143,7 +111,6 @@ public class ApproveHikingActivity extends BaseActivity {
         rvResultPhoto.setAdapter(photoAdapter);
         getDetail(formId);
     }
-
     /**
      * 初始化AMap对象
      */
@@ -152,43 +119,22 @@ public class ApproveHikingActivity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
-
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Net.create(Api.class).getHikingDetail(token, params)
-                .enqueue(new NetCallback<HikingDetailModel>(this, true) {
+        Net.create(Api.class).getVideoDetail(token, params)
+                .enqueue(new NetCallback<VideoDetailModel>(this, true) {
                     @Override
-                    public void onResponse(HikingDetailModel model) {
+                    public void onResponse(VideoDetailModel model) {
                         if (model != null) {
-                            HikingDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getPipeString())) {
+                            VideoDetail dataDetail = model.getDatadetail();
+                            if(!TextUtils.isEmpty(model.getPipeString())){
                                 tvPipeName.setText(model.getPipeString().split(":")[1]);
                             }
-                            if (!TextUtils.isEmpty(model.getStakeString())) {
-                                tvStartStationNo.setText(model.getStakeString().split(";")[0].split(":")[1]);
-                                tvEndStationNo.setText(model.getStakeString().split(";")[0].split(":")[1] + "至" + model.getStakeString().split(";")[1].split(":")[1]);
-                            }
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
-                                tvArea.setText(model.getDeptString().split(":")[1]);
-                            }
-                            tvAllowPeople.setText(dataDetail.getRouteinspect());
-                            tvBare.setText(dataDetail.getCol1());
-                            tvMachine.setText(dataDetail.getCol2());
-                            tvSuspicious.setText(dataDetail.getCol3());
-                            tvNew.setText(dataDetail.getCol4());
-                            tvComplete.setText(dataDetail.getCol5());
-                            tvCorrect.setText(dataDetail.getCol6());
-                            tvUseful.setText(dataDetail.getCol7());
-                            tvWater.setText(dataDetail.getCol8());
-                            tvRelative.setText(dataDetail.getCol9());
-                            tvBuilding.setText(dataDetail.getCol10());
-                            tvCar.setText(dataDetail.getCol11());
-                            tvTimely.setText(dataDetail.getCol12());
-                            tvWear.setText(dataDetail.getCol13());
-                            tvRecord.setText(dataDetail.getCol14());
-                            tvOther.setText(dataDetail.getCol15());
-                            tvAdvice.setText(dataDetail.getCol16());
+                            tvHighZoneName.setText(dataDetail.getHighwarncode());
+                            tvDes.setText(dataDetail.getExceptiondesc());
+                            tvConfirmPeople.setText(dataDetail.getConfirmer());
+                            tvResult.setText(dataDetail.getDealresult());
                             String location = model.getDatadetail().getLocate();
                             if (!TextUtils.isEmpty(location)) {
                                 String[] locationArr = location.split(",");
@@ -204,8 +150,8 @@ public class ApproveHikingActivity extends BaseActivity {
                                 if ("00".equals(model.getDataupload().getFilepath())) {
                                     tvFileName.setText("无");
                                 } else {
-                                    filePath = model.getDataupload().getFilepath();
                                     tvFileName.setText(model.getDataupload().getFilename());
+                                    filePath = model.getDataupload().getFilepath();
                                 }
                             } else {
                                 tvFileName.setText("无");
@@ -235,7 +181,7 @@ public class ApproveHikingActivity extends BaseActivity {
                             tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
                             //显示审批图片
                             if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveHikingActivity.this).
+                                Glide.with(ApproveVideoActivity.this).
                                         load(model.getDatapproval().getSignfilepath()).
                                         into(ivApproveStatus);
                             }
@@ -245,13 +191,15 @@ public class ApproveHikingActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_back,
-            R.id.btn_approve,
             R.id.ll_file,
-    })
+            R.id.btn_approve})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.btn_approve:
+                openActivity(ApproveFormActivity.class);
                 break;
             case R.id.ll_file:
                 if(!TextUtils.isEmpty(filePath)){
@@ -259,9 +207,6 @@ public class ApproveHikingActivity extends BaseActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                 }
-                break;
-            case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
                 break;
 
         }

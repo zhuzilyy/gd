@@ -3,11 +3,14 @@ package com.gd.form.net;
 import com.gd.form.model.BuildingDetailModel;
 import com.gd.form.model.BuildingModel;
 import com.gd.form.model.Department;
+import com.gd.form.model.DeviceDetailModel;
+import com.gd.form.model.ElectricityDetailModel;
 import com.gd.form.model.FormModel;
 import com.gd.form.model.HiddenDetailModel;
 import com.gd.form.model.HighZoneDetailModel;
 import com.gd.form.model.HighZoneModel;
 import com.gd.form.model.HikingDetailModel;
+import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
@@ -22,6 +25,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
+import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaterDetailModel;
 import com.gd.form.model.WaterProtectionModel;
 import com.gd.form.model.WeightCarDetailModel;
@@ -533,6 +537,38 @@ public interface Api {
      */
     @POST("W009GetdataByKey.html")
     Call<HighZoneDetailModel> getHighZoneDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 视频监控查看记录
+     *
+     * @return
+     */
+    @POST("W010GetdataByKey.html")
+    Call<VideoDetailModel> getVideoDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 区域阴保电位测试
+     *
+     * @return
+     */
+    @POST("W012GetdataByKey.html")
+    Call<ElectricityDetailModel> getElectricityDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 阀室绝缘件性能测试
+     *
+     * @return
+     */
+    @POST("W013GetdataByKey.html")
+    Call<InsulationDetailModel> getInsulationDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 去耦合器测试
+     *
+     * @return
+     */
+    @POST("W014GetdataByKey.html")
+    Call<DeviceDetailModel> getDeviceDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

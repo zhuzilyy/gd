@@ -1,75 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:layout_height="match_parent">
     <include layout="@layout/layout_title" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/ll_departmentName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="调查单位"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:id="@+id/tv_departmentName"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:layout_height="@dimen/d_10"
+                android:background="#FFF3F3F3" />
 
-            <!--管道名称-->
             <LinearLayout
-                android:id="@+id/ll_pipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -102,15 +52,6 @@
                     android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
             </LinearLayout>
 
             <View
@@ -120,9 +61,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-            <!--桩号-->
             <LinearLayout
-                android:id="@+id/ll_stationNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -136,12 +75,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="桩号"
+                    android:text="阀室"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <TextView
-                    android:id="@+id/tv_stationNo"
+                    android:id="@+id/tv_box"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -155,15 +94,6 @@
                     android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
             </LinearLayout>
 
             <View
@@ -173,9 +103,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-            <!--行政位置-->
             <LinearLayout
-                android:id="@+id/ll_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -189,33 +117,23 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="行政位置"
+                    android:text="管道电位(-V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <TextView
-                    android:id="@+id/tv_address"
+                    android:id="@+id/tv_pipeElectricity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
+                    android:layout_weight="1.5"
                     android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />"
 
             </LinearLayout>
 
@@ -225,7 +143,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--道路名称-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -240,195 +158,14 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="道路名称"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_roadName"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:hint="道路名称"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <!--道路宽度（m）-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="道路宽度（m）"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_roadWidth"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:hint="道路名称"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-
-            <!--管径（mm））-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="管径（mm）"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_pipeDiameter"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:hint="管径（mm）"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-
-            <!--最小埋深（m）-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="最小埋深（m）"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_depth"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:hint="管径（mm）"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <!--碾压频率（**次/小时）-->
-            <LinearLayout
-                android:id="@+id/ll_rate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="碾压频率（**次/小时）"
+                    android:text="管道干扰电压(V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <TextView
-                    android:id="@+id/tv_rate"
+                    android:id="@+id/tv_pipePressure"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -442,15 +179,6 @@
                     android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
             </LinearLayout>
 
             <View
@@ -460,8 +188,6 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-
-            <!--是否满足管道防护要求-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -476,13 +202,13 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="是否满足管道防护要求"
+                    android:text="接地侧电位(-V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <RadioGroup
-                    android:id="@+id/rg_isProtect"
-                    android:layout_width="@dimen/d_0"
+                <TextView
+                    android:id="@+id/tv_groundElectricity"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -491,31 +217,10 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="end"
-                    android:orientation="horizontal"
+                    android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16">
-
-                    <RadioButton
-                        android:id="@+id/rb_yes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/d_5"
-                        android:background="@android:color/transparent"
-                        android:button="@null"
-                        android:checked="true"
-                        android:drawableLeft="@drawable/radio_btn"
-                        android:text="是" />
-
-                    <RadioButton
-                        android:id="@+id/rb_no"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/d_5"
-                        android:background="@android:color/transparent"
-                        android:button="@null"
-                        android:drawableLeft="@drawable/radio_btn"
-                        android:text="否" />
-                </RadioGroup>
+                    android:textSize="@dimen/s_16" />
             </LinearLayout>
 
             <View
@@ -525,7 +230,256 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-            <!--备注-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="接地侧干扰电压(V)"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_groundPressure"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="放空侧电位(-V)"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+                <TextView
+                    android:id="@+id/tv_blankElectricity"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="管道避雷器电压(V)"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+                <TextView
+                    android:id="@+id/tv_lightingPressure"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="绝缘件性能"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+                <TextView
+                    android:id="@+id/tv_property"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="避雷器情况"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+                <TextView
+                    android:id="@+id/tv_situation"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="作业区"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+                <TextView
+                    android:id="@+id/tv_area"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -543,10 +497,9 @@
                     android:text="备注"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_remark"
-                    android:layout_width="@dimen/d_0"
+                <TextView
+                    android:id="@+id/tv_remark"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
@@ -554,13 +507,11 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="备注"
                     android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
             </LinearLayout>
 
             <View
@@ -569,58 +520,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--选择图片-->
-            <LinearLayout
-                android:background="#80FFFFFF"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:id="@+id/rl_selectImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_centerVertical="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/d_15"
-                        android:layout_marginLeft="@dimen/d_15"
-                        android:layout_marginTop="@dimen/d_10"
-                        android:layout_marginBottom="@dimen/d_10"
-                        android:text="添加照片"
-                        android:textColor="#FF000000"
-                        android:textSize="@dimen/s_16" />
-
-                    <ImageView
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/d_10"
-                        android:layout_marginRight="@dimen/d_10"
-                        android:src="@mipmap/ic_next" />
-                </RelativeLayout>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:id="@+id/rvResultPhoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/d_5"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
-                android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
-            <include layout="@layout/layout_common"/>
+            <include layout="@layout/layout_approval_common" />
         </LinearLayout>
-
-
-    </ScrollView>
-
-
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

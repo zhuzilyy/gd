@@ -124,6 +124,18 @@ public class FormActivity extends BaseActivity {
                     case "W009":
                         openActivity(ApproveHighZoneActivity.class, bundle);
                         break;
+                    case "W010":
+                        openActivity(ApproveVideoActivity.class, bundle);
+                        break;
+                    case "W012":
+                        openActivity(ApproveElectricity.class, bundle);
+                        break;
+                    case "W013":
+                        openActivity(ApproveInsulationActivity.class, bundle);
+                        break;
+                    case "W014":
+                        openActivity(ApproveDeviceActivity.class, bundle);
+                        break;
                 }
             }
         });

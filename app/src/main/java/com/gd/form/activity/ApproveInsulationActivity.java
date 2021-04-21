@@ -24,8 +24,8 @@ import com.bumptech.glide.Glide;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
-import com.gd.form.model.HikingDetail;
-import com.gd.form.model.HikingDetailModel;
+import com.gd.form.model.InsulationDetail;
+import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -40,51 +40,33 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ApproveHikingActivity extends BaseActivity {
+public class ApproveInsulationActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_pipeName)
     TextView tvPipeName;
-    @BindView(R.id.tv_startStationNo)
-    TextView tvStartStationNo;
-    @BindView(R.id.tv_endStationNo)
-    TextView tvEndStationNo;
-    @BindView(R.id.tv_allowPeople)
-    TextView tvAllowPeople;
+    @BindView(R.id.tv_box)
+    TextView tvBox;
+    @BindView(R.id.tv_pipeElectricity)
+    TextView tvPipeElectricity;
+    @BindView(R.id.tv_pipePressure)
+    TextView tvPipePressure;
+    @BindView(R.id.tv_groundElectricity)
+    TextView tvGroundElectricity;
+    @BindView(R.id.tv_groundPressure)
+    TextView tvGroundPressure;
+    @BindView(R.id.tv_blankElectricity)
+    TextView tvBlankElectricity;
+    @BindView(R.id.tv_property)
+    TextView tvProperty;
+    @BindView(R.id.tv_lightingPressure)
+    TextView tvLightingPressure;
     @BindView(R.id.tv_area)
     TextView tvArea;
-    @BindView(R.id.tv_bare)
-    TextView tvBare;
-    @BindView(R.id.tv_machine)
-    TextView tvMachine;
-    @BindView(R.id.tv_suspicious)
-    TextView tvSuspicious;
-    @BindView(R.id.tv_new)
-    TextView tvNew;
-    @BindView(R.id.tv_complete)
-    TextView tvComplete;
-    @BindView(R.id.tv_useful)
-    TextView tvUseful;
-    @BindView(R.id.tv_correct)
-    TextView tvCorrect;
-    @BindView(R.id.tv_water)
-    TextView tvWater;
-    @BindView(R.id.tv_relative)
-    TextView tvRelative;
-    @BindView(R.id.tv_building)
-    TextView tvBuilding;
-    @BindView(R.id.tv_car)
-    TextView tvCar;
-    @BindView(R.id.tv_timely)
-    TextView tvTimely;
-    @BindView(R.id.tv_wear)
-    TextView tvWear;
-    @BindView(R.id.tv_record)
-    TextView tvRecord;
-    @BindView(R.id.tv_other)
-    TextView tvOther;
-    @BindView(R.id.tv_advice)
-    TextView tvAdvice;
+    @BindView(R.id.tv_remark)
+    TextView tvRemark;
+    @BindView(R.id.tv_situation)
+    TextView tvSituation;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -115,18 +97,18 @@ public class ApproveHikingActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_approve_hiking;
+        return R.layout.activity_approve_insulation;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("徒步巡检表");
+        tvTitle.setText("阀室绝缘件性能测试");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
-        token = (String) SPUtil.get(ApproveHikingActivity.this, "token", "");
-        userId = (String) SPUtil.get(ApproveHikingActivity.this, "userId", "");
+        token = (String) SPUtil.get(ApproveInsulationActivity.this, "token", "");
+        userId = (String) SPUtil.get(ApproveInsulationActivity.this, "userId", "");
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             String tag = bundle.getString("tag");
@@ -142,8 +124,8 @@ public class ApproveHikingActivity extends BaseActivity {
         photoAdapter = new PhotoAdapter(this, path);
         rvResultPhoto.setAdapter(photoAdapter);
         getDetail(formId);
-    }
 
+    }
     /**
      * 初始化AMap对象
      */
@@ -152,44 +134,33 @@ public class ApproveHikingActivity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
-
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Net.create(Api.class).getHikingDetail(token, params)
-                .enqueue(new NetCallback<HikingDetailModel>(this, true) {
+        Net.create(Api.class).getInsulationDetail(token, params)
+                .enqueue(new NetCallback<InsulationDetailModel>(this, true) {
                     @Override
-                    public void onResponse(HikingDetailModel model) {
+                    public void onResponse(InsulationDetailModel model) {
                         if (model != null) {
-                            HikingDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getPipeString())) {
+                            InsulationDetail dataDetail = model.getDatadetail();
+                            if(!TextUtils.isEmpty(model.getPipeString())){
                                 tvPipeName.setText(model.getPipeString().split(":")[1]);
                             }
-                            if (!TextUtils.isEmpty(model.getStakeString())) {
-                                tvStartStationNo.setText(model.getStakeString().split(";")[0].split(":")[1]);
-                                tvEndStationNo.setText(model.getStakeString().split(";")[0].split(":")[1] + "至" + model.getStakeString().split(";")[1].split(":")[1]);
-                            }
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
+                            tvBox.setText(dataDetail.getStationdesc());
+                            tvRemark.setText(dataDetail.getRemarks());
+                            tvPipeElectricity.setText(dataDetail.getCol1());
+                            tvPipePressure.setText(dataDetail.getCol2());
+                            tvGroundElectricity.setText(dataDetail.getCol3());
+                            tvGroundPressure.setText(dataDetail.getCol4());
+                            tvBlankElectricity.setText(dataDetail.getCol5());
+                            tvProperty.setText(dataDetail.getCol6());
+                            tvLightingPressure.setText(dataDetail.getCol7());
+                            tvSituation.setText(dataDetail.getCol8());
+                            String location = model.getDatadetail().getLocate();
+                            if(!TextUtils.isEmpty(model.getDeptString())){
                                 tvArea.setText(model.getDeptString().split(":")[1]);
                             }
-                            tvAllowPeople.setText(dataDetail.getRouteinspect());
-                            tvBare.setText(dataDetail.getCol1());
-                            tvMachine.setText(dataDetail.getCol2());
-                            tvSuspicious.setText(dataDetail.getCol3());
-                            tvNew.setText(dataDetail.getCol4());
-                            tvComplete.setText(dataDetail.getCol5());
-                            tvCorrect.setText(dataDetail.getCol6());
-                            tvUseful.setText(dataDetail.getCol7());
-                            tvWater.setText(dataDetail.getCol8());
-                            tvRelative.setText(dataDetail.getCol9());
-                            tvBuilding.setText(dataDetail.getCol10());
-                            tvCar.setText(dataDetail.getCol11());
-                            tvTimely.setText(dataDetail.getCol12());
-                            tvWear.setText(dataDetail.getCol13());
-                            tvRecord.setText(dataDetail.getCol14());
-                            tvOther.setText(dataDetail.getCol15());
-                            tvAdvice.setText(dataDetail.getCol16());
-                            String location = model.getDatadetail().getLocate();
+                            tvRemark.setText(dataDetail.getRemarks());
                             if (!TextUtils.isEmpty(location)) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
@@ -204,8 +175,8 @@ public class ApproveHikingActivity extends BaseActivity {
                                 if ("00".equals(model.getDataupload().getFilepath())) {
                                     tvFileName.setText("无");
                                 } else {
-                                    filePath = model.getDataupload().getFilepath();
                                     tvFileName.setText(model.getDataupload().getFilename());
+                                    filePath = model.getDataupload().getFilepath();
                                 }
                             } else {
                                 tvFileName.setText("无");
@@ -235,7 +206,7 @@ public class ApproveHikingActivity extends BaseActivity {
                             tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
                             //显示审批图片
                             if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveHikingActivity.this).
+                                Glide.with(ApproveInsulationActivity.this).
                                         load(model.getDatapproval().getSignfilepath()).
                                         into(ivApproveStatus);
                             }
@@ -245,13 +216,15 @@ public class ApproveHikingActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_back,
-            R.id.btn_approve,
             R.id.ll_file,
-    })
+            R.id.btn_approve})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.btn_approve:
+                openActivity(ApproveFormActivity.class);
                 break;
             case R.id.ll_file:
                 if(!TextUtils.isEmpty(filePath)){
@@ -259,9 +232,6 @@ public class ApproveHikingActivity extends BaseActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                 }
-                break;
-            case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
                 break;
 
         }

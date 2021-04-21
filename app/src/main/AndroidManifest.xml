@@ -293,6 +293,18 @@
             android:name=".activity.ApproveHighZoneActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ApproveVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveElectricity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveInsulationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveDeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
