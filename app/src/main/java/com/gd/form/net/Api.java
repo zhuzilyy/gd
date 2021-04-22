@@ -14,6 +14,7 @@ import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
+import com.gd.form.model.NoApproveModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
@@ -26,6 +27,7 @@ import com.gd.form.model.StationNoModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
 import com.gd.form.model.VideoDetailModel;
+import com.gd.form.model.WaitingApproveModel;
 import com.gd.form.model.WaterDetailModel;
 import com.gd.form.model.WaterProtectionModel;
 import com.gd.form.model.WeightCarDetailModel;
@@ -569,6 +571,30 @@ public interface Api {
      */
     @POST("W014GetdataByKey.html")
     Call<DeviceDetailModel> getDeviceDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 待审批接口
+     *
+     * @return
+     */
+    @POST("DataFormMultiGetApprovalList.html")
+    Call<List<WaitingApproveModel>> waitingApproveList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 超期未批
+     *
+     * @return
+     */
+    @POST("DataFormMultiGetApprovalList.html")
+    Call<List<NoApproveModel>> noApproveList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 审批
+     *
+     * @return
+     */
+    @POST("dataformapprovalUpdate.html")
+    Call<ServerModel> approve(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

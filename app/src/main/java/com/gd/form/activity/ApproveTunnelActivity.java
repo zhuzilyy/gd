@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.bumptech.glide.Glide;
@@ -212,6 +214,8 @@ public class ApproveTunnelActivity extends BaseActivity {
                                         .position(latLng)
                                         .draggable(true);
                                 aMap.addMarker(markerOption);
+                                aMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                                        new CameraPosition(latLng, 11f, 0, 0)));
                             }
                             //上传的文件
                             if (model.getDataupload() != null) {
@@ -267,7 +271,9 @@ public class ApproveTunnelActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid",formId);
+                openActivity(ApproveFormActivity.class,bundle);
                 break;
             case R.id.ll_file:
                 if(!TextUtils.isEmpty(filePath)){

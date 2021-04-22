@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
 import com.bumptech.glide.Glide;
@@ -90,6 +92,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
@@ -129,7 +132,9 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                     @Override
                     public void onResponse(WaterProtectionModel model) {
                         if (model != null) {
-                            tvStationNo.setText(model.getStakeString());
+                            if(!TextUtils.isEmpty(model.getStakeString())){
+                                tvStationNo.setText(model.getStakeString().split(":")[1]);
+                            }
                             tvWaterType.setText(model.getDatadetail().getHydraulicform());
                             tvMaterial.setText(model.getDatadetail().getMaterial());
                             tvIsComplete.setText(model.getDatadetail().getCondition());
@@ -143,6 +148,8 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                                         .position(latLng)
                                         .draggable(true);
                                 aMap.addMarker(markerOption);
+                                aMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                                        new CameraPosition(latLng, 11f, 0, 0)));
                             }
                             //上传的文件
                             if (model.getDataupload() != null) {
@@ -197,7 +204,9 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid",formId);
+                openActivity(ApproveFormActivity.class,bundle);
                 break;
             case R.id.ll_file:
                 if (!TextUtils.isEmpty(filePath)) {
@@ -236,6 +245,9 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
+    }
 }

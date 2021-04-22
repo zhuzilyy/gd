@@ -305,6 +305,15 @@
             android:name=".activity.ApproveDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.WaitingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OverTimeTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NoApproveActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

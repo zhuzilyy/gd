@@ -1,11 +1,15 @@
 package com.gd.form.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -13,11 +17,13 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,14 +34,16 @@ import java.util.regex.Pattern;
  */
 
 public class Util {
+    public static List<Activity> activityList = new ArrayList<>();
 
     /**
      * 对象判空
+     *
      * @param obj 要判空的对象
      * @return
      */
-    public static boolean isEmpty(Object obj){
-        if(obj==null){
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) {
             return true;
         }
         if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
@@ -50,24 +58,25 @@ public class Util {
 
     /**
      * 字符串判空
+     *
      * @param string 要判空的字符串
      * @return
      */
-    public static boolean isEmpty(String string){
+    public static boolean isEmpty(String string) {
         return null == string || "".equals(string.trim());
     }
 
-    public static int screenWidth(Context context){
+    public static int screenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getWidth();
     }
 
-    public static int screenHeight(Context context){
+    public static int screenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getHeight();
     }
 
-    public static String appendString(Object str1,String str2){
+    public static String appendString(Object str1, String str2) {
         return str1 + str2;
     }
 
@@ -88,6 +97,7 @@ public class Util {
 
     /**
      * 获取指定日期
+     *
      * @param offset 把日期往后增加一天.整数往后推,负数往前移动
      * @return
      */
@@ -110,6 +120,7 @@ public class Util {
 
     /**
      * 获取指定日期
+     *
      * @param offset 把日期往后增加一天.整数往后推,负数往前移动
      * @return
      */
@@ -127,8 +138,10 @@ public class Util {
         }
         return dateString;
     }
+
     /**
      * 获取年月日时间（忽略时分秒，即 2018-06-25 00：00：00）
+     *
      * @param sdf
      * @param date 要格式化的时间
      * @return
@@ -145,6 +158,7 @@ public class Util {
 
     /**
      * 将分钟转换成小时
+     *
      * @param min 分钟
      * @return
      */
@@ -183,6 +197,7 @@ public class Util {
 
     /**
      * 是否可以修改密码
+     *
      * @param password 要判断的密码字符串
      * @return
      */
@@ -198,8 +213,10 @@ public class Util {
         Matcher mat = pat.matcher(password);
         return mat.find();
     }
+
     /**
      * dp转px
+     *
      * @param dp
      * @param context
      * @return
@@ -209,9 +226,7 @@ public class Util {
     }
 
     /**
-
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
-
      */
 
     public static int pxToDp(Context context, float pxValue) {
@@ -225,12 +240,13 @@ public class Util {
 
     /**
      * 判断字符串是否包含指定字符串
+     *
      * @param need 字符串
      * @param have 指定字符串
      * @return
      */
-    public static boolean haveStr(String need, String have){
-        if(!Util.isEmpty(need)&&!Util.isEmpty(have)){
+    public static boolean haveStr(String need, String have) {
+        if (!Util.isEmpty(need) && !Util.isEmpty(have)) {
             return need.contains(have);
         }
         return false;
@@ -239,10 +255,11 @@ public class Util {
 
     /**
      * MD5加密
+     *
      * @param pwd
      * @return
      */
-    public static String md5Pwd(String pwd){
+    public static String md5Pwd(String pwd) {
 
         //MD5加密的算法，有JDK实现，我们只需要使用
         try {
@@ -263,9 +280,9 @@ public class Util {
             for (byte b : bs) {
                 int temp = b & 255;
                 //第二，将所有的数据，转换成16进制格式
-                if(temp >=0 && temp <=15){
-                    str = str +"0"+ Integer.toHexString(temp);
-                }else{
+                if (temp >= 0 && temp <= 15) {
+                    str = str + "0" + Integer.toHexString(temp);
+                } else {
                     str = str + Integer.toHexString(temp);
                 }
             }
@@ -278,6 +295,7 @@ public class Util {
 
     /**
      * GMT(格林威治标准时间)转换当前北京时间
+     *
      * @param GMT 秒单部位
      * @return
      */
@@ -286,50 +304,78 @@ public class Util {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             res = simpleDateFormat.format(GMT);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
     }
 
-    public static long getCurTimeLong(){
+    public static long getCurTimeLong() {
         return System.currentTimeMillis();
     }
+
     public static Object[] addDataToArray(Object[] s, Object newData) {
-        s= Arrays.copyOf(s, s.length+1);
-        s[s.length-1]=newData;
+        s = Arrays.copyOf(s, s.length + 1);
+        s[s.length - 1] = newData;
         return s;
     }
 
-    public static String doubleNumber(double d){
-        DecimalFormat decimalFormat =new DecimalFormat("#0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+    public static String doubleNumber(double d) {
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
         return decimalFormat.format(d);
     }
 
     /**
-     *
      * @param temp
      * @return
      */
-    public static String doubleOrInt(double temp){
-        int tempInt=(int)temp;
+    public static String doubleOrInt(double temp) {
+        int tempInt = (int) temp;
         String result;
-        if(tempInt-temp==0){
+        if (tempInt - temp == 0) {
             result = String.valueOf(tempInt);
-        }else{
+        } else {
             result = String.valueOf(temp);
         }
         return result;
     }
-    public static String getApprovalStatus(int resultCode){
-        if(resultCode == 0){
+
+    public static String getApprovalStatus(int resultCode) {
+        if (resultCode == 0) {
             return "不同意";
-        }else if(resultCode == 1){
+        } else if (resultCode == 1) {
             return "同意";
-        }else if(resultCode == 3){
+        } else if (resultCode == 3) {
             return "未批复";
         }
         return "";
+    }
+
+    public static byte[] getBitmapByte(Bitmap bitmap) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        try {
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
+    }
+
+    public static void addActivity(Activity activity) {
+        if (!activityList.contains(activity)) {
+            activityList.add(activity);
+        }
+    }
+
+    public static void finishAll() {
+        if (activityList != null) {
+            for (int i = 0; i < activityList.size(); i++) {
+                activityList.get(i).finish();
+            }
+        }
+
     }
 
 }

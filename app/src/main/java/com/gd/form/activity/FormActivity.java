@@ -30,6 +30,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.gd.form.utils.Util.activityList;
+
 public class FormActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -57,6 +59,7 @@ public class FormActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityList.add(this);
         tvTitle.setText("表单查询结果");
         token = (String) SPUtil.get(FormActivity.this, "token", "");
         userId = (String) SPUtil.get(FormActivity.this, "userId", "");
@@ -94,46 +97,45 @@ public class FormActivity extends BaseActivity {
         formAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                String type = formModelList.get(position).getFormtype();
+                String formName = formModelList.get(position).getFormname();
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
-                Log.i("tag", "formId==" + formModelList.get(position).getFormid());
-                switch (type) {
-                    case "W001":
+                switch (formName) {
+                    case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
                         break;
-                    case "W002":
+                    case "隧道外部检查表":
                         openActivity(ApproveTunnelActivity.class, bundle);
                         break;
-                    case "W004":
+                    case "重车碾压调查表":
                         openActivity(ApproveWeightCarActivity.class, bundle);
                         break;
-                    case "W005":
+                    case "违章违建处理记录":
                         openActivity(ApproveBuildingActivity.class, bundle);
                         break;
-                    case "W006":
+                    case "徒步巡检表（结对子）":
                         openActivity(ApproveHikingActivity.class, bundle);
                         break;
-                    case "W015":
+                    case "水工施工检查日志":
                         openActivity(ApproveWaterActivity.class, bundle);
                         break;
-                    case "W016":
+                    case "隐蔽工程检查记录":
                         openActivity(ApproveHiddenActivity.class, bundle);
                         break;
-                    case "W009":
+                    case "高后果区徒步巡检表":
                         openActivity(ApproveHighZoneActivity.class, bundle);
                         break;
-                    case "W010":
+                    case "视频监控查看记录":
                         openActivity(ApproveVideoActivity.class, bundle);
                         break;
-                    case "W012":
+                    case "区域阴保电位测试":
                         openActivity(ApproveElectricity.class, bundle);
                         break;
-                    case "W013":
+                    case "阀室绝缘件性能测试":
                         openActivity(ApproveInsulationActivity.class, bundle);
                         break;
-                    case "W014":
+                    case "去耦合器测试":
                         openActivity(ApproveDeviceActivity.class, bundle);
                         break;
                 }
@@ -171,5 +173,9 @@ public class FormActivity extends BaseActivity {
 
         }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activityList.remove(this);
+    }
 }

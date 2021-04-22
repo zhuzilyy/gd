@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,9 +32,6 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 
 import com.gd.form.R;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  * @author F1ReKing
@@ -123,35 +119,15 @@ public class SignatureView extends View {
     /**
      * 保存图片
      *
-     * @param path 保存的地址
      * @param clearBlank 是否清除空白区域
      * @param blank 空白区域留空距离
-     * @throws IOException
      */
-    public Bitmap getSignBitmap(String path, boolean clearBlank, int blank, Context context) throws IOException {
-        if (TextUtils.isEmpty(path)) {
-            return null;
-        }
-        mSavePath = path;
+    public Bitmap getSignBitmap(boolean clearBlank, int blank) {
         Bitmap bitmap = cacheBitmap;
         if (clearBlank) {
             bitmap = clearBlank(bitmap, blank);
         }
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         return bitmap;
-//        byte[] buffer = bos.toByteArray();
-//        if (buffer != null) {
-//            File file = new File(path);
-//            if (file.exists()) {
-//                file.delete();
-//            }
-//            OutputStream os = new FileOutputStream(file);
-//            os.write(buffer);
-//            os.close();
-//            bos.close();
-//        }
-//        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "title", "description");
-       // context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File("/sdcard/sign.png"))));
     }
 
     /**

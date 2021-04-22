@@ -637,7 +637,6 @@ public class HikingCheckActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitHiking(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -729,7 +728,6 @@ public class HikingCheckActivity extends BaseActivity {
                     WeiboDialogUtils.closeDialog(mWeiboDialog);
                 }
             }
-
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
                 ToastUtil.show("上传失败请重试");
