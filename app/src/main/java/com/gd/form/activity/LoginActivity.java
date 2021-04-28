@@ -92,6 +92,12 @@ public class LoginActivity extends BaseActivity {
                         if (loginModel.getCode() == Constant.SUCCESS_CODE) {
                             SPUtil.put(LoginActivity.this, "token", loginModel.getMsg());
                             SPUtil.put(LoginActivity.this, "userId", userName);
+                            SPUtil.put(LoginActivity.this, "employName", loginModel.getEmployname());
+                            SPUtil.put(LoginActivity.this, "workingName", loginModel.getFessionname());
+                            SPUtil.put(LoginActivity.this, "dptName", loginModel.getDptname());
+                            SPUtil.put(LoginActivity.this, "telNumber", loginModel.getTelenumber());
+                            SPUtil.put(LoginActivity.this, "mail", loginModel.getMail());
+                            SPUtil.put(LoginActivity.this, "roleId", loginModel.getRoleid());
                             ToastUtil.show("登录成功");
                             openActivity(MainActivity.class);
                             finish();

@@ -69,7 +69,7 @@ public class PipeMeasureActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("管道标志测量");
+        tvTitle.setText("管道埋深测量");
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("测量记录");
         initTimePicker();

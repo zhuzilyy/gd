@@ -272,13 +272,15 @@ public class EndorsementActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitIllegalBuilding(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

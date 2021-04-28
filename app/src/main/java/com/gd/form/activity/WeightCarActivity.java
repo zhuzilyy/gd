@@ -129,6 +129,10 @@ public class WeightCarActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         tvTitle.setText("重车碾压调查表");
         if (dialog == null) {
             dialog = new ListDialog(mContext);
@@ -140,10 +144,6 @@ public class WeightCarActivity extends BaseActivity {
         initListener();
         initGallery();
         initConfig();
-        token = (String) SPUtil.get(this, "token", "");
-        userId = (String) SPUtil.get(this, "userId", "");
-        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
-        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
     }
 
     private void initGallery() {
@@ -226,7 +226,7 @@ public class WeightCarActivity extends BaseActivity {
 
     private void getPipelineInfoListRequest() {
 
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -371,6 +371,9 @@ public class WeightCarActivity extends BaseActivity {
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

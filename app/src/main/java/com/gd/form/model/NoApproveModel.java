@@ -8,6 +8,7 @@ public class NoApproveModel {
     private String formid;
     private String formname;
     private String formtype;
+    private String expireTimeString;
     public CreateTime getCreatime() {
         return creatime;
     }
@@ -62,5 +63,13 @@ public class NoApproveModel {
 
     public void setFormtype(String formtype) {
         this.formtype = formtype;
+    }
+
+    public String getExpireTimeString() {
+        return expireTimeString;
+    }
+
+    public void setExpireTimeString(String expireTimeString) {
+        this.expireTimeString = expireTimeString;
     }
 }

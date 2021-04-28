@@ -62,22 +62,21 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/jcfxgl" />
+                    android:src="@mipmap/info" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="台账设计"
+                    android:text="信息台账"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="invisible"
-                android:id="@+id/ll_fxgl"
+                android:id="@+id/ll_addOrReduce"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -88,22 +87,21 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/jcfxgl" />
+                    android:src="@mipmap/station" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="防汛管理"
+                    android:text="新增桩体"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="invisible"
-                android:id="@+id/ll_ghgqgl"
+                android:id="@+id/ll_waterInsurance"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -114,14 +112,14 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/jcghgqgl" />
+                    android:src="@mipmap/water" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="高后果区管理"
+                    android:text="增加水保工程"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 

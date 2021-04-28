@@ -18,6 +18,7 @@ import com.gd.form.model.ResultMsg;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.Util;
 import com.gd.form.view.ListDialog;
@@ -54,9 +55,12 @@ public class UserActivity extends BaseActivity {
     List<Department> listDepartments=new ArrayList<>();
     List<String> listDepartmentsName = new ArrayList<>();
     private ListDialog dialog;
+    private String token, userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(UserActivity.this, "token", "");
+        userId = (String) SPUtil.get(UserActivity.this, "userId", "");
         if(getIntent()!=null&&getIntent().getExtras()!=null){
             Bundle extra=getIntent().getExtras();
             id=extra.getString("id");
@@ -166,7 +170,7 @@ public class UserActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
 
-        Net.create(Api.class).pipemploysGetListByPrimaryKey(jsonObject)
+        Net.create(Api.class).pipemploysGetListByPrimaryKey(token,jsonObject)
                 .enqueue(new NetCallback<List<Pipemploys>>(this,true) {
                     @Override
                     public void onResponse(List<Pipemploys> resultMsg) {
@@ -193,12 +197,10 @@ public class UserActivity extends BaseActivity {
         jsonObject.addProperty("mail",et_user_mail.getText().toString());
         jsonObject.addProperty("telenumber",et_user_tel.getText().toString());
         jsonObject.addProperty("roleid","");
-        Net.create(Api.class).pipemploysAdd(jsonObject)
+        Net.create(Api.class).pipemploysAdd(token,jsonObject)
                 .enqueue(new NetCallback<ResultMsg>(this,true) {
                     @Override
                     public void onResponse(ResultMsg resultMsg) {
-                        Log.i("--------",resultMsg.getMsg()+"");
-                        Log.i("--------",resultMsg.getCode()+"");
                         ToastUtil.show(resultMsg.getMsg()+"");
                         if (resultMsg.getCode()==200){
                             finish();
@@ -209,12 +211,10 @@ public class UserActivity extends BaseActivity {
 
 
     private void professionalinfoget() {
-
-        Net.create(Api.class).professionalinfoget()
+        Net.create(Api.class).professionalinfoget(token)
                 .enqueue(new NetCallback<List<Jobs>>(this,false) {
                     @Override
                     public void onResponse(List<Jobs> list1) {
-                        Log.i("--------",list1.size()+"");
                         listJobs=list1;
                         for (int i=0;i<listJobs.size();i++){
                             listJobsName.add(listJobs.get(i).getName());
@@ -224,11 +224,10 @@ public class UserActivity extends BaseActivity {
     }
     private void pipedepartmentinfoGetList() {
 
-        Net.create(Api.class).pipedepartmentinfoGetList()
+        Net.create(Api.class).pipedepartmentinfoGetList(token)
                 .enqueue(new NetCallback<List<Department>>(this,false) {
                     @Override
                     public void onResponse(List<Department> list1) {
-                        Log.i("--------",list1.size()+"");
                         listDepartments=list1;
                         for (int i=0;i<listDepartments.size();i++){
                             listDepartmentsName.add(listDepartments.get(i).getName());

@@ -314,6 +314,54 @@
             android:name=".activity.NoApproveActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChangePwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddWaterInsuranceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchStationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeBaseInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PipeManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StationNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HighZoneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BuildingListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TunnelListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WaterProtectionListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WindVaneListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AdvocacyBoardListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VideoMonitorListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OtherListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TunnelStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

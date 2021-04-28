@@ -102,8 +102,35 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/ll_setting"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@drawable/setting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/d_10"
+                    android:text="设置"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
+
+
 
 
 

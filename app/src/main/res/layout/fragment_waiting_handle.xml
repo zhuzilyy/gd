@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginTop="@dimen/d_5"
         android:id="@+id/ll_selectDepartment"
         android:layout_width="match_parent"

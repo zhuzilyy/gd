@@ -128,8 +128,6 @@ public class VideoMonitoringActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initTimePicker();
-        getPipelineInfoListRequest();
         tvTitle.setText("视频监控查看记录");
         dialog = new ListDialog(this);
 
@@ -142,6 +140,8 @@ public class VideoMonitoringActivity extends BaseActivity {
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         initGallery();
         initConfig();
+        initTimePicker();
+        getPipelineInfoListRequest();
     }
 
     private void initConfig() {
@@ -205,7 +205,7 @@ public class VideoMonitoringActivity extends BaseActivity {
     }
 
     private void getPipelineInfoListRequest() {
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -420,6 +420,9 @@ public class VideoMonitoringActivity extends BaseActivity {
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

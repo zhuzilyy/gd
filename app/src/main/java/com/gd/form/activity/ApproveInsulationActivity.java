@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -85,6 +86,10 @@ public class ApproveInsulationActivity extends BaseActivity {
     MapView mapView;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -92,6 +97,7 @@ public class ApproveInsulationActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -105,6 +111,7 @@ public class ApproveInsulationActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("阀室绝缘件性能测试");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
@@ -128,6 +135,7 @@ public class ApproveInsulationActivity extends BaseActivity {
         getDetail(formId);
 
     }
+
     /**
      * 初始化AMap对象
      */
@@ -136,6 +144,7 @@ public class ApproveInsulationActivity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
+
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
@@ -145,7 +154,7 @@ public class ApproveInsulationActivity extends BaseActivity {
                     public void onResponse(InsulationDetailModel model) {
                         if (model != null) {
                             InsulationDetail dataDetail = model.getDatadetail();
-                            if(!TextUtils.isEmpty(model.getPipeString())){
+                            if (!TextUtils.isEmpty(model.getPipeString())) {
                                 tvPipeName.setText(model.getPipeString().split(":")[1]);
                             }
                             tvBox.setText(dataDetail.getStationdesc());
@@ -159,11 +168,11 @@ public class ApproveInsulationActivity extends BaseActivity {
                             tvLightingPressure.setText(dataDetail.getCol7());
                             tvSituation.setText(dataDetail.getCol8());
                             String location = model.getDatadetail().getLocate();
-                            if(!TextUtils.isEmpty(model.getDeptString())){
+                            if (!TextUtils.isEmpty(model.getDeptString())) {
                                 tvArea.setText(model.getDeptString().split(":")[1]);
                             }
                             tvRemark.setText(dataDetail.getRemarks());
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -200,20 +209,26 @@ public class ApproveInsulationActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if (model.getDatapproval() != null) {
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveInsulationActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveInsulationActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -228,10 +243,12 @@ public class ApproveInsulationActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -266,5 +283,11 @@ public class ApproveInsulationActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
     }
 }

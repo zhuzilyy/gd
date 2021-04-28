@@ -241,7 +241,7 @@ public class WaterInsuranceActivity extends BaseActivity {
 
 
     private void pipeDepartmentInfoGetList() {
-        Net.create(Api.class).pipedepartmentinfoGetList()
+        Net.create(Api.class).pipedepartmentinfoGetList(token)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
                     public void onResponse(List<Department> list) {
@@ -433,6 +433,9 @@ public class WaterInsuranceActivity extends BaseActivity {
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

@@ -1,7 +1,9 @@
 package com.gd.form.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,19 +17,38 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
+import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.BuildingModel;
+import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
@@ -35,10 +56,15 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+import com.yancy.gallerypick.config.GalleryConfig;
+import com.yancy.gallerypick.config.GalleryPick;
+import com.yancy.gallerypick.inter.IHandlerCallBack;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,10 +83,10 @@ public class PipeBuildingActivity extends BaseActivity {
     EditText etStartStationNo;
     @BindView(R.id.et_location)
     EditText etLocation;
-    @BindView(R.id.et_pipeProperty)
-    EditText etPipeProperty;
-    @BindView(R.id.et_type)
-    EditText etType;
+    @BindView(R.id.tv_pipeProperty)
+    TextView tvPipeProperty;
+    @BindView(R.id.tv_type)
+    TextView tvType;
     @BindView(R.id.et_name)
     EditText etName;
     @BindView(R.id.tv_time)
@@ -81,10 +107,10 @@ public class PipeBuildingActivity extends BaseActivity {
     EditText etPersonActivity;
     @BindView(R.id.et_des)
     EditText etDes;
-    @BindView(R.id.et_riskEvaluate)
-    EditText etRiskEvaluate;
-    @BindView(R.id.et_riskType)
-    EditText etRiskType;
+    @BindView(R.id.tv_riskEvaluate)
+    TextView tvRiskEvaluate;
+    @BindView(R.id.tv_riskType)
+    TextView tvRiskType;
     @BindView(R.id.et_beforeChangeMethod)
     EditText etBeforeChangeMethod;
     @BindView(R.id.et_changeMethod)
@@ -97,12 +123,40 @@ public class PipeBuildingActivity extends BaseActivity {
     LinearLayout llPipeName;
     @BindView(R.id.ll_time)
     LinearLayout llTime;
+    @BindView(R.id.ll_pipeProperty)
+    LinearLayout llPipeProperty;
+    @BindView(R.id.ll_type)
+    LinearLayout llType;
+    @BindView(R.id.ll_riskEvaluate)
+    LinearLayout llRiskEvaluate;
+    @BindView(R.id.tv_riskResult)
+    TextView tvRiskResult;
+    @BindView(R.id.ll_riskResult)
+    LinearLayout llRiskResult;
+    @BindView(R.id.ll_riskType)
+    LinearLayout llRiskType;
+    @BindView(R.id.rvResultPhoto)
+    RecyclerView rvResultPhoto;
+    @BindView(R.id.rl_selectImage)
+    RelativeLayout rlSelectImage;
     private String isHighZone = "是";
     private TimePickerView pvTime;
     private String token, userId, buildingId, stationId, pipeId, pipeName, stationName;
     private final int SEARCH_BUILDING = 100;
+    private int SELECT_AREA = 104;
+    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private List<Pipelineinfo> pipelineInfoList;
     private ListDialog dialog;
+    private List<String> pipePropertyList, typeList, riskEvaluateList, riskResultList, riskTypeList;
+    private List<String> path;
+    private GalleryConfig galleryConfig;
+    private PhotoAdapter photoAdapter;
+    private List<String> nameList;
+    private IHandlerCallBack iHandlerCallBack;
+    private Dialog mWeiboDialog;
+    private OSSCredentialProvider ossCredentialProvider;
+    private OSS oss;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -116,11 +170,19 @@ public class PipeBuildingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initListener();
-        initTimePicker();
-        getPipelineInfoListRequest();
+        token = (String) SPUtil.get(PipeBuildingActivity.this, "token", "");
+        userId = (String) SPUtil.get(PipeBuildingActivity.this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         tvTitle.setText("违规违建");
         dialog = new ListDialog(this);
+        pipePropertyList = new ArrayList<>();
+        typeList = new ArrayList<>();
+        riskEvaluateList = new ArrayList<>();
+        riskResultList = new ArrayList<>();
+        riskTypeList = new ArrayList<>();
+        path = new ArrayList<>();
+        nameList = new ArrayList<>();
         if (getIntent() != null) {
             String tag = getIntent().getExtras().getString("tag");
             buildingId = getIntent().getExtras().getString("buildingId");
@@ -134,12 +196,12 @@ public class PipeBuildingActivity extends BaseActivity {
             }
             if ("add".equals(tag)) {
                 btnCommit.setVisibility(View.VISIBLE);
-                llSearch.setVisibility(View.VISIBLE);
+                llSearch.setVisibility(View.GONE);
                 llPipeName.setEnabled(true);
                 etStartStationNo.setEnabled(true);
                 etLocation.setEnabled(true);
-                etPipeProperty.setEnabled(true);
-                etType.setEnabled(true);
+                tvPipeProperty.setEnabled(true);
+                tvType.setEnabled(true);
                 etName.setEnabled(true);
                 tvTime.setEnabled(true);
                 rgIsHighZone.setEnabled(true);
@@ -148,22 +210,28 @@ public class PipeBuildingActivity extends BaseActivity {
                 etMissArea.setEnabled(true);
                 etPersonActivity.setEnabled(true);
                 etDes.setEnabled(true);
-                etRiskEvaluate.setEnabled(true);
-                etRiskType.setEnabled(true);
+                tvRiskEvaluate.setEnabled(true);
+                tvRiskType.setEnabled(true);
                 etBeforeChangeMethod.setEnabled(true);
                 etChangeMethod.setEnabled(true);
                 llTime.setEnabled(true);
                 llPipeName.setEnabled(true);
                 rbNo.setEnabled(true);
                 rbYes.setEnabled(true);
+                llPipeProperty.setEnabled(true);
+                llType.setEnabled(true);
+                llRiskEvaluate.setEnabled(true);
+                llRiskResult.setEnabled(true);
+                llRiskType.setEnabled(true);
+                rlSelectImage.setEnabled(true);
             } else if (("check".equals(tag))) {
                 btnCommit.setVisibility(View.GONE);
                 llSearch.setVisibility(View.GONE);
                 llPipeName.setEnabled(false);
                 etStartStationNo.setEnabled(false);
                 etLocation.setEnabled(false);
-                etPipeProperty.setEnabled(false);
-                etType.setEnabled(false);
+                tvPipeProperty.setEnabled(false);
+                tvType.setEnabled(false);
                 etName.setEnabled(false);
                 tvTime.setEnabled(false);
                 rgIsHighZone.setEnabled(false);
@@ -172,22 +240,120 @@ public class PipeBuildingActivity extends BaseActivity {
                 etMissArea.setEnabled(false);
                 etPersonActivity.setEnabled(false);
                 etDes.setEnabled(false);
-                etRiskEvaluate.setEnabled(false);
-                etRiskType.setEnabled(false);
+                tvRiskEvaluate.setEnabled(false);
+                tvRiskType.setEnabled(false);
                 etBeforeChangeMethod.setEnabled(false);
                 etChangeMethod.setEnabled(false);
                 llPipeName.setEnabled(false);
                 rbNo.setEnabled(false);
                 rbYes.setEnabled(false);
                 llTime.setEnabled(false);
+                llPipeProperty.setEnabled(false);
+                llType.setEnabled(false);
+                llRiskEvaluate.setEnabled(false);
+                llRiskResult.setEnabled(false);
+                llRiskType.setEnabled(false);
+                rlSelectImage.setEnabled(false);
             }
         }
-        token = (String) SPUtil.get(PipeBuildingActivity.this, "token", "");
-        userId = (String) SPUtil.get(PipeBuildingActivity.this, "userId", "");
+        initListener();
+        initTimePicker();
+        getPipelineInfoListRequest();
+        initDialog();
+        initGallery();
+        initConfig();
     }
+
+    private void initGallery() {
+        iHandlerCallBack = new IHandlerCallBack() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(List<String> photoList) {
+                path.clear();
+                for (String s : photoList) {
+                    path.add(s);
+                }
+                photoAdapter.notifyDataSetChanged();
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(PipeBuildingActivity.this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                for (int i = 0; i < path.size(); i++) {
+                    String suffix = path.get(i).substring(path.get(i).length() - 4);
+                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                }
+
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        };
+
+    }
+
+    private void initConfig() {
+        galleryConfig = new GalleryConfig.Builder()
+                .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）
+                .iHandlerCallBack(iHandlerCallBack)     // 监听接口（必填）
+                .provider("com.gd.form.fileprovider")   // provider(必填)
+                .pathList(path)                         // 记录已选的图片
+                .multiSelect(true)                      // 是否多选   默认：false
+                .multiSelect(true, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
+                .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
+                .crop(false)                             // 快捷开启裁剪功能，仅当单选 或直接开启相机时有效
+                .crop(false, 1, 1, 500, 500)             // 配置裁剪功能的参数，   默认裁剪比例 1:1
+                .isShowCamera(true)                     // 是否现实相机按钮  默认：false
+                .filePath("/Gallery/Pictures")// 图片存放路径
+                .build();
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvResultPhoto.setLayoutManager(gridLayoutManager);
+        photoAdapter = new PhotoAdapter(this, path);
+        rvResultPhoto.setAdapter(photoAdapter);
+    }
+
+    private void initDialog() {
+        pipePropertyList.add("直接占压");
+        pipePropertyList.add("距离不足");
+        typeList.add("房屋（有人居住）");
+        typeList.add("房屋（无人居住）");
+        typeList.add("简易结构（简易厕所、杂货房、车棚等）");
+        typeList.add("厂房");
+        typeList.add("大棚");
+        typeList.add("围墙");
+        typeList.add("动物棚圈");
+        typeList.add("重物占压");
+        riskEvaluateList.add("1");
+        riskEvaluateList.add("2");
+        riskEvaluateList.add("3");
+        riskEvaluateList.add("4");
+        riskEvaluateList.add("5");
+        riskResultList.add("I");
+        riskResultList.add("II");
+        riskResultList.add("III");
+        riskResultList.add("IV");
+        riskResultList.add("V");
+        riskTypeList.add("一般");
+        riskTypeList.add("较大");
+        riskTypeList.add("重大");
+    }
+
     private void getPipelineInfoListRequest() {
 
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -195,12 +361,13 @@ public class PipeBuildingActivity extends BaseActivity {
                     }
                 });
     }
+
     private void initTimePicker() {
         //Dialog 模式下，在底部弹出
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 tvTime.setText(format.format(date));
             }
         }).setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
@@ -208,7 +375,7 @@ public class PipeBuildingActivity extends BaseActivity {
             public void onTimeSelectChanged(Date date) {
                 Log.i("pvTime", "onTimeSelectChanged");
             }
-        }).setType(new boolean[]{true, true, true, true, true, true})
+        }).setType(new boolean[]{true, true, true, false, false, false})
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .addOnCancelClickListener(new View.OnClickListener() {
                     @Override
@@ -274,8 +441,8 @@ public class PipeBuildingActivity extends BaseActivity {
 //                                etStartStationNo.setText(descArr[1]);
                             }
                             etLocation.setText(buildingModel.getLocationdesc());
-                            etPipeProperty.setText(buildingModel.getOverpropety());
-                            etType.setText(buildingModel.getOvertype());
+                            tvPipeProperty.setText(buildingModel.getOverpropety());
+                            tvType.setText(buildingModel.getOvertype());
                             etName.setText(buildingModel.getOvername());
                             tvTime.setText(buildingModel.getGenernaldate());
                             if (buildingModel.getHighareasflag().equals("是")) {
@@ -288,8 +455,8 @@ public class PipeBuildingActivity extends BaseActivity {
                             etMissArea.setText(buildingModel.getShortareas() + "");
                             etPersonActivity.setText(buildingModel.getPeractives());
                             etDes.setText(buildingModel.getDangerdesc());
-                            etRiskEvaluate.setText(buildingModel.getRiskevaluation());
-                            etRiskType.setText(buildingModel.getDangertype());
+                            tvRiskEvaluate.setText(buildingModel.getRiskevaluation());
+                            tvRiskType.setText(buildingModel.getDangertype());
                             etBeforeChangeMethod.setText(buildingModel.getPresolution());
                             etChangeMethod.setText(buildingModel.getAftsolution());
                         }
@@ -303,11 +470,65 @@ public class PipeBuildingActivity extends BaseActivity {
             R.id.ll_pipeName,
             R.id.ll_time,
             R.id.ll_search,
+            R.id.ll_location,
+            R.id.ll_pipeProperty,
+            R.id.ll_type,
+            R.id.ll_riskEvaluate,
+            R.id.ll_riskResult,
+            R.id.ll_riskType,
+            R.id.rl_selectImage,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.rl_selectImage:
+                initPermissions();
+                break;
+            case R.id.ll_riskType:
+                dialog.setData(riskTypeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRiskType.setText(riskTypeList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_riskResult:
+                dialog.setData(riskResultList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRiskResult.setText(riskResultList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_riskEvaluate:
+                dialog.setData(riskEvaluateList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRiskEvaluate.setText(riskEvaluateList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_type:
+                dialog.setData(typeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvType.setText(typeList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_pipeProperty:
+                dialog.setData(pipePropertyList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvPipeProperty.setText(pipePropertyList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_location:
+                Intent intentArea = new Intent(this, MapActivity.class);
+                startActivityForResult(intentArea, SELECT_AREA);
                 break;
             case R.id.ll_pipeName:
                 List<String> pipeList = new ArrayList<>();
@@ -351,8 +572,8 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("stakeid", Integer.valueOf(stationId));
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("locationdesc", etLocation.getText().toString());
-        params.addProperty("overpropety", etPipeProperty.getText().toString());
-        params.addProperty("overtype", etType.getText().toString());
+        params.addProperty("overpropety", tvPipeProperty.getText().toString());
+        params.addProperty("overtype", tvType.getText().toString());
         params.addProperty("overname", etName.getText().toString());
         params.addProperty("genernaldate", tvTime.getText().toString());
         params.addProperty("highareasflag", isHighZone);
@@ -361,8 +582,8 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("shortareas", Double.parseDouble(etMissArea.getText().toString()));
         params.addProperty("peractives", etPersonActivity.getText().toString());
         params.addProperty("dangerdesc", etDes.getText().toString());
-        params.addProperty("riskevaluation", etRiskEvaluate.getText().toString());
-        params.addProperty("dangertype", etRiskType.getText().toString());
+        params.addProperty("riskevaluation", tvRiskEvaluate.getText().toString());
+        params.addProperty("dangertype", tvRiskType.getText().toString());
         params.addProperty("presolution", etBeforeChangeMethod.getText().toString());
         params.addProperty("aftsolution", etChangeMethod.getText().toString());
         Net.create(Api.class).addBuilding(token, params)
@@ -395,12 +616,12 @@ public class PipeBuildingActivity extends BaseActivity {
             ToastUtil.show("请输入行政位置");
             return false;
         }
-        if (TextUtils.isEmpty(etPipeProperty.getText().toString())) {
-            ToastUtil.show("请输入占据性质");
+        if (TextUtils.isEmpty(tvPipeProperty.getText().toString())) {
+            ToastUtil.show("请选择占据性质");
             return false;
         }
-        if (TextUtils.isEmpty(etType.getText().toString())) {
-            ToastUtil.show("请输入占压类型");
+        if (TextUtils.isEmpty(tvType.getText().toString())) {
+            ToastUtil.show("请选择占压类型");
             return false;
         }
         if (TextUtils.isEmpty(etName.getText().toString())) {
@@ -443,12 +664,16 @@ public class PipeBuildingActivity extends BaseActivity {
             ToastUtil.show("请输入隐患内容描述");
             return false;
         }
-        if (TextUtils.isEmpty(etRiskEvaluate.getText().toString())) {
-            ToastUtil.show("请输入风险评价");
+        if (TextUtils.isEmpty(tvRiskEvaluate.getText().toString())) {
+            ToastUtil.show("风险评价-事故概率");
             return false;
         }
-        if (TextUtils.isEmpty(etRiskType.getText().toString())) {
-            ToastUtil.show("请输入隐患类型");
+        if (TextUtils.isEmpty(tvRiskResult.getText().toString())) {
+            ToastUtil.show("风险评价-事故后果");
+            return false;
+        }
+        if (TextUtils.isEmpty(tvRiskType.getText().toString())) {
+            ToastUtil.show("请选择隐患类型");
             return false;
         }
         if (TextUtils.isEmpty(etBeforeChangeMethod.getText().toString())) {
@@ -477,8 +702,8 @@ public class PipeBuildingActivity extends BaseActivity {
                 etStartStationNo.setText(descArr[1]);
             }
             etLocation.setText(buildingModel.getLocationdesc());
-            etPipeProperty.setText(buildingModel.getOverpropety());
-            etType.setText(buildingModel.getOvertype());
+            tvPipeProperty.setText(buildingModel.getOverpropety());
+            tvType.setText(buildingModel.getOvertype());
             etName.setText(buildingModel.getOvername());
             tvTime.setText(buildingModel.getGenernaldate());
             if (buildingModel.getHighareasflag().equals("是")) {
@@ -491,10 +716,66 @@ public class PipeBuildingActivity extends BaseActivity {
             etMissArea.setText(buildingModel.getShortareas() + "");
             etPersonActivity.setText(buildingModel.getPeractives());
             etDes.setText(buildingModel.getDangerdesc());
-            etRiskEvaluate.setText(buildingModel.getRiskevaluation());
-            etRiskType.setText(buildingModel.getDangertype());
+            tvRiskEvaluate.setText(buildingModel.getRiskevaluation());
+            tvRiskType.setText(buildingModel.getDangertype());
             etBeforeChangeMethod.setText(buildingModel.getPresolution());
             etChangeMethod.setText(buildingModel.getAftsolution());
+        } else if (requestCode == SELECT_AREA) {
+            String area = data.getStringExtra("area");
+            etLocation.setText(area);
         }
+    }
+
+    // 授权管理
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(mContext, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        } else {
+            GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(this);
+            } else {
+                Log.i("tag", "拒绝授权");
+            }
+        }
+    }
+
+    //上传阿里云文件
+    public void uploadFiles(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                nameList.add(fileName);
+                if (nameList.size() == path.size()) {
+                    WeiboDialogUtils.closeDialog(mWeiboDialog);
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
+
     }
 }

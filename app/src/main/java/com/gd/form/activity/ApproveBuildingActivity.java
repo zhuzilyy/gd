@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -67,6 +68,10 @@ public class ApproveBuildingActivity extends BaseActivity {
     MapView mapView;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -74,6 +79,7 @@ public class ApproveBuildingActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -88,6 +94,7 @@ public class ApproveBuildingActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("违章违建处理记录");
+        Util.activityList.add(this);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
@@ -109,6 +116,7 @@ public class ApproveBuildingActivity extends BaseActivity {
         rvResultPhoto.setAdapter(photoAdapter);
         getDetail(formId);
     }
+
     /**
      * 初始化AMap对象
      */
@@ -117,6 +125,7 @@ public class ApproveBuildingActivity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
+
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
@@ -126,13 +135,13 @@ public class ApproveBuildingActivity extends BaseActivity {
                     public void onResponse(BuildingDetailModel model) {
                         if (model != null) {
                             BuildingDetail dataDetail = model.getDatadetail();
-                            if(!TextUtils.isEmpty(model.getStakeString())){
-                               tvStationNo.setText(model.getStakeString().split(":")[1]);
+                            if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")) {
+                                tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
                             tvDes.setText(dataDetail.getConditiondesc());
                             tvRecord.setText(dataDetail.getSolutionrecord());
                             String location = model.getDatadetail().getLocate();
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -143,6 +152,7 @@ public class ApproveBuildingActivity extends BaseActivity {
                                 aMap.moveCamera(CameraUpdateFactory.newCameraPosition(
                                         new CameraPosition(latLng, 11f, 0, 0)));
                             }
+
                             //上传的文件
                             if (model.getDataupload() != null) {
                                 if ("00".equals(model.getDataupload().getFilepath())) {
@@ -169,20 +179,27 @@ public class ApproveBuildingActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if (model.getDatapproval() != null) {
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveBuildingActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
+                                tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveBuildingActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -197,10 +214,12 @@ public class ApproveBuildingActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -235,5 +254,11 @@ public class ApproveBuildingActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
     }
 }

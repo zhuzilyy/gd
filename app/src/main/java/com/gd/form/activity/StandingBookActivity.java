@@ -91,8 +91,7 @@ public class StandingBookActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("管道及附属设施台账");
-        ivRight.setVisibility(View.VISIBLE);
+        tvTitle.setText("管道及附属设施");
         token = (String) SPUtil.get(StandingBookActivity.this, "token", "");
         userId = (String) SPUtil.get(StandingBookActivity.this, "userId", "");
         myReceiver = new MyReceiver();
@@ -133,12 +132,64 @@ public class StandingBookActivity extends BaseActivity {
             R.id.btn_otherCheck,
             R.id.btn_otherChange,
             R.id.ll_search,
+            R.id.ll_area,
+            R.id.ll_pipeName,
+            R.id.ll_pipeTagBaseInfo,
+            R.id.ll_pipePerson,
+            R.id.ll_station,
+            R.id.ll_highZone,
+            R.id.ll_illegalBuilding,
+            R.id.ll_tunnel,
+            R.id.ll_wind_vane,
+            R.id.ll_advocacy_board,
+            R.id.ll_video_monitoring,
+            R.id.ll_water,
+            R.id.ll_other,
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         bundle.putString("stationId", stationId);
         bundle.putString("pipeId", pipeId);
         switch (view.getId()) {
+            case R.id.ll_wind_vane:
+                openActivity(WindVaneListActivity.class);
+                break;
+            case R.id.ll_other:
+                openActivity(OtherListActivity.class);
+                break;
+            case R.id.ll_water:
+                openActivity(WaterProtectionListActivity.class);
+                break;
+            case R.id.ll_video_monitoring:
+                openActivity(VideoMonitorListActivity.class);
+                break;
+            case R.id.ll_advocacy_board:
+                openActivity(AdvocacyBoardListActivity.class);
+                break;
+            case R.id.ll_area:
+
+                break;
+            case R.id.ll_tunnel:
+                openActivity(TunnelListActivity.class);
+                break;
+            case R.id.ll_illegalBuilding:
+                openActivity(BuildingListActivity.class);
+                break;
+            case R.id.ll_highZone:
+                openActivity(HighZoneListActivity.class);
+                break;
+            case R.id.ll_station:
+                openActivity(StationNameActivity.class);
+                break;
+            case R.id.ll_pipePerson:
+                openActivity(PipeManagerActivity.class);
+                break;
+            case R.id.ll_pipeName:
+
+                break;
+            case R.id.ll_pipeTagBaseInfo:
+                openActivity(PipeBaseInfoActivity.class);
+                break;
             //管道标识基础信息查看
             case R.id.ll_search:
                 Intent intentStation = new Intent(this, StationActivity.class);
@@ -398,12 +449,12 @@ public class StandingBookActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("id", Integer.valueOf(stationId));
-        Log.i("tag","params=="+params);
+        Log.i("tag", "params==" + params);
         Net.create(Api.class).searchStation(token, params)
                 .enqueue(new NetCallback<List<SearchStationModel>>(this, true) {
                     @Override
                     public void onResponse(List<SearchStationModel> result) {
-                        if(result!=null && result.size()>0){
+                        if (result != null && result.size() > 0) {
                             SearchStationModel model = result.get(0);
                             searchStationModel = model;
                             stationName = model.getName();
@@ -491,21 +542,21 @@ public class StandingBookActivity extends BaseActivity {
                                 tvOther.setText("其他(隧道、地震监测等设备设施)");
                             }
                             //高后果区
-                            if(TextUtils.isEmpty(model.getHighareasid())){
+                            if (TextUtils.isEmpty(model.getHighareasid())) {
                                 tvHighZone.setText("高后果区(无)");
-                            }else{
+                            } else {
                                 tvHighZone.setText("高后果区(有)");
                             }
                             //隧道
-                            if(TextUtils.isEmpty(model.getPipeaccountid())){
+                            if (TextUtils.isEmpty(model.getPipeaccountid())) {
                                 tvTunnel.setText("隧道(无)");
-                            }else{
+                            } else {
                                 tvTunnel.setText("隧道(有)");
                             }
                             //违章建筑
-                            if(TextUtils.isEmpty(model.getLegalconstructionid())){
+                            if (TextUtils.isEmpty(model.getLegalconstructionid())) {
                                 tvBuilding.setText("违章建筑(无)");
-                            }else{
+                            } else {
                                 tvBuilding.setText("违章建筑(有)");
                             }
                         }

@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.gd.form.R;
+import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.activity.FfglActivity;
 import com.gd.form.activity.FxglActivity;
 import com.gd.form.activity.GcglActivity;
 import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
+import com.gd.form.activity.PipeTagActivity;
 import com.gd.form.activity.SearchDataActivity;
+import com.gd.form.activity.SearchStationActivity;
 import com.gd.form.activity.SgbhActivity;
-import com.gd.form.activity.StandingBookActivity;
 import com.gd.form.activity.XhglActivity;
 import com.gd.form.base.BaseFragment;
 import com.jaeger.library.StatusBarUtil;
@@ -43,13 +45,13 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_jobs,
             R.id.ll_sgbh,
             R.id.ll_job_xhgl,
-            R.id.ll_job_fxgl,
             R.id.ll_job_ghg,
             R.id.ll_job_ffgl,
             R.id.ll_job_gcgl,
             R.id.ll_tzsj,
             R.id.ll_search_data,
-
+            R.id.ll_addOrReduce,
+            R.id.ll_waterInsurance,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -60,7 +62,7 @@ public class WorkFragment extends BaseFragment {
             case R.id.ll_jobs:
                 openActivity(JobsActivity.class);
                 break;
-                //数据查询
+            //数据查询
             case R.id.ll_search_data:
                 openActivity(SearchDataActivity.class);
                 break;
@@ -86,7 +88,13 @@ public class WorkFragment extends BaseFragment {
                 openActivity(GcglActivity.class);
                 break;
             case R.id.ll_tzsj:
-                openActivity(StandingBookActivity.class);
+                openActivity(SearchStationActivity.class);
+                break;
+            case R.id.ll_addOrReduce:
+                openActivity(PipeTagActivity.class);
+                break;
+            case R.id.ll_waterInsurance:
+                openActivity(AddWaterInsuranceActivity.class);
                 break;
         }
     }

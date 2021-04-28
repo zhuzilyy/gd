@@ -136,20 +136,20 @@ public class DeviceActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("去耦合器测试");
-        dialog = new ListDialog(this);
-        llLocation.setVisibility(View.GONE);
-        pipeDepartmentInfoGetList();
-        getPipelineInfoListRequest();
-        path = new ArrayList<>();
-        nameList = new ArrayList<>();
-        dialog = new ListDialog(this);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+        tvTitle.setText("去耦合器测试");
+        dialog = new ListDialog(this);
+        llLocation.setVisibility(View.GONE);
+        path = new ArrayList<>();
+        nameList = new ArrayList<>();
+        dialog = new ListDialog(this);
         initGallery();
         initConfig();
+        pipeDepartmentInfoGetList();
+        getPipelineInfoListRequest();
     }
 
     private void initConfig() {
@@ -213,7 +213,7 @@ public class DeviceActivity extends BaseActivity {
     }
 
     private void pipeDepartmentInfoGetList() {
-        Net.create(Api.class).pipedepartmentinfoGetList()
+        Net.create(Api.class).pipedepartmentinfoGetList(token)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
                     public void onResponse(List<Department> list) {
@@ -223,8 +223,7 @@ public class DeviceActivity extends BaseActivity {
     }
 
     private void getPipelineInfoListRequest() {
-
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -418,6 +417,9 @@ public class DeviceActivity extends BaseActivity {
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

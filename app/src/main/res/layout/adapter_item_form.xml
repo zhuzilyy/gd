@@ -9,6 +9,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
@@ -16,6 +17,7 @@
             android:text="创建时间" />
 
         <TextView
+            android:textColor="#000"
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"
@@ -38,6 +40,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
@@ -45,6 +48,7 @@
             android:text="创建人姓名" />
 
         <TextView
+            android:textColor="#000"
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"
@@ -66,6 +70,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
@@ -73,6 +78,7 @@
             android:text="表单类型" />
 
         <TextView
+            android:textColor="#000"
             android:id="@+id/tv_type"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"

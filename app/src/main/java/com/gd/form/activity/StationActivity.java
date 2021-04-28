@@ -22,6 +22,7 @@ import com.gd.form.model.StationNoModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -47,10 +48,12 @@ public class StationActivity extends BaseActivity {
     private List<StationNoModel> stationNoModelList;
     private StationAdapter adapter;
     private String selectTag;
-
+    private String token, userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
         tvTitle.setText("搜索桩号");
         initViews();
         initData();
@@ -83,7 +86,7 @@ public class StationActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("pipeid", 0);
         jsonObject.addProperty("name", keyWord);
-        Net.create(Api.class).pipestakeinfoget(jsonObject)
+        Net.create(Api.class).pipestakeinfoget(token,jsonObject)
                 .enqueue(new NetCallback<List<StationNoModel>>(this, true) {
                     @Override
                     public void onResponse(List<StationNoModel> list) {
@@ -120,7 +123,7 @@ public class StationActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
-                if (TextUtils.isEmpty(v.getText().toString())) {
+                if (TextUtils.isEmpty(v.getText().toString().trim())) {
                     ToastUtil.show("请输入搜索内容");
                     return false;
                 }
@@ -150,7 +153,7 @@ public class StationActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_search:
-                if (TextUtils.isEmpty(mainSearchEditText.getText().toString())) {
+                if (TextUtils.isEmpty(mainSearchEditText.getText().toString().trim())) {
                     ToastUtil.show("请输入搜索内容");
                     return;
                 }

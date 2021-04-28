@@ -16,6 +16,7 @@ import com.gd.form.model.ResultMsg;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
@@ -40,10 +41,12 @@ public class UsersActivity extends BaseActivity {
     private List<String> nameList = new ArrayList<>();
     private List<String> nameIdList = new ArrayList<>();
     private UsersExpandableListAdapter adapter;
-
+    private String token, userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(this, "token", "");
+        userId = (String) SPUtil.get(this, "userId", "");
         //  设置分组项的点击监听事件
         lv_users.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -60,10 +63,6 @@ public class UsersActivity extends BaseActivity {
         lv_users.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                // Toast.makeText(UsersActivity.this, userNames[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
-                //  Toast.makeText(UsersActivity.this, userNameIds[groupPosition][childPosition], Toast.LENGTH_SHORT).show();
-
-
                 List<String> listM = new ArrayList<>();
 
                 listM.add("修改");
@@ -92,7 +91,7 @@ public class UsersActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
 
-        Net.create(Api.class).pipemploysDelete(jsonObject)
+        Net.create(Api.class).pipemploysDelete(token,jsonObject)
                 .enqueue(new NetCallback<ResultMsg>(this, true) {
                     @Override
                     public void onResponse(ResultMsg resultMsg) {
@@ -112,8 +111,7 @@ public class UsersActivity extends BaseActivity {
 
 
     private void getListRequest() {
-
-        Net.create(Api.class).pipemploysGetList()
+        Net.create(Api.class).pipemploysGetList(token)
                 .enqueue(new NetCallback<List<Pipemploys>>(this, true) {
                     @Override
                     public void onResponse(List<Pipemploys> list) {

@@ -15,6 +15,7 @@ import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
 import com.gd.form.model.NoApproveModel;
+import com.gd.form.model.OverTimeModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
@@ -24,6 +25,7 @@ import com.gd.form.model.SearchPerson;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
+import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
 import com.gd.form.model.VideoDetailModel;
@@ -65,7 +67,7 @@ public interface Api {
      * @return
      */
     @GET("professionalinfoget.html")
-    Call<List<Jobs>> professionalinfoget();
+    Call<List<Jobs>> professionalinfoget(@Header("TokenValue") String token);
 
 
     /**
@@ -74,7 +76,7 @@ public interface Api {
      * @return
      */
     @POST("professionalinfoAdd.html")
-    Call<ResultMsg> professionalinfoAdd(@Body JsonObject jsonObject);
+    Call<ResultMsg> professionalinfoAdd(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 岗位职称删除
@@ -82,7 +84,7 @@ public interface Api {
      * @return
      */
     @POST("professionalinfodelete.html")
-    Call<ResultMsg> professionalinfodelete(@Body JsonObject jsonObject);
+    Call<ResultMsg> professionalinfodelete(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**
@@ -91,7 +93,7 @@ public interface Api {
      * @return
      */
     @GET("pipelineinfosget.html")
-    Call<List<Pipelineinfo>> pipelineinfosget();
+    Call<List<Pipelineinfo>> pipelineinfosget(@Header("TokenValue") String token);
 
     /**
      * 根据管道线路id获取该管道桩信息接口
@@ -99,7 +101,7 @@ public interface Api {
      * @return
      */
     @POST("pipestakeinfogetMulti.html")
-    Call<List<StationNoModel>> pipestakeinfoget(@Body JsonObject jsonObject);
+    Call<List<StationNoModel>> pipestakeinfoget(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**
@@ -107,9 +109,8 @@ public interface Api {
      *
      * @return
      */
-    // @GET("pipemploysGetList.html")
     @GET("pipemploysGetListUI.html")
-    Call<List<Pipemploys>> pipemploysGetList();
+    Call<List<Pipemploys>> pipemploysGetList(@Header("TokenValue") String token);
 
     /**
      * 获取所有部门名称
@@ -117,7 +118,7 @@ public interface Api {
      * @return
      */
     @GET("pipedepartmentinfoGetList.html")
-    Call<List<Department>> pipedepartmentinfoGetList();
+    Call<List<Department>> pipedepartmentinfoGetList(@Header("TokenValue") String token);
 
     /**
      * 新增和修改用户
@@ -125,7 +126,7 @@ public interface Api {
      * @return
      */
     @POST("pipemploysAdd.html")
-    Call<ResultMsg> pipemploysAdd(@Body JsonObject jsonObject);
+    Call<ResultMsg> pipemploysAdd(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 删除用户
@@ -133,7 +134,7 @@ public interface Api {
      * @return
      */
     @POST("pipemploysDelete.html")
-    Call<ResultMsg> pipemploysDelete(@Body JsonObject jsonObject);
+    Call<ResultMsg> pipemploysDelete(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**
@@ -142,7 +143,7 @@ public interface Api {
      * @return
      */
     @POST("pipemploysGetListUIByPrimaryKey.html")
-    Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Body JsonObject jsonObject);
+    Call<List<Pipemploys>> pipemploysGetListByPrimaryKey(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 水工保护表单提交
@@ -595,6 +596,38 @@ public interface Api {
      */
     @POST("dataformapprovalUpdate.html")
     Call<ServerModel> approve(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 超期任务
+     *
+     * @return
+     */
+    @POST("DataFormGetOverList.html")
+    Call<List<OverTimeModel>> overTimeList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 待办任务
+     *
+     * @return
+     */
+    @POST("DataFormGetExpectList.html")
+    Call<List<OverTimeModel>> waitingHandleList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取任务数量
+     *
+     * @return
+     */
+    @POST("DataFormGetAllMsg.html")
+    Call<TaskCountModel> getTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @POST("pipemploysUpdatePwd.html")
+    Call<ServerModel> changePwd(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

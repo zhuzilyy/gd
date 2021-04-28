@@ -1,5 +1,9 @@
 package com.gd.form.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,7 +51,8 @@ public class NoApproveActivity extends BaseActivity {
     private List<String> formBaseCodeList, formNameList;
     private ListDialog dialog;
     private List<NoApproveModel> noApproveModelList;
-
+    private MyReceiver myReceiver;
+    private String formBaseCode;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -78,10 +83,15 @@ public class NoApproveActivity extends BaseActivity {
             refreshLayout.finishLoadMore(2000);
         });
         initData();
-        getNoApproveList("all");
+        formBaseCode = "all";
+        getNoApproveList();
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.action.updateApprove");
+        registerReceiver(myReceiver,intentFilter);
     }
 
-    private void getNoApproveList(String formBaseCode) {
+    private void getNoApproveList() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
         params.addProperty("basecode", formBaseCode);
@@ -112,7 +122,48 @@ public class NoApproveActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-
+                Bundle bundle = new Bundle();
+                bundle.putString("tag", "approve");
+                bundle.putString("formId", noApproveModelList.get(position).getFormid());
+                String formName = noApproveModelList.get(position).getFormname();
+                switch (formName) {
+                    case "水工保护巡检表":
+                        openActivity(ApproveWaterProtectionActivity.class, bundle);
+                        break;
+                    case "隧道外部检查表":
+                        openActivity(ApproveTunnelActivity.class, bundle);
+                        break;
+                    case "重车碾压调查表":
+                        openActivity(ApproveWeightCarActivity.class, bundle);
+                        break;
+                    case "违章违建处理记录":
+                        openActivity(ApproveBuildingActivity.class, bundle);
+                        break;
+                    case "徒步巡检表（结对子）":
+                        openActivity(ApproveHikingActivity.class, bundle);
+                        break;
+                    case "水工施工检查日志":
+                        openActivity(ApproveWaterActivity.class, bundle);
+                        break;
+                    case "隐蔽工程检查记录":
+                        openActivity(ApproveHiddenActivity.class, bundle);
+                        break;
+                    case "高后果区徒步巡检表":
+                        openActivity(ApproveHighZoneActivity.class, bundle);
+                        break;
+                    case "视频监控查看记录":
+                        openActivity(ApproveVideoActivity.class, bundle);
+                        break;
+                    case "区域阴保电位测试":
+                        openActivity(ApproveElectricity.class, bundle);
+                        break;
+                    case "阀室绝缘件性能测试":
+                        openActivity(ApproveInsulationActivity.class, bundle);
+                        break;
+                    case "去耦合器测试":
+                        openActivity(ApproveDeviceActivity.class, bundle);
+                        break;
+                }
             }
         });
 
@@ -151,12 +202,27 @@ public class NoApproveActivity extends BaseActivity {
                             dialog.show();
                             dialog.setListItemClick(positionM -> {
                                 tvFormType.setText(formNameList.get(positionM));
-                                String formBaseCode = formBaseCodeList.get(positionM);
-                                getNoApproveList(formBaseCode);
+                                formBaseCode = formBaseCodeList.get(positionM);
+                                getNoApproveList();
                                 dialog.dismiss();
                             });
                         }
                     }
                 });
+    }
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("com.action.updateApprove")) {
+                getNoApproveList();
+            }
+        }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(myReceiver!=null){
+            unregisterReceiver(myReceiver);
+        }
     }
 }

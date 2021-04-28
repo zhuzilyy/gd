@@ -78,6 +78,10 @@ public class ApproveHiddenActivity extends BaseActivity {
     View viewLocation;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private PhotoAdapter photoAdapter;
@@ -96,6 +100,7 @@ public class ApproveHiddenActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("隐蔽工程检查");
         token = (String) SPUtil.get(ApproveHiddenActivity.this, "token", "");
         userId = (String) SPUtil.get(ApproveHiddenActivity.this, "userId", "");
@@ -130,7 +135,7 @@ public class ApproveHiddenActivity extends BaseActivity {
                             HiddenDetail dataDetail = model.getDatadetail();
                             tvName.setText(dataDetail.getConstructionname());
                             tvCompany.setText(dataDetail.getConstructionunit());
-                            if(!TextUtils.isEmpty(model.getStakeString())){
+                            if(!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")){
                                 tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
                             tvLocation.setText(dataDetail.getLocate());
@@ -166,17 +171,23 @@ public class ApproveHiddenActivity extends BaseActivity {
                             }
 
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
-                            }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveHiddenActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
+                            if(model.getDatapproval()!=null){
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveHiddenActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
                         }
                     }
@@ -192,7 +203,9 @@ public class ApproveHiddenActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid",formId);
+                openActivity(ApproveFormActivity.class,bundle);
                 break;
             case R.id.ll_file:
                 if(!TextUtils.isEmpty(filePath)){
@@ -203,5 +216,11 @@ public class ApproveHiddenActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
     }
 }

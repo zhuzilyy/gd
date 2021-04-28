@@ -92,7 +92,7 @@ public class ApproveFormActivity extends BaseActivity {
         params.addProperty("formid", formId);
         params.addProperty("approvalresult", 0);
         params.addProperty("approvalcomment", advice);
-        params.addProperty("signfilepath", "");
+        params.addProperty("signfilepath", "00");
         params.addProperty("creatime", TimeUtil.longToFormatTimeHMS(System.currentTimeMillis()));
         Net.create(Api.class).approve(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
@@ -102,7 +102,7 @@ public class ApproveFormActivity extends BaseActivity {
                             Intent intent = new Intent();
                             intent.setAction("com.action.updateApprove");
                             sendBroadcast(intent);
-                            finish();
+                            Util.finishAll();
                         }
                     }
                 });

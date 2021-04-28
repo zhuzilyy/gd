@@ -5,16 +5,17 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_title" />
+
     <LinearLayout
         android:id="@+id/ll_search"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/mainSearchTextView"
             android:layout_width="0dp"
-            android:gravity="center_vertical"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/d_9"
             android:layout_marginLeft="@dimen/d_9"
@@ -26,23 +27,25 @@
             android:background="@drawable/main_edit_bg"
             android:drawableRight="@mipmap/main_search"
             android:drawablePadding="@dimen/d_9"
+            android:gravity="center_vertical"
             android:hint="请输入桩号"
             android:imeOptions="actionSearch"
             android:padding="@dimen/d_6"
             android:singleLine="true" />
 
         <Button
-            android:visibility="gone"
-            android:background="@drawable/bg_search"
-            android:layout_marginRight="@dimen/d_10"
-            android:textColor="#fff"
             android:id="@+id/btn_search"
-            android:text="搜索"
             android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="@dimen/d_10"
             android:layout_weight="1"
-            android:layout_height="30dp"/>
+            android:background="@drawable/bg_search"
+            android:text="搜索"
+            android:textColor="#fff"
+            android:visibility="gone" />
 
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -89,7 +92,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
@@ -144,7 +146,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
@@ -169,7 +170,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -199,13 +201,13 @@
                     android:textSize="@dimen/s_16" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/d_10"
                     android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
+                    android:src="@mipmap/ic_next"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -214,7 +216,8 @@
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--管道标识基础信息-->
             <LinearLayout
@@ -253,23 +256,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_infoCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_infoChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -317,22 +329,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_personCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_personChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
 
@@ -360,7 +382,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="站场或阀室"
+                    android:text="场站名称"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
@@ -381,23 +403,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_stationCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_stationChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -445,23 +476,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_highZoneCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_highZoneChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -510,23 +550,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_buildingCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_buildingChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -574,23 +623,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_tunnelCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_tunnelChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -599,7 +657,78 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
+            <!--水工(含其他)保护形势-->
+            <LinearLayout
+                android:id="@+id/ll_water"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
 
+                <TextView
+                    android:id="@+id/tv_water"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="水保工程"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <Button
+                    android:id="@+id/btn_waterCheck"
+                    android:layout_width="@dimen/d_60"
+                    android:layout_height="@dimen/d_30"
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_waterChange"
+                    android:layout_width="@dimen/d_60"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
             <!--风向标-->
             <LinearLayout
                 android:id="@+id/ll_wind_vane"
@@ -638,23 +767,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_windVaneCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_windVaneChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -702,22 +840,32 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_advocacyBoardCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_advocacyBoardChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
 
@@ -767,87 +915,32 @@
 
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_videoCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_videoChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <!--水工(含其他)保护形势-->
-            <LinearLayout
-                android:id="@+id/ll_water"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:id="@+id/tv_water"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="水工(含其他)保护形势"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-                <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
-                    android:id="@+id/btn_waterCheck"
-                    android:layout_width="@dimen/d_60"
-                    android:layout_height="@dimen/d_30"
-                    android:text="查看" />
-
-                <Button
-                    android:layout_marginRight="@dimen/d_10"
                     android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
                     android:background="@drawable/bg_standing"
+                    android:text="维护"
                     android:textColor="#fff"
-                    android:id="@+id/btn_waterChange"
-                    android:layout_width="@dimen/d_60"
-                    android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:visibility="gone" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -865,7 +958,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_well"
@@ -895,23 +989,30 @@
                     android:textSize="@dimen/s_16" />
 
                 <Button
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_wellCheck"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="查看" />
+                    android:background="@drawable/bg_standing"
+                    android:text="查看"
+                    android:textColor="#fff" />
 
                 <Button
-                    android:layout_marginRight="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_10"
-                    android:background="@drawable/bg_standing"
-                    android:textColor="#fff"
                     android:id="@+id/btn_wellChange"
                     android:layout_width="@dimen/d_60"
                     android:layout_height="@dimen/d_30"
-                    android:text="维护" />
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:background="@drawable/bg_standing"
+                    android:text="维护"
+                    android:textColor="#fff" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -919,15 +1020,16 @@
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--其他(隧道、地震监测等设备设施)-->
             <LinearLayout
                 android:id="@+id/ll_other"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="#80FFFFFF"
+                android:orientation="horizontal"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12">
 
@@ -937,30 +1039,59 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="其他(隧道、地震监测等设备设施)"
+                    android:text="其他(地震监测等设备设施)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-                <LinearLayout
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
                     android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+
+                <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
                     <Button
-                        android:background="@drawable/bg_standing"
-                        android:textColor="#fff"
                         android:id="@+id/btn_otherCheck"
                         android:layout_width="@dimen/d_60"
                         android:layout_height="@dimen/d_30"
-                        android:text="查看" />
+                        android:background="@drawable/bg_standing"
+                        android:text="查看"
+                        android:textColor="#fff"
+                        android:visibility="gone" />
 
                     <Button
-                        android:layout_marginRight="@dimen/d_10"
-                        android:layout_marginLeft="@dimen/d_10"
-                        android:background="@drawable/bg_standing"
-                        android:textColor="#fff"
                         android:id="@+id/btn_otherChange"
                         android:layout_width="@dimen/d_60"
                         android:layout_height="@dimen/d_30"
-                        android:text="维护" />
+                        android:layout_marginLeft="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:background="@drawable/bg_standing"
+                        android:text="维护"
+                        android:textColor="#fff"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
             </LinearLayout>

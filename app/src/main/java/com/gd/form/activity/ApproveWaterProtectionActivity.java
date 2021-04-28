@@ -71,6 +71,10 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
     MapView mapView;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -123,7 +127,6 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
-
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
@@ -132,7 +135,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                     @Override
                     public void onResponse(WaterProtectionModel model) {
                         if (model != null) {
-                            if(!TextUtils.isEmpty(model.getStakeString())){
+                            if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")) {
                                 tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
                             tvWaterType.setText(model.getDatadetail().getHydraulicform());
@@ -140,7 +143,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                             tvIsComplete.setText(model.getDatadetail().getCondition());
                             tvHandleMethod.setText(model.getDatadetail().getSolution());
                             String location = model.getDatadetail().getLocate();
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -177,18 +180,24 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-                            //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
-                            }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveWaterProtectionActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
+                            if (model.getDatapproval() != null) {
+                                //审批人
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveWaterProtectionActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
                         }
                     }
@@ -205,8 +214,8 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 Bundle bundle = new Bundle();
-                bundle.putString("formid",formId);
-                openActivity(ApproveFormActivity.class,bundle);
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
                 if (!TextUtils.isEmpty(filePath)) {
@@ -245,6 +254,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

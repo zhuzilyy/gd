@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,16 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
@@ -26,7 +37,9 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -50,28 +63,44 @@ public class PipeHighZoneActivity extends BaseActivity {
     EditText etLocation;
     @BindView(R.id.et_length)
     EditText etLength;
-    @BindView(R.id.et_level)
-    EditText etLevel;
+    @BindView(R.id.tv_level)
+    TextView tvLevel;
+    @BindView(R.id.ll_level)
+    LinearLayout llLevel;
     @BindView(R.id.et_desc)
     EditText etDesc;
     @BindView(R.id.et_controlMethod)
     EditText etControlMethod;
-    @BindView(R.id.et_recognise)
-    EditText etRecognise;
-    @BindView(R.id.et_locationLevel)
-    EditText etLocationLevel;
-    @BindView(R.id.et_riskLevel)
-    EditText etRiskLevel;
+    @BindView(R.id.tv_recognise)
+    TextView tvRecognise;
+    @BindView(R.id.tv_locationLevel)
+    TextView tvLocationLevel;
+    @BindView(R.id.ll_locationLevel)
+    LinearLayout llLocationLevel;
+    @BindView(R.id.tv_riskLevel)
+    TextView tvRiskLevel;
+    @BindView(R.id.ll_riskLevel)
+    LinearLayout llRiskLevel;
     @BindView(R.id.et_ply)
     EditText etPly;
-    @BindView(R.id.et_relativeAreaLevel)
-    EditText etRelativeAreaLevel;
-    @BindView(R.id.et_death)
-    EditText etDeath;
-    @BindView(R.id.et_influence)
-    EditText etInfluence;
-    @BindView(R.id.et_type)
-    EditText etType;
+    @BindView(R.id.tv_relativeAreaLevel)
+    TextView tvRelativeAreaLevel;
+    @BindView(R.id.ll_relativeAreaLevel)
+    LinearLayout llRelativeAreaLevel;
+    @BindView(R.id.tv_death)
+    TextView tvDeath;
+    @BindView(R.id.ll_death)
+    LinearLayout llDeath;
+    @BindView(R.id.tv_influence)
+    TextView tvInfluence;
+    @BindView(R.id.ll_influence)
+    LinearLayout llInfluence;
+    @BindView(R.id.tv_type)
+    TextView tvType;
+    @BindView(R.id.ll_type)
+    LinearLayout llType;
+    @BindView(R.id.ll_recognise)
+    LinearLayout llRecognise;
     @BindView(R.id.rg_isAdd)
     RadioGroup rgIsAdd;
     @BindView(R.id.rb_yes)
@@ -82,12 +111,35 @@ public class PipeHighZoneActivity extends BaseActivity {
     LinearLayout llSearch;
     @BindView(R.id.ll_pipeName)
     LinearLayout llPipeName;
+    @BindView(R.id.tv_fileName1)
+    TextView tvFileName1;
+    @BindView(R.id.tv_fileName2)
+    TextView tvFileName2;
+    @BindView(R.id.tv_fileName3)
+    TextView tvFileName3;
+    @BindView(R.id.ll_selectFile1)
+    LinearLayout llSelectFile1;
+    @BindView(R.id.ll_selectFile2)
+    LinearLayout llSelectFile2;
+    @BindView(R.id.ll_selectFile3)
+    LinearLayout llSelectFile3;
     private String isAdd = "是";
     private String stationId, pipeId, pipeName;
     private String token, userId, highZoneId;
     private final int SEARCH_HIGHZONE = 100;
+    private int FILE_REQUEST_CODE1 = 101;
+    private int FILE_REQUEST_CODE2 = 102;
+    private int FILE_REQUEST_CODE3 = 103;
     private List<Pipelineinfo> pipelineInfoList;
     private ListDialog dialog;
+    private List<String> typeList, recogniseList, locationLevelList,highZoneLevelList,
+            relativeAreaLevelList, riskLevelList, deathList, influenceList;
+    private String selectFileName1, selectFileName2, selectFileName3;
+    private String selectFilePath1, selectFilePath2, selectFilePath3;
+    private Dialog mWeiboDialog;
+    private OSSCredentialProvider ossCredentialProvider;
+    private OSS oss;
+    private String ossFilePath1, ossFilePath2, ossFilePath3;
 
     @Override
     protected void setStatusBar() {
@@ -102,73 +154,146 @@ public class PipeHighZoneActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initListener();
-        getPipelineInfoListRequest();
+        token = (String) SPUtil.get(PipeHighZoneActivity.this, "token", "");
+        userId = (String) SPUtil.get(PipeHighZoneActivity.this, "userId", "");
         tvTitle.setText("高后果区");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+        typeList = new ArrayList<>();
+        recogniseList = new ArrayList<>();
+        locationLevelList = new ArrayList<>();
+        relativeAreaLevelList = new ArrayList<>();
+        riskLevelList = new ArrayList<>();
+        deathList = new ArrayList<>();
+        influenceList = new ArrayList<>();
+        highZoneLevelList = new ArrayList<>();
         dialog = new ListDialog(this);
         if (getIntent() != null) {
-            stationId = getIntent().getExtras().getString("stationId");
-            pipeId = getIntent().getExtras().getString("pipeId");
-            pipeName = getIntent().getExtras().getString("pipeName");
-            highZoneId = getIntent().getExtras().getString("highZoneId");
+//            stationId = getIntent().getExtras().getString("stationId");
+//            pipeId = getIntent().getExtras().getString("pipeId");
+//            pipeName = getIntent().getExtras().getString("pipeName");
+//            highZoneId = getIntent().getExtras().getString("highZoneId");
             String tag = getIntent().getExtras().getString("tag");
             //根据接口获取数据
             if (!TextUtils.isEmpty(highZoneId)) {
                 getHighZoneData(highZoneId);
             }
-            if ("add".equals(tag)) {
+            if ("update".equals(tag)) {
                 btnCommit.setVisibility(View.VISIBLE);
-                llSearch.setVisibility(View.VISIBLE);
+                llSearch.setVisibility(View.GONE);
                 etHighZoneName.setEnabled(true);
                 etLocation.setEnabled(true);
                 etLength.setEnabled(true);
-                etLevel.setEnabled(true);
+                llLevel.setEnabled(true);
                 etDesc.setEnabled(true);
                 etControlMethod.setEnabled(true);
-                etRecognise.setEnabled(true);
-                etLocationLevel.setEnabled(true);
-                etRiskLevel.setEnabled(true);
+                tvRecognise.setEnabled(true);
+                tvLocationLevel.setEnabled(true);
+                tvRiskLevel.setEnabled(true);
                 etPly.setEnabled(true);
-                etRelativeAreaLevel.setEnabled(true);
-                etDeath.setEnabled(true);
-                etInfluence.setEnabled(true);
+                tvRelativeAreaLevel.setEnabled(true);
+                tvDeath.setEnabled(true);
+                tvInfluence.setEnabled(true);
                 rbYes.setEnabled(true);
                 rbNo.setEnabled(true);
                 rgIsAdd.setEnabled(true);
-                etType.setEnabled(true);
+                tvType.setEnabled(true);
+                llType.setEnabled(true);
                 llPipeName.setEnabled(true);
+                llRecognise.setEnabled(true);
+                llLocationLevel.setEnabled(true);
+                llRiskLevel.setEnabled(true);
+                llDeath.setEnabled(true);
+                llInfluence.setEnabled(true);
+                llRelativeAreaLevel.setEnabled(true);
+                llSelectFile1.setEnabled(true);
+                llSelectFile2.setEnabled(true);
+                llSelectFile3.setEnabled(true);
             } else if ("check".equals(tag)) {
                 btnCommit.setVisibility(View.GONE);
                 llSearch.setVisibility(View.GONE);
                 etHighZoneName.setEnabled(false);
                 etLocation.setEnabled(false);
                 etLength.setEnabled(false);
-                etLevel.setEnabled(false);
+                llLevel.setEnabled(false);
                 etDesc.setEnabled(false);
                 etControlMethod.setEnabled(false);
-                etRecognise.setEnabled(false);
-                etLocationLevel.setEnabled(false);
-                etRiskLevel.setEnabled(false);
+                tvRecognise.setEnabled(false);
+                tvLocationLevel.setEnabled(false);
+                tvRiskLevel.setEnabled(false);
                 etPly.setEnabled(false);
-                etRelativeAreaLevel.setEnabled(false);
-                etDeath.setEnabled(false);
-                etInfluence.setEnabled(false);
+                tvRelativeAreaLevel.setEnabled(false);
+                tvDeath.setEnabled(false);
+                tvInfluence.setEnabled(false);
                 rbYes.setEnabled(false);
                 rbNo.setEnabled(false);
                 rgIsAdd.setEnabled(false);
-                etType.setEnabled(false);
-                etType.setEnabled(false);
+                tvType.setEnabled(false);
+                llType.setEnabled(false);
                 llPipeName.setEnabled(false);
+                llRecognise.setEnabled(false);
+                llLocationLevel.setEnabled(false);
+                llRiskLevel.setEnabled(false);
+                llDeath.setEnabled(false);
+                llInfluence.setEnabled(false);
+                llRelativeAreaLevel.setEnabled(false);
+                llSelectFile1.setEnabled(false);
+                llSelectFile2.setEnabled(false);
+                llSelectFile3.setEnabled(false);
             }
         }
-        token = (String) SPUtil.get(PipeHighZoneActivity.this, "token", "");
-        userId = (String) SPUtil.get(PipeHighZoneActivity.this, "userId", "");
+        initListener();
+        getPipelineInfoListRequest();
+        initDialogList();
+
+    }
+
+    private void initDialogList() {
+        typeList.add("人员密集型");
+        typeList.add("易燃易爆场所");
+        typeList.add("特定场所");
+        typeList.add("人员密集型&易燃易爆场所");
+        typeList.add("人员密集型&特定场所");
+        typeList.add("特定场所&易燃易爆场所");
+        typeList.add("特定场所&易燃易爆场所&人员密集型");
+        recogniseList.add("管道经过的四级地区");
+        recogniseList.add("管道经过的三级地区");
+        recogniseList.add("如管径大于762mm，并且最大允许操作压力大于6.9MPa，其天然气管道潜在影响区域内有特定场所的区域");
+        recogniseList.add("如管径小于273mm，并且最大允许操作压力小于1.6MPa，其天然气管道潜在影响区域内有特定场所的区域");
+        recogniseList.add("其他管道两侧各200m内有特定场所的区域");
+        recogniseList.add("除三级、四级地区外，管道两侧各200m内有加油站、油库等易燃易爆场所");
+        locationLevelList.add("一级");
+        locationLevelList.add("二级");
+        locationLevelList.add("三级");
+        locationLevelList.add("四级");
+        relativeAreaLevelList.add("一级");
+        relativeAreaLevelList.add("二级");
+        relativeAreaLevelList.add("三级");
+        relativeAreaLevelList.add("四级");
+        riskLevelList.add("低级");
+        riskLevelList.add("较低级");
+        riskLevelList.add("中级");
+        riskLevelList.add("较高级");
+        riskLevelList.add("高级");
+        deathList.add("130");
+        deathList.add("199");
+        deathList.add("251");
+        deathList.add("301");
+        deathList.add("329");
+        influenceList.add("165");
+        influenceList.add("253");
+        influenceList.add("318");
+        influenceList.add("381");
+        influenceList.add("418");
+        highZoneLevelList.add("Ⅰ级");
+        highZoneLevelList.add("Ⅱ级");
+        highZoneLevelList.add("Ⅲ级");
 
     }
 
     private void getPipelineInfoListRequest() {
 
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -190,22 +315,22 @@ public class PipeHighZoneActivity extends BaseActivity {
                             etHighZoneName.setText(highZoneModel.getName());
                             etLocation.setText(highZoneModel.getLocationdesc());
                             etLength.setText(highZoneModel.getLength() + "");
-                            etLevel.setText(highZoneModel.getLevel());
-                            etType.setText(highZoneModel.getHtype());
+                            tvLevel.setText(highZoneModel.getLevel());
+                            tvType.setText(highZoneModel.getHtype());
                             etDesc.setText(highZoneModel.getDesc());
                             etControlMethod.setText(highZoneModel.getControlmeasures());
-                            etRecognise.setText(highZoneModel.getIdentifiers());
-                            etLocationLevel.setText(highZoneModel.getAreaslevel());
-                            etRiskLevel.setText(highZoneModel.getRisklevel());
+                            tvRecognise.setText(highZoneModel.getIdentifiers());
+                            tvLocationLevel.setText(highZoneModel.getAreaslevel());
+                            tvRiskLevel.setText(highZoneModel.getRisklevel());
                             etPly.setText(highZoneModel.getPipethickness() + "");
-                            etRelativeAreaLevel.setText(highZoneModel.getDesignlevel());
+                            tvRelativeAreaLevel.setText(highZoneModel.getDesignlevel());
                             if (highZoneModel.getAreaslevelflag().equals("是")) {
                                 rbYes.setChecked(true);
                             } else {
                                 rbNo.setChecked(true);
                             }
-                            etDeath.setText(highZoneModel.getArearadius());
-                            etInfluence.setText(highZoneModel.getFluentionareas());
+                            tvDeath.setText(highZoneModel.getArearadius());
+                            tvInfluence.setText(highZoneModel.getFluentionareas());
                         }
                     }
                 });
@@ -232,11 +357,97 @@ public class PipeHighZoneActivity extends BaseActivity {
             R.id.btn_commit,
             R.id.ll_search,
             R.id.ll_pipeName,
+            R.id.ll_type,
+            R.id.ll_recognise,
+            R.id.ll_locationLevel,
+            R.id.ll_relativeAreaLevel,
+            R.id.ll_riskLevel,
+            R.id.ll_death,
+            R.id.ll_influence,
+            R.id.ll_selectFile1,
+            R.id.ll_selectFile2,
+            R.id.ll_selectFile3,
+            R.id.ll_level,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_level:
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvLevel.setText(highZoneLevelList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_selectFile1:
+                Intent intentSelectFile1 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                startActivityForResult(intentSelectFile1, FILE_REQUEST_CODE1);
+                break;
+            case R.id.ll_selectFile2:
+                Intent intentSelectFile2 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                startActivityForResult(intentSelectFile2, FILE_REQUEST_CODE2);
+                break;
+            case R.id.ll_selectFile3:
+                Intent intentSelectFile3 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                startActivityForResult(intentSelectFile3, FILE_REQUEST_CODE3);
+                break;
+            case R.id.ll_influence:
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvInfluence.setText(influenceList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_death:
+                dialog.setData(deathList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvDeath.setText(deathList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_riskLevel:
+                dialog.setData(riskLevelList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRiskLevel.setText(riskLevelList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_relativeAreaLevel:
+                dialog.setData(relativeAreaLevelList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRelativeAreaLevel.setText(relativeAreaLevelList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_locationLevel:
+                dialog.setData(locationLevelList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvLocationLevel.setText(locationLevelList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_recognise:
+                dialog.setData(recogniseList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvRecognise.setVisibility(View.VISIBLE);
+                    tvRecognise.setText(recogniseList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.ll_type:
+                dialog.setData(typeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvType.setText(typeList.get(positionM));
+                    dialog.dismiss();
+                });
                 break;
             case R.id.ll_pipeName:
                 List<String> pipeList = new ArrayList<>();
@@ -269,9 +480,9 @@ public class PipeHighZoneActivity extends BaseActivity {
 
     private void addHighZone() {
         JsonObject params = new JsonObject();
-        if(TextUtils.isEmpty(highZoneId)){
+        if (TextUtils.isEmpty(highZoneId)) {
             params.addProperty("id", 0);
-        }else{
+        } else {
             params.addProperty("id", Integer.parseInt(highZoneId));
         }
         params.addProperty("stakeid", Integer.valueOf(stationId));
@@ -280,18 +491,18 @@ public class PipeHighZoneActivity extends BaseActivity {
         params.addProperty("name", etHighZoneName.getText().toString());
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("length", Double.parseDouble(etLength.getText().toString()));
-        params.addProperty("level", etLevel.getText().toString());
-        params.addProperty("htype", etType.getText().toString());
+        params.addProperty("level", tvLevel.getText().toString());
+        params.addProperty("htype", tvType.getText().toString());
         params.addProperty("desc", etDesc.getText().toString());
         params.addProperty("controlmeasures", etControlMethod.getText().toString());
-        params.addProperty("identifiers", etRecognise.getText().toString());
-        params.addProperty("areaslevel", etLocationLevel.getText().toString());
-        params.addProperty("risklevel", etRiskLevel.getText().toString());
+        params.addProperty("identifiers", tvRecognise.getText().toString());
+        params.addProperty("areaslevel", tvLocationLevel.getText().toString());
+        params.addProperty("risklevel", tvRiskLevel.getText().toString());
         params.addProperty("pipethickness", Double.parseDouble(etPly.getText().toString()));
-        params.addProperty("designlevel", etRelativeAreaLevel.getText().toString());
+        params.addProperty("designlevel", tvRelativeAreaLevel.getText().toString());
         params.addProperty("areaslevelflag", isAdd);
-        params.addProperty("arearadius", etDeath.getText().toString());
-        params.addProperty("fluentionareas", etInfluence.getText().toString());
+        params.addProperty("arearadius", tvDeath.getText().toString());
+        params.addProperty("fluentionareas", tvInfluence.getText().toString());
         Log.i("tag", "params===" + params);
         Net.create(Api.class).addHighZone(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
@@ -332,12 +543,12 @@ public class PipeHighZoneActivity extends BaseActivity {
             return false;
 
         }
-        if (TextUtils.isEmpty(etLevel.getText().toString())) {
-            ToastUtil.show("请输入高后果区等级");
+        if (TextUtils.isEmpty(tvLevel.getText().toString())) {
+            ToastUtil.show("请选择高后果区等级");
             return false;
         }
-        if (TextUtils.isEmpty(etType.getText().toString())) {
-            ToastUtil.show("请输入高后果区类型");
+        if (TextUtils.isEmpty(tvType.getText().toString())) {
+            ToastUtil.show("请选择高后果区类型");
             return false;
         }
         if (TextUtils.isEmpty(etDesc.getText().toString())) {
@@ -348,16 +559,16 @@ public class PipeHighZoneActivity extends BaseActivity {
             ToastUtil.show("请输入高后果区管控措施");
             return false;
         }
-        if (TextUtils.isEmpty(etRecognise.getText().toString())) {
-            ToastUtil.show("请输入高后果区识别项");
+        if (TextUtils.isEmpty(tvRecognise.getText().toString())) {
+            ToastUtil.show("请选择高后果区识别项");
             return false;
         }
-        if (TextUtils.isEmpty(etLocationLevel.getText().toString())) {
-            ToastUtil.show("请输入地区等级");
+        if (TextUtils.isEmpty(tvLocationLevel.getText().toString())) {
+            ToastUtil.show("请选择地区等级");
             return false;
         }
-        if (TextUtils.isEmpty(etRiskLevel.getText().toString())) {
-            ToastUtil.show("请输入风险等级");
+        if (TextUtils.isEmpty(tvRiskLevel.getText().toString())) {
+            ToastUtil.show("请选择风险等级");
             return false;
         }
         if (TextUtils.isEmpty(etPly.getText().toString())) {
@@ -369,20 +580,16 @@ public class PipeHighZoneActivity extends BaseActivity {
             return false;
 
         }
-        if (TextUtils.isEmpty(etRelativeAreaLevel.getText().toString())) {
-            ToastUtil.show("请输入对应设计地区等级");
+        if (TextUtils.isEmpty(tvRelativeAreaLevel.getText().toString())) {
+            ToastUtil.show("请选择对应设计地区等级");
             return false;
         }
-        if (TextUtils.isEmpty(etRelativeAreaLevel.getText().toString())) {
-            ToastUtil.show("请输入对应设计地区等级");
+        if (TextUtils.isEmpty(tvDeath.getText().toString())) {
+            ToastUtil.show("请选择致死半径区域");
             return false;
         }
-        if (TextUtils.isEmpty(etDeath.getText().toString())) {
-            ToastUtil.show("请输入致死半径区域");
-            return false;
-        }
-        if (TextUtils.isEmpty(etInfluence.getText().toString())) {
-            ToastUtil.show("请输入潜在影响区域");
+        if (TextUtils.isEmpty(tvInfluence.getText().toString())) {
+            ToastUtil.show("请选择潜在影响区域");
             return false;
         }
         return true;
@@ -399,22 +606,75 @@ public class PipeHighZoneActivity extends BaseActivity {
             etHighZoneName.setText(highZoneModel.getName());
             etLocation.setText(highZoneModel.getLocationdesc());
             etLength.setText(highZoneModel.getLength() + "");
-            etLevel.setText(highZoneModel.getLevel());
-            etType.setText(highZoneModel.getHtype());
+            tvLevel.setText(highZoneModel.getLevel());
+            tvType.setText(highZoneModel.getHtype());
             etDesc.setText(highZoneModel.getDesc());
             etControlMethod.setText(highZoneModel.getControlmeasures());
-            etRecognise.setText(highZoneModel.getIdentifiers());
-            etLocationLevel.setText(highZoneModel.getAreaslevel());
-            etRiskLevel.setText(highZoneModel.getRisklevel());
+            tvRecognise.setText(highZoneModel.getIdentifiers());
+            tvLocationLevel.setText(highZoneModel.getAreaslevel());
+            tvRiskLevel.setText(highZoneModel.getRisklevel());
             etPly.setText(highZoneModel.getPipethickness() + "");
-            etRelativeAreaLevel.setText(highZoneModel.getDesignlevel());
+            tvRelativeAreaLevel.setText(highZoneModel.getDesignlevel());
             if (highZoneModel.getAreaslevelflag().equals("是")) {
                 rbYes.setChecked(true);
             } else {
                 rbNo.setChecked(true);
             }
-            etDeath.setText(highZoneModel.getArearadius());
-            etInfluence.setText(highZoneModel.getFluentionareas());
+            tvDeath.setText(highZoneModel.getArearadius());
+            tvInfluence.setText(highZoneModel.getFluentionareas());
+        } else if (requestCode == FILE_REQUEST_CODE1) {
+            selectFileName1 = data.getStringExtra("fileName");
+            selectFilePath1 = data.getStringExtra("selectFilePath");
+            tvFileName1.setText(selectFileName1);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName1, selectFilePath1, 1);
+        } else if (requestCode == FILE_REQUEST_CODE2) {
+            selectFileName2 = data.getStringExtra("fileName");
+            selectFilePath2 = data.getStringExtra("selectFilePath");
+            tvFileName2.setText(selectFileName2);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName2, selectFilePath2, 2);
+        } else if (requestCode == FILE_REQUEST_CODE3) {
+            selectFileName3 = data.getStringExtra("fileName");
+            selectFilePath3 = data.getStringExtra("selectFilePath");
+            tvFileName3.setText(selectFileName3);
+            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+            mWeiboDialog.getWindow().setDimAmount(0f);
+            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName3, selectFilePath3, 3);
         }
+
+    }
+
+    public void uploadOffice(String fileName, String filePath, int index) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                if (index == 1) {
+                    ossFilePath1 = fileName;
+                } else if (index == 2) {
+                    ossFilePath2 = fileName;
+                } else {
+                    ossFilePath3 = fileName;
+                }
+                WeiboDialogUtils.closeDialog(mWeiboDialog);
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
     }
 }

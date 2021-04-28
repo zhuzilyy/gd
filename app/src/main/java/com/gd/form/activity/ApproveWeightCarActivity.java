@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -83,6 +84,10 @@ public class ApproveWeightCarActivity extends BaseActivity {
     MapView mapView;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -144,10 +149,10 @@ public class ApproveWeightCarActivity extends BaseActivity {
                         if (model != null) {
                             WeightCarDetail dataDetail = model.getDatadetail();
                             tvDepartmentName.setText(dataDetail.getDepartmentid());
-                            if(!TextUtils.isEmpty(model.getPipeString())){
+                            if(!TextUtils.isEmpty(model.getPipeString()) && model.getPipeString().contains(":")){
                                 tvPipeName.setText(model.getPipeString().split(":")[1]);
                             }
-                            if (!TextUtils.isEmpty(model.getStakeString())) {
+                            if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")) {
                                 tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
                             tvAddress.setText(dataDetail.getAdmposition());
@@ -159,7 +164,7 @@ public class ApproveWeightCarActivity extends BaseActivity {
                             tvIsProtect.setText(dataDetail.getPipeprotect());
                             tvRemark.setText(dataDetail.getRemarks());
                             String location = model.getDatadetail().getLocate();
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -199,18 +204,25 @@ public class ApproveWeightCarActivity extends BaseActivity {
                             }
 
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if(model.getDatapproval()!=null){
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveWeightCarActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveWeightCarActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });

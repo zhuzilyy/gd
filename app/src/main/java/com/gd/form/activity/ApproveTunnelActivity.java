@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -111,6 +112,10 @@ public class ApproveTunnelActivity extends BaseActivity {
     MapView mapView;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -118,6 +123,7 @@ public class ApproveTunnelActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -131,6 +137,7 @@ public class ApproveTunnelActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("隧道外部检查表");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
@@ -206,7 +213,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             tvArmProblem.setText(dataDetail.getCol10desc());
                             tvOtherProblem.setText(dataDetail.getCol11());
                             String location = model.getDatadetail().getLocate();
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -245,18 +252,25 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
 
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if (model.getDatapproval() != null) {
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveTunnelActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveTunnelActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -272,11 +286,11 @@ public class ApproveTunnelActivity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 Bundle bundle = new Bundle();
-                bundle.putString("formid",formId);
-                openActivity(ApproveFormActivity.class,bundle);
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -313,4 +327,9 @@ public class ApproveTunnelActivity extends BaseActivity {
         mapView.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
+    }
 }

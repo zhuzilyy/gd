@@ -48,7 +48,6 @@ public class SignActivity extends BaseActivity {
     private Dialog mWeiboDialog;
     private String formId, advice;
     private String token, userId;
-    private boolean isSucces;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -71,7 +70,6 @@ public class SignActivity extends BaseActivity {
             formId = getIntent().getExtras().getString("formId");
             advice = getIntent().getExtras().getString("advice");
         }
-        Util.activityList.add(this);
     }
 
     @OnClick({
@@ -147,14 +145,9 @@ public class SignActivity extends BaseActivity {
                             intent.setAction("com.action.updateApprove");
                             sendBroadcast(intent);
                             Util.finishAll();
+                            finish();
                         }
                     }
                 });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Util.activityList.remove(this);
     }
 }

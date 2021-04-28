@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.gd.form.R;
 import com.gd.form.model.NoApproveModel;
-import com.gd.form.utils.TimeUtil;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class NoApproveAdapter extends BaseRecyclerViewAdapter<NoApproveModel> {
         tvFormType.setText(model.getFormname());
         tvDepartmentName.setText(model.getDeptname());
         tvNotice.setText(model.getEmployname());
-        tvTime.setText(TimeUtil.longToFormatTimeHMS(model.getCreatime().getTime()));
+        tvTime.setText(model.getExpireTimeString());
         viewHolder.getContentView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -110,6 +111,10 @@ public class ApproveHighZoneActivity extends BaseActivity {
     View viewLocation;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private PhotoAdapter photoAdapter;
@@ -117,6 +122,7 @@ public class ApproveHighZoneActivity extends BaseActivity {
     private MarkerOptions markerOption;
     private AMap aMap;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -130,6 +136,7 @@ public class ApproveHighZoneActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("高后果区徒步巡检表");
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
@@ -165,19 +172,23 @@ public class ApproveHighZoneActivity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
+        Log.i("tag", "formid===" + formId);
         Net.create(Api.class).getHighZoneDetail(token, params)
                 .enqueue(new NetCallback<HighZoneDetailModel>(this, true) {
                     @Override
                     public void onResponse(HighZoneDetailModel model) {
                         if (model != null) {
                             HighZoneDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
+                            if (!TextUtils.isEmpty(model.getDeptString()) && model.getDeptString().contains(":")) {
                                 tvArea.setText(model.getDeptString().split(":")[1]);
                             }
                             tvWeather.setText(dataDetail.getWeathers());
-                            if (!TextUtils.isEmpty(model.getStakeString())) {
-                                tvStationNo.setText(model.getStakeString().split(";")[0].split(":")[1]
-                                        + "到" + model.getStakeString().split(";")[1].split(":")[1]);
+                            if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(";")) {
+                                if (model.getStakeString().split(";")[0].contains(":") &&
+                                        model.getStakeString().split(";")[1].contains(":")) {
+                                    tvStationNo.setText(model.getStakeString().split(";")[0].split(":")[1]
+                                            + "到" + model.getStakeString().split(";")[1].split(":")[1]);
+                                }
                             }
                             tvBare.setText(dataDetail.getCol1());
                             tvMachine.setText(dataDetail.getCol2());
@@ -199,7 +210,7 @@ public class ApproveHighZoneActivity extends BaseActivity {
                             tvResult.setText(dataDetail.getResultdetail());
                             tvStatus.setText(dataDetail.getConditions());
                             String location = dataDetail.getLocate();
-                            if (!TextUtils.isEmpty(location)) {
+                            if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
                                 markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
@@ -238,18 +249,25 @@ public class ApproveHighZoneActivity extends BaseActivity {
                             }
 
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if (model.getDatapproval() != null) {
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveHighZoneActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveHighZoneActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -264,10 +282,12 @@ public class ApproveHighZoneActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -302,5 +322,11 @@ public class ApproveHighZoneActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.add(this);
     }
 }

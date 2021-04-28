@@ -88,11 +88,16 @@ public class ApproveWaterActivity extends BaseActivity {
     View viewLocation;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -106,6 +111,7 @@ public class ApproveWaterActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("水工施工检查日志");
         token = (String) SPUtil.get(ApproveWaterActivity.this, "token", "");
         userId = (String) SPUtil.get(ApproveWaterActivity.this, "userId", "");
@@ -138,7 +144,7 @@ public class ApproveWaterActivity extends BaseActivity {
                     public void onResponse(WaterDetailModel model) {
                         if (model != null) {
                             WaterDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
+                            if (!TextUtils.isEmpty(model.getDeptString()) && model.getDeptString().contains(":")) {
                                 tvArea.setText(model.getDeptString().split(":")[1]);
                             }
                             tvAddress.setText(dataDetail.getLocate());
@@ -154,7 +160,7 @@ public class ApproveWaterActivity extends BaseActivity {
                             tvCompany.setText(dataDetail.getConstructionunit());
                             tvJobLocation.setText(dataDetail.getLocate());
                             tvMethod.setText(dataDetail.getHandlemode());
-                            if (!TextUtils.isEmpty(model.getStakeString())) {
+                            if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")) {
                                 tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
                             //上传的图片
@@ -183,18 +189,25 @@ public class ApproveWaterActivity extends BaseActivity {
                                 tvFileName.setText("无");
                             }
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if(model.getDatapproval()!=null){
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveWaterActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveWaterActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -209,10 +222,12 @@ public class ApproveWaterActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -222,4 +237,9 @@ public class ApproveWaterActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
+    }
 }

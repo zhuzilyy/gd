@@ -101,6 +101,7 @@ public class FormActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
+                Log.i("tag","formId=="+formModelList.get(position).getFormid());
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);

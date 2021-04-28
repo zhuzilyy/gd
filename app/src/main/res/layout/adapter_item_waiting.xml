@@ -97,7 +97,7 @@
 
         <TextView
             android:textColor="#000"
-            android:text="2021-5-1"
+            android:text="未知"
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"

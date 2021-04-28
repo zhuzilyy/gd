@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <include layout="@layout/layout_title" />
+
     <LinearLayout
         android:id="@+id/ll_search"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
         <TextView
-            android:gravity="center_vertical"
             android:id="@+id/mainSearchTextView"
             android:layout_width="0dp"
-            android:layout_weight="4"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d_9"
             android:layout_marginLeft="@dimen/d_9"
@@ -21,15 +22,18 @@
             android:layout_marginEnd="@dimen/d_9"
             android:layout_marginRight="@dimen/d_9"
             android:layout_marginBottom="@dimen/d_5"
+            android:layout_weight="4"
             android:background="@drawable/main_edit_bg"
             android:drawableRight="@mipmap/main_search"
             android:drawablePadding="@dimen/d_9"
+            android:gravity="center_vertical"
             android:hint="请输入搜索内容"
             android:imeOptions="actionSearch"
             android:padding="@dimen/d_6"
             android:singleLine="true" />
 
     </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -46,7 +50,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,12 +89,14 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
 
             <!--起始桩号-->
@@ -97,45 +104,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="起始桩号"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_startStationNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="起始桩号"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
 
             <!--行政区域-->
@@ -143,180 +151,210 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_location"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_gravity="center"
-                    android:text="行政区域"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#FF000000"
-                    />
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:paddingBottom="@dimen/d_5"
+                        android:text="行政区域"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/d_5"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/d_18"
+                        android:layout_height="@dimen/d_18"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+                </LinearLayout>
+
                 <EditText
                     android:id="@+id/et_location"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_40"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
                     android:hint="行政区域"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <!--占压性质-->
             <LinearLayout
+                android:id="@+id/ll_pipeProperty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="占压性质"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
-                <EditText
-                    android:id="@+id/et_pipeProperty"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_pipeProperty"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
-                    android:hint="占压性质"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <!--占压类型-->
             <LinearLayout
+                android:id="@+id/ll_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="占压类型"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
-                <EditText
-                    android:id="@+id/et_type"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_type"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
                     android:singleLine="true"
-                    android:hint="占压类型"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <!--占压名称-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="占压名称"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_name"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="占压名称"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
             <!--形成时间-->
             <LinearLayout
@@ -324,20 +362,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="形成时间"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <TextView
                     android:id="@+id/tv_time"
                     android:layout_width="0dp"
@@ -366,9 +404,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
 
             <!--是否高后果区-->
@@ -378,7 +416,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -406,13 +445,13 @@
                     android:textSize="@dimen/s_16">
 
                     <RadioButton
-                        android:checked="true"
                         android:id="@+id/rb_yes"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/d_5"
                         android:background="@android:color/transparent"
                         android:button="@null"
+                        android:checked="true"
                         android:drawableLeft="@drawable/radio_btn"
                         android:text="是" />
 
@@ -433,7 +472,8 @@
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
 
             <!--占压或安全距离不足长度(m)-->
@@ -441,323 +481,395 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="占压或安全距离不足长度(m)"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
-                    android:digits="1234567890."
-                    android:inputType="number"
                     android:id="@+id/et_missLength"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:digits="1234567890."
+                    android:gravity="end"
                     android:hint="占压或安全距离不足长度(m)"
-                    />
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--与管道最小间距(m)-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="与管道最小间距(m)"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
-                    android:digits="1234567890."
-                    android:inputType="number"
                     android:id="@+id/et_minDistance"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:digits="1234567890."
+                    android:gravity="end"
                     android:hint="与管道最小间距(m)"
-                    />
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--占压或安全距离不足面积(㎡)-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="占压或安全距离不足面积(㎡)"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
-                    android:digits="1234567890."
-                    android:inputType="number"
                     android:id="@+id/et_missArea"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:digits="1234567890."
+                    android:gravity="end"
                     android:hint="占压或安全距离不足面积(㎡)"
-                    />
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--人员活动情况-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="人员活动情况"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_personActivity"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="人员活动情况"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--隐患内容描述-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
+                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:gravity="center"
-                >
+                android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="隐患内容描述"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_des"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="隐患内容描述"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
 
             <!--风险评价-->
             <LinearLayout
+                android:id="@+id/ll_riskEvaluate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
-                    android:text="风险评价"
-                    android:textSize="@dimen/s_16"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="风险评价-事故概率"
                     android:textColor="#FF000000"
-                    />
-                <EditText
-                    android:id="@+id/et_riskEvaluate"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_riskEvaluate"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="风险评价"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
+
+
+            <!--风险评价事故后果-->
+            <LinearLayout
+                android:id="@+id/ll_riskResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="风险评价-事故后果"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_riskResult"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:hint="风险评价"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
 
 
             <!--隐患类型-->
             <LinearLayout
+                android:id="@+id/ll_riskType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="隐患类型"
-                    android:textSize="@dimen/s_16"
                     android:textColor="#FF000000"
-                    />
-                <EditText
-                    android:id="@+id/et_riskType"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_riskType"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
-                    android:singleLine="true"
+                    android:gravity="end"
                     android:hint="隐患类型"
-                    />
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
 
             <!--整改前控制措施-->
@@ -765,45 +877,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
-                    android:text="整改前控制措施"
-                    android:textSize="@dimen/s_16"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="日常管控措施"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_beforeChangeMethod"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
+                    android:hint="日常管控措施"
                     android:singleLine="true"
-                    android:hint="整改前控制措施"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
 
 
             <!--整改控制措施-->
@@ -811,61 +922,109 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
                 android:gravity="center"
-                >
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_gravity="center"
-                    android:text="整改控制措施"
-                    android:textSize="@dimen/s_16"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="整改计划"
                     android:textColor="#FF000000"
-                    />
+                    android:textSize="@dimen/s_16" />
+
                 <EditText
                     android:id="@+id/et_changeMethod"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/s_16"
-                    android:textColor="#A6000000"
-                    android:gravity="end"
-                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end"
+                    android:hint="整改计划"
                     android:singleLine="true"
-                    android:hint="整改控制措施"
-                    />
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
-                android:background="#FFE5E5E5"
+                android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:layout_marginStart="@dimen/d_12"/>
+                android:background="#FFE5E5E5" />
+
+            <!--选择图片-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_selectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:layout_marginTop="@dimen/d_10"
+                        android:layout_marginBottom="@dimen/d_10"
+                        android:text="添加照片"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvResultPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:paddingBottom="@dimen/d_5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
 
             <Button
                 android:id="@+id/btn_commit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d_30"
-                android:layout_marginBottom="@dimen/d_30"
                 android:layout_marginStart="@dimen/d_30"
                 android:layout_marginLeft="@dimen/d_30"
+                android:layout_marginTop="@dimen/d_30"
                 android:layout_marginEnd="@dimen/d_30"
                 android:layout_marginRight="@dimen/d_30"
-                android:text="保存"
+                android:layout_marginBottom="@dimen/d_30"
                 android:background="@drawable/button_ship"
-                android:textSize="@dimen/s_18"
+                android:text="保存"
                 android:textColor="@color/write"
-                />
+                android:textSize="@dimen/s_18" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

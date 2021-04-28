@@ -171,6 +171,10 @@ public class SdwbActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(SdwbActivity.this, "token", "");
+        userId = (String) SPUtil.get(SdwbActivity.this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         dialog = new ListDialog(mContext);
         path = new ArrayList<>();
         nameList = new ArrayList<>();
@@ -183,10 +187,6 @@ public class SdwbActivity extends BaseActivity {
         initListener();
         initGallery();
         initConfig();
-        token = (String) SPUtil.get(SdwbActivity.this, "token", "");
-        userId = (String) SPUtil.get(SdwbActivity.this, "userId", "");
-        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
-        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
     }
 
     private void initGallery() {
@@ -410,7 +410,7 @@ public class SdwbActivity extends BaseActivity {
     }
 
     private void pipeDepartmentInfoGetList() {
-        Net.create(Api.class).pipedepartmentinfoGetList()
+        Net.create(Api.class).pipedepartmentinfoGetList(token)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
                     public void onResponse(List<Department> list) {
@@ -421,7 +421,7 @@ public class SdwbActivity extends BaseActivity {
 
     private void getPipelineInfoListRequest() {
 
-        Net.create(Api.class).pipelineinfosget()
+        Net.create(Api.class).pipelineinfosget(token)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
@@ -583,6 +583,9 @@ public class SdwbActivity extends BaseActivity {
                     public void onResponse(ServerModel result) {
                         ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
                             finish();
                         }
 

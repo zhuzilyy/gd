@@ -17,6 +17,7 @@ import com.gd.form.model.Pipemploys;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -39,10 +40,12 @@ public class ApproverActivity extends BaseActivity {
     private List<String> nameList = new ArrayList<>();
     private List<String> nameIdList = new ArrayList<>();
     private UsersExpandableListAdapter adapter;
-
+    private String token, userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        token = (String) SPUtil.get(ApproverActivity.this, "token", "");
+        userId = (String) SPUtil.get(ApproverActivity.this, "userId", "");
         tvTitle.setText("审批人");
         //  设置分组项的点击监听事件
         lv_users.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -81,10 +84,9 @@ public class ApproverActivity extends BaseActivity {
         getListRequest();
     }
 
-
     private void getListRequest() {
 
-        Net.create(Api.class).pipemploysGetList()
+        Net.create(Api.class).pipemploysGetList(token)
                 .enqueue(new NetCallback<List<Pipemploys>>(this, true) {
                     @Override
                     public void onResponse(List<Pipemploys> list) {

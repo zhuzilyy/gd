@@ -84,6 +84,10 @@ public class ApproveDeviceActivity extends BaseActivity {
     View viewLocation;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.tv_approveAdvice)
+    TextView tvApproveAdvice;
+    @BindView(R.id.ll_approveAdvice)
+    LinearLayout llApproveAdvice;
     private String formId;
     private String token, userId;
     private PhotoAdapter photoAdapter;
@@ -102,6 +106,7 @@ public class ApproveDeviceActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.activityList.add(this);
         tvTitle.setText("去耦合器测试");
         mapView.setVisibility(View.GONE);
         llLocation.setVisibility(View.GONE);
@@ -134,10 +139,10 @@ public class ApproveDeviceActivity extends BaseActivity {
                     public void onResponse(DeviceDetailModel model) {
                         if (model != null) {
                             DeviceDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
+                            if (!TextUtils.isEmpty(model.getDeptString()) && model.getDeptString().contains(":")) {
                                 tvArea.setText(model.getDeptString().split(":")[1]);
                             }
-                            if (!TextUtils.isEmpty(model.getPipeString())) {
+                            if (!TextUtils.isEmpty(model.getPipeString()) && model.getPipeString().contains(":")) {
                                 tvPipeName.setText(model.getPipeString().split(":")[1]);
                             }
                             tvStationNo.setText(dataDetail.getStakeid());
@@ -176,20 +181,26 @@ public class ApproveDeviceActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-
                             //审批人
-                            String approval = model.getDatapproval().getEmployid();
-                            if (!TextUtils.isEmpty(approval)) {
-                                tvSpr.setText(approval.split(":")[1]);
+                            if(model.getDatapproval()!=null){
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval)) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveDeviceActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
                             }
-                            //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                            tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                            //显示审批图片
-                            if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                Glide.with(ApproveDeviceActivity.this).
-                                        load(model.getDatapproval().getSignfilepath()).
-                                        into(ivApproveStatus);
-                            }
+
                         }
                     }
                 });
@@ -204,7 +215,9 @@ public class ApproveDeviceActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                openActivity(ApproveFormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("formid",formId);
+                openActivity(ApproveFormActivity.class,bundle);
                 break;
             case R.id.ll_file:
                 if(!TextUtils.isEmpty(filePath)){
@@ -215,5 +228,11 @@ public class ApproveDeviceActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Util.activityList.remove(this);
     }
 }
