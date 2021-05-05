@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.gd.form.R;
 import com.gd.form.activity.PipeTagActivity;
+import com.gd.form.model.StakeModel;
 
 import java.util.List;
 
@@ -15,18 +17,24 @@ import java.util.List;
  * <p>创建人：wh
  * <p>创建时间：2020/5/11
  */
-public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<String> {
+public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<StakeModel> {
     /**
      * @param context  {@link Context}
      * @param list     数据集合
      * @param layoutId RecyclerView item布局ID
      */
-    public PipeBaseInfoAdapter(Context context, List<String> list, int layoutId) {
+    public PipeBaseInfoAdapter(Context context, List<StakeModel> list, int layoutId) {
         super(context, list, layoutId);
     }
 
     @Override
-    protected void bindData(BaseViewHolder viewHolder, String value, int position) {
+    protected void bindData(BaseViewHolder viewHolder, StakeModel model, int position) {
+        TextView tvDepartmentName = viewHolder.getView(R.id.tv_departmentName);
+        TextView tvPipeName = viewHolder.getView(R.id.tv_pipeName);
+        TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
+        tvStationNo.setText(model.getName());
+        tvDepartmentName.setText(model.getDeptname());
+        tvPipeName.setText(model.getLinename());
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

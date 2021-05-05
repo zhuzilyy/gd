@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,7 +38,6 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
-import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
@@ -124,7 +124,7 @@ public class PipeHighZoneActivity extends BaseActivity {
     @BindView(R.id.ll_selectFile3)
     LinearLayout llSelectFile3;
     private String isAdd = "是";
-    private String stationId, pipeId, pipeName;
+    private String stationId, pipeName;
     private String token, userId, highZoneId;
     private final int SEARCH_HIGHZONE = 100;
     private int FILE_REQUEST_CODE1 = 101;
@@ -132,7 +132,7 @@ public class PipeHighZoneActivity extends BaseActivity {
     private int FILE_REQUEST_CODE3 = 103;
     private List<Pipelineinfo> pipelineInfoList;
     private ListDialog dialog;
-    private List<String> typeList, recogniseList, locationLevelList,highZoneLevelList,
+    private List<String> typeList, recogniseList, locationLevelList, highZoneLevelList,
             relativeAreaLevelList, riskLevelList, deathList, influenceList;
     private String selectFileName1, selectFileName2, selectFileName3;
     private String selectFilePath1, selectFilePath2, selectFilePath3;
@@ -140,7 +140,9 @@ public class PipeHighZoneActivity extends BaseActivity {
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
     private String ossFilePath1, ossFilePath2, ossFilePath3;
-
+    private String tag;
+    private String fileName1, fileName2, fileName3,uploadPath1,uploadPath2,uploadPath3;
+    private int pipeId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -169,11 +171,8 @@ public class PipeHighZoneActivity extends BaseActivity {
         highZoneLevelList = new ArrayList<>();
         dialog = new ListDialog(this);
         if (getIntent() != null) {
-//            stationId = getIntent().getExtras().getString("stationId");
-//            pipeId = getIntent().getExtras().getString("pipeId");
-//            pipeName = getIntent().getExtras().getString("pipeName");
-//            highZoneId = getIntent().getExtras().getString("highZoneId");
-            String tag = getIntent().getExtras().getString("tag");
+            highZoneId = getIntent().getExtras().getString("highZoneId");
+            tag = getIntent().getExtras().getString("tag");
             //根据接口获取数据
             if (!TextUtils.isEmpty(highZoneId)) {
                 getHighZoneData(highZoneId);
@@ -237,9 +236,9 @@ public class PipeHighZoneActivity extends BaseActivity {
                 llDeath.setEnabled(false);
                 llInfluence.setEnabled(false);
                 llRelativeAreaLevel.setEnabled(false);
-                llSelectFile1.setEnabled(false);
-                llSelectFile2.setEnabled(false);
-                llSelectFile3.setEnabled(false);
+//                llSelectFile1.setEnabled(false);
+//                llSelectFile2.setEnabled(false);
+//                llSelectFile3.setEnabled(false);
             }
         }
         initListener();
@@ -305,6 +304,7 @@ public class PipeHighZoneActivity extends BaseActivity {
     private void getHighZoneData(String highZoneId) {
         JsonObject params = new JsonObject();
         params.addProperty("id", highZoneId);
+        Log.i("tag","params=="+params);
         Net.create(Api.class).getHighZoneData(token, params)
                 .enqueue(new NetCallback<List<HighZoneModel>>(this, true) {
                     @Override
@@ -331,6 +331,31 @@ public class PipeHighZoneActivity extends BaseActivity {
                             }
                             tvDeath.setText(highZoneModel.getArearadius());
                             tvInfluence.setText(highZoneModel.getFluentionareas());
+                            fileName1 = highZoneModel.getFilename1();
+                            fileName2 = highZoneModel.getFilename2();
+                            fileName3 = highZoneModel.getFilename3();
+                            if(!TextUtils.isEmpty(fileName1) && fileName1.contains("/")){
+                                fileName1 =  fileName1.split("/")[1];
+                            }
+                            if(!TextUtils.isEmpty(fileName2) && fileName2.contains("/")){
+                                fileName2 =  fileName2.split("/")[1];
+                            }
+                            if(!TextUtils.isEmpty(fileName3) && fileName3.contains("/")){
+                                fileName3 =  fileName3.split("/")[1];
+                            }
+                            pipeId = highZoneModel.getPipeid();
+                            uploadPath1 = highZoneModel.getUploadfile1();
+                            uploadPath2 = highZoneModel.getUploadfile2();
+                            uploadPath3 = highZoneModel.getUploadfile3();
+                            if (!TextUtils.isEmpty(fileName1)) {
+                                tvFileName1.setText(fileName1);
+                            }
+                            if (!TextUtils.isEmpty(fileName2)) {
+                                tvFileName2.setText(fileName2);
+                            }
+                            if (!TextUtils.isEmpty(fileName3)) {
+                                tvFileName3.setText(fileName3);
+                            }
                         }
                     }
                 });
@@ -375,6 +400,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_level:
+                dialog.setData(highZoneLevelList);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvLevel.setText(highZoneLevelList.get(positionM));
@@ -382,18 +408,45 @@ public class PipeHighZoneActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_selectFile1:
-                Intent intentSelectFile1 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                startActivityForResult(intentSelectFile1, FILE_REQUEST_CODE1);
+                if ("check".equals(tag)) {
+                    if (!uploadPath1.equals("00")) {
+                        Uri uri = Uri.parse(uploadPath1);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                } else {
+                    Intent intentSelectFile1 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                    startActivityForResult(intentSelectFile1, FILE_REQUEST_CODE1);
+                }
+
                 break;
             case R.id.ll_selectFile2:
-                Intent intentSelectFile2 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                startActivityForResult(intentSelectFile2, FILE_REQUEST_CODE2);
+                if ("check".equals(tag)) {
+                    if (!uploadPath2.equals("00")) {
+                        Uri uri = Uri.parse(uploadPath2);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                } else {
+                    Intent intentSelectFile2 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                    startActivityForResult(intentSelectFile2, FILE_REQUEST_CODE2);
+                }
+
                 break;
             case R.id.ll_selectFile3:
-                Intent intentSelectFile3 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                startActivityForResult(intentSelectFile3, FILE_REQUEST_CODE3);
+                if ("check".equals(tag)) {
+                    if (!uploadPath3.equals("00")) {
+                        Uri uri = Uri.parse(uploadPath3);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                } else {
+                    Intent intentSelectFile3 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+                    startActivityForResult(intentSelectFile3, FILE_REQUEST_CODE3);
+                }
                 break;
             case R.id.ll_influence:
+                dialog.setData(influenceList);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvInfluence.setText(influenceList.get(positionM));
@@ -462,7 +515,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvPipeName.setText(pipeList.get(positionM));
-                    pipeId = pipeIdList.get(positionM) + "";
+                    pipeId = pipeIdList.get(positionM);
                     dialog.dismiss();
                 });
                 break;
@@ -472,22 +525,16 @@ public class PipeHighZoneActivity extends BaseActivity {
                 break;
             case R.id.btn_commit:
                 if (paramsComplete()) {
-                    addHighZone();
+                    updateHighZone();
                 }
                 break;
         }
     }
 
-    private void addHighZone() {
+    private void updateHighZone() {
         JsonObject params = new JsonObject();
-        if (TextUtils.isEmpty(highZoneId)) {
-            params.addProperty("id", 0);
-        } else {
-            params.addProperty("id", Integer.parseInt(highZoneId));
-        }
-        params.addProperty("stakeid", Integer.valueOf(stationId));
+        params.addProperty("id", Integer.parseInt(highZoneId));
         params.addProperty("pipeid", Integer.valueOf(pipeId));
-        params.addProperty("pipedesc", tvPipeName.getText().toString());
         params.addProperty("name", etHighZoneName.getText().toString());
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("length", Double.parseDouble(etLength.getText().toString()));
@@ -503,19 +550,31 @@ public class PipeHighZoneActivity extends BaseActivity {
         params.addProperty("areaslevelflag", isAdd);
         params.addProperty("arearadius", tvDeath.getText().toString());
         params.addProperty("fluentionareas", tvInfluence.getText().toString());
+        if (!TextUtils.isEmpty(ossFilePath1)) {
+            params.addProperty("uploadfile1", ossFilePath1);
+        } else {
+            params.addProperty("uploadfile1", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath2)) {
+            params.addProperty("uploadfile2", ossFilePath2);
+        } else {
+            params.addProperty("uploadfile2", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath3)) {
+            params.addProperty("uploadfile3", ossFilePath3);
+        } else {
+            params.addProperty("uploadfile3", "00");
+        }
         Log.i("tag", "params===" + params);
-        Net.create(Api.class).addHighZone(token, params)
+        Net.create(Api.class).updateHighZone(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
-                            ToastUtil.show("保存成功");
-                            Intent intent = new Intent();
-                            intent.setAction("com.action.update");
-                            sendBroadcast(intent);
+                            ToastUtil.show("更新成功");
                             finish();
                         } else {
-                            ToastUtil.show("保存失败");
+                            ToastUtil.show("更新失败");
                         }
                     }
                 });
@@ -628,21 +687,24 @@ public class PipeHighZoneActivity extends BaseActivity {
             tvFileName1.setText(selectFileName1);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName1, selectFilePath1, 1);
+//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName1, selectFilePath1, 1);
+            uploadOffice("highaccount/"+selectFileName1, selectFilePath1, 1);
         } else if (requestCode == FILE_REQUEST_CODE2) {
             selectFileName2 = data.getStringExtra("fileName");
             selectFilePath2 = data.getStringExtra("selectFilePath");
             tvFileName2.setText(selectFileName2);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName2, selectFilePath2, 2);
+//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName2, selectFilePath2, 2);
+            uploadOffice("highaccount/"+selectFileName2, selectFilePath2, 2);
         } else if (requestCode == FILE_REQUEST_CODE3) {
             selectFileName3 = data.getStringExtra("fileName");
             selectFilePath3 = data.getStringExtra("selectFilePath");
             tvFileName3.setText(selectFileName3);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName3, selectFilePath3, 3);
+//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName3, selectFilePath3, 3);
+            uploadOffice("highaccount/"+selectFileName3, selectFilePath3, 3);
         }
 
     }

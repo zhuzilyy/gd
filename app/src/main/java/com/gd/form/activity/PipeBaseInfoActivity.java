@@ -14,12 +14,12 @@ import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.PipeBaseInfoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.StakeModel;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.view.DeleteDialog;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,6 +37,7 @@ public class PipeBaseInfoActivity extends BaseActivity {
     LinearLayout llNoData;
     private String token, userId;
     private  DeleteDialog deleteDialog;
+    private List<StakeModel> resultModelList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -52,7 +53,15 @@ public class PipeBaseInfoActivity extends BaseActivity {
         tvTitle.setText("管道标识信息");
         token = (String) SPUtil.get(PipeBaseInfoActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeBaseInfoActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if (getIntent() != null) {
+            List<StakeModel> stakeModelList = (List<StakeModel>) getIntent().getExtras().getSerializable("stakes");
+            if (stakeModelList != null && stakeModelList.size() > 0) {
+                resultModelList = stakeModelList;
+                llNoData.setVisibility(View.GONE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         deleteDialog = new DeleteDialog(PipeBaseInfoActivity.this);
         initViews();
         initData();
@@ -69,12 +78,8 @@ public class PipeBaseInfoActivity extends BaseActivity {
     }
 
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i <10 ; i++) {
-            list.add(i+"");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new PipeBaseInfoAdapter(mContext, list, R.layout.adapter_item_pipe_base_info);
+        adapter = new PipeBaseInfoAdapter(mContext, resultModelList, R.layout.adapter_item_pipe_base_info);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

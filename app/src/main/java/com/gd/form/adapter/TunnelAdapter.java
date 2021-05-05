@@ -27,7 +27,7 @@ public class TunnelAdapter extends BaseRecyclerViewAdapter<TunnelModel> {
     @Override
     protected void bindData(BaseViewHolder viewHolder, TunnelModel tunnelModel, int position) {
         TextView tvPipeName = viewHolder.getView(R.id.tv_pipeName);
-        tvPipeName.setText(tunnelModel.getTunneldesc());
+        tvPipeName.setText(tunnelModel.getPipename());
         TextView tvTunnelName = viewHolder.getView(R.id.tv_tunnelName);
         tvTunnelName.setText(tunnelModel.getPipename());
         TextView tvLocation = viewHolder.getView(R.id.tv_location);

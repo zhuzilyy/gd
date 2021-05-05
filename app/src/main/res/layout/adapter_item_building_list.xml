@@ -68,11 +68,22 @@
         android:background="@color/color_divider" />
 
     <LinearLayout
+        android:id="@+id/ll_update"
         android:padding="@dimen/d_10"
         android:gravity="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <Button
+            android:id="@+id/btn_check"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="@dimen/d_30"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:background="@drawable/bg_standing"
+            android:text="查看"
+            android:textColor="#fff"
+            />
         <Button
             android:id="@+id/btn_update"
             android:layout_width="@dimen/d_60"

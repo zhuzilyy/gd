@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@drawable/dialog_delete_top"
+    android:background="@drawable/dialog_delete_bg"
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <TextView
@@ -40,17 +40,17 @@
         android:layout_height="@dimen/d_1"
         android:background="#FFE3E3E3" />
     <LinearLayout
+        android:background="@drawable/dialog_upload_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dialog_upload_detail"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_cancel"
+        <TextView
+            android:id="@+id/tv_cancel"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@null"
+            android:background="@drawable/dialog_delete_cancel"
             android:gravity="center"
             android:paddingLeft="@dimen/d_10"
             android:text="取消"
@@ -60,12 +60,12 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#FFE3E3E3" />
-        <Button
-            android:id="@+id/btn_confirm"
+        <TextView
+            android:id="@+id/tv_confirm"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@null"
+            android:background="@drawable/dialog_delete_confirm"
             android:gravity="center"
             android:paddingLeft="@dimen/d_10"
             android:text="确定"

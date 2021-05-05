@@ -14,11 +14,11 @@ import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.PipeManagerAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchOwnerModel;
 import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,7 @@ public class PipeManagerActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
+    private List<SearchOwnerModel> pipeManagers;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -51,7 +52,15 @@ public class PipeManagerActivity extends BaseActivity {
         tvTitle.setText("管道责任人");
         token = (String) SPUtil.get(PipeManagerActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeManagerActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if(getIntent()!=null){
+            List<SearchOwnerModel> owners = (List<SearchOwnerModel>)getIntent().getExtras().getSerializable("owners");
+            if(owners!=null && owners.size()>0){
+                pipeManagers = owners;
+                llNoData.setVisibility(View.GONE);
+            }else{
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -67,12 +76,8 @@ public class PipeManagerActivity extends BaseActivity {
     }
 
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i <10 ; i++) {
-            list.add(i+"");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new PipeManagerAdapter(mContext, list, R.layout.adapter_item_pipe_manager);
+        adapter = new PipeManagerAdapter(mContext, pipeManagers, R.layout.adapter_item_pipe_manager);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

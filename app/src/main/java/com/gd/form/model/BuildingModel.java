@@ -17,12 +17,16 @@ public class BuildingModel implements Serializable {
     private String overtype;
     private String peractives;
     private String pipedesc;
-    private double pipeid;
+    private int pipeid;
     private double shortareas;
     private double shortlength;
-    private double stakeid;
+    private int stakeid;
     private String presolution;
     private String riskevaluation;
+    private String riskevaluation1;
+    private String riskevaluation2;
+    private String riskevaluation3;
+    private String uploadpicture;
     public String getAftsolution() {
         return aftsolution;
     }
@@ -127,11 +131,11 @@ public class BuildingModel implements Serializable {
         this.pipedesc = pipedesc;
     }
 
-    public double getPipeid() {
+    public int getPipeid() {
         return pipeid;
     }
 
-    public void setPipeid(double pipeid) {
+    public void setPipeid(int pipeid) {
         this.pipeid = pipeid;
     }
 
@@ -151,11 +155,11 @@ public class BuildingModel implements Serializable {
         this.shortlength = shortlength;
     }
 
-    public double getStakeid() {
+    public int getStakeid() {
         return stakeid;
     }
 
-    public void setStakeid(double stakeid) {
+    public void setStakeid(int stakeid) {
         this.stakeid = stakeid;
     }
 
@@ -181,5 +185,37 @@ public class BuildingModel implements Serializable {
 
     public void setGenernaldate(String genernaldate) {
         this.genernaldate = genernaldate;
+    }
+
+    public String getRiskevaluation1() {
+        return riskevaluation1;
+    }
+
+    public void setRiskevaluation1(String riskevaluation1) {
+        this.riskevaluation1 = riskevaluation1;
+    }
+
+    public String getRiskevaluation2() {
+        return riskevaluation2;
+    }
+
+    public void setRiskevaluation2(String riskevaluation2) {
+        this.riskevaluation2 = riskevaluation2;
+    }
+
+    public String getRiskevaluation3() {
+        return riskevaluation3;
+    }
+
+    public void setRiskevaluation3(String riskevaluation3) {
+        this.riskevaluation3 = riskevaluation3;
+    }
+
+    public String getUploadpicture() {
+        return uploadpicture;
+    }
+
+    public void setUploadpicture(String uploadpicture) {
+        this.uploadpicture = uploadpicture;
     }
 }

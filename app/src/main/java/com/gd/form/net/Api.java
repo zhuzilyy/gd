@@ -22,6 +22,7 @@ import com.gd.form.model.ResultMsg;
 import com.gd.form.model.SearchArea;
 import com.gd.form.model.SearchForm;
 import com.gd.form.model.SearchPerson;
+import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationNoModel;
@@ -31,6 +32,7 @@ import com.gd.form.model.TunnelModel;
 import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaitingApproveModel;
 import com.gd.form.model.WaterDetailModel;
+import com.gd.form.model.WaterInsuranceDetailModel;
 import com.gd.form.model.WaterProtectionModel;
 import com.gd.form.model.WeightCarDetailModel;
 import com.google.gson.JsonObject;
@@ -94,6 +96,15 @@ public interface Api {
      */
     @GET("pipelineinfosget.html")
     Call<List<Pipelineinfo>> pipelineinfosget(@Header("TokenValue") String token);
+
+
+    /**
+     * 通过用户id获取所有管道信息
+     *
+     * @return
+     */
+    @POST("GetlinesByemployid.html")
+    Call<List<Pipelineinfo>> getLinesByUserId(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 根据管道线路id获取该管道桩信息接口
@@ -352,8 +363,8 @@ public interface Api {
      *
      * @return
      */
-    @POST("highareasinfoAdd.html")
-    Call<ServerModel> addHighZone(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    @POST("highareasinfoupdate.html")
+    Call<ServerModel> updateHighZone(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 获取高后果区数据
@@ -400,8 +411,8 @@ public interface Api {
      *
      * @return
      */
-    @POST("lllegalconstructionsinfoAdd.html")
-    Call<ServerModel> addBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    @POST("lllegalconstructionsinfoUpdate.html")
+    Call<ServerModel> updateBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 查询违章建筑
@@ -425,8 +436,8 @@ public interface Api {
      *
      * @return
      */
-    @POST("pipeaccountAdd.html")
-    Call<ServerModel> addTunnel(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    @POST("pipeaccountupdate.html")
+    Call<ServerModel> updateTunnel(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 搜索隧道
@@ -628,6 +639,119 @@ public interface Api {
      */
     @POST("pipemploysUpdatePwd.html")
     Call<ServerModel> changePwd(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取作业区
+     *
+     * @return
+     */
+    @POST("PipedepartmentinfoGetByemployid.html")
+    Call<List<Department>> getDepartmentById(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 根据管道和用户获取桩号
+     *
+     * @return
+     */
+    @POST("GetpipestakeinfoByIDandPipeidandKey.html")
+    Call<List<StationNoModel>> getStationByFullParams(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取管道信息
+     *
+     * @return
+     */
+    @POST("GetpipestakeinfoBydptid.html")
+    Call<SearchPipeModel> getPipeInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取管道信息
+     *
+     * @return
+     */
+    @POST("GetpipestakeinfoBySection.html")
+    Call<SearchPipeModel> getPipeInfoByStationId(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 增加水保工程
+     *
+     * @return
+     */
+    @POST("waterProtectAdd.html")
+    Call<ServerModel> addWaterProtection(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 增加水保工程
+     *
+     * @return
+     */
+    @POST("waterProtectupdate.html")
+    Call<ServerModel> updateWaterProtection(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取水保工程详情
+     *
+     * @return
+     */
+    @POST("waterProtectSelectKey.html")
+    Call<WaterInsuranceDetailModel> waterProtectionDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除风向标
+     *
+     * @return
+     */
+    @POST("StakeDeleteForwindvanes.html")
+    Call<ServerModel> deleteWindVane(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 新增宣教栏
+     *
+     * @return
+     */
+    @POST("StakeUpdateForpedurail.html")
+    Call<ServerModel> addBoard(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除宣教栏
+     *
+     * @return
+     */
+    @POST("StakeDeleteForpedurail.html")
+    Call<ServerModel> deleteBoard(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 新增视频监控
+     *
+     * @return
+     */
+    @POST("StakeUpdateForviewmonitor.html")
+    Call<ServerModel> addVideoMonitoring(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除宣教栏
+     *
+     * @return
+     */
+    @POST("StakeDeleteForviewmonitor.html")
+    Call<ServerModel> deleteVideo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 新增其他
+     *
+     * @return
+     */
+    @POST("StakeUpdateForothers.html")
+    Call<ServerModel> addOthers(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除宣教栏
+     *
+     * @return
+     */
+    @POST("StakeDeleteForothers.html")
+    Call<ServerModel> deleteOther(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

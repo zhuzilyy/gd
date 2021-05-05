@@ -14,11 +14,11 @@ import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.TunnelListAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchPipeInfoModel;
 import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,7 @@ public class TunnelListActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
+    private List<SearchPipeInfoModel> resultPipeList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -51,10 +52,19 @@ public class TunnelListActivity extends BaseActivity {
         tvTitle.setText("隧道");
         token = (String) SPUtil.get(TunnelListActivity.this, "token", "");
         userId = (String) SPUtil.get(TunnelListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if (getIntent() != null) {
+            List<SearchPipeInfoModel> pipeInfoModelList = (List<SearchPipeInfoModel>) getIntent().getExtras().getSerializable("tunnels");
+            if (pipeInfoModelList != null && pipeInfoModelList.size() > 0) {
+                resultPipeList = pipeInfoModelList;
+                llNoData.setVisibility(View.GONE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
+
     private void initViews() {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
 
@@ -65,13 +75,10 @@ public class TunnelListActivity extends BaseActivity {
             refreshLayout.finishLoadMore(2000);
         });
     }
+
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new TunnelListAdapter(mContext, list, R.layout.adapter_item_tunnel_list);
+        adapter = new TunnelListAdapter(mContext, resultPipeList, R.layout.adapter_item_tunnel_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

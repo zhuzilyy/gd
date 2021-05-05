@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zhy="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -81,6 +82,8 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
                     android:id="@+id/et_distance"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -211,7 +214,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -221,13 +224,11 @@
                     android:text="工程名称"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-
-                <com.hhl.library.FlowTagLayout
-                    android:layout_marginTop="@dimen/d_10"
-                    android:layout_marginLeft="@dimen/d_15"
+                <com.zhy.view.flowlayout.TagFlowLayout
                     android:id="@+id/flow_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    zhy:max_select="-1"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"

@@ -54,6 +54,7 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_waterInsurance,
     })
     public void onClick(View view) {
+        Bundle bundle = new Bundle();
         switch (view.getId()) {
 //            case R.id.ll_gd_check:
 //                Intent intent=new Intent(context,GdCheckFormActivity.class);
@@ -94,7 +95,7 @@ public class WorkFragment extends BaseFragment {
                 openActivity(PipeTagActivity.class);
                 break;
             case R.id.ll_waterInsurance:
-                openActivity(AddWaterInsuranceActivity.class);
+                openActivity(AddWaterInsuranceActivity.class,bundle);
                 break;
         }
     }

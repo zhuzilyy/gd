@@ -81,10 +81,10 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     Button btnCommit;
     @BindView(R.id.tv_pipeName)
     TextView tvPipeName;
-    @BindView(R.id.et_startStationNo)
-    EditText etStartStationNo;
-    @BindView(R.id.et_endStationNo)
-    EditText etEndStationNo;
+    @BindView(R.id.tv_startStationNo)
+    TextView tvStartStationNo;
+    @BindView(R.id.tv_endStationNo)
+    TextView tvEndStationNo;
     @BindView(R.id.et_pipeName)
     EditText etPipeName;
     @BindView(R.id.et_pipeDepth)
@@ -109,10 +109,15 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     LinearLayout llSelectFile;
     @BindView(R.id.et_location)
     EditText etLocation;
-    private String token, userId, stationId, pipeId, pipeName, stationName, tunnelId;
+    @BindView(R.id.ll_startStationNo)
+    LinearLayout llStartStationNo;
+    @BindView(R.id.ll_endStationNo)
+    LinearLayout llEndStationNo;
+    private String token, userId, stationId, pipeName, stationName, tunnelId;
     private final int SEARCH_TUNNEL = 100;
     private final int INPUT_STATUS = 101;
     private int FILE_REQUEST_CODE = 102;
+    private int SELECT_STATION = 103;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private List<Pipelineinfo> pipelineInfoList;
     private ListDialog dialog;
@@ -129,6 +134,8 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     private Dialog mWeiboDialog;
     public AMapLocationClient mlocationClient;
     public AMapLocationClientOption mLocationOption = null;
+    private int  pipeId;
+    private String startStationId, endStationId,startPipeId,endPipeId,tag,fileName,uploadFilePath;
     /**
      * 需要进行检测的权限数组
      */
@@ -149,6 +156,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     //是否需要检测后台定位权限，设置为true时，如果用户没有给予后台定位权限会弹窗提示
     private boolean needCheckBackLocation = false;
     private boolean isLoactionSuccess;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -175,39 +183,45 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         initConfig();
         getLocation();
         if (getIntent() != null) {
-            String tag = getIntent().getExtras().getString("tag");
-//            tunnelId = getIntent().getExtras().getString("tunnelId");
+            tag = getIntent().getExtras().getString("tag");
+            tunnelId = getIntent().getExtras().getString("tunnelId");
 //            stationId = getIntent().getExtras().getString("stationId");
 //            pipeId = getIntent().getExtras().getString("pipeId");
 //            String pipeName = getIntent().getExtras().getString("pipeName");
             if (!TextUtils.isEmpty(tunnelId)) {
                 getTunnelData(tunnelId);
             }
-            if ("add".equals(tag)) {
-                tvPipeName.setEnabled(false);
-                etStartStationNo.setEnabled(false);
-                etEndStationNo.setEnabled(false);
-                etPipeName.setEnabled(false);
-                etPipeDepth.setEnabled(false);
-                etMethod.setEnabled(false);
-                llPipeName.setEnabled(false);
+            if ("update".equals(tag)) {
+                tvPipeName.setEnabled(true);
+                etLocation.setEnabled(true);
+                tvStartStationNo.setEnabled(true);
+                tvEndStationNo.setEnabled(true);
+                etPipeName.setEnabled(true);
+                etPipeDepth.setEnabled(true);
+                etMethod.setEnabled(true);
+                llPipeName.setEnabled(true);
                 llStatus.setEnabled(true);
-                rlSelectImage.setEnabled(false);
-                llSelectFile.setEnabled(false);
+                rlSelectImage.setEnabled(true);
+                llSelectFile.setEnabled(true);
+                llStartStationNo.setEnabled(true);
+                llEndStationNo.setEnabled(true);
                 btnCommit.setVisibility(View.VISIBLE);
                 llSearch.setVisibility(View.GONE);
             } else if ("check".equals(tag)) {
                 tvPipeName.setEnabled(false);
-                etStartStationNo.setEnabled(false);
+                tvStartStationNo.setEnabled(false);
                 etPipeName.setEnabled(false);
                 etPipeDepth.setEnabled(false);
                 etMethod.setEnabled(false);
                 tvStatus.setEnabled(false);
+                etLocation.setEnabled(false);
                 llPipeName.setEnabled(false);
-                etEndStationNo.setEnabled(false);
+                tvEndStationNo.setEnabled(false);
                 llStatus.setEnabled(false);
                 rlSelectImage.setEnabled(false);
-                llSelectFile.setEnabled(false);
+                llSelectFile.setEnabled(true);
+                llEndStationNo.setEnabled(false);
+                llStartStationNo.setEnabled(false);
                 btnCommit.setVisibility(View.GONE);
                 llSearch.setVisibility(View.GONE);
             }
@@ -253,6 +267,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
             @Override
             public void onSuccess(List<String> photoList) {
                 path.clear();
+                nameList.clear();
                 for (String s : photoList) {
                     path.add(s);
                 }
@@ -261,7 +276,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("pipeaccount/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -307,20 +322,48 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
 
     private void getTunnelData(String tunnelId) {
         JsonObject params = new JsonObject();
-        params.addProperty("id", Double.parseDouble(tunnelId));
+        params.addProperty("id", Integer.parseInt(tunnelId));
+        Log.i("tag", "params==" + params);
         Net.create(Api.class).getTunnelData(token, params)
                 .enqueue(new NetCallback<List<TunnelModel>>(this, true) {
                     @Override
                     public void onResponse(List<TunnelModel> result) {
                         if (result != null && result.size() > 0) {
                             TunnelModel tunnelModel = result.get(0);
-                            Log.i("tag", tunnelModel.getTunneldesc() + "==3333===");
-                            etStartStationNo.setText(tunnelModel.getLocation());
+                            tvStartStationNo.setText(tunnelModel.getStakename());
+                            tvEndStationNo.setText(tunnelModel.getEndstakename());
+                            etLocation.setText(tunnelModel.getLocation());
                             etPipeName.setText(tunnelModel.getPipename());
                             etPipeDepth.setText(tunnelModel.getPipelength() + "");
                             tvStatus.setText(tunnelModel.getPipesituation());
                             etMethod.setText(tunnelModel.getSetupmode());
-                            tvPipeName.setText(tunnelModel.getTunneldesc());
+                            tvPipeName.setText(tunnelModel.getPipename());
+                            startStationId = tunnelModel.getStakeid()+"";
+                            endStationId = tunnelModel.getEndstakeid()+"";
+                            pipeId = tunnelModel.getPipeid();
+                            fileName = tunnelModel.getFilename();
+                            uploadFilePath = tunnelModel.getUploadfile();
+                            if(!TextUtils.isEmpty(tunnelModel.getFilename())){
+                                if(tunnelModel.getFilename().contains("/")){
+                                    String subFileName = tunnelModel.getFilename().split("/")[1];
+                                    tvFileName.setText(subFileName);
+                                }else{
+                                    tvFileName.setText(tunnelModel.getFilename());
+                                }
+
+                            }
+                            if (!TextUtils.isEmpty(tunnelModel.getUploadpicture())) {
+                                if (tunnelModel.getUploadpicture().contains(";")) {
+                                    String[] pathArr = tunnelModel.getUploadpicture().split(";");
+                                    for (int i = 0; i < pathArr.length; i++) {
+                                        path.add(pathArr[i]);
+                                        photoAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    path.add(tunnelModel.getUploadpicture());
+                                    photoAdapter.notifyDataSetChanged();
+                                }
+                            }
                         }
                     }
                 });
@@ -334,15 +377,37 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
             R.id.ll_status,
             R.id.rl_selectImage,
             R.id.ll_selectFile,
+            R.id.ll_startStationNo,
+            R.id.ll_endStationNo,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_startStationNo:
+                Intent intentStartStation = new Intent(this, StationByIdActivity.class);
+                intentStartStation.putExtra("tag", "start");
+                intentStartStation.putExtra("pipeId", pipeId+"");
+                startActivityForResult(intentStartStation, SELECT_STATION);
+                break;
+            case R.id.ll_endStationNo:
+                Intent intentEndStation = new Intent(this, StationByIdActivity.class);
+                intentEndStation.putExtra("tag", "end");
+                intentEndStation.putExtra("pipeId", pipeId+"");
+                startActivityForResult(intentEndStation, SELECT_STATION);
+                break;
             case R.id.ll_selectFile:
-                Intent intentFile = new Intent(PipeTunnelActivity.this, SelectFileActivity.class);
-                startActivityForResult(intentFile, FILE_REQUEST_CODE);
+                if(tag.equals("update")){
+                    Intent intentFile = new Intent(PipeTunnelActivity.this, SelectFileActivity.class);
+                    startActivityForResult(intentFile, FILE_REQUEST_CODE);
+                }else{
+                    if (!uploadFilePath.equals("00")) {
+                        Uri uri = Uri.parse(uploadFilePath);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                }
                 break;
             case R.id.rl_selectImage:
                 initPermissions();
@@ -365,13 +430,13 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvPipeName.setText(pipeList.get(positionM));
-                    pipeId = pipeIdList.get(positionM) + "";
+                    pipeId = pipeIdList.get(positionM);
                     dialog.dismiss();
                 });
                 break;
             case R.id.btn_commit:
                 if (paramsComplete()) {
-                    addTunnel();
+                    updateTunnel();
                 }
                 break;
             case R.id.ll_search:
@@ -402,7 +467,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
             } else {
                 Log.i("tag", "拒绝授权");
             }
-        }else  if (requestCode == PERMISSON_REQUESTCODE) {
+        } else if (requestCode == PERMISSON_REQUESTCODE) {
             if (!verifyPermissions(grantResults)) {
                 showMissingPermissionDialog();
                 isNeedCheck = false;
@@ -410,30 +475,44 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         }
     }
 
-    private void addTunnel() {
-        JsonObject params = new JsonObject();
-        if (TextUtils.isEmpty(tunnelId)) {
-            params.addProperty("id", 0);
-        } else {
-            params.addProperty("id", Integer.parseInt(tunnelId));
+    private void updateTunnel() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
         }
-        params.addProperty("stakeid", Integer.valueOf(stationId));
-        params.addProperty("pipeid", Integer.valueOf(pipeId));
-        params.addProperty("location", etStartStationNo.getText().toString());
+        JsonObject params = new JsonObject();
+        params.addProperty("id", Integer.parseInt(tunnelId));
+        params.addProperty("stakeid", Integer.parseInt(startStationId));
+        params.addProperty("endstakeid", Integer.parseInt(endStationId));
+        params.addProperty("pipeid", pipeId);
+        params.addProperty("location", etLocation.getText().toString());
         params.addProperty("pipename", etPipeName.getText().toString());
         params.addProperty("pipelength", Double.parseDouble(etPipeDepth.getText().toString()));
         params.addProperty("setupmode", etMethod.getText().toString());
         params.addProperty("pipesituation", tvStatus.getText().toString());
-        Log.i("tag", "params==" + params);
-        Net.create(Api.class).addTunnel(token, params)
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            params.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            params.addProperty("uploadpicture", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            params.addProperty("uploadfile", ossFilePath);
+        } else {
+            params.addProperty("uploadfile", "00");
+        }
+        Log.i("tag","params==="+params);
+        Net.create(Api.class).updateTunnel(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             ToastUtil.show("保存成功");
-                            Intent intent = new Intent();
-                            intent.setAction("com.action.update");
-                            sendBroadcast(intent);
                             finish();
                         } else {
                             ToastUtil.show("保存失败");
@@ -443,8 +522,12 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     }
 
     private boolean paramsComplete() {
-        if (TextUtils.isEmpty(etStartStationNo.getText().toString())) {
-            ToastUtil.show("请输入起始桩号位置");
+        if (TextUtils.isEmpty(tvStartStationNo.getText().toString())) {
+            ToastUtil.show("请选择起始桩号位置");
+            return false;
+        }
+        if (TextUtils.isEmpty(tvEndStationNo.getText().toString())) {
+            ToastUtil.show("请选择结束桩号位置");
             return false;
         }
         if (TextUtils.isEmpty(etPipeName.getText().toString())) {
@@ -476,14 +559,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         if (data == null) {
             return;
         }
-        if (requestCode == SEARCH_TUNNEL) {
-            TunnelModel tunnelModel = (TunnelModel) data.getSerializableExtra("tunnel");
-            etStartStationNo.setText(tunnelModel.getLocation());
-            etPipeName.setText(tunnelModel.getPipename());
-            etPipeDepth.setText(tunnelModel.getPipelength() + "");
-            tvStatus.setText(tunnelModel.getPipesituation());
-            etMethod.setText(tunnelModel.getSetupmode());
-        } else if (requestCode == INPUT_STATUS) {
+        if (requestCode == INPUT_STATUS) {
             String content = data.getStringExtra("content");
             tvStatus.setText(content);
         } else if (requestCode == FILE_REQUEST_CODE) {
@@ -492,7 +568,24 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
             tvFileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("pipeaccount/" + selectFileName, selectFilePath);
+        }else if (requestCode == SELECT_STATION) {
+            String selectTag = data.getStringExtra("selectTag");
+            String stationName = data.getStringExtra("stationName");
+
+            if (!TextUtils.isEmpty(selectTag)) {
+                if (selectTag.equals("start")) {
+                    tvStartStationNo.setText(stationName);
+                    startStationId = data.getStringExtra("stationId");
+                    startPipeId = data.getStringExtra("pipeId");
+                } else {
+                    tvEndStationNo.setText(stationName);
+                    endStationId = data.getStringExtra("stationId");
+                    endPipeId = data.getStringExtra("pipeId");
+
+                }
+            }
+
         }
     }
 
@@ -572,7 +665,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         }
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
-                if(!isLoactionSuccess){
+                if (!isLoactionSuccess) {
                     isLoactionSuccess = true;
                     //定位成功回调信息，设置相关消息
                     amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
@@ -582,7 +675,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(amapLocation.getTime());
                     df.format(date);//定位时间
-                    etLocation.setText(amapLocation.getAddress());
+//                    etLocation.setText(amapLocation.getAddress());
                 }
 
             } else {
@@ -711,7 +804,7 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mlocationClient!=null){
+        if (mlocationClient != null) {
             mlocationClient.onDestroy();
         }
     }

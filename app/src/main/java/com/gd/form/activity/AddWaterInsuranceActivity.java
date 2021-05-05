@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,33 +42,42 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
-import com.gd.form.adapter.TagAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.ServerModel;
+import com.gd.form.model.WaterInsuranceDetailModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
-import com.hhl.library.FlowTagLayout;
-import com.hhl.library.OnTagSelectListener;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocationListener {
     @BindView(R.id.flow_layout)
-    FlowTagLayout flowTagLayout;
+    TagFlowLayout mFlowLayout;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_stationNo)
@@ -82,12 +92,11 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     EditText etDistance;
     @BindView(R.id.et_company)
     EditText etCompany;
-    private TagAdapter<String> tagAdapter;
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 103;
     private int FILE_REQUEST_CODE = 100;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
-    private String stationId, pipeId;
+    private int stationId, pipeId;
     private String token, userId;
     private String ossFilePath;
     private OSSCredentialProvider ossCredentialProvider;
@@ -124,6 +133,10 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     //是否需要检测后台定位权限，设置为true时，如果用户没有给予后台定位权限会弹窗提示
     private boolean needCheckBackLocation = false;
     private boolean isLoactionSuccess = false;
+    private String tag, waterId;
+    private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙"};
+    private TagAdapter<String> mAdapter;
+    private Set<Integer> selectedIndex;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -145,28 +158,92 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         userId = (String) SPUtil.get(this, "userId", "");
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
-        tagAdapter = new TagAdapter<>(this);
-        flowTagLayout.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_MULTI);
-        flowTagLayout.setAdapter(tagAdapter);
-        flowTagLayout.setOnTagSelectListener(new OnTagSelectListener() {
-            @Override
-            public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
-                if (selectedList != null && selectedList.size() > 0) {
-                    StringBuilder sb = new StringBuilder();
+        final LayoutInflater mInflater = LayoutInflater.from(this);
+        mFlowLayout.setAdapter(mAdapter = new com.zhy.view.flowlayout.TagAdapter<String>(dataSource) {
 
-                    for (int i : selectedList) {
-                        sb.append(parent.getAdapter().getItem(i));
-                        sb.append(":");
-                    }
-                    selectPressureName = sb.toString();
-                }
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) mInflater.inflate(R.layout.background_tag,
+                        mFlowLayout, false);
+                tv.setText(s);
+                return tv;
             }
         });
-        initNameData();
+
+        mFlowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+            @Override
+            public void onSelected(Set<Integer> selectPosSet) {
+                selectedIndex = selectPosSet;
+                StringBuilder selectedTagBuilder = new StringBuilder();
+                if(selectedIndex!=null && selectedIndex.size()>0){
+                    for (int i : selectedIndex) {
+                        selectedTagBuilder.append(dataSource[i]);
+                        selectedTagBuilder.append(":");
+                    }
+                }
+                selectPressureName = selectedTagBuilder.toString();
+            }
+        });
+        if (getIntent() != null) {
+            tag = getIntent().getExtras().getString("tag");
+            waterId = getIntent().getExtras().getString("waterId");
+            if ("update".equals(tag)) {
+                getWaterInsuranceDetail();
+            }
+        }
         initGallery();
         initConfig();
         getLocation();
     }
+
+    private void getWaterInsuranceDetail() {
+        JsonObject params = new JsonObject();
+        params.addProperty("id", Integer.valueOf(waterId));
+//        params.addProperty("id",41936905);
+        Log.i("tag", "params===" + params);
+        Net.create(Api.class).waterProtectionDetail(token, params)
+                .enqueue(new NetCallback<WaterInsuranceDetailModel>(this, true) {
+                    @Override
+                    public void onResponse(WaterInsuranceDetailModel detailModel) {
+                        tvStationNo.setText(detailModel.getStakename());
+                        etDistance.setText(detailModel.getStakefrom());
+                        etLocation.setText(detailModel.getLocations());
+                        etCompany.setText(detailModel.getProtectunit());
+                        stationId = detailModel.getStakeid();
+                        pipeId = detailModel.getPipeid();
+                        selectPressureName = detailModel.getProtectname();
+                        Set<Integer> set = new HashSet<>();
+                        if (!TextUtils.isEmpty(detailModel.getProtectname())) {
+                            String[] arrayName = detailModel.getProtectname().split(":");
+                            for (int i = 0; i < dataSource.length; i++) {
+                                for (int j = 0; j < arrayName.length; j++) {
+                                    if (dataSource[i].equals(arrayName[j])) {
+                                        set.add(i);
+                                    }
+                                }
+                            }
+                            mAdapter.setSelectedList(set);
+                        }
+                        if (!TextUtils.isEmpty(detailModel.getUploadpicture()) &&
+                                !detailModel.getUploadpicture().equals("00")) {
+                            String[] photoArr = detailModel.getUploadpicture().split(";");
+                            for (int i = 0; i < photoArr.length; i++) {
+                                path.add(photoArr[i]);
+                            }
+                            photoAdapter.notifyDataSetChanged();
+                        }
+                        if (!TextUtils.isEmpty(detailModel.getFilename()) &&
+                                !detailModel.getFilename().equals("00")) {
+                            if (detailModel.getFilename().contains("/")) {
+                                tvFileName.setText(detailModel.getFilename().split("/")[1]);
+                            } else {
+                                tvFileName.setText(detailModel.getFilename());
+                            }
+                        }
+                    }
+                });
+    }
+
     private void getLocation() {
         mlocationClient = new AMapLocationClient(getApplicationContext());
         //初始化定位参数
@@ -185,17 +262,6 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mlocationClient.startLocation();
-    }
-    private void initNameData() {
-        List<String> dataSource = new ArrayList<>();
-        dataSource.add("挡墙");
-        dataSource.add("护坡");
-        dataSource.add("排水渠");
-        dataSource.add("盖板");
-        dataSource.add("U形盖板");
-        dataSource.add("过水面");
-        dataSource.add("防冲墙");
-        tagAdapter.onlyAddAll(dataSource);
     }
 
     private void initConfig() {
@@ -229,6 +295,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             @Override
             public void onSuccess(List<String> photoList) {
                 path.clear();
+                nameList.clear();
                 for (String s : photoList) {
                     path.add(s);
                 }
@@ -237,7 +304,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("wateracount/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -273,7 +340,13 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                 finish();
                 break;
             case R.id.btn_commit:
-                paramsIsComplete();
+                if (paramsIsComplete()) {
+                    if ("update".equals(tag)) {
+                        updateWater();
+                    } else {
+                        addWater();
+                    }
+                }
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(this, MapActivity.class);
@@ -293,6 +366,97 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         }
     }
 
+    //增加水保工程
+    private void addWater() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject params = new JsonObject();
+        params.addProperty("id", 0);
+        params.addProperty("pipeid", Integer.valueOf(pipeId));
+        params.addProperty("stakeid", Integer.valueOf(stationId));
+        params.addProperty("stakefrom", etDistance.getText().toString());
+        params.addProperty("protectname", selectPressureName);
+        params.addProperty("locations", etLocation.getText().toString());
+        params.addProperty("protectunit", etCompany.getText().toString());
+        params.addProperty("creator", userId);
+        params.addProperty("creatime", TimeUtil.getCurrentTime());
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            params.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            params.addProperty("uploadpicture", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            params.addProperty("uploadfile", ossFilePath);
+        } else {
+            params.addProperty("uploadfile", "00");
+        }
+        Net.create(Api.class).addWaterProtection(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            finish();
+                        }
+                    }
+                });
+    }
+
+
+    //更新
+    private void updateWater() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject params = new JsonObject();
+        params.addProperty("id", Integer.parseInt(waterId));
+        params.addProperty("pipeid", pipeId);
+        params.addProperty("stakeid", stationId);
+        params.addProperty("stakefrom", etDistance.getText().toString());
+        params.addProperty("protectname", selectPressureName);
+        params.addProperty("locations", etLocation.getText().toString());
+        params.addProperty("protectunit", etCompany.getText().toString());
+        params.addProperty("creator", userId);
+        params.addProperty("creatime", TimeUtil.getCurrentTime());
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            params.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            params.addProperty("uploadpicture", "00");
+        }
+        if (!TextUtils.isEmpty(ossFilePath)) {
+            params.addProperty("uploadfile", ossFilePath);
+        } else {
+            params.addProperty("uploadfile", "00");
+        }
+        Log.i("tag","params==="+params);
+        Net.create(Api.class).updateWaterProtection(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            ToastUtil.show("保存成功");
+                            finish();
+                        } else {
+                            ToastUtil.show("保存失败");
+                        }
+                    }
+                });
+    }
+
     private boolean paramsIsComplete() {
         if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
             ToastUtil.show("请选择桩号");
@@ -302,8 +466,12 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             ToastUtil.show("请输入距离");
             return false;
         }
+        if (!NumberUtil.isNumber(etDistance.getText().toString())) {
+            ToastUtil.show("距离格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etLocation.getText().toString())) {
-            ToastUtil.show("请输入距离");
+            ToastUtil.show("请输入位置");
             return false;
         }
         if (TextUtils.isEmpty(etCompany.getText().toString())) {
@@ -311,7 +479,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             return false;
         }
         if (TextUtils.isEmpty(selectPressureName)) {
-            ToastUtil.show("请选择占压类型");
+            ToastUtil.show("请选择工程名称");
             return false;
         }
         return true;
@@ -338,7 +506,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             } else {
                 Log.i("tag", "拒绝授权");
             }
-        }else if (requestCode == PERMISSON_REQUESTCODE) {
+        } else if (requestCode == PERMISSON_REQUESTCODE) {
             if (!verifyPermissions(grantResults)) {
                 showMissingPermissionDialog();
                 isNeedCheck = false;
@@ -358,11 +526,11 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             tvFileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("wateracount/" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
-            stationId = data.getStringExtra("stationId");
-            pipeId = data.getStringExtra("pipeId");
+            stationId = Integer.parseInt(data.getStringExtra("stationId"));
+            pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
             String stationName = data.getStringExtra("stationName");
             tvStationNo.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
@@ -425,6 +593,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         });
 
     }
+
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         if (Build.VERSION.SDK_INT >= 23
@@ -447,7 +616,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         }
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
-                if(!isLoactionSuccess){
+                if (!isLoactionSuccess) {
                     isLoactionSuccess = true;
                     //定位成功回调信息，设置相关消息
                     amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
@@ -457,8 +626,9 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(amapLocation.getTime());
                     df.format(date);//定位时间
-                    etLocation.setText(amapLocation.getAddress());
-
+                    if (!"update".equals(tag)) {
+                        etLocation.setText(amapLocation.getAddress());
+                    }
                 }
 
             } else {
@@ -583,10 +753,11 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         intent.setData(Uri.parse("package:" + getPackageName()));
         startActivity(intent);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mlocationClient!=null){
+        if (mlocationClient != null) {
             mlocationClient.onDestroy();
         }
     }

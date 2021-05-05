@@ -139,9 +139,13 @@ public class PipeBuildingActivity extends BaseActivity {
     RecyclerView rvResultPhoto;
     @BindView(R.id.rl_selectImage)
     RelativeLayout rlSelectImage;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+    @BindView(R.id.tv_totalLevel)
+    TextView tvTotalLevel;
     private String isHighZone = "是";
     private TimePickerView pvTime;
-    private String token, userId, buildingId, stationId, pipeId, pipeName, stationName;
+    private String token, userId, buildingId;
     private final int SEARCH_BUILDING = 100;
     private int SELECT_AREA = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
@@ -156,6 +160,9 @@ public class PipeBuildingActivity extends BaseActivity {
     private Dialog mWeiboDialog;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
+    private int stationId, pipeId;
+    private int rateLevel, resultLevel;
+    private List<String> oldPicList;
 
     @Override
     protected void setStatusBar() {
@@ -182,15 +189,11 @@ public class PipeBuildingActivity extends BaseActivity {
         riskResultList = new ArrayList<>();
         riskTypeList = new ArrayList<>();
         path = new ArrayList<>();
+        oldPicList = new ArrayList<>();
         nameList = new ArrayList<>();
         if (getIntent() != null) {
             String tag = getIntent().getExtras().getString("tag");
             buildingId = getIntent().getExtras().getString("buildingId");
-            stationId = getIntent().getExtras().getString("stationId");
-            pipeId = getIntent().getExtras().getString("pipeId");
-            String pipeName = getIntent().getExtras().getString("pipeName");
-            String stationName = getIntent().getExtras().getString("stationName");
-            etStartStationNo.setText(stationName);
             if (!TextUtils.isEmpty(buildingId)) {
                 getBuildingData(buildingId);
             }
@@ -254,6 +257,7 @@ public class PipeBuildingActivity extends BaseActivity {
                 llRiskResult.setEnabled(false);
                 llRiskType.setEnabled(false);
                 rlSelectImage.setEnabled(false);
+                llLocation.setEnabled(false);
             }
         }
         initListener();
@@ -273,6 +277,7 @@ public class PipeBuildingActivity extends BaseActivity {
             @Override
             public void onSuccess(List<String> photoList) {
                 path.clear();
+                nameList.clear();
                 for (String s : photoList) {
                     path.add(s);
                 }
@@ -281,7 +286,8 @@ public class PipeBuildingActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+//                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("llegalaccount/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -459,6 +465,47 @@ public class PipeBuildingActivity extends BaseActivity {
                             tvRiskType.setText(buildingModel.getDangertype());
                             etBeforeChangeMethod.setText(buildingModel.getPresolution());
                             etChangeMethod.setText(buildingModel.getAftsolution());
+                            stationId = buildingModel.getStakeid();
+                            pipeId = buildingModel.getPipeid();
+                            tvRiskEvaluate.setText(buildingModel.getRiskevaluation1());
+                            tvRiskResult.setText(buildingModel.getRiskevaluation2());
+                            tvTotalLevel.setText(buildingModel.getRiskevaluation3());
+                            if (!TextUtils.isEmpty(buildingModel.getUploadpicture())) {
+                                if (buildingModel.getUploadpicture().contains(";")) {
+                                    String[] pathArr = buildingModel.getUploadpicture().split(";");
+                                    for (int i = 0; i < pathArr.length; i++) {
+                                        path.add(pathArr[i]);
+                                        photoAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    path.add(buildingModel.getUploadpicture());
+                                    photoAdapter.notifyDataSetChanged();
+                                }
+                            }
+                            if (!TextUtils.isEmpty((buildingModel.getRiskevaluation1())) &&
+                                    NumberUtil.isNumber(buildingModel.getRiskevaluation1())) {
+                                rateLevel = Integer.parseInt(buildingModel.getRiskevaluation1());
+                            }
+                            switch (buildingModel.getRiskevaluation2()) {
+                                case "I":
+                                    resultLevel = 1;
+                                    break;
+                                case "II":
+                                    resultLevel = 2;
+                                    break;
+                                case "III":
+                                    resultLevel = 3;
+                                    break;
+                                case "IV":
+                                    resultLevel = 4;
+                                    break;
+                                case "V":
+                                    resultLevel = 5;
+                                    break;
+                            }
+                        }
+                        if (rateLevel != 0 && resultLevel != 0) {
+                            tvTotalLevel.setText(rateLevel * resultLevel + "");
                         }
                     }
                 });
@@ -499,6 +546,10 @@ public class PipeBuildingActivity extends BaseActivity {
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvRiskResult.setText(riskResultList.get(positionM));
+                    resultLevel = positionM + 1;
+                    if (resultLevel != 0 && rateLevel != 0) {
+                        tvTotalLevel.setText(resultLevel * rateLevel + "");
+                    }
                     dialog.dismiss();
                 });
                 break;
@@ -507,6 +558,10 @@ public class PipeBuildingActivity extends BaseActivity {
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvRiskEvaluate.setText(riskEvaluateList.get(positionM));
+                    rateLevel = positionM + 1;
+                    if (resultLevel != 0 && rateLevel != 0) {
+                        tvTotalLevel.setText(resultLevel * rateLevel + "");
+                    }
                     dialog.dismiss();
                 });
                 break;
@@ -543,13 +598,13 @@ public class PipeBuildingActivity extends BaseActivity {
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvPipeName.setText(pipeList.get(positionM));
-                    pipeId = pipeIdList.get(positionM) + "";
+                    pipeId = pipeIdList.get(positionM);
                     dialog.dismiss();
                 });
                 break;
             case R.id.btn_commit:
                 if (paramsComplete()) {
-                    addBuilding();
+                    updateBuilding();
                 }
                 break;
             case R.id.ll_time:
@@ -562,15 +617,21 @@ public class PipeBuildingActivity extends BaseActivity {
         }
     }
 
-    private void addBuilding() {
-        JsonObject params = new JsonObject();
-        if (TextUtils.isEmpty(buildingId)) {
-            params.addProperty("id", 0);
-        } else {
-            params.addProperty("id", Integer.parseInt(buildingId));
+    private void updateBuilding() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
         }
-        params.addProperty("stakeid", Integer.valueOf(stationId));
-        params.addProperty("pipeid", Integer.valueOf(pipeId));
+        JsonObject params = new JsonObject();
+        params.addProperty("id", Integer.parseInt(buildingId));
+        params.addProperty("stakeid", stationId);
+        params.addProperty("pipeid", pipeId);
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("overpropety", tvPipeProperty.getText().toString());
         params.addProperty("overtype", tvType.getText().toString());
@@ -582,19 +643,24 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("shortareas", Double.parseDouble(etMissArea.getText().toString()));
         params.addProperty("peractives", etPersonActivity.getText().toString());
         params.addProperty("dangerdesc", etDes.getText().toString());
-        params.addProperty("riskevaluation", tvRiskEvaluate.getText().toString());
+        params.addProperty("riskevaluation1", tvRiskEvaluate.getText().toString());
+        params.addProperty("riskevaluation2", tvRiskResult.getText().toString());
+        params.addProperty("riskevaluation3", tvTotalLevel.getText().toString());
         params.addProperty("dangertype", tvRiskType.getText().toString());
         params.addProperty("presolution", etBeforeChangeMethod.getText().toString());
         params.addProperty("aftsolution", etChangeMethod.getText().toString());
-        Net.create(Api.class).addBuilding(token, params)
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            params.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            params.addProperty("uploadpicture", "00");
+        }
+        Log.i("tag", "params==" + params);
+        Net.create(Api.class).updateBuilding(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             ToastUtil.show("保存成功");
-                            Intent intent = new Intent();
-                            intent.setAction("com.action.update");
-                            sendBroadcast(intent);
                             finish();
                         } else {
                             ToastUtil.show("保存失败");
@@ -604,14 +670,14 @@ public class PipeBuildingActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
-            ToastUtil.show("请选择管道名称");
-            return false;
-        }
-        if (TextUtils.isEmpty(etStartStationNo.getText().toString())) {
-            ToastUtil.show("请输入起始桩号");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
+//            ToastUtil.show("请选择管道名称");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(etStartStationNo.getText().toString())) {
+//            ToastUtil.show("请输入起始桩号");
+//            return false;
+//        }
         if (TextUtils.isEmpty(etLocation.getText().toString())) {
             ToastUtil.show("请输入行政位置");
             return false;

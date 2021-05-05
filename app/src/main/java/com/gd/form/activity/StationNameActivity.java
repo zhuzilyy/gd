@@ -19,7 +19,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,7 +34,7 @@ public class StationNameActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
-
+    private ArrayList<String> resultStations;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -52,7 +51,15 @@ public class StationNameActivity extends BaseActivity {
         tvTitle.setText("场站名称");
         token = (String) SPUtil.get(StationNameActivity.this, "token", "");
         userId = (String) SPUtil.get(StationNameActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if(getIntent()!=null){
+            ArrayList<String> stations = getIntent().getExtras().getStringArrayList("stations");
+            if(stations!=null && stations.size()>0){
+                resultStations = stations;
+                llNoData.setVisibility(View.GONE);
+            }else{
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -69,12 +76,8 @@ public class StationNameActivity extends BaseActivity {
     }
 
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new StationNameAdapter(mContext, list, R.layout.adapter_item_station_name);
+        adapter = new StationNameAdapter(mContext, resultStations, R.layout.adapter_item_station_name);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

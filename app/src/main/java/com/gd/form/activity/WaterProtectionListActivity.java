@@ -14,11 +14,11 @@ import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.WaterProtectionListAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.WaterModel;
 import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,7 @@ public class WaterProtectionListActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
+    private List<WaterModel> resultWaterList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -51,7 +52,15 @@ public class WaterProtectionListActivity extends BaseActivity {
         tvTitle.setText("水工保护");
         token = (String) SPUtil.get(WaterProtectionListActivity.this, "token", "");
         userId = (String) SPUtil.get(WaterProtectionListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if (getIntent() != null) {
+            List<WaterModel> waterModelList = (List<WaterModel>) getIntent().getExtras().getSerializable("waters");
+            if (waterModelList != null && waterModelList.size() > 0) {
+                resultWaterList = waterModelList;
+                llNoData.setVisibility(View.GONE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -66,17 +75,16 @@ public class WaterProtectionListActivity extends BaseActivity {
         });
     }
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new WaterProtectionListAdapter(mContext, list, R.layout.adapter_item_water_protection_list);
+        adapter = new WaterProtectionListAdapter(mContext, resultWaterList, R.layout.adapter_item_water_protection_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                openActivity(AddWaterInsuranceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("tag","update");
+                bundle.putString("waterId",resultWaterList.get(position).getId()+"");
+                openActivity(AddWaterInsuranceActivity.class,bundle);
             }
         });
     }

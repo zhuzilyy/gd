@@ -16,7 +16,9 @@ import androidx.core.content.ContextCompat;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
+import com.gd.form.model.StakeModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -25,6 +27,8 @@ import com.gd.form.utils.ToastUtil;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,15 +72,15 @@ public class StandingBookActivity extends BaseActivity {
     @BindView(R.id.mainSearchTextView)
     TextView mainSearchTextView;
     private int SELECT_STATION = 100;
-    private String pipeId, stationId;
+    private String pipeId, stationId, employId, departmentId;
     private String token, userId;
     private String departmentName, pipeName;
     private String pipeOwners, stations, windVanes, advocacyBoard, viewMonitor, waterProtect, well, other, tunnelId;
     private MyReceiver myReceiver;
-    private int departmentId;
-    private String highZoneId, buildingId, stationName;
+    private String highZoneId, buildingId, stationName, startStationId, endStationId;
     private SearchStationModel searchStationModel;
     private String newPipeTagId;
+    private SearchPipeModel resultSearchPipeModel;
 
     @Override
     protected void setStatusBar() {
@@ -102,6 +106,106 @@ public class StandingBookActivity extends BaseActivity {
         IntentFilter intentFilterAdd = new IntentFilter();
         intentFilter.addAction("com.action.add");
         registerReceiver(myReceiver, intentFilterAdd);
+        if (getIntent() != null) {
+            Bundle bundle = getIntent().getExtras();
+            departmentId = bundle.getString("dptid");
+            pipeId = bundle.getString("pipeid");
+            employId = bundle.getString("empid");
+            startStationId = bundle.getString("stakeid");
+            endStationId = bundle.getString("estakeid");
+        }
+        getData();
+    }
+
+    private void getData() {
+        JsonObject params = new JsonObject();
+        if (!TextUtils.isEmpty(startStationId)) {
+            params.addProperty("appempid", userId);
+            params.addProperty("pipeid", pipeId);
+            params.addProperty("stakeid", startStationId);
+            params.addProperty("estakeid", endStationId);
+            getPipeInfoByStationId(params);
+        } else {
+            params.addProperty("appempid", userId);
+            params.addProperty("dptid", departmentId);
+            params.addProperty("pipeid", pipeId);
+            params.addProperty("empid", employId);
+            getPipeInfo(params);
+        }
+    }
+
+    private void getPipeInfoByStationId(JsonObject params) {
+        Net.create(Api.class).getPipeInfoByStationId(token, params)
+                .enqueue(new NetCallback<SearchPipeModel>(this, true) {
+                    @Override
+                    public void onResponse(SearchPipeModel searchPipeModel) {
+                        resultSearchPipeModel = searchPipeModel;
+                        setData(searchPipeModel);
+                    }
+                });
+    }
+
+    private void getPipeInfo(JsonObject params) {
+        Net.create(Api.class).getPipeInfo(token, params)
+                .enqueue(new NetCallback<SearchPipeModel>(this, true) {
+                    @Override
+                    public void onResponse(SearchPipeModel searchPipeModel) {
+                        resultSearchPipeModel = searchPipeModel;
+                        setData(searchPipeModel);
+
+                    }
+                });
+    }
+
+    private void setData(SearchPipeModel searchPipeModel) {
+        if (searchPipeModel.getDeptCount() > 0) {
+            tvArea.setText(searchPipeModel.getDptList().get(0).getName());
+        }
+        if (searchPipeModel.getLineCount() > 0 && TextUtils.isEmpty(tvPipeName.getText().toString())) {
+            tvPipeName.setText(searchPipeModel.getLineList().get(0).getName());
+        }
+        if (searchPipeModel.getStakeCount() > 0) {
+            tvPipeTagBaseInfo.setText("管道标识基础信息(" + searchPipeModel.getStakeCount() + ")");
+        }
+        if (searchPipeModel.getOwnerCount() > 0) {
+            tvPipePerson.setText("管道责任人(" + searchPipeModel.getOwnerCount() + ")");
+        }
+        if (searchPipeModel.getStationCount() > 0) {
+            tvStation.setText("场站名称(" + searchPipeModel.getStationCount() + ")");
+        }
+        if (searchPipeModel.getHigharesCount() > 0) {
+            tvHighZone.setText("高后果区(" + searchPipeModel.getHigharesCount() + ")");
+        }
+        if (searchPipeModel.getLlegalCount() > 0) {
+            tvBuilding.setText("违章违建(" + searchPipeModel.getLlegalCount() + ")");
+        }
+        if (searchPipeModel.getPipeCount() > 0) {
+            tvTunnel.setText("隧道(" + searchPipeModel.getPipeCount() + ")");
+        }
+        if (searchPipeModel.getWaterprjCount() > 0) {
+            tvWater.setText("水保工程(" + searchPipeModel.getWaterprjCount() + ")");
+        }
+        if (searchPipeModel.getWindCount() > 0) {
+            tvWindVane.setText("风向标(" + searchPipeModel.getWindCount() + ")");
+        }else{
+            tvWindVane.setText("风向标");
+        }
+        if (searchPipeModel.getPeduralCount() > 0) {
+            tvAdvocacyBoard.setText("宣教栏(" + searchPipeModel.getPeduralCount() + ")");
+        }else{
+            tvAdvocacyBoard.setText("宣教栏");
+        }
+        if (searchPipeModel.getViewCount() > 0) {
+            tvVideoMonitoring.setText("视频监控(" + searchPipeModel.getViewCount() + ")");
+        }else{
+            tvVideoMonitoring.setText("视频监控");
+        }
+        if (searchPipeModel.getOtherCount() > 0) {
+            tvOther.setText("其他(地震监测等设备设施)(" + searchPipeModel.getOtherCount() + ")");
+        }else{
+            tvOther.setText("其他(地震监测等设备设施)");
+        }
+
     }
 
     @OnClick({
@@ -148,47 +252,83 @@ public class StandingBookActivity extends BaseActivity {
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
-        bundle.putString("stationId", stationId);
-        bundle.putString("pipeId", pipeId);
         switch (view.getId()) {
             case R.id.ll_wind_vane:
-                openActivity(WindVaneListActivity.class);
+                if (resultSearchPipeModel.getWindCount() > 0) {
+                    bundle.putSerializable("winds", (Serializable) resultSearchPipeModel.getWindList());
+                }
+                openActivity(WindVaneListActivity.class, bundle);
                 break;
             case R.id.ll_other:
-                openActivity(OtherListActivity.class);
+                if (resultSearchPipeModel.getOtherCount() > 0) {
+                    bundle.putSerializable("others", (Serializable) resultSearchPipeModel.getOtherList());
+                }
+                openActivity(OtherListActivity.class, bundle);
                 break;
             case R.id.ll_water:
-                openActivity(WaterProtectionListActivity.class);
+                if (resultSearchPipeModel.getWaterprjCount() > 0) {
+                    bundle.putSerializable("waters", (Serializable) resultSearchPipeModel.getWaterLsit());
+                }
+                openActivity(WaterProtectionListActivity.class, bundle);
                 break;
             case R.id.ll_video_monitoring:
-                openActivity(VideoMonitorListActivity.class);
+                if (resultSearchPipeModel.getViewCount() > 0) {
+                    bundle.putSerializable("videos", (Serializable) resultSearchPipeModel.getViewList());
+                }
+                openActivity(VideoMonitorListActivity.class, bundle);
                 break;
             case R.id.ll_advocacy_board:
-                openActivity(AdvocacyBoardListActivity.class);
+                if (resultSearchPipeModel.getPeduralCount() > 0) {
+                    bundle.putSerializable("advocacyBoards", (Serializable) resultSearchPipeModel.getPreList());
+                }
+                openActivity(AdvocacyBoardListActivity.class, bundle);
                 break;
             case R.id.ll_area:
 
                 break;
             case R.id.ll_tunnel:
-                openActivity(TunnelListActivity.class);
+                if (resultSearchPipeModel.getPipeCount() > 0) {
+                    bundle.putSerializable("tunnels", (Serializable) resultSearchPipeModel.getPipeList());
+                }
+                openActivity(TunnelListActivity.class, bundle);
                 break;
             case R.id.ll_illegalBuilding:
-                openActivity(BuildingListActivity.class);
+                if (resultSearchPipeModel.getLlegalCount() > 0) {
+                    bundle.putSerializable("buildings", (Serializable) resultSearchPipeModel.getLlegaList());
+                }
+                openActivity(BuildingListActivity.class, bundle);
                 break;
             case R.id.ll_highZone:
-                openActivity(HighZoneListActivity.class);
+                if (resultSearchPipeModel.getHigharesCount() > 0) {
+                    bundle.putSerializable("highZones", (Serializable) resultSearchPipeModel.getHighList());
+                }
+                openActivity(HighZoneListActivity.class, bundle);
                 break;
             case R.id.ll_station:
-                openActivity(StationNameActivity.class);
+                if (resultSearchPipeModel.getStationCount() > 0) {
+                    bundle.putStringArrayList("stations", (ArrayList<String>) resultSearchPipeModel.getStationList());
+                }
+                openActivity(StationNameActivity.class, bundle);
                 break;
             case R.id.ll_pipePerson:
-                openActivity(PipeManagerActivity.class);
+                if (resultSearchPipeModel.getOwnerCount() > 0) {
+                    bundle.putSerializable("owners", (Serializable) resultSearchPipeModel.getOwnerList());
+                }
+                openActivity(PipeManagerActivity.class, bundle);
                 break;
             case R.id.ll_pipeName:
 
                 break;
             case R.id.ll_pipeTagBaseInfo:
-                openActivity(PipeBaseInfoActivity.class);
+                if (resultSearchPipeModel.getStakeCount() > 0) {
+                    if (resultSearchPipeModel.getStakeCount() > 50) {
+                        List<StakeModel> stakeList = new ArrayList<>(resultSearchPipeModel.getStakeList().subList(0, 49));
+                        bundle.putSerializable("stakes", (Serializable) (stakeList));
+                    } else {
+                        bundle.putSerializable("stakes", (Serializable) resultSearchPipeModel.getStakeList());
+                    }
+                }
+                openActivity(PipeBaseInfoActivity.class, bundle);
                 break;
             //管道标识基础信息查看
             case R.id.ll_search:
@@ -464,7 +604,7 @@ public class StandingBookActivity extends BaseActivity {
                             tunnelId = model.getPipeaccountid();
                             String[] descArr = desc.split(":");
                             departmentName = descArr[0];
-                            departmentId = model.getDepartmentid();
+                            departmentId = model.getDepartmentid() + "";
                             pipeName = descArr[1];
                             if (!departmentName.equals("null")) {
                                 tvArea.setText(departmentName);
@@ -572,7 +712,7 @@ public class StandingBookActivity extends BaseActivity {
             }
             if (intent.getAction().equals("com.action.update")) {
                 //获取数据
-                searchStation(pipeId, stationId);
+                getData();
             } else if (intent.getAction().equals("com.action.add")) {
                 newPipeTagId = intent.getStringExtra("id");
             }

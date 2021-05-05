@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,8 +18,8 @@ import com.gd.form.R;
 
 public class DeleteDialog extends Dialog {
     private TextView tvTitle;
-    private Button btnCancel;
-    private Button btnConfirm;
+    private TextView tvCancel;
+    private TextView tvConfirm;
     private TextView tvContent;
     private String title,content;
     private OnClickBottomListener onClickBottomListener;
@@ -44,9 +43,9 @@ public class DeleteDialog extends Dialog {
         }
         tvTitle = findViewById(R.id.dialog_title);
         tvContent = findViewById(R.id.content);
-        btnCancel = findViewById(R.id.btn_cancel);
-        btnConfirm = findViewById(R.id.btn_confirm);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        tvCancel = findViewById(R.id.tv_cancel);
+        tvConfirm = findViewById(R.id.tv_confirm);
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onClickBottomListener!=null){
@@ -54,7 +53,7 @@ public class DeleteDialog extends Dialog {
                 }
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onClickBottomListener!=null){

@@ -13,7 +13,7 @@ public class HighZoneModel implements Serializable {
     private String htype;
     private double id;
     private double length;
-    private double pipeid;
+    private int pipeid;
     private double pipethickness;
     private String identifiers;
     private String level;
@@ -21,6 +21,12 @@ public class HighZoneModel implements Serializable {
     private String name;
     private String pipedesc;
     private String risklevel;
+    private String filename1;
+    private String filename2;
+    private String filename3;
+    private String uploadfile1;
+    private String uploadfile2;
+    private String uploadfile3;
     public String getArearadius() {
         return arearadius;
     }
@@ -101,11 +107,11 @@ public class HighZoneModel implements Serializable {
         this.length = length;
     }
 
-    public double getPipeid() {
+    public int getPipeid() {
         return pipeid;
     }
 
-    public void setPipeid(double pipeid) {
+    public void setPipeid(int pipeid) {
         this.pipeid = pipeid;
     }
 
@@ -163,5 +169,53 @@ public class HighZoneModel implements Serializable {
 
     public void setRisklevel(String risklevel) {
         this.risklevel = risklevel;
+    }
+
+    public String getFilename1() {
+        return filename1;
+    }
+
+    public void setFilename1(String filename1) {
+        this.filename1 = filename1;
+    }
+
+    public String getFilename2() {
+        return filename2;
+    }
+
+    public void setFilename2(String filename2) {
+        this.filename2 = filename2;
+    }
+
+    public String getFilename3() {
+        return filename3;
+    }
+
+    public void setFilename3(String filename3) {
+        this.filename3 = filename3;
+    }
+
+    public String getUploadfile1() {
+        return uploadfile1;
+    }
+
+    public void setUploadfile1(String uploadfile1) {
+        this.uploadfile1 = uploadfile1;
+    }
+
+    public String getUploadfile2() {
+        return uploadfile2;
+    }
+
+    public void setUploadfile2(String uploadfile2) {
+        this.uploadfile2 = uploadfile2;
+    }
+
+    public String getUploadfile3() {
+        return uploadfile3;
+    }
+
+    public void setUploadfile3(String uploadfile3) {
+        this.uploadfile3 = uploadfile3;
     }
 }

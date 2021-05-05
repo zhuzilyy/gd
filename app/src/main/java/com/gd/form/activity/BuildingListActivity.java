@@ -14,11 +14,11 @@ import com.gd.form.R;
 import com.gd.form.adapter.BuildingListAdapter;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchBuildingModel;
 import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,7 @@ public class BuildingListActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
+    private List<SearchBuildingModel> resultBuildingList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -51,7 +52,15 @@ public class BuildingListActivity extends BaseActivity {
         tvTitle.setText("违章违建");
         token = (String) SPUtil.get(BuildingListActivity.this, "token", "");
         userId = (String) SPUtil.get(BuildingListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if(getIntent()!=null){
+            List<SearchBuildingModel> buildingModelList = (List<SearchBuildingModel>)getIntent().getExtras().getSerializable("buildings");
+            if(buildingModelList!=null && buildingModelList.size()>0){
+                resultBuildingList = buildingModelList;
+                llNoData.setVisibility(View.GONE);
+            }else{
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -66,12 +75,8 @@ public class BuildingListActivity extends BaseActivity {
         });
     }
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new BuildingListAdapter(mContext, list, R.layout.adapter_item_building_list);
+        adapter = new BuildingListAdapter(mContext, resultBuildingList, R.layout.adapter_item_building_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

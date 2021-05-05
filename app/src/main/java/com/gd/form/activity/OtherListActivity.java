@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,10 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
-import com.gd.form.adapter.WindVaneListAdapter;
+import com.gd.form.adapter.OtherListAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
+import com.gd.form.model.SearchOtherModel;
+import com.gd.form.model.ServerModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -34,11 +43,14 @@ public class OtherListActivity extends BaseActivity {
     RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    private WindVaneListAdapter adapter;
+    private OtherListAdapter adapter;
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
     private DeleteDialog deleteDialog;
+    private List<SearchOtherModel> resultOtherList;
+    private final int ADD_OTHER = 100;
+    private int deleteIndex;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -53,10 +65,21 @@ public class OtherListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("其他");
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("添加");
         deleteDialog = new DeleteDialog(this);
+        resultOtherList = new ArrayList<>();
         token = (String) SPUtil.get(OtherListActivity.this, "token", "");
         userId = (String) SPUtil.get(OtherListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if (getIntent() != null) {
+            List<SearchOtherModel> otherModelList = (List<SearchOtherModel>) getIntent().getExtras().getSerializable("others");
+            if (otherModelList != null && otherModelList.size() > 0) {
+                resultOtherList = otherModelList;
+                llNoData.setVisibility(View.GONE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -72,16 +95,13 @@ public class OtherListActivity extends BaseActivity {
     }
 
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new WindVaneListAdapter(mContext, list, R.layout.adapter_item_wind_vane_list);
+        adapter = new OtherListAdapter(mContext, resultOtherList, R.layout.adapter_item_other_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
+                deleteIndex = position;
                 deleteDialog.show();
             }
         });
@@ -89,6 +109,7 @@ public class OtherListActivity extends BaseActivity {
             @Override
             public void onPositiveClick() {
                 deleteDialog.dismiss();
+                deleteOther();
             }
             @Override
             public void onNegativeClick() {
@@ -96,7 +117,33 @@ public class OtherListActivity extends BaseActivity {
             }
         });
     }
-
+    private void deleteOther() {
+        JsonObject params = new JsonObject();
+        params.addProperty("stakeid", resultOtherList.get(deleteIndex).getStakeid());
+        params.addProperty("othername", resultOtherList.get(deleteIndex).getName());
+        params.addProperty("others", resultOtherList.get(deleteIndex).getDistance());
+        Net.create(Api.class).deleteOther(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update");
+                            sendBroadcast(intent);
+                            resultOtherList.remove(deleteIndex);
+                            adapter.notifyDataSetChanged();
+                            if (resultOtherList != null && resultOtherList.size() > 0) {
+                                llNoData.setVisibility(View.GONE);
+                                refreshLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                llNoData.setVisibility(View.VISIBLE);
+                                refreshLayout.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+    }
     @OnClick({
             R.id.iv_back,
             R.id.tv_right,
@@ -107,10 +154,37 @@ public class OtherListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_right:
-                Bundle bundle = new Bundle();
-                bundle.putString("name","other");
-                openActivity(AddWindVaneActivity.class,bundle);
+                Intent intent = new Intent(OtherListActivity.this, AddWindVaneActivity.class);
+                intent.putExtra("name", "other");
+                startActivityForResult(intent, ADD_OTHER);
                 break;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        if (requestCode == ADD_OTHER) {
+            String name = data.getStringExtra("name");
+            String otherName = data.getStringExtra("otherName");
+            String distance = data.getStringExtra("distance");
+            String id = data.getStringExtra("id");
+            SearchOtherModel searchOtherModel = new SearchOtherModel();
+            searchOtherModel.setStakename(name);
+            searchOtherModel.setDistance(distance);
+            searchOtherModel.setName(otherName);
+            searchOtherModel.setStakeid(Integer.parseInt(id));
+            resultOtherList.add(searchOtherModel);
+            adapter.notifyDataSetChanged();
+            if (resultOtherList != null && resultOtherList.size() > 0) {
+                llNoData.setVisibility(View.GONE);
+                refreshLayout.setVisibility(View.VISIBLE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+                refreshLayout.setVisibility(View.GONE);
+            }
         }
     }
 }

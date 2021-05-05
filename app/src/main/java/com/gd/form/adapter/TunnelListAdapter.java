@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.gd.form.R;
 import com.gd.form.activity.PipeTunnelActivity;
+import com.gd.form.model.SearchPipeInfoModel;
 
 import java.util.List;
 
@@ -15,33 +17,46 @@ import java.util.List;
  * <p>创建人：wh
  * <p>创建时间：2020/5/11
  */
-public class TunnelListAdapter extends BaseRecyclerViewAdapter<String> {
+public class TunnelListAdapter extends BaseRecyclerViewAdapter<SearchPipeInfoModel> {
     /**
      * @param context  {@link Context}
      * @param list     数据集合
      * @param layoutId RecyclerView item布局ID
      */
-    public TunnelListAdapter(Context context, List<String> list, int layoutId) {
+    public TunnelListAdapter(Context context, List<SearchPipeInfoModel> list, int layoutId) {
         super(context, list, layoutId);
     }
 
     @Override
-    protected void bindData(BaseViewHolder viewHolder, String value, int position) {
+    protected void bindData(BaseViewHolder viewHolder, SearchPipeInfoModel model, int position) {
+        TextView tvName = viewHolder.getView(R.id.tv_name);
+        TextView tvStartStationNo = viewHolder.getView(R.id.tv_startStationNo);
+        TextView tvEndStationNo = viewHolder.getView(R.id.tv_endStationNo);
+        tvName.setText(model.getPipename());
+        tvStartStationNo.setText(model.getStakename());
+        tvEndStationNo.setText(model.getEndstakename());
         Button btnCheck = viewHolder.getView(R.id.btn_check);
+        Button btnUpdate = viewHolder.getView(R.id.btn_update);
+//        if(model.getMaintain().equals("1")){
+//            btnUpdate.setVisibility(View.VISIBLE);
+//        }else if(model.getMaintain().equals("0")){
+//            btnUpdate.setVisibility(View.GONE);
+//        }
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PipeTunnelActivity.class);
                 intent.putExtra("tag","check");
+                intent.putExtra("tunnelId",model.getId()+"");
                 context.startActivity(intent);
             }
         });
-        Button btnUpdate = viewHolder.getView(R.id.btn_update);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PipeTunnelActivity.class);
-                intent.putExtra("tag","add");
+                intent.putExtra("tag","update");
+                intent.putExtra("tunnelId",model.getId()+"");
                 context.startActivity(intent);
             }
         });

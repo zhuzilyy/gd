@@ -49,7 +49,7 @@
 
         <TextView
             android:textColor="#000"
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_distance"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"

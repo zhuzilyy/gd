@@ -1,6 +1,10 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.widget.TextView;
+
+import com.gd.form.R;
 
 import java.util.List;
 
@@ -21,8 +25,16 @@ public class StationNameAdapter extends BaseRecyclerViewAdapter<String> {
 
     @Override
     protected void bindData(BaseViewHolder viewHolder, String value, int position) {
-//        TextView tvRecord = viewHolder.getView(R.id.tv_value);
-//        tvRecord.setText(value);
+        TextView tvStationName = viewHolder.getView(R.id.tv_stationName);
+        TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
+        if(!TextUtils.isEmpty(value)){
+            String[] stationArr = value.split(":");
+            tvStationName.setText(stationArr[0]);
+            tvStationNo.setText(stationArr[1]);
+        }else{
+            tvStationName.setText("暂无");
+            tvStationNo.setText("暂无");
+        }
         viewHolder.getContentView().setOnClickListener(view -> {
             if(onItemClickListener!=null){
                 onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());

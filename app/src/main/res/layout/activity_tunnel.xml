@@ -99,6 +99,7 @@
 
             <!--桩号/位置-->
             <LinearLayout
+                android:id="@+id/ll_startStationNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -116,8 +117,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:id="@+id/et_startStationNo"
+                <TextView
+                    android:id="@+id/tv_startStationNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -143,6 +144,7 @@
 
             <!--终止桩号-->
             <LinearLayout
+                android:id="@+id/ll_endStationNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -160,8 +162,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:id="@+id/et_endStationNo"
+                <TextView
+                    android:id="@+id/tv_endStationNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

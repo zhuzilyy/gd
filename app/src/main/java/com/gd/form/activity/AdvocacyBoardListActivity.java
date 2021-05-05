@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,8 +15,16 @@ import com.gd.form.R;
 import com.gd.form.adapter.AdvocacyBoardListAdapter;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
+import com.gd.form.model.PreModel;
+import com.gd.form.model.ServerModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -39,6 +48,9 @@ public class AdvocacyBoardListActivity extends BaseActivity {
     LinearLayout llNoData;
     private String token, userId;
     private DeleteDialog deleteDialog;
+    private List<PreModel> resultPreList;
+    private final int ADD_BOARD = 100;
+    private int deleteIndex;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -52,11 +64,22 @@ public class AdvocacyBoardListActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvTitle.setText("宣教栏");
         tvRight.setText("添加");
+        tvRight.setVisibility(View.VISIBLE);
         deleteDialog = new DeleteDialog(this);
+        resultPreList = new ArrayList<>();
         token = (String) SPUtil.get(AdvocacyBoardListActivity.this, "token", "");
         userId = (String) SPUtil.get(AdvocacyBoardListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if (getIntent() != null) {
+            List<PreModel> preModelList = (List<PreModel>) getIntent().getExtras().getSerializable("advocacyBoards");
+            if (preModelList != null && preModelList.size() > 0) {
+                resultPreList = preModelList;
+                llNoData.setVisibility(View.GONE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -72,16 +95,13 @@ public class AdvocacyBoardListActivity extends BaseActivity {
     }
 
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new AdvocacyBoardListAdapter(mContext, list, R.layout.adapter_item_advocacy_board_list);
+        adapter = new AdvocacyBoardListAdapter(mContext, resultPreList, R.layout.adapter_item_advocacy_board_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
+                deleteIndex = position;
                 deleteDialog.show();
             }
         });
@@ -89,6 +109,7 @@ public class AdvocacyBoardListActivity extends BaseActivity {
             @Override
             public void onPositiveClick() {
                 deleteDialog.dismiss();
+                deleteBoard();
             }
             @Override
             public void onNegativeClick() {
@@ -96,7 +117,32 @@ public class AdvocacyBoardListActivity extends BaseActivity {
             }
         });
     }
-
+    private void deleteBoard() {
+        JsonObject params = new JsonObject();
+        params.addProperty("stakeid", resultPreList.get(deleteIndex).getStakeid());
+        params.addProperty("pedurail", resultPreList.get(deleteIndex).getDistance());
+        Net.create(Api.class).deleteBoard(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update");
+                            sendBroadcast(intent);
+                            resultPreList.remove(deleteIndex);
+                            adapter.notifyDataSetChanged();
+                            if (resultPreList != null && resultPreList.size() > 0) {
+                                llNoData.setVisibility(View.GONE);
+                                refreshLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                llNoData.setVisibility(View.VISIBLE);
+                                refreshLayout.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+    }
     @OnClick({
             R.id.iv_back,
             R.id.tv_right,
@@ -107,10 +153,35 @@ public class AdvocacyBoardListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_right:
-                Bundle bundle = new Bundle();
-                bundle.putString("name","advocacyBoard");
-                openActivity(AddWindVaneActivity.class,bundle);
+                Intent intent = new Intent(AdvocacyBoardListActivity.this,AddWindVaneActivity.class);
+                intent.putExtra("name","advocacyBoard");
+                startActivityForResult(intent,ADD_BOARD);
                 break;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            return;
+        }
+        if(requestCode == ADD_BOARD){
+            String name =  data.getStringExtra("name");
+            String distance =  data.getStringExtra("distance");
+            String id =  data.getStringExtra("id");
+            PreModel preModel = new PreModel();
+            preModel.setStakename(name);
+            preModel.setDistance(distance);
+            preModel.setStakeid(Integer.parseInt(id));
+            resultPreList.add(preModel);
+            adapter.notifyDataSetChanged();
+            if (resultPreList != null && resultPreList.size() > 0) {
+                llNoData.setVisibility(View.GONE);
+                refreshLayout.setVisibility(View.VISIBLE);
+            } else {
+                llNoData.setVisibility(View.VISIBLE);
+                refreshLayout.setVisibility(View.GONE);
+            }
         }
     }
 }

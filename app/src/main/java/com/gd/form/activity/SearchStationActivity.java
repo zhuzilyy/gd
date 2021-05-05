@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +20,9 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.ListDialog;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -67,7 +70,9 @@ public class SearchStationActivity extends BaseActivity {
     private int SELECT_APPROVER = 102;
     private ListDialog dialog;
     private int departmentId;
-    private String approverName,approverId;
+    private String approverName, approverId;
+    private int selectPipeId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -83,6 +88,7 @@ public class SearchStationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
+        Log.i("tag", "userId===" + userId);
         tvTitle.setText("台账信息维护");
         dialog = new ListDialog(this);
     }
@@ -101,6 +107,7 @@ public class SearchStationActivity extends BaseActivity {
             R.id.ll_area,
             R.id.ll_person})
     public void click(View view) {
+        Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
@@ -113,26 +120,53 @@ public class SearchStationActivity extends BaseActivity {
                 pipeDepartmentInfoGetList();
                 break;
             case R.id.ll_endNo:
-                Intent intentEndStation = new Intent(this, StationActivity.class);
+                if (TextUtils.isEmpty(tvStartStationNo.getText().toString().trim())) {
+                    ToastUtil.show("请先选择开始桩号名称");
+                    return;
+                }
+                Intent intentEndStation = new Intent(this, StationByIdActivity.class);
                 intentEndStation.putExtra("tag", "end");
+                intentEndStation.putExtra("pipeId", selectPipeId+"");
                 startActivityForResult(intentEndStation, SELECT_STATION);
                 break;
             case R.id.ll_startNo:
-                Intent intentStartStation = new Intent(this, StationActivity.class);
+                if (TextUtils.isEmpty(tvPipeName.getText().toString().trim())) {
+                    ToastUtil.show("请先选择线路");
+                    return;
+                }
+                Intent intentStartStation = new Intent(this, StationByIdActivity.class);
                 intentStartStation.putExtra("tag", "start");
+                intentStartStation.putExtra("pipeId", selectPipeId+"");
                 startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
             case R.id.ll_pipeName:
                 getPipelineInfoListRequest();
                 break;
             case R.id.btn_searchStaionNo:
-                openActivity(StandingBookActivity.class);
+                bundle.putString("pipeid",selectPipeId+"");
+                bundle.putString("stakeid",startStationId);
+                bundle.putString("estakeid",endStationId);
+                openActivity(StandingBookActivity.class,bundle);
                 break;
             case R.id.btn_searchManager:
-                openActivity(StandingBookActivity.class);
+                if(TextUtils.isEmpty(tvManager.getText().toString())){
+                    ToastUtil.show("请选择负责人");
+                    return;
+                }
+                bundle.putString("dptid","");
+                bundle.putString("pipeid","");
+                bundle.putString("empid",approverId);
+                openActivity(StandingBookActivity.class,bundle);
                 break;
             case R.id.btn_searchDepartment:
-                openActivity(StandingBookActivity.class);
+                if(TextUtils.isEmpty(tvDepartmentName.getText().toString())){
+                    ToastUtil.show("请选择作业区");
+                    return;
+                }
+                bundle.putString("dptid",departmentId+"");
+                bundle.putString("pipeid","");
+                bundle.putString("empid","");
+                openActivity(StandingBookActivity.class,bundle);
                 break;
             case R.id.ll_stationNo:
                 tvStationNo.setTextColor(Color.parseColor("#FF52A7F9"));
@@ -171,22 +205,26 @@ public class SearchStationActivity extends BaseActivity {
     }
 
     private void getPipelineInfoListRequest() {
-
-        Net.create(Api.class).pipelineinfosget(token)
+        JsonObject params = new JsonObject();
+        params.addProperty("id", userId);
+        Net.create(Api.class).getLinesByUserId(token, params)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
                     public void onResponse(List<Pipelineinfo> list) {
                         pipeLineInfoList = list;
                         List<String> pipeNameList = new ArrayList<>();
+                        List<Integer> pipeIdList = new ArrayList<>();
                         if (pipeLineInfoList != null && pipeLineInfoList.size() > 0) {
                             for (int i = 0; i < pipeLineInfoList.size(); i++) {
                                 pipeNameList.add(pipeLineInfoList.get(i).getName());
+                                pipeIdList.add(pipeLineInfoList.get(i).getId());
                             }
                         }
                         dialog.setData(pipeNameList);
                         dialog.show();
                         dialog.setListItemClick(positionM -> {
                             tvPipeName.setText(pipeNameList.get(positionM));
+                            selectPipeId = pipeIdList.get(positionM);
                             dialog.dismiss();
                         });
                     }
@@ -194,7 +232,9 @@ public class SearchStationActivity extends BaseActivity {
     }
 
     private void pipeDepartmentInfoGetList() {
-        Net.create(Api.class).pipedepartmentinfoGetList(token)
+        JsonObject params = new JsonObject();
+        params.addProperty("employid", userId);
+        Net.create(Api.class).getDepartmentById(token, params)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
                     public void onResponse(List<Department> list) {
@@ -212,6 +252,7 @@ public class SearchStationActivity extends BaseActivity {
                         dialog.setListItemClick(positionM -> {
                             tvDepartmentName.setText(areaList.get(positionM));
                             departmentId = idList.get(positionM);
+                            Log.i("tag", "departmentId===" + departmentId);
                             dialog.dismiss();
                         });
                     }

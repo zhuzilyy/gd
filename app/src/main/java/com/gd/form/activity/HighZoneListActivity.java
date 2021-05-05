@@ -14,11 +14,11 @@ import com.gd.form.R;
 import com.gd.form.adapter.HighZoneListAdapter;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.SearchHighZoneModel;
 import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,7 @@ public class HighZoneListActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
+    private List<SearchHighZoneModel> resultHighZoneList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -51,7 +52,15 @@ public class HighZoneListActivity extends BaseActivity {
         tvTitle.setText("高后果区");
         token = (String) SPUtil.get(HighZoneListActivity.this, "token", "");
         userId = (String) SPUtil.get(HighZoneListActivity.this, "userId", "");
-        llNoData.setVisibility(View.GONE);
+        if(getIntent()!=null){
+            List<SearchHighZoneModel> highZoneModelList = (List<SearchHighZoneModel>)getIntent().getExtras().getSerializable("highZones");
+            if(highZoneModelList!=null && highZoneModelList.size()>0){
+                resultHighZoneList = highZoneModelList;
+                llNoData.setVisibility(View.GONE);
+            }else{
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         initData();
     }
@@ -66,16 +75,13 @@ public class HighZoneListActivity extends BaseActivity {
         });
     }
     private void initData() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(i + "");
-        }
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new HighZoneListAdapter(mContext, list, R.layout.adapter_item_high_zone_list);
+        adapter = new HighZoneListAdapter(mContext, resultHighZoneList, R.layout.adapter_item_high_zone_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
+
 
             }
         });
