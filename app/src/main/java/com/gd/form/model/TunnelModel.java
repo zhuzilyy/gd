@@ -7,7 +7,7 @@ public class TunnelModel implements Serializable {
     private int stakeid;
     private int endstakeid;
     private int pipeid;
-    private int pipelength;
+    private double pipelength;
     private String location;
     private String pipename;
     private String setupmode;
@@ -54,7 +54,7 @@ public class TunnelModel implements Serializable {
         return pipelength;
     }
 
-    public void setPipelength(int pipelength) {
+    public void setPipelength(double pipelength) {
         this.pipelength = pipelength;
     }
 

@@ -161,7 +161,7 @@ public class PipeBuildingActivity extends BaseActivity {
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
     private int stationId, pipeId;
-    private int rateLevel, resultLevel;
+    private double rateLevel, resultLevel;
     private List<String> oldPicList;
 
     @Override
@@ -484,7 +484,7 @@ public class PipeBuildingActivity extends BaseActivity {
                             }
                             if (!TextUtils.isEmpty((buildingModel.getRiskevaluation1())) &&
                                     NumberUtil.isNumber(buildingModel.getRiskevaluation1())) {
-                                rateLevel = Integer.parseInt(buildingModel.getRiskevaluation1());
+                                rateLevel = Double.parseDouble(buildingModel.getRiskevaluation1());
                             }
                             switch (buildingModel.getRiskevaluation2()) {
                                 case "I":

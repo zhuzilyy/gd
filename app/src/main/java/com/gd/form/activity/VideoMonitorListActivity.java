@@ -51,7 +51,7 @@ public class VideoMonitorListActivity extends BaseActivity {
     private List<SearchVideoModel> resultVideoList;
     private final int ADD_VIDEO = 100;
     private int deleteIndex;
-
+    private String pipeId,departmentId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -80,6 +80,10 @@ public class VideoMonitorListActivity extends BaseActivity {
             } else {
                 llNoData.setVisibility(View.VISIBLE);
             }
+        }
+        if(getIntent()!=null){
+            pipeId =  getIntent().getExtras().getString("pipeId");
+            departmentId =  getIntent().getExtras().getString("departmentId");
         }
         initViews();
         initData();
@@ -160,6 +164,8 @@ public class VideoMonitorListActivity extends BaseActivity {
             case R.id.tv_right:
                 Intent intent = new Intent(VideoMonitorListActivity.this, AddWindVaneActivity.class);
                 intent.putExtra("name", "videoMonitoring");
+                intent.putExtra("departmentId",departmentId);
+                intent.putExtra("pipeId",pipeId);
                 startActivityForResult(intent, ADD_VIDEO);
                 break;
         }

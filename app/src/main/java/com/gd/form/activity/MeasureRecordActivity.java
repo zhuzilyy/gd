@@ -1,7 +1,9 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -35,6 +37,8 @@ public class MeasureRecordActivity extends BaseActivity {
     RecyclerView recordRecycler;
     @BindView(R.id.stationRefreshLayout)
     SmartRefreshLayout stationRefreshLayout;
+    @BindView(R.id.ll_no_data)
+    LinearLayout llNoData;
     private MeasureRecordAdapter adapter;
     private String token, userId, stationId;
     private List<MeasureModel> measureModelList;
@@ -72,21 +76,27 @@ public class MeasureRecordActivity extends BaseActivity {
             @Override
             public void onItemClickListener(View v, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putString("stationId",stationId);
-                bundle.putString("time",measureModelList.get(position).getMeasuredate().getTime()+"");
-                openActivity(PipeMeasureDetailActivity.class,bundle);
+                bundle.putString("stationId", stationId);
+                bundle.putString("time", measureModelList.get(position).getMeasuredate().getTime() + "");
+                openActivity(PipeMeasureDetailActivity.class, bundle);
             }
         });
         //获取测量数据
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", Integer.parseInt(stationId));
+        Log.i("tag","params==="+params);
         Net.create(Api.class).getMeasureRecords(token, params)
                 .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override
                     public void onResponse(List<MeasureModel> list) {
                         if (list != null && list.size() > 0) {
+                            llNoData.setVisibility(View.GONE);
+                            stationRefreshLayout.setVisibility(View.VISIBLE);
                             measureModelList.addAll(list);
                             adapter.notifyDataSetChanged();
+                        } else {
+                            llNoData.setVisibility(View.VISIBLE);
+                            stationRefreshLayout.setVisibility(View.GONE);
                         }
 
                     }

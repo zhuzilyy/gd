@@ -1,6 +1,7 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
 
     @Override
     protected void bindData(BaseViewHolder viewHolder, WaterModel model, int position) {
+        Log.i("tag","to111"+model.toString());
         TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
         TextView tvDistance = viewHolder.getView(R.id.tv_distance);
         TextView tvName = viewHolder.getView(R.id.tv_name);

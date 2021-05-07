@@ -16,6 +16,7 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.Department;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -66,6 +67,7 @@ public class SearchStationActivity extends BaseActivity {
     private String startStationId, startPipeId, endStationId, endPipeId;
     private List<Pipelineinfo> pipeLineInfoList;
     private List<Department> departmentList;
+    private List<Pipemploys> managerList;
     private int SELECT_STATION = 101;
     private int SELECT_APPROVER = 102;
     private ListDialog dialog;
@@ -88,7 +90,9 @@ public class SearchStationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
-        Log.i("tag", "userId===" + userId);
+        pipeLineInfoList = new ArrayList<>();
+        departmentList = new ArrayList<>();
+        managerList = new ArrayList<>();
         tvTitle.setText("台账信息维护");
         dialog = new ListDialog(this);
     }
@@ -113,8 +117,9 @@ public class SearchStationActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_manager:
-                Intent intentApprover = new Intent(SearchStationActivity.this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+                getPipeManagerByUserId();
+//                Intent intentApprover = new Intent(SearchStationActivity.this, ApproverActivity.class);
+//                startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
             case R.id.ll_departmentName:
                 pipeDepartmentInfoGetList();
@@ -253,6 +258,32 @@ public class SearchStationActivity extends BaseActivity {
                             tvDepartmentName.setText(areaList.get(positionM));
                             departmentId = idList.get(positionM);
                             Log.i("tag", "departmentId===" + departmentId);
+                            dialog.dismiss();
+                        });
+                    }
+                });
+    }
+    private void getPipeManagerByUserId() {
+        JsonObject params = new JsonObject();
+        params.addProperty("empid", userId);
+        Net.create(Api.class).getPipeManagerByUserId(token, params)
+                .enqueue(new NetCallback<List<Pipemploys>>(this, false) {
+                    @Override
+                    public void onResponse(List<Pipemploys> list) {
+                        managerList = list;
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if (managerList != null && managerList.size() > 0) {
+                            for (int i = 0; i < managerList.size(); i++) {
+                                nameList.add(managerList.get(i).getName());
+                                idList.add(managerList.get(i).getId());
+                            }
+                        }
+                        dialog.setData(nameList);
+                        dialog.show();
+                        dialog.setListItemClick(positionM -> {
+                            tvManager.setText(nameList.get(positionM));
+                            approverId = idList.get(positionM);
                             dialog.dismiss();
                         });
                     }

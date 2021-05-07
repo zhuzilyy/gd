@@ -40,11 +40,10 @@ public class AddWindVaneActivity extends BaseActivity {
     LinearLayout llName;
     @BindView(R.id.view_name)
     View view_name;
-    private String stationId, pipeId, windVanes;
+    private String stationId, pipeId, windVanes,departmentId;
     private String token, userId;
     private int SELECT_STATION = 101;
     private String activityName;
-
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -62,6 +61,8 @@ public class AddWindVaneActivity extends BaseActivity {
         userId = (String) SPUtil.get(AddWindVaneActivity.this, "userId", "");
         if (getIntent() != null) {
             activityName = getIntent().getExtras().getString("name");
+            pipeId = getIntent().getExtras().getString("pipeId");
+            departmentId = getIntent().getExtras().getString("departmentId");
             if (activityName.equals("windVane")) {
                 tvTitle.setText("添加风向标");
             } else if (activityName.equals("videoMonitoring")) {
@@ -87,7 +88,9 @@ public class AddWindVaneActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_stationNo:
-                Intent intentStation = new Intent(this, StationActivity.class);
+                Intent intentStation = new Intent(this, StationByFullParamsActivity.class);
+                intentStation.putExtra("departmentId", departmentId+"");
+                intentStation.putExtra("pipeId", pipeId+"");
                 startActivityForResult(intentStation, SELECT_STATION);
                 break;
             case R.id.btn_commit:

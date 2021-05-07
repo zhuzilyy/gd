@@ -51,6 +51,7 @@ public class AdvocacyBoardListActivity extends BaseActivity {
     private List<PreModel> resultPreList;
     private final int ADD_BOARD = 100;
     private int deleteIndex;
+    private String pipeId,departmentId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -79,6 +80,10 @@ public class AdvocacyBoardListActivity extends BaseActivity {
             } else {
                 llNoData.setVisibility(View.VISIBLE);
             }
+        }
+        if(getIntent()!=null){
+            pipeId =  getIntent().getExtras().getString("pipeId");
+            departmentId =  getIntent().getExtras().getString("departmentId");
         }
         initViews();
         initData();
@@ -155,6 +160,8 @@ public class AdvocacyBoardListActivity extends BaseActivity {
             case R.id.tv_right:
                 Intent intent = new Intent(AdvocacyBoardListActivity.this,AddWindVaneActivity.class);
                 intent.putExtra("name","advocacyBoard");
+                intent.putExtra("departmentId",departmentId);
+                intent.putExtra("pipeId",pipeId);
                 startActivityForResult(intent,ADD_BOARD);
                 break;
         }

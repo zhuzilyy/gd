@@ -51,6 +51,7 @@ public class WindVaneListActivity extends BaseActivity {
     private List<WindModel> resultWindList;
     private final int ADD_WIND = 100;
     private int deleteIndex;
+    private String pipeId,departmentId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -79,6 +80,10 @@ public class WindVaneListActivity extends BaseActivity {
             } else {
                 llNoData.setVisibility(View.VISIBLE);
             }
+        }
+        if(getIntent()!=null){
+            pipeId =  getIntent().getExtras().getString("pipeId");
+            departmentId =  getIntent().getExtras().getString("departmentId");
         }
         initViews();
         initData();
@@ -156,6 +161,8 @@ public class WindVaneListActivity extends BaseActivity {
             case R.id.tv_right:
                 Intent intent = new Intent(WindVaneListActivity.this,AddWindVaneActivity.class);
                 intent.putExtra("name","windVane");
+                intent.putExtra("departmentId",departmentId);
+                intent.putExtra("pipeId",pipeId);
                 startActivityForResult(intent,ADD_WIND);
                 break;
         }

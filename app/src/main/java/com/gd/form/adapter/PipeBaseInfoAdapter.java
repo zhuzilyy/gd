@@ -40,7 +40,9 @@ public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<StakeModel> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PipeTagActivity.class);
-                intent.putExtra("tag","check");
+                intent.putExtra("tag","update");
+                intent.putExtra("id",model.getId()+"");
+                intent.putExtra("lineId",model.getLineid()+"");
                 context.startActivity(intent);
             }
         });

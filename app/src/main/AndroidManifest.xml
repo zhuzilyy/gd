@@ -365,6 +365,9 @@
             android:name=".activity.StationByIdActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.StationByFullParamsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

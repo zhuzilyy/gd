@@ -1,6 +1,5 @@
 package com.gd.form.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -23,10 +22,6 @@ import butterknife.OnClick;
 
 
 public class WorkFragment extends BaseFragment {
-    //  @BindView(R.id.ll_gd_check)
-    //  LinearLayout ll_gd_check;
-
-
     @Override
     protected void initView(Bundle bundle) {
         StatusBarUtil.setTranslucentForImageView(getActivity(), 0, null);
@@ -39,9 +34,7 @@ public class WorkFragment extends BaseFragment {
     }
 
 
-    @SuppressLint("NonConstantResourceId")
     @OnClick({
-            // R.id.ll_gd_check,
             R.id.ll_jobs,
             R.id.ll_sgbh,
             R.id.ll_job_xhgl,
@@ -92,7 +85,8 @@ public class WorkFragment extends BaseFragment {
                 openActivity(SearchStationActivity.class);
                 break;
             case R.id.ll_addOrReduce:
-                openActivity(PipeTagActivity.class);
+                bundle.putString("tag","add");
+                openActivity(PipeTagActivity.class,bundle);
                 break;
             case R.id.ll_waterInsurance:
                 openActivity(AddWaterInsuranceActivity.class,bundle);

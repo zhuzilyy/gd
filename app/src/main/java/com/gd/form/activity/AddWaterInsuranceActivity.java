@@ -199,7 +199,6 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     private void getWaterInsuranceDetail() {
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.valueOf(waterId));
-//        params.addProperty("id",41936905);
         Log.i("tag", "params===" + params);
         Net.create(Api.class).waterProtectionDetail(token, params)
                 .enqueue(new NetCallback<WaterInsuranceDetailModel>(this, true) {
@@ -398,6 +397,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         } else {
             params.addProperty("uploadfile", "00");
         }
+        Log.i("tag","params==="+params);
         Net.create(Api.class).addWaterProtection(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

@@ -333,41 +333,40 @@
 
             <!--高后果区描述-->
             <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:text="高后果区描述"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:id="@+id/et_desc"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:hint="高后果区描述"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
             </LinearLayout>
-
+            <EditText
+                android:id="@+id/et_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/d_5"
+                android:paddingTop="@dimen/d_5"
+                android:paddingLeft="@dimen/d_15"
+                android:paddingRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="高后果区描述"
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -378,41 +377,39 @@
 
             <!--高后果区管控措施-->
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="高后果区管控措施"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="高后果区管控措施"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                </LinearLayout>
                 <EditText
                     android:id="@+id/et_controlMethod"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/d_5"
+                    android:paddingTop="@dimen/d_5"
+                    android:paddingLeft="@dimen/d_15"
+                    android:paddingRight="@dimen/d_15"
                     android:background="@null"
-                    android:gravity="end"
                     android:hint="高后果区管控措施"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
             </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"

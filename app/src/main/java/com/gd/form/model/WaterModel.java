@@ -7,6 +7,7 @@ public class WaterModel implements Serializable {
     private String maintain;
     private String name;
     private String stakename;
+    private double stakeform;
     private int id;
     private int stakeid;
     public String getDistance() {
@@ -55,5 +56,24 @@ public class WaterModel implements Serializable {
 
     public void setStakeid(int stakeid) {
         this.stakeid = stakeid;
+    }
+    public double getStakeform() {
+        return stakeform;
+    }
+
+    public void setStakeform(double stakeform) {
+        this.stakeform = stakeform;
+    }
+
+    @Override
+    public String toString() {
+        return "WaterModel{" +
+                "distance='" + distance + '\'' +
+                ", maintain='" + maintain + '\'' +
+                ", name='" + name + '\'' +
+                ", stakename='" + stakename + '\'' +
+                ", id=" + id +
+                ", stakeid=" + stakeid +
+                '}';
     }
 }

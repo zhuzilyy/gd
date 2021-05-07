@@ -14,6 +14,7 @@ import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
+import com.gd.form.model.NextStationModel;
 import com.gd.form.model.NoApproveModel;
 import com.gd.form.model.OverTimeModel;
 import com.gd.form.model.Pipelineinfo;
@@ -25,6 +26,7 @@ import com.gd.form.model.SearchPerson;
 import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
+import com.gd.form.model.StationDetailInfo;
 import com.gd.form.model.StationNoModel;
 import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.TunnelDetailModel;
@@ -96,6 +98,14 @@ public interface Api {
      */
     @GET("pipelineinfosget.html")
     Call<List<Pipelineinfo>> pipelineinfosget(@Header("TokenValue") String token);
+
+    /**
+     * 获取所有管道信息
+     *
+     * @return
+     */
+    @POST("GetlinesByDptid.html")
+    Call<List<Pipelineinfo>> pipelineinfosgetById(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**
@@ -752,6 +762,54 @@ public interface Api {
      */
     @POST("StakeDeleteForothers.html")
     Call<ServerModel> deleteOther(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取桩的信息
+     *
+     * @return
+     */
+    @POST("pipestakeinfoGetNextByKey.html")
+    Call<NextStationModel> getStationInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取桩的信息
+     *
+     * @return
+     */
+    @POST("pipestakeinfogetForPrimaryKey.html")
+    Call<List<StationDetailInfo>> getStationDetailInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新桩的信息
+     *
+     * @return
+     */
+    @POST("pipestakeinfoUpdateBaseinfo.html")
+    Call<ServerModel> updateStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取桩号信息
+     *
+     * @return
+     */
+    @POST("GetpipestakeinfoByDptidAndPipeidandKey.html")
+    Call<List<StationNoModel>> getStationByDptidAndPipeIdAndKey(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 查找管道负责人
+     *
+     * @return
+     */
+    @POST("pipemploysGetListUIByDpt.html")
+    Call<List<Pipemploys>> getPipeManager(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 查找管道负责人
+     *
+     * @return
+     */
+    @POST("pipemploysGetListUIByEmpID.html")
+    Call<List<Pipemploys>> getPipeManagerByUserId(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

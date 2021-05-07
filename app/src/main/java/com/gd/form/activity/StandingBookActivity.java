@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.StakeModel;
@@ -24,6 +25,7 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
@@ -81,7 +83,8 @@ public class StandingBookActivity extends BaseActivity {
     private SearchStationModel searchStationModel;
     private String newPipeTagId;
     private SearchPipeModel resultSearchPipeModel;
-
+    private ListDialog dialog;
+    private List<Pipelineinfo> pipeList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -96,6 +99,7 @@ public class StandingBookActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道及附属设施");
+        dialog = new ListDialog(this);
         token = (String) SPUtil.get(StandingBookActivity.this, "token", "");
         userId = (String) SPUtil.get(StandingBookActivity.this, "userId", "");
         myReceiver = new MyReceiver();
@@ -146,6 +150,7 @@ public class StandingBookActivity extends BaseActivity {
     }
 
     private void getPipeInfo(JsonObject params) {
+        Log.i("tag","params=="+params);
         Net.create(Api.class).getPipeInfo(token, params)
                 .enqueue(new NetCallback<SearchPipeModel>(this, true) {
                     @Override
@@ -161,6 +166,9 @@ public class StandingBookActivity extends BaseActivity {
         if (searchPipeModel.getDeptCount() > 0) {
             tvArea.setText(searchPipeModel.getDptList().get(0).getName());
         }
+        departmentId = searchPipeModel.getDptList().get(0).getId()+"";
+        pipeList = searchPipeModel.getLineList();
+        pipeId = searchPipeModel.getLineList().get(0).getId()+"";
         if (searchPipeModel.getLineCount() > 0 && TextUtils.isEmpty(tvPipeName.getText().toString())) {
             tvPipeName.setText(searchPipeModel.getLineList().get(0).getName());
         }
@@ -257,12 +265,16 @@ public class StandingBookActivity extends BaseActivity {
                 if (resultSearchPipeModel.getWindCount() > 0) {
                     bundle.putSerializable("winds", (Serializable) resultSearchPipeModel.getWindList());
                 }
+                bundle.putString("departmentId",departmentId);
+                bundle.putString("pipeId",pipeId);
                 openActivity(WindVaneListActivity.class, bundle);
                 break;
             case R.id.ll_other:
                 if (resultSearchPipeModel.getOtherCount() > 0) {
                     bundle.putSerializable("others", (Serializable) resultSearchPipeModel.getOtherList());
                 }
+                bundle.putString("departmentId",departmentId);
+                bundle.putString("pipeId",pipeId);
                 openActivity(OtherListActivity.class, bundle);
                 break;
             case R.id.ll_water:
@@ -275,12 +287,16 @@ public class StandingBookActivity extends BaseActivity {
                 if (resultSearchPipeModel.getViewCount() > 0) {
                     bundle.putSerializable("videos", (Serializable) resultSearchPipeModel.getViewList());
                 }
+                bundle.putString("departmentId",departmentId);
+                bundle.putString("pipeId",pipeId);
                 openActivity(VideoMonitorListActivity.class, bundle);
                 break;
             case R.id.ll_advocacy_board:
                 if (resultSearchPipeModel.getPeduralCount() > 0) {
                     bundle.putSerializable("advocacyBoards", (Serializable) resultSearchPipeModel.getPreList());
                 }
+                bundle.putString("departmentId",departmentId);
+                bundle.putString("pipeId",pipeId);
                 openActivity(AdvocacyBoardListActivity.class, bundle);
                 break;
             case R.id.ll_area:
@@ -317,7 +333,31 @@ public class StandingBookActivity extends BaseActivity {
                 openActivity(PipeManagerActivity.class, bundle);
                 break;
             case R.id.ll_pipeName:
-
+                if(pipeList.size()==0){
+                    ToastUtil.show("暂无数据");
+                    return;
+                }
+                //获取管道名称
+                List<String>  pipeNameList= new ArrayList<>();
+                List<String>  pipeIdList= new ArrayList<>();
+                if(pipeList!=null && pipeList.size()>0){
+                    for (int i = 0; i <pipeList.size() ; i++) {
+                        pipeNameList.add(pipeList.get(i).getName());
+                        pipeIdList.add(pipeList.get(i).getId()+"");
+                    }
+                }
+                dialog.setData(pipeNameList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvPipeName.setText(pipeNameList.get(positionM));
+                    JsonObject params = new JsonObject();
+                    params.addProperty("appempid", userId);
+                    params.addProperty("dptid", departmentId);
+                    params.addProperty("pipeid", pipeIdList.get(positionM));
+                    params.addProperty("empid", employId);
+                    getPipeInfo(params);
+                    dialog.dismiss();
+                });
                 break;
             case R.id.ll_pipeTagBaseInfo:
                 if (resultSearchPipeModel.getStakeCount() > 0) {
