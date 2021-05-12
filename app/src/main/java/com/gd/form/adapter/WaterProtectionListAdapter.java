@@ -1,11 +1,14 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gd.form.R;
+import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.model.WaterModel;
 
 import java.util.List;
@@ -27,22 +30,38 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
 
     @Override
     protected void bindData(BaseViewHolder viewHolder, WaterModel model, int position) {
-        Log.i("tag","to111"+model.toString());
         TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
         TextView tvDistance = viewHolder.getView(R.id.tv_distance);
         TextView tvName = viewHolder.getView(R.id.tv_name);
         LinearLayout llUpdate = viewHolder.getView(R.id.ll_update);
+        View viewUpdate = viewHolder.getView(R.id.view_update);
         tvStationNo.setText(model.getStakename());
         tvDistance.setText(model.getDistance());
         tvName.setText(model.getName());
-//        if(model.getMaintain().equals("1")){
-//            llUpdate.setVisibility(View.VISIBLE);
-//        }else if(model.getMaintain().equals("0")){
-//            llUpdate.setVisibility(View.GONE);
-//        }
-        viewHolder.getContentView().findViewById(R.id.btn_update).setOnClickListener(view -> {
-            if(onItemClickListener!=null){
-                onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());
+        if (model.getMaintain().equals("1")) {
+            llUpdate.setVisibility(View.VISIBLE);
+        } else if (model.getMaintain().equals("0")) {
+            llUpdate.setVisibility(View.GONE);
+        }
+        if ("select".equals(model.getType())) {
+            llUpdate.setVisibility(View.GONE);
+        } else {
+            llUpdate.setVisibility(View.VISIBLE);
+        }
+        viewHolder.getContentView().setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
+            }
+        });
+        viewHolder.getView(R.id.btn_update).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AddWaterInsuranceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("tag", "update");
+                bundle.putString("waterId", model.getId() + "");
+                intent.putExtras(bundle);
+                context.startActivity(intent, bundle);
             }
         });
     }

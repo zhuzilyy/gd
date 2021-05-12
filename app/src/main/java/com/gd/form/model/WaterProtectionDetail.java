@@ -12,6 +12,11 @@ public class WaterProtectionDetail {
     private String solution;
     private int pipeid;
     private int stakeid;
+    private int waterid;
+    private String stakefrom;
+    private String ownername;
+    private String approvalid;
+    private String ownerid;
     public CheckDateTime getCheckdatetime() {
         return checkdatetime;
     }
@@ -100,4 +105,43 @@ public class WaterProtectionDetail {
         this.stakeid = stakeid;
     }
 
+    public String getStakefrom() {
+        return stakefrom;
+    }
+
+    public void setStakefrom(String stakefrom) {
+        this.stakefrom = stakefrom;
+    }
+
+    public String getOwnername() {
+        return ownername;
+    }
+
+    public void setOwnername(String ownername) {
+        this.ownername = ownername;
+    }
+
+    public String getApprovalid() {
+        return approvalid;
+    }
+
+    public void setApprovalid(String approvalid) {
+        this.approvalid = approvalid;
+    }
+
+    public int getWaterid() {
+        return waterid;
+    }
+
+    public void setWaterid(int waterid) {
+        this.waterid = waterid;
+    }
+
+    public String getOwnerid() {
+        return ownerid;
+    }
+
+    public void setOwnerid(String ownerid) {
+        this.ownerid = ownerid;
+    }
 }

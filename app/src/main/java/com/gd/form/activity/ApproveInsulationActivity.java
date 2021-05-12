@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -46,10 +47,8 @@ import butterknife.OnClick;
 public class ApproveInsulationActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_pipeName)
-    TextView tvPipeName;
-    @BindView(R.id.tv_box)
-    TextView tvBox;
+    @BindView(R.id.tv_stationName)
+    TextView tvStationName;
     @BindView(R.id.tv_pipeElectricity)
     TextView tvPipeElectricity;
     @BindView(R.id.tv_pipePressure)
@@ -60,16 +59,10 @@ public class ApproveInsulationActivity extends BaseActivity {
     TextView tvGroundPressure;
     @BindView(R.id.tv_blankElectricity)
     TextView tvBlankElectricity;
-    @BindView(R.id.tv_property)
-    TextView tvProperty;
     @BindView(R.id.tv_lightingPressure)
     TextView tvLightingPressure;
-    @BindView(R.id.tv_area)
-    TextView tvArea;
     @BindView(R.id.tv_remark)
     TextView tvRemark;
-    @BindView(R.id.tv_situation)
-    TextView tvSituation;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -90,6 +83,10 @@ public class ApproveInsulationActivity extends BaseActivity {
     TextView tvApproveAdvice;
     @BindView(R.id.ll_approveAdvice)
     LinearLayout llApproveAdvice;
+    @BindView(R.id.ll_file)
+    LinearLayout llFile;
+    @BindView(R.id.ll_selectImages)
+    LinearLayout llSelectImages;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -112,7 +109,9 @@ public class ApproveInsulationActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Util.activityList.add(this);
-        tvTitle.setText("阀室绝缘件性能测试");
+        tvTitle.setText("绝缘件性能测试");
+        llFile.setVisibility(View.GONE);
+        llSelectImages.setVisibility(View.GONE);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
@@ -148,29 +147,22 @@ public class ApproveInsulationActivity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).getInsulationDetail(token, params)
                 .enqueue(new NetCallback<InsulationDetailModel>(this, true) {
                     @Override
                     public void onResponse(InsulationDetailModel model) {
                         if (model != null) {
                             InsulationDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getPipeString())) {
-                                tvPipeName.setText(model.getPipeString().split(":")[1]);
-                            }
-                            tvBox.setText(dataDetail.getStationdesc());
+                            tvStationName.setText(dataDetail.getStationdesc());
                             tvRemark.setText(dataDetail.getRemarks());
                             tvPipeElectricity.setText(dataDetail.getCol1());
                             tvPipePressure.setText(dataDetail.getCol2());
                             tvGroundElectricity.setText(dataDetail.getCol3());
                             tvGroundPressure.setText(dataDetail.getCol4());
                             tvBlankElectricity.setText(dataDetail.getCol5());
-                            tvProperty.setText(dataDetail.getCol6());
                             tvLightingPressure.setText(dataDetail.getCol7());
-                            tvSituation.setText(dataDetail.getCol8());
                             String location = model.getDatadetail().getLocate();
-                            if (!TextUtils.isEmpty(model.getDeptString())) {
-                                tvArea.setText(model.getDeptString().split(":")[1]);
-                            }
                             tvRemark.setText(dataDetail.getRemarks());
                             if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
@@ -217,7 +209,7 @@ public class ApproveInsulationActivity extends BaseActivity {
                                 }
                                 //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
                                 tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
                                     llApproveAdvice.setVisibility(View.VISIBLE);
                                     tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                                 }

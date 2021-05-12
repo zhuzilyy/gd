@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gd.form.R;
@@ -30,11 +31,17 @@ public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<StakeModel> {
     @Override
     protected void bindData(BaseViewHolder viewHolder, StakeModel model, int position) {
         TextView tvDepartmentName = viewHolder.getView(R.id.tv_departmentName);
+        LinearLayout llBottom = viewHolder.getView(R.id.ll_bottom);
         TextView tvPipeName = viewHolder.getView(R.id.tv_pipeName);
         TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
         tvStationNo.setText(model.getName());
         tvDepartmentName.setText(model.getDeptname());
         tvPipeName.setText(model.getLinename());
+        if("select".equals(model.getSelect())){
+            llBottom.setVisibility(View.GONE);
+        }else{
+            llBottom.setVisibility(View.VISIBLE);
+        }
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +53,7 @@ public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<StakeModel> {
                 context.startActivity(intent);
             }
         });
-        viewHolder.getContentView().findViewById(R.id.btn_delete).setOnClickListener(view -> {
+        viewHolder.getContentView().setOnClickListener(view -> {
             if(onItemClickListener!=null){
                 onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());
             }

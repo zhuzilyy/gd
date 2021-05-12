@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/layout_title"/>
+    <LinearLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_stationNo"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:textSize="@dimen/s_16"
+                android:textColor="@color/colorFF52A7F9"
+                android:id="@+id/tv_stationNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="按桩号搜索" />
+
+            <View
+                android:id="@+id/view_stationNo"
+                android:background="@color/colorFF52A7F9"
+                android:layout_marginTop="@dimen/d_5"
+                android:layout_width="@dimen/d_60"
+                android:layout_height="@dimen/d_2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_area"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:textSize="@dimen/s_16"
+                android:textColor="#000"
+                android:id="@+id/tv_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="按作业区搜索" />
+
+            <View
+                android:visibility="invisible"
+                android:id="@+id/view_area"
+                android:background="@color/colorFF52A7F9"
+                android:layout_marginTop="@dimen/d_5"
+                android:layout_width="@dimen/d_60"
+                android:layout_height="@dimen/d_2" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_person"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:textSize="@dimen/s_16"
+                android:textColor="#000"
+                android:id="@+id/tv_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="按负责人搜索" />
+
+            <View
+                android:visibility="invisible"
+                android:id="@+id/view_person"
+                android:background="@color/colorFF52A7F9"
+                android:layout_marginTop="@dimen/d_5"
+                android:layout_width="@dimen/d_60"
+                android:layout_height="@dimen/d_2" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--根据桩号搜索-->
+    <LinearLayout
+        android:layout_marginTop="@dimen/d_10"
+        android:id="@+id/ll_searchByStationNo"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_pipeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:gravity="center"
+            android:paddingTop="@dimen/d_12"
+            android:paddingBottom="@dimen/d_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:text="管道名称"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
+
+            <TextView
+                android:id="@+id/tv_pipeName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginEnd="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <LinearLayout
+            android:id="@+id/ll_startNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:gravity="center"
+            android:paddingTop="@dimen/d_12"
+            android:paddingBottom="@dimen/d_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:text="起始桩号"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
+
+            <TextView
+                android:id="@+id/tv_startStationNo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginEnd="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_endNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:gravity="center"
+            android:paddingTop="@dimen/d_12"
+            android:paddingBottom="@dimen/d_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:text="终止桩号"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
+
+            <TextView
+                android:id="@+id/tv_endStationNo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginEnd="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <Button
+            android:id="@+id/btn_searchStaionNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_30"
+            android:layout_marginLeft="@dimen/d_30"
+            android:layout_marginTop="@dimen/d_30"
+            android:layout_marginEnd="@dimen/d_30"
+            android:layout_marginRight="@dimen/d_30"
+            android:layout_marginBottom="@dimen/d_30"
+            android:background="@drawable/button_ship"
+            android:text="查询"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_18" />
+
+    </LinearLayout>
+
+    <!--根据作业区搜索-->
+    <LinearLayout
+        android:layout_marginTop="@dimen/d_10"
+        android:id="@+id/ll_searchByDepartmentName"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_departmentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:gravity="center"
+            android:paddingTop="@dimen/d_12"
+            android:paddingBottom="@dimen/d_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:text="作业区"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
+
+            <TextView
+                android:id="@+id/tv_departmentName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginEnd="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <Button
+            android:id="@+id/btn_searchDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_30"
+            android:layout_marginLeft="@dimen/d_30"
+            android:layout_marginTop="@dimen/d_30"
+            android:layout_marginEnd="@dimen/d_30"
+            android:layout_marginRight="@dimen/d_30"
+            android:layout_marginBottom="@dimen/d_30"
+            android:background="@drawable/button_ship"
+            android:text="查询"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_18" />
+
+    </LinearLayout>
+
+    <!--根据负责人搜索-->
+    <LinearLayout
+        android:layout_marginTop="@dimen/d_10"
+        android:id="@+id/ll_searchByPerson"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80FFFFFF"
+            android:gravity="center"
+            android:paddingTop="@dimen/d_12"
+            android:paddingBottom="@dimen/d_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:text="管道负责人"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
+
+            <TextView
+                android:id="@+id/tv_manager"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginEnd="@dimen/d_15"
+                android:layout_marginRight="@dimen/d_15"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="end"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#A6000000"
+                android:textSize="@dimen/s_16" />
+
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+
+        <Button
+            android:id="@+id/btn_searchManager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_30"
+            android:layout_marginLeft="@dimen/d_30"
+            android:layout_marginTop="@dimen/d_30"
+            android:layout_marginEnd="@dimen/d_30"
+            android:layout_marginRight="@dimen/d_30"
+            android:layout_marginBottom="@dimen/d_30"
+            android:background="@drawable/button_ship"
+            android:text="查询"
+            android:textColor="@color/write"
+            android:textSize="@dimen/s_18" />
+
+    </LinearLayout>
+</LinearLayout>

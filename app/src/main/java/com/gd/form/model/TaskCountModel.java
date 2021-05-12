@@ -1,10 +1,66 @@
 package com.gd.form.model;
 
+import java.util.List;
+
 public class TaskCountModel {
     private int approval2;
     private int approval1;
     private int task1;
     private int task2;
+    private int overCount;
+    private int overFinishCount;
+    private int waitCount;
+    private List<OverTimeModel> overTaskList;
+    private List<OverTimeModel> waitTaskList;
+    private List<OverTimeModel> overFinishTaskList;
+    public int getOverCount() {
+        return overCount;
+    }
+
+    public void setOverCount(int overCount) {
+        this.overCount = overCount;
+    }
+
+    public int getOverFinishCount() {
+        return overFinishCount;
+    }
+
+    public void setOverFinishCount(int overFinishCount) {
+        this.overFinishCount = overFinishCount;
+    }
+
+    public int getWaitCount() {
+        return waitCount;
+    }
+
+    public void setWaitCount(int waitCount) {
+        this.waitCount = waitCount;
+    }
+
+    public List<OverTimeModel> getOverTaskList() {
+        return overTaskList;
+    }
+
+    public void setOverTaskList(List<OverTimeModel> overTaskList) {
+        this.overTaskList = overTaskList;
+    }
+
+    public List<OverTimeModel> getWaitTaskList() {
+        return waitTaskList;
+    }
+
+    public void setWaitTaskList(List<OverTimeModel> waitTaskList) {
+        this.waitTaskList = waitTaskList;
+    }
+
+    public List<OverTimeModel> getOverFinishTaskList() {
+        return overFinishTaskList;
+    }
+
+    public void setOverFinishTaskList(List<OverTimeModel> overFinishTaskList) {
+        this.overFinishTaskList = overFinishTaskList;
+    }
+
     public int getApproval2() {
         return approval2;
     }

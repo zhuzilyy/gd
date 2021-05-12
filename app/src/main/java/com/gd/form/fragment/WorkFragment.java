@@ -41,6 +41,7 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_job_ghg,
             R.id.ll_job_ffgl,
             R.id.ll_job_gcgl,
+            R.id.ll_job_fxgl,
             R.id.ll_tzsj,
             R.id.ll_search_data,
             R.id.ll_addOrReduce,

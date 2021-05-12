@@ -38,7 +38,10 @@ import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
+import com.gd.form.model.WaterInsuranceDetailModel;
+import com.gd.form.model.WaterModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -53,6 +56,7 @@ import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +70,7 @@ public class WaterInsuranceActivity extends BaseActivity {
     TextView tvArea;
     @BindView(R.id.tv_weather)
     TextView tvWeather;
-    @BindView(R.id.tv_zh)
+    @BindView(R.id.tv_stationNo)
     TextView tvStationNo;
     @BindView(R.id.tv_location)
     TextView tvLocation;
@@ -100,7 +104,18 @@ public class WaterInsuranceActivity extends BaseActivity {
     RadioGroup rgHandle;
     @BindView(R.id.ll_location)
     LinearLayout llLocation;
-
+    @BindView(R.id.et_distance)
+    EditText etDistance;
+    @BindView(R.id.et_BuildingCompany)
+    EditText etBuildingCompany;
+    @BindView(R.id.et_location)
+    EditText etLocation;
+    @BindView(R.id.et_weather)
+    EditText etWeather;
+    @BindView(R.id.et_process)
+    EditText etProcess;
+    @BindView(R.id.rg_isHidden)
+    RadioGroup rg_isHidden;
     private List<Department> departmentList;
     private ListDialog dialog;
     private int FILE_REQUEST_CODE = 100;
@@ -124,8 +139,9 @@ public class WaterInsuranceActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
     private int departmentId;
-    private String stationId;
+    private String stationId, stakeId;
     private String handlemode = "头通知施工单位整改";
+    private String isHidden = "否";
 
     @Override
     protected void setStatusBar() {
@@ -170,6 +186,19 @@ public class WaterInsuranceActivity extends BaseActivity {
                         break;
                     case R.id.rb_writeUpload:
                         handlemode = "书面上报输气管理处";
+                        break;
+                }
+            }
+        });
+        rg_isHidden.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_no:
+                        isHidden = "否";
+                        break;
+                    case R.id.rb_yes:
+                        isHidden = "是";
                         break;
                 }
             }
@@ -219,7 +248,7 @@ public class WaterInsuranceActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("w015/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -260,11 +289,15 @@ public class WaterInsuranceActivity extends BaseActivity {
             R.id.ll_scfj,
             R.id.ll_address,
             R.id.btn_commit,
+            R.id.ll_stationNo,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_stationNo:
+                getWaters();
                 break;
             case R.id.ll_address:
                 Intent intentArea = new Intent(this, MapActivity.class);
@@ -290,10 +323,10 @@ public class WaterInsuranceActivity extends BaseActivity {
             case R.id.ll_selectImage:
                 initPermissions();
                 break;
-            case R.id.ll_zh:
-                Intent intentStartStation = new Intent(this, StationActivity.class);
-                startActivityForResult(intentStartStation, SELECT_STATION);
-                break;
+//            case R.id.ll_zh:
+//                Intent intentStartStation = new Intent(this, StationActivity.class);
+//                startActivityForResult(intentStartStation, SELECT_STATION);
+//                break;
             case R.id.ll_weather:
                 List<String> weatherList = new ArrayList<>();
                 weatherList.add("晴");
@@ -328,33 +361,53 @@ public class WaterInsuranceActivity extends BaseActivity {
         }
     }
 
+    private void getWaters() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getWatersByDepartment(token, jsonObject)
+                .enqueue(new NetCallback<List<WaterModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<WaterModel> list) {
+                        List<WaterModel> waterModelList = new ArrayList<>();
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                WaterModel waterModel = list.get(i);
+                                waterModel.setType("select");
+                                waterModelList.add(waterModel);
+                            }
+                            Intent intent = new Intent(WaterInsuranceActivity.this, WaterProtectionListActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("waters", (Serializable) waterModelList);
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, SELECT_STATION);
+                        }
+                    }
+                });
+    }
+
     private boolean paramsComplete() {
-        if (TextUtils.isEmpty(tvArea.getText().toString())) {
-            ToastUtil.show("请选择作业区");
+        if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
+            ToastUtil.show("请选择桩号");
             return false;
         }
-        if (TextUtils.isEmpty(etCompany.getText().toString())) {
-            ToastUtil.show("请输入施工单位");
+        if (TextUtils.isEmpty(etDistance.getText().toString())) {
+            ToastUtil.show("请输入距离");
             return false;
         }
         if (TextUtils.isEmpty(etName.getText().toString())) {
             ToastUtil.show("请输入工程名称");
             return false;
         }
-        if (TextUtils.isEmpty(tvWeather.getText().toString())) {
-            ToastUtil.show("请选择天气");
+        if (TextUtils.isEmpty(etLocation.getText().toString())) {
+            ToastUtil.show("请输入行政区域");
             return false;
         }
-        if (TextUtils.isEmpty(etArea.getText().toString())) {
-            ToastUtil.show("请选择施工地点");
+        if (TextUtils.isEmpty(etBuildingCompany.getText().toString())) {
+            ToastUtil.show("请输入施工单位");
             return false;
         }
-        if (TextUtils.isEmpty(etWorkingPlane.getText().toString())) {
-            ToastUtil.show("请输入施工作业面");
-            return false;
-        }
-        if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
-            ToastUtil.show("请选择施桩号");
+        if (TextUtils.isEmpty(etWeather.getText().toString())) {
+            ToastUtil.show("请输入天气");
             return false;
         }
         if (TextUtils.isEmpty(etProblem.getText().toString())) {
@@ -369,18 +422,10 @@ public class WaterInsuranceActivity extends BaseActivity {
             ToastUtil.show("请输入施工负责人");
             return false;
         }
-        if (TextUtils.isEmpty(etFinishCount.getText().toString())) {
-            ToastUtil.show("请输入完成工程量");
+        if (TextUtils.isEmpty(etProcess.getText().toString())) {
+            ToastUtil.show("请输入形象进度");
             return false;
         }
-        if (TextUtils.isEmpty(etOther.getText().toString())) {
-            ToastUtil.show("请输入施工动态、其它人员巡视情况");
-            return false;
-        }
-//        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-//            ToastUtil.show("请选择坐标");
-//            return false;
-//        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
@@ -401,26 +446,26 @@ public class WaterInsuranceActivity extends BaseActivity {
         }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
-        jsonObject.addProperty("constructionunit", etCompany.getText().toString());
-        jsonObject.addProperty("constructionname", etName.getText().toString());
+        jsonObject.addProperty("stakeid", Integer.parseInt(stakeId));
+        jsonObject.addProperty("stakefrom", etDistance.getText().toString());
+        jsonObject.addProperty("protectname", etName.getText().toString());
+        jsonObject.addProperty("protectunit", etBuildingCompany.getText().toString());
+        jsonObject.addProperty("locations", etLocation.getText().toString());
         jsonObject.addProperty("weathers", tvWeather.getText().toString());
-        jsonObject.addProperty("constructionface", etWorkingPlane.getText().toString());
-        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("col1", etProblem.getText().toString());
         jsonObject.addProperty("col1handle", etAdvice.getText().toString());
         jsonObject.addProperty("handlemode", handlemode);
         jsonObject.addProperty("constructionhandler", etManager.getText().toString());
-        jsonObject.addProperty("col2", etFinishCount.getText().toString());
-        jsonObject.addProperty("col3", etOther.getText().toString());
-        jsonObject.addProperty("col3picture", "00");
+        jsonObject.addProperty("col2", etProcess.getText().toString());
+        jsonObject.addProperty("col3", isHidden);
         jsonObject.addProperty("locate", tvAddress.getText().toString());
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);
         if (!TextUtils.isEmpty(photoSb.toString())) {
-            jsonObject.addProperty("col1picture", photoSb.toString());
+            jsonObject.addProperty("picturepath", photoSb.toString());
         } else {
-            jsonObject.addProperty("col1picture", "00");
+            jsonObject.addProperty("picturepath", "00");
         }
         if (!TextUtils.isEmpty(ossFilePath)) {
             jsonObject.addProperty("filepath", ossFilePath);
@@ -479,12 +524,15 @@ public class WaterInsuranceActivity extends BaseActivity {
             tvFileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("w015/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
-            stationId = data.getStringExtra("stationId");
-            String stationName = data.getStringExtra("stationName");
+            stationId = data.getStringExtra("waterId");
+            String stationName = data.getStringExtra("name");
+            stakeId = data.getStringExtra("stakeId");
             tvStationNo.setText(stationName);
+            getWaterDetail(stationId);
+            getDefaultManager();
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
@@ -502,6 +550,34 @@ public class WaterInsuranceActivity extends BaseActivity {
             tvAddress.setText(area);
         }
 
+    }
+
+    private void getWaterDetail(String stationId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", Integer.parseInt(stationId));
+        Net.create(Api.class).getWatersByKey(token, jsonObject)
+                .enqueue(new NetCallback<WaterInsuranceDetailModel>(this, true) {
+                    @Override
+                    public void onResponse(WaterInsuranceDetailModel detailModel) {
+                        etName.setText(detailModel.getProtectname());
+                        etDistance.setText(detailModel.getStakefrom());
+                        etLocation.setText(detailModel.getLocations());
+                        etBuildingCompany.setText(detailModel.getProtectunit());
+                    }
+                });
+    }
+
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tvSpr.setText(pipemploys.getName());
+                    }
+                });
     }
 
     //上传阿里云文件

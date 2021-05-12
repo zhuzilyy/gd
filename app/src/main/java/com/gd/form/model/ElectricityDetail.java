@@ -11,6 +11,7 @@ public class ElectricityDetail {
     private String temperature;
     private String testlocate;
     private String weathers;
+    private String stationame;
     public String getCol1() {
         return col1;
     }
@@ -89,5 +90,13 @@ public class ElectricityDetail {
 
     public void setWeathers(String weathers) {
         this.weathers = weathers;
+    }
+
+    public String getStationame() {
+        return stationame;
+    }
+
+    public void setStationame(String stationame) {
+        this.stationame = stationame;
     }
 }

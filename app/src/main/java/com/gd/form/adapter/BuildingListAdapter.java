@@ -31,17 +31,25 @@ public class BuildingListAdapter extends BaseRecyclerViewAdapter<SearchBuildingM
     @Override
     protected void bindData(BaseViewHolder viewHolder, SearchBuildingModel model, int position) {
         TextView tvName = viewHolder.getView(R.id.tv_name);
+        View viewUpdate = viewHolder.getView(R.id.view_update);
         TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
         LinearLayout llUpdate = viewHolder.getView(R.id.ll_update);
         tvName.setText(model.getLlegalname());
         tvStationNo.setText(model.getStakename());
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
         Button btnCheck = viewHolder.getView(R.id.btn_check);
-//        if(model.getMaintain().equals("1")){
-//            llUpdate.setVisibility(View.VISIBLE);
-//        }else if(model.getMaintain().equals("0")){
-//            llUpdate.setVisibility(View.GONE);
-//        }
+        if(model.getMaintain().equals("1")){
+            llUpdate.setVisibility(View.VISIBLE);
+        }else if(model.getMaintain().equals("0")){
+            llUpdate.setVisibility(View.GONE);
+        }
+        if("select".equals(model.getSelect())){
+            llUpdate.setVisibility(View.GONE);
+            viewUpdate.setVisibility(View.GONE);
+        }else{
+            llUpdate.setVisibility(View.VISIBLE);
+            viewUpdate.setVisibility(View.VISIBLE);
+        }
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

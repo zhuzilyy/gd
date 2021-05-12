@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +36,12 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -61,6 +64,7 @@ public class ZoneElectricityActivity extends BaseActivity {
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_APPROVER = 102;
     private int SELECT_ADDRESS = 103;
+    private int SELECT_STATION_NAME = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private String approverName;
     private String approverId;
@@ -92,6 +96,12 @@ public class ZoneElectricityActivity extends BaseActivity {
     EditText etRemark;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.ll_scfj)
+    LinearLayout llSelectFile;
+    @BindView(R.id.view_file)
+    View viewFile;
+    @BindView(R.id.tv_stationName)
+    TextView tvStationName;
     private Dialog mWeiboDialog;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
@@ -124,6 +134,8 @@ public class ZoneElectricityActivity extends BaseActivity {
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         dialog = new ListDialog(this);
+        llSelectFile.setVisibility(View.GONE);
+        viewFile.setVisibility(View.GONE);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
@@ -131,6 +143,7 @@ public class ZoneElectricityActivity extends BaseActivity {
         initGallery();
         initConfig();
     }
+
     private void initConfig() {
         galleryConfig = new GalleryConfig.Builder()
                 .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）
@@ -190,6 +203,7 @@ public class ZoneElectricityActivity extends BaseActivity {
         };
 
     }
+
     @OnClick({R.id.iv_back,
             R.id.ll_weather,
             R.id.ll_location,
@@ -197,6 +211,7 @@ public class ZoneElectricityActivity extends BaseActivity {
             R.id.ll_spr,
             R.id.btn_commit,
             R.id.ll_selectPic,
+            R.id.ll_stationName,
 
     })
     public void click(View view) {
@@ -204,11 +219,14 @@ public class ZoneElectricityActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_stationName:
+                getStations();
+                break;
             case R.id.ll_selectPic:
                 initPermissions();
                 break;
             case R.id.btn_commit:
-                if(paramsComplete()){
+                if (paramsComplete()) {
                     commit();
                 }
                 break;
@@ -241,11 +259,33 @@ public class ZoneElectricityActivity extends BaseActivity {
         }
     }
 
+    private void getStations() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getStations(token, jsonObject)
+                .enqueue(new NetCallback<List<String>>(this, true) {
+                    @Override
+                    public void onResponse(List<String> list) {
+                        if (list != null && list.size() > 0) {
+                            Intent intent = new Intent(ZoneElectricityActivity.this, StationNameActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArrayList("stations", (ArrayList<String>) list);
+                            bundle.putString("tag", "selectStation");
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, SELECT_STATION_NAME);
+                        } else {
+                            ToastUtil.show("暂无数据");
+                        }
+
+                    }
+                });
+    }
+
     private boolean paramsComplete() {
-//        if (TextUtils.isEmpty(etNo.getText().toString())) {
-//            ToastUtil.show("请输入序号");
-//            return false;
-//        }
+        if (TextUtils.isEmpty(tvStationName.getText().toString())) {
+            ToastUtil.show("请选择站场名称");
+            return false;
+        }
         if (TextUtils.isEmpty(etPosition.getText().toString())) {
             ToastUtil.show("请输入测试位置");
             return false;
@@ -254,12 +294,24 @@ public class ZoneElectricityActivity extends BaseActivity {
             ToastUtil.show("请输入管地电位");
             return false;
         }
+        if (!NumberUtil.isNumber((etElectricalPosition.getText().toString()))) {
+            ToastUtil.show("管地电位格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etBasePosition.getText().toString())) {
             ToastUtil.show("请输入基准电位");
             return false;
         }
+        if (!NumberUtil.isNumber((etBasePosition.getText().toString()))) {
+            ToastUtil.show("基准电位格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etGround.getText().toString())) {
             ToastUtil.show("请输入土壤电阻率");
+            return false;
+        }
+        if (!NumberUtil.isNumber((etGround.getText().toString()))) {
+            ToastUtil.show("土壤电阻率格式输入不正确");
             return false;
         }
         if (TextUtils.isEmpty(tvWeather.getText().toString())) {
@@ -270,16 +322,16 @@ public class ZoneElectricityActivity extends BaseActivity {
             ToastUtil.show("请输入温度");
             return false;
         }
-//        if (TextUtils.isEmpty(etPerson.getText().toString())) {
-//            ToastUtil.show("请输入测试人");
-//            return false;
-//        }
+        if (!NumberUtil.isNumber((etTemperature.getText().toString()))) {
+            ToastUtil.show("温度格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etRemark.getText().toString())) {
             ToastUtil.show("请输入备注");
             return false;
         }
         if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请输入坐标");
+            ToastUtil.show("请输入填报位置");
             return false;
         }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
@@ -288,6 +340,7 @@ public class ZoneElectricityActivity extends BaseActivity {
         }
         return true;
     }
+
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
         if (nameList.size() > 0) {
@@ -300,7 +353,8 @@ public class ZoneElectricityActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("testlocate",etPosition.getText().toString());
+        jsonObject.addProperty("stationame", tvStationName.getText().toString());
+        jsonObject.addProperty("testlocate", etPosition.getText().toString());
         jsonObject.addProperty("col1", etElectricalPosition.getText().toString());
         jsonObject.addProperty("col2", etBasePosition.getText().toString());
         jsonObject.addProperty("col3", etGround.getText().toString());
@@ -337,6 +391,7 @@ public class ZoneElectricityActivity extends BaseActivity {
                     }
                 });
     }
+
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -359,6 +414,7 @@ public class ZoneElectricityActivity extends BaseActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -386,9 +442,30 @@ public class ZoneElectricityActivity extends BaseActivity {
             if (!TextUtils.isEmpty(approverName)) {
                 tvSpr.setText(approverName);
             }
+        } else if (requestCode == SELECT_STATION_NAME) {
+            String content = data.getStringExtra("content");
+            if (!TextUtils.isEmpty(content)) {
+                String[] stationArr = content.split(":");
+                tvStationName.setText(stationArr[0]);
+            }
+            getDefaultManager();
         }
 
     }
+
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tvSpr.setText(pipemploys.getName());
+                    }
+                });
+    }
+
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);

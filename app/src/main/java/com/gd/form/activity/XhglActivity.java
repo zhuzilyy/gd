@@ -39,10 +39,14 @@ public class XhglActivity extends BaseActivity {
             R.id.ll_wzwj,
             R.id.ll_tbxj,
             R.id.ll_wrj,
+            R.id.ll_video_monitoring,
 
     })
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ll_video_monitoring:
+                openActivity(VideoMonitoringActivity.class);
+                break;
             case R.id.iv_back:
                 finish();
                 break;

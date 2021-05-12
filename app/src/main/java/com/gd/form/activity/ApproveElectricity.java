@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -80,6 +81,12 @@ public class ApproveElectricity extends BaseActivity {
     TextView tvApproveAdvice;
     @BindView(R.id.ll_approveAdvice)
     LinearLayout llApproveAdvice;
+    @BindView(R.id.ll_file)
+    LinearLayout llFile;
+    @BindView(R.id.ll_selectImages)
+    LinearLayout llSelectImages;
+    @BindView(R.id.tv_stationName)
+    TextView tvStationName;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -87,6 +94,7 @@ public class ApproveElectricity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -102,6 +110,8 @@ public class ApproveElectricity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Util.activityList.add(this);
         tvTitle.setText("区域阴保电位测试");
+        llFile.setVisibility(View.GONE);
+        llSelectImages.setVisibility(View.GONE);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);
         initMap();
@@ -123,6 +133,7 @@ public class ApproveElectricity extends BaseActivity {
         rvResultPhoto.setAdapter(photoAdapter);
         getDetail(formId);
     }
+
     /**
      * 初始化AMap对象
      */
@@ -131,17 +142,20 @@ public class ApproveElectricity extends BaseActivity {
             aMap = mapView.getMap();
         }
     }
+
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
+        Log.i("tag","params==="+params);
         Net.create(Api.class).getElectricityDetail(token, params)
                 .enqueue(new NetCallback<ElectricityDetailModel>(this, true) {
                     @Override
                     public void onResponse(ElectricityDetailModel model) {
                         if (model != null) {
                             ElectricityDetail dataDetail = model.getDatadetail();
-                            tvPosition.setText(dataDetail.getCol1());
-                            tvGround.setText(dataDetail.getTestlocate());
+                            tvStationName.setText(dataDetail.getStationame());
+                            tvPosition.setText(dataDetail.getTestlocate());
+                            tvGround.setText(dataDetail.getCol1());
                             tvBase.setText(dataDetail.getCol2());
                             tvResistance.setText(dataDetail.getCol3());
                             tvWeather.setText(dataDetail.getWeathers());
@@ -187,14 +201,14 @@ public class ApproveElectricity extends BaseActivity {
                             }
 
                             //审批人
-                            if(model.getDatapproval()!=null){
+                            if (model.getDatapproval() != null) {
                                 String approval = model.getDatapproval().getEmployid();
                                 if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
                                     tvSpr.setText(approval.split(":")[1]);
                                 }
                                 //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
                                 tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
                                     llApproveAdvice.setVisibility(View.VISIBLE);
                                     tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                                 }
@@ -220,11 +234,11 @@ public class ApproveElectricity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 Bundle bundle = new Bundle();
-                bundle.putString("formid",formId);
-                openActivity(ApproveFormActivity.class,bundle);
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);

@@ -34,7 +34,10 @@ import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
+import com.gd.form.model.BuildingModel;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.Pipemploys;
+import com.gd.form.model.SearchBuildingModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
@@ -49,6 +52,7 @@ import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +80,7 @@ public class EndorsementActivity extends BaseActivity {
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 102;
     private int SELECT_APPROVER = 103;
+    private int SELECT_BUILDING = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private String approverName;
     private String approverId;
@@ -86,7 +91,7 @@ public class EndorsementActivity extends BaseActivity {
     private String ossFilePath;
     private String selectFileName;
     private String selectFilePath;
-    private String stationId, pipeId, location;
+    private String stationId, pipeId, location, buildId, stakeId;
     private String isProtection = "是";
     private IHandlerCallBack iHandlerCallBack;
     private List<String> path;
@@ -107,7 +112,7 @@ public class EndorsementActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("违章违建处理记录");
+        tvTitle.setText("现有违章违建记录");
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         initGallery();
@@ -157,7 +162,7 @@ public class EndorsementActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("w005/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -182,7 +187,6 @@ public class EndorsementActivity extends BaseActivity {
             R.id.ll_stationNo,
             R.id.ll_selectPic,
             R.id.ll_location,
-            R.id.ll_spr,
             R.id.ll_scfj,
             R.id.btn_commit,
     })
@@ -212,10 +216,41 @@ public class EndorsementActivity extends BaseActivity {
                 initPermissions();
                 break;
             case R.id.ll_stationNo:
-                Intent intentStation = new Intent(this, StationActivity.class);
-                startActivityForResult(intentStation, SELECT_STATION);
+                getBuildings();
+//                if (resultSearchPipeModel.getLlegalCount() > 0) {
+//                    bundle.putSerializable("buildings", (Serializable) resultSearchPipeModel.getLlegaList());
+//                }
+//                openActivity(BuildingListActivity.class, bundle);
+//                Intent intentStation = new Intent(this, StationActivity.class);
+//                startActivityForResult(intentStation, SELECT_STATION);
                 break;
         }
+    }
+
+    private void getBuildings() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getBuildings(token, jsonObject)
+                .enqueue(new NetCallback<List<SearchBuildingModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<SearchBuildingModel> list) {
+                        if (list != null && list.size() > 0) {
+                            List<SearchBuildingModel> searchBuildingModelList = new ArrayList<>();
+                            for (int i = 0; i < list.size(); i++) {
+                                SearchBuildingModel searchBuildingModel = list.get(i);
+                                searchBuildingModel.setSelect("select");
+                                searchBuildingModelList.add(searchBuildingModel);
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("buildings", (Serializable) searchBuildingModelList);
+                            Intent intent = new Intent(EndorsementActivity.this, BuildingListActivity.class);
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, SELECT_BUILDING);
+                        }else{
+                            ToastUtil.show("暂无数据");
+                        }
+                    }
+                });
     }
 
     private boolean paramsComplete() {
@@ -254,8 +289,8 @@ public class EndorsementActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("pipeid", Integer.valueOf(pipeId));
-        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
+        jsonObject.addProperty("pipeid", Integer.valueOf(buildId));
+        jsonObject.addProperty("stakeid", Integer.valueOf(stakeId));
         jsonObject.addProperty("conditiondesc", etDes.getText().toString());
         jsonObject.addProperty("solutionrecord", etRecord.getText().toString());
         jsonObject.addProperty("locate", location);
@@ -324,7 +359,7 @@ public class EndorsementActivity extends BaseActivity {
             tv_fileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("w005/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
             stationId = data.getStringExtra("stationId");
@@ -344,8 +379,40 @@ public class EndorsementActivity extends BaseActivity {
             if (!TextUtils.isEmpty(approverName)) {
                 tv_spr.setText(approverName);
             }
+        } else if (requestCode == SELECT_BUILDING) {
+            String illegalName = data.getStringExtra("name");
+            buildId = data.getStringExtra("buildId");
+            stakeId = data.getStringExtra("stakeId");
+            tvStationNo.setText(illegalName);
+            getBuildingDesc(buildId);
+            getDefaultManager();
         }
 
+    }
+
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tv_spr.setText(pipemploys.getName());
+                    }
+                });
+    }
+
+    private void getBuildingDesc(String stationId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", stationId);
+        Net.create(Api.class).getBuildingDees(token, jsonObject)
+                .enqueue(new NetCallback<BuildingModel>(this, true) {
+                    @Override
+                    public void onResponse(BuildingModel buildingModel) {
+                        etDes.setText(buildingModel.getDangerdesc());
+                    }
+                });
     }
 
     //上传阿里云文件

@@ -119,7 +119,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="阀室绝缘件性能测试"
+                    android:text="绝缘件性能测试"
                     />
 
             </LinearLayout>

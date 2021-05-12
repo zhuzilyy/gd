@@ -15,8 +15,11 @@ public class WaterDetail {
     private String handlemode;
     private String id;
     private String locate;
+    private String protectname;
+    private String protectunit;
     private int departmentid;
     private int stakeid;
+    private String stakefrom;
     private String weathers;
     public String getCol1() {
         return col1;
@@ -152,5 +155,29 @@ public class WaterDetail {
 
     public void setWeathers(String weathers) {
         this.weathers = weathers;
+    }
+
+    public String getProtectname() {
+        return protectname;
+    }
+
+    public void setProtectname(String protectname) {
+        this.protectname = protectname;
+    }
+
+    public String getProtectunit() {
+        return protectunit;
+    }
+
+    public void setProtectunit(String protectunit) {
+        this.protectunit = protectunit;
+    }
+
+    public String getStakefrom() {
+        return stakefrom;
+    }
+
+    public void setStakefrom(String stakefrom) {
+        this.stakefrom = stakefrom;
     }
 }

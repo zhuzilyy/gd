@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -81,10 +82,14 @@ public class WaterProtectionListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putString("tag","update");
-                bundle.putString("waterId",resultWaterList.get(position).getId()+"");
-                openActivity(AddWaterInsuranceActivity.class,bundle);
+                if("select".equals(resultWaterList.get(position).getType())){
+                    Intent intent = new Intent();
+                    intent.putExtra("name",resultWaterList.get(position).getStakename());
+                    intent.putExtra("waterId",resultWaterList.get(position).getId()+"");
+                    intent.putExtra("stakeId",resultWaterList.get(position).getStakeid()+"");
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
             }
         });
     }

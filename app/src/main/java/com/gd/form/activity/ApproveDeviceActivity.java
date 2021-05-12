@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -40,12 +39,10 @@ import butterknife.OnClick;
 public class ApproveDeviceActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_pipeName)
-    TextView tvPipeName;
-    @BindView(R.id.tv_area)
-    TextView tvArea;
     @BindView(R.id.tv_stationNo)
     TextView tvStationNo;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
     @BindView(R.id.tv_pipeElectricity)
     TextView tvPipeElectricity;
     @BindView(R.id.tv_pipePressure)
@@ -88,11 +85,16 @@ public class ApproveDeviceActivity extends BaseActivity {
     TextView tvApproveAdvice;
     @BindView(R.id.ll_approveAdvice)
     LinearLayout llApproveAdvice;
+    @BindView(R.id.ll_file)
+    LinearLayout llFile;
+    @BindView(R.id.ll_selectImages)
+    LinearLayout llSelectImages;
     private String formId;
     private String token, userId;
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -109,8 +111,9 @@ public class ApproveDeviceActivity extends BaseActivity {
         Util.activityList.add(this);
         tvTitle.setText("去耦合器测试");
         mapView.setVisibility(View.GONE);
+        llFile.setVisibility(View.GONE);
+        llSelectImages.setVisibility(View.GONE);
         llLocation.setVisibility(View.GONE);
-        viewLocation.setVisibility(View.GONE);
         token = (String) SPUtil.get(ApproveDeviceActivity.this, "token", "");
         userId = (String) SPUtil.get(ApproveDeviceActivity.this, "userId", "");
         if (getIntent() != null) {
@@ -139,12 +142,6 @@ public class ApproveDeviceActivity extends BaseActivity {
                     public void onResponse(DeviceDetailModel model) {
                         if (model != null) {
                             DeviceDetail dataDetail = model.getDatadetail();
-                            if (!TextUtils.isEmpty(model.getDeptString()) && model.getDeptString().contains(":")) {
-                                tvArea.setText(model.getDeptString().split(":")[1]);
-                            }
-                            if (!TextUtils.isEmpty(model.getPipeString()) && model.getPipeString().contains(":")) {
-                                tvPipeName.setText(model.getPipeString().split(":")[1]);
-                            }
                             tvStationNo.setText(dataDetail.getStakeid());
                             tvPipeElectricity.setText(dataDetail.getCol1());
                             tvPipePressure.setText(dataDetail.getCol2());
@@ -153,7 +150,7 @@ public class ApproveDeviceActivity extends BaseActivity {
                             tvAc.setText(dataDetail.getCol5());
                             tvDc.setText(dataDetail.getCol6());
                             tvMaterial.setText(dataDetail.getLandmaterial());
-                            tvLocation.setText(dataDetail.getLocate());
+                            tvAddress.setText(dataDetail.getLocate());
                             tvResistance.setText(dataDetail.getLandresis());
                             //上传的文件
                             if (model.getDataupload() != null) {
@@ -182,14 +179,14 @@ public class ApproveDeviceActivity extends BaseActivity {
                                 tvPhoto.setText("无");
                             }
                             //审批人
-                            if(model.getDatapproval()!=null){
+                            if (model.getDatapproval() != null) {
                                 String approval = model.getDatapproval().getEmployid();
                                 if (!TextUtils.isEmpty(approval)) {
                                     tvSpr.setText(approval.split(":")[1]);
                                 }
                                 //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
                                 tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                if(!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())){
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
                                     llApproveAdvice.setVisibility(View.VISIBLE);
                                     tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                                 }
@@ -216,11 +213,11 @@ public class ApproveDeviceActivity extends BaseActivity {
                 break;
             case R.id.btn_approve:
                 Bundle bundle = new Bundle();
-                bundle.putString("formid",formId);
-                openActivity(ApproveFormActivity.class,bundle);
+                bundle.putString("formid", formId);
+                openActivity(ApproveFormActivity.class, bundle);
                 break;
             case R.id.ll_file:
-                if(!TextUtils.isEmpty(filePath)){
+                if (!TextUtils.isEmpty(filePath)) {
                     Uri uri = Uri.parse(filePath);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);

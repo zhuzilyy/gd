@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.gd.form.R;
 import com.gd.form.activity.NoApproveActivity;
 import com.gd.form.activity.OverTimeTaskActivity;
+import com.gd.form.activity.RefuseTaskActivity;
 import com.gd.form.activity.WaitingActivity;
 import com.gd.form.base.BaseFragment;
 import com.gd.form.model.TaskCountModel;
@@ -45,6 +46,7 @@ public class MessageFragment extends BaseFragment {
     List<Badge> badges;
     private String token, userId;
     private MyReceiver myReceiver;
+
     @Override
     protected void initView(Bundle bundle) {
         token = (String) SPUtil.get(getActivity(), "token", "");
@@ -56,11 +58,11 @@ public class MessageFragment extends BaseFragment {
         myReceiver = new MyReceiver();
         IntentFilter filterWaitingTask = new IntentFilter();
         filterWaitingTask.addAction("com.action.update.waitingTask");
-        getActivity().registerReceiver(myReceiver,filterWaitingTask);
+        getActivity().registerReceiver(myReceiver, filterWaitingTask);
 
         IntentFilter filterApprove = new IntentFilter();
         filterApprove.addAction("com.action.updateApprove");
-        getActivity().registerReceiver(myReceiver,filterApprove);
+        getActivity().registerReceiver(myReceiver, filterApprove);
 
     }
 
@@ -82,11 +84,24 @@ public class MessageFragment extends BaseFragment {
                 .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
                     @Override
                     public void onResponse(TaskCountModel model) {
-                        int waitingTask = model.getApproval1() + model.getTask1();
+                        getTaskTotal();
+                    }
+                });
+    }
+
+    private void getTaskTotal() {
+        JsonObject params = new JsonObject();
+        params.addProperty("empid", userId);
+        Net.create(Api.class).getTaskTotal(token, params)
+                .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(TaskCountModel model) {
+                        int waitingTask = model.getApproval1() + model.getWaitCount();
                         if (waitingTask > 0) {
                             badges.get(0).setShowShadow(false).setBadgeNumber(waitingTask);
                         }
-                        int overTimeTask = model.getTask2();
+
+                        int overTimeTask = model.getOverCount();
                         if (overTimeTask > 0) {
                             badges.get(1).setShowShadow(false).setBadgeNumber(overTimeTask);
                         }
@@ -103,6 +118,7 @@ public class MessageFragment extends BaseFragment {
             R.id.ll_waiting,
             R.id.ll_overTime,
             R.id.ll_noApprove,
+            R.id.ll_refuse,
     })
     public void click(View view) {
         switch (view.getId()) {
@@ -114,6 +130,9 @@ public class MessageFragment extends BaseFragment {
                 break;
             case R.id.ll_noApprove:
                 openActivity(NoApproveActivity.class);
+                break;
+            case R.id.ll_refuse:
+                openActivity(RefuseTaskActivity.class);
                 break;
         }
     }
@@ -127,6 +146,7 @@ public class MessageFragment extends BaseFragment {
             }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

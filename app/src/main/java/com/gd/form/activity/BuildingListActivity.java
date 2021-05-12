@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -81,7 +82,13 @@ public class BuildingListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-
+                SearchBuildingModel searchBuildingModel = resultBuildingList.get(position);
+                Intent intent = new Intent();
+                intent.putExtra("name",searchBuildingModel.getLlegalname());
+                intent.putExtra("buildId",searchBuildingModel.getId()+"");
+                intent.putExtra("stakeId",searchBuildingModel.getStakeid()+"");
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
     }

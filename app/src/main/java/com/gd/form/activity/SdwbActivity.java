@@ -46,11 +46,12 @@ import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
+import com.gd.form.model.SearchPipeInfoModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
-import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -62,6 +63,7 @@ import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,7 +137,7 @@ public class SdwbActivity extends BaseActivity {
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_APPROVER = 101;
     private int SELECT_STATION = 103;
-
+    private int SELECT_STATION_NAME = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private TimePickerView pvTime;
     private ListDialog dialog;
@@ -156,7 +158,7 @@ public class SdwbActivity extends BaseActivity {
     private String selectFileName;
     private String selectFilePath;
     private String stationId, pipeId, location;
-    private int selectPipeId,departmentId;
+    private int selectPipeId, departmentId;
     private String col1 = "无违章采石、采矿、爆破行为";
     private String col2 = "无第三方施工行为";
     private String col3 = "无可疑人员、车辆逗留现象";
@@ -206,7 +208,7 @@ public class SdwbActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("W002/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -448,7 +450,6 @@ public class SdwbActivity extends BaseActivity {
             R.id.ll_scfj,
             R.id.ll_tbrq,
             R.id.iv_back,
-            R.id.ll_spr,
             R.id.btn_commit,
             R.id.rl_selectImage,
     })
@@ -470,21 +471,22 @@ public class SdwbActivity extends BaseActivity {
                 startActivityForResult(intent, SELECT_ADDRESS);
                 break;
             case R.id.ll_sdmc:
-                List<String> pipeList = new ArrayList<>();
-                List<Integer> idList = new ArrayList<>();
-                if (pipelineinfoList != null && pipelineinfoList.size() > 0) {
-                    for (int i = 0; i < pipelineinfoList.size(); i++) {
-                        pipeList.add(pipelineinfoList.get(i).getName());
-                        idList.add(pipelineinfoList.get(i).getId());
-                    }
-                }
-                dialog.setData(pipeList);
-                dialog.show();
-                dialog.setListItemClick(positionM -> {
-                    tv_sdmc.setText(pipeList.get(positionM));
-                    selectPipeId = idList.get(positionM);
-                    dialog.dismiss();
-                });
+                getTunnelList();
+//                List<String> pipeList = new ArrayList<>();
+//                List<Integer> idList = new ArrayList<>();
+//                if (pipelineinfoList != null && pipelineinfoList.size() > 0) {
+//                    for (int i = 0; i < pipelineinfoList.size(); i++) {
+//                        pipeList.add(pipelineinfoList.get(i).getName());
+//                        idList.add(pipelineinfoList.get(i).getId());
+//                    }
+//                }
+//                dialog.setData(pipeList);
+//                dialog.show();
+//                dialog.setListItemClick(positionM -> {
+//                    tv_sdmc.setText(pipeList.get(positionM));
+//                    selectPipeId = idList.get(positionM);
+//                    dialog.dismiss();
+//                });
                 break;
             case R.id.ll_sdwz:
                 Intent intentStartStation = new Intent(this, StationActivity.class);
@@ -525,6 +527,31 @@ public class SdwbActivity extends BaseActivity {
         }
     }
 
+    private void getTunnelList() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getAllTunnelList(token, jsonObject)
+                .enqueue(new NetCallback<List<SearchPipeInfoModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<SearchPipeInfoModel> list) {
+                        List<SearchPipeInfoModel> pipeInfoModelList = new ArrayList<>();
+                         if(list!=null && list.size()>0){
+                             for (int i = 0; i <list.size() ; i++) {
+                                 SearchPipeInfoModel searchPipeInfoModel = list.get(i);
+                                 searchPipeInfoModel.setType("select");
+                                 pipeInfoModelList.add(searchPipeInfoModel);
+                             }
+                             Bundle bundle = new Bundle();
+                             bundle.putSerializable("tunnels", (Serializable) pipeInfoModelList);
+                             Intent intent = new Intent(SdwbActivity.this,TunnelListActivity.class);
+                             intent.putExtras(bundle);
+                             startActivityForResult(intent,SELECT_STATION_NAME);
+                         }
+
+                    }
+                });
+    }
+
     //提交数据
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
@@ -538,7 +565,7 @@ public class SdwbActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("pipeid", selectPipeId);
+        jsonObject.addProperty("pipeid", stationId);
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("pipelength", et_pipeLength.getText().toString());
@@ -577,7 +604,8 @@ public class SdwbActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Net.create(Api.class).commitTunnel(token,jsonObject)
+        Log.i("tag","jsonObject=="+jsonObject);
+        Net.create(Api.class).commitTunnel(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
@@ -594,26 +622,26 @@ public class SdwbActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-        if (TextUtils.isEmpty(tv_gddw.getText().toString())) {
-            ToastUtil.show("请选择管道单位");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tv_gddw.getText().toString())) {
+//            ToastUtil.show("请选择管道单位");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tv_sdmc.getText().toString())) {
             ToastUtil.show("请选择隧道名称");
             return false;
         }
-        if (TextUtils.isEmpty(tv_sdwz.getText().toString())) {
-            ToastUtil.show("请选择隧道位置");
-            return false;
-        }
-        if (TextUtils.isEmpty(et_pipeLength.getText().toString())) {
-            ToastUtil.show("请输入管道长度");
-            return false;
-        }
-        if(!NumberUtil.isNumber(et_pipeLength.getText().toString())){
-            ToastUtil.show("管道长度输入格式不正确");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tv_sdwz.getText().toString())) {
+//            ToastUtil.show("请选择隧道位置");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(et_pipeLength.getText().toString())) {
+//            ToastUtil.show("请输入管道长度");
+//            return false;
+//        }
+//        if (!NumberUtil.isNumber(et_pipeLength.getText().toString())) {
+//            ToastUtil.show("管道长度输入格式不正确");
+//            return false;
+//        }
         if (TextUtils.isEmpty(et_wgxw_problem.getText().toString())) {
             ToastUtil.show("请输入违规行为问题描述");
             return false;
@@ -746,7 +774,7 @@ public class SdwbActivity extends BaseActivity {
             tv_fileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("W002/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
@@ -766,8 +794,27 @@ public class SdwbActivity extends BaseActivity {
             pipeId = data.getStringExtra("pipeId");
             String stationName = data.getStringExtra("stationName");
             tv_sdwz.setText(stationName);
+        }else if(requestCode == SELECT_STATION_NAME){
+//            intent.putExtra("stationName",searchPipeInfoModel.getStakename());
+//            intent.putExtra("stationId",searchPipeInfoModel.getId()+"");
+            String stationName = data.getStringExtra("stationName");
+            stationId = data.getStringExtra("stationId");
+            tv_sdmc.setText(stationName);
+            getDefaultManager();
         }
 
+    }
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid",userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tv_spr.setText(pipemploys.getName());
+                    }
+                });
     }
 
     // 授权管理

@@ -8,6 +8,7 @@ public class StakeModel implements Serializable {
     private String deptname;
     private  int lineid;
     private  String linename;
+    private String select;
     public int getId() {
         return id;
     }
@@ -45,5 +46,13 @@ public class StakeModel implements Serializable {
 
     public void setLinename(String linename) {
         this.linename = linename;
+    }
+
+    public String getSelect() {
+        return select;
+    }
+
+    public void setSelect(String select) {
+        this.select = select;
     }
 }

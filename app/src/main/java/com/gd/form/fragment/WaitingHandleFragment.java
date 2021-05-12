@@ -30,6 +30,7 @@ import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.base.BaseFragment;
 import com.gd.form.model.OverTimeModel;
 import com.gd.form.model.SearchForm;
+import com.gd.form.model.TaskCountModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -107,7 +108,7 @@ public class WaitingHandleFragment extends BaseFragment {
                     case "重车碾压调查表":
                         openActivity(WeightCarActivity.class);
                         break;
-                    case "违章违建处理记录":
+                    case "现有违章违建记录":
                         openActivity(EndorsementActivity.class);
                         break;
                     case "徒步巡检表（结对子）":
@@ -128,7 +129,7 @@ public class WaitingHandleFragment extends BaseFragment {
                     case "区域阴保电位测试":
                         openActivity(ZoneElectricityActivity.class);
                         break;
-                    case "阀室绝缘件性能测试":
+                    case "绝缘件性能测试":
                         openActivity(InsulatingPropertyActivity.class);
                         break;
                     case "去耦合器测试":
@@ -141,14 +142,15 @@ public class WaitingHandleFragment extends BaseFragment {
     }
     private void getOverTimeList() {
         JsonObject params = new JsonObject();
-        params.addProperty("employid", userId);
-        Net.create(Api.class).waitingHandleList(token, params)
-                .enqueue(new NetCallback<List<OverTimeModel>>(getActivity(), true) {
+        params.addProperty("empid", userId);
+        Net.create(Api.class).getTaskTotal(token, params)
+                .enqueue(new NetCallback<TaskCountModel>(getActivity(), true) {
                     @Override
-                    public void onResponse(List<OverTimeModel> list) {
+                    public void onResponse(TaskCountModel taskCountModel) {
                         waitingHandleList.clear();
-                        if (list != null && list.size() > 0) {
-                            waitingHandleList.addAll(list);
+                        List<OverTimeModel> waitTaskList = taskCountModel.getWaitTaskList();
+                        if (waitTaskList != null && waitTaskList.size() > 0) {
+                            waitingHandleList.addAll(waitTaskList);
                             adapter.notifyDataSetChanged();
                             refreshLayout.setVisibility(View.VISIBLE);
                             llNoData.setVisibility(View.GONE);

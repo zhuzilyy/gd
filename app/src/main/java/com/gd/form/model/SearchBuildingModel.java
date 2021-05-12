@@ -8,6 +8,7 @@ public class SearchBuildingModel implements Serializable {
     private String maintain;
     private int stakeid;
     private String stakename;
+    private String select;
     public int getId() {
         return id;
     }
@@ -46,6 +47,14 @@ public class SearchBuildingModel implements Serializable {
 
     public void setStakename(String stakename) {
         this.stakename = stakename;
+    }
+
+    public String getSelect() {
+        return select;
+    }
+
+    public void setSelect(String select) {
+        this.select = select;
     }
 }
 

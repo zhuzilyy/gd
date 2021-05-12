@@ -11,11 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_10"
-                android:background="#FFF3F3F3"
-                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,6 +45,13 @@
                     android:singleLine="true"
                     android:text=""
                     />
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
             </LinearLayout>
 
             <View
@@ -67,7 +69,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,19 +80,19 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_des"
+                <EditText
+                    android:id="@+id/et_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_15"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:layout_weight="1"
                     android:background="@null"
                     android:ellipsize="end"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
@@ -111,7 +113,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,19 +124,19 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_record"
+                <EditText
+                    android:id="@+id/et_record"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_15"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:layout_weight="1"
                     android:background="@null"
                     android:ellipsize="end"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +39,12 @@ import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -66,6 +69,7 @@ public class InsulatingPropertyActivity extends BaseActivity {
     private int SELECT_APPROVER = 102;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private int SELECT_ADDRESS = 103;
+    private int SELECT_STATION_NAME = 104;
     private String approverName;
     private String approverId;
     @BindView(R.id.tv_title)
@@ -98,12 +102,18 @@ public class InsulatingPropertyActivity extends BaseActivity {
     EditText etRemark;
     @BindView(R.id.tv_pipeName)
     TextView tvPipeName;
+    @BindView(R.id.tv_stationName)
+    TextView tvStationName;
     @BindView(R.id.rg_isProperty)
     RadioGroup rg_isProperty;
     @BindView(R.id.rg_isBury)
     RadioGroup rg_isBury;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.ll_scfj)
+    LinearLayout llSelectFile;
+    @BindView(R.id.view_file)
+    View viewFile;
     private List<Pipelineinfo> pipeLineinfoList;
     private Dialog mWeiboDialog;
     private OSSCredentialProvider ossCredentialProvider;
@@ -121,6 +131,7 @@ public class InsulatingPropertyActivity extends BaseActivity {
     private int departmentId, pipeId;
     private String col6 = "正常";
     private String col8 = "正常";
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -134,12 +145,14 @@ public class InsulatingPropertyActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("阀室绝缘件性能测试");
+        tvTitle.setText("绝缘件性能测试");
         dialog = new ListDialog(this);
         pipeLineinfoList = new ArrayList<>();
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         dialog = new ListDialog(this);
+        llSelectFile.setVisibility(View.GONE);
+        viewFile.setVisibility(View.GONE);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
@@ -150,7 +163,6 @@ public class InsulatingPropertyActivity extends BaseActivity {
         initGallery();
         initConfig();
     }
-
     private void getPipelineInfoListRequest() {
 
         Net.create(Api.class).pipelineinfosget(token)
@@ -265,15 +277,18 @@ public class InsulatingPropertyActivity extends BaseActivity {
             R.id.ll_area,
             R.id.ll_location,
             R.id.ll_scfj,
-            R.id.ll_spr,
             R.id.btn_commit,
             R.id.ll_selectPic,
             R.id.ll_pipeName,
+            R.id.ll_stationName,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_stationName:
+                getStations();
                 break;
             case R.id.ll_pipeName:
                 List<String> pipeNameList = new ArrayList<>();
@@ -346,7 +361,7 @@ public class InsulatingPropertyActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
-        jsonObject.addProperty("stationdesc", etRoom.getText().toString());
+        jsonObject.addProperty("stationdesc", tvStationName.getText().toString());
         jsonObject.addProperty("col1", etLineElectricity.getText().toString());
         jsonObject.addProperty("col2", etDistractionElectricity.getText().toString());
         jsonObject.addProperty("col3", etPosition.getText().toString());
@@ -386,6 +401,26 @@ public class InsulatingPropertyActivity extends BaseActivity {
                 });
     }
 
+    private void getStations() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getStations(token, jsonObject)
+                .enqueue(new NetCallback<List<String>>(this, true) {
+                    @Override
+                    public void onResponse(List<String> list) {
+                        if (list != null && list.size() > 0) {
+                            Intent intent = new Intent(InsulatingPropertyActivity.this, StationNameActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putStringArrayList("stations", (ArrayList<String>) list);
+                            bundle.putString("tag", "selectStation");
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, SELECT_STATION_NAME);
+                        } else {
+                            ToastUtil.show("暂无数据");
+                        }
+                    }
+                });
+    }
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -414,36 +449,56 @@ public class InsulatingPropertyActivity extends BaseActivity {
 //            ToastUtil.show("请输入序号");
 //            return false;
 //        }
-        if (TextUtils.isEmpty(etRoom.getText().toString())) {
-            ToastUtil.show("请输入阀室");
+        if (TextUtils.isEmpty(tvStationName.getText().toString())) {
+            ToastUtil.show("请输入场站名称");
             return false;
         }
         if (TextUtils.isEmpty(etLineElectricity.getText().toString())) {
             ToastUtil.show("请输入管道电位");
             return false;
         }
+        if (!NumberUtil.isNumber(etLineElectricity.getText().toString())) {
+            ToastUtil.show("管道电位格式不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etDistractionElectricity.getText().toString())) {
             ToastUtil.show("请输入管道干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etDistractionElectricity.getText().toString())) {
+            ToastUtil.show("管道干扰电压格式不正确");
             return false;
         }
         if (TextUtils.isEmpty(etPosition.getText().toString())) {
             ToastUtil.show("请输入接地侧电位");
             return false;
         }
+        if (!NumberUtil.isNumber(etPosition.getText().toString())) {
+            ToastUtil.show("接地侧电位格式不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etGround.getText().toString())) {
             ToastUtil.show("请输入接地侧干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etGround.getText().toString())) {
+            ToastUtil.show("入接地侧干扰电压格式不正确");
             return false;
         }
         if (TextUtils.isEmpty(etBlankPosition.getText().toString())) {
             ToastUtil.show("请输入放空侧电位");
             return false;
         }
+        if (!NumberUtil.isNumber(etBlankPosition.getText().toString())) {
+            ToastUtil.show("放空侧电位格式不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etLightningProtection.getText().toString())) {
             ToastUtil.show("请输入管道避雷器电压");
             return false;
         }
-        if (TextUtils.isEmpty(tvArea.getText().toString())) {
-            ToastUtil.show("请选择作业区");
+        if (!NumberUtil.isNumber(etLightningProtection.getText().toString())) {
+            ToastUtil.show("管道避雷器电压格式不正确");
             return false;
         }
         if (TextUtils.isEmpty(etRemark.getText().toString())) {
@@ -451,7 +506,7 @@ public class InsulatingPropertyActivity extends BaseActivity {
             return false;
         }
         if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请输入坐标");
+            ToastUtil.show("请输入填报位置");
             return false;
         }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
@@ -487,10 +542,28 @@ public class InsulatingPropertyActivity extends BaseActivity {
             if (!TextUtils.isEmpty(approverName)) {
                 tvSpr.setText(approverName);
             }
+        } else if (requestCode == SELECT_STATION_NAME) {
+            String content = data.getStringExtra("content");
+            if (!TextUtils.isEmpty(content)) {
+                String[] stationArr = content.split(":");
+                tvStationName.setText(stationArr[0]);
+            }
+            getDefaultManager();
         }
 
     }
-
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tvSpr.setText(pipemploys.getName());
+                    }
+                });
+    }
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);

@@ -175,6 +175,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_zcny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -211,6 +212,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_0_5"
                 android:background="#FFE5E5E5"
@@ -249,7 +251,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="违章违建处理记录"
+                    android:text="现有违章违建记录"
                     />
 
             </LinearLayout>
@@ -260,6 +262,7 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_tbxj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -296,6 +299,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_0_5"
                 android:background="#FFE5E5E5"
@@ -392,7 +396,47 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:layout_marginStart="@dimen/d_12"/>
 
+            <LinearLayout
+                android:id="@+id/ll_video_monitoring"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/spjkck" />
+                <TextView
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/s_16"
+                    android:textColor="#A6000000"
+                    android:gravity="center|left"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:text="视频监控查看记录"
+                    />
 
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_0_5"
+                android:background="#FFE5E5E5"
+                android:layout_marginLeft="@dimen/d_12"
+                android:layout_marginStart="@dimen/d_12"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -33,7 +34,7 @@ public class StationNameActivity extends BaseActivity {
     private StationNameAdapter adapter;
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
-    private String token, userId;
+    private String token, userId,tag;
     private ArrayList<String> resultStations;
     @Override
     protected void setStatusBar() {
@@ -53,6 +54,7 @@ public class StationNameActivity extends BaseActivity {
         userId = (String) SPUtil.get(StationNameActivity.this, "userId", "");
         if(getIntent()!=null){
             ArrayList<String> stations = getIntent().getExtras().getStringArrayList("stations");
+            tag = getIntent().getExtras().getString("tag");
             if(stations!=null && stations.size()>0){
                 resultStations = stations;
                 llNoData.setVisibility(View.GONE);
@@ -82,7 +84,12 @@ public class StationNameActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-
+                if("selectStation".equals(tag)){
+                    Intent intent = new Intent();
+                    intent.putExtra("content",resultStations.get(position));
+                    setResult(RESULT_OK,intent);
+                    finish();
+                }
             }
         });
     }

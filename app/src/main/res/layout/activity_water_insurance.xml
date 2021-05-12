@@ -13,6 +13,7 @@
             android:layout_height="wrap_content">
             <!--作业区-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,6 +58,58 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <LinearLayout
+                android:id="@+id/ll_stationNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="桩号"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_stationNo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+
+            </LinearLayout>
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -64,6 +117,7 @@
                 android:background="#FFE5E5E5" />
             <!--作业区-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,6 +162,96 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--施工单位-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="距离"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:enabled="false"
+                    android:id="@+id/et_distance"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="距离"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--工程名称-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="工程名称"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:enabled="false"
+                    android:id="@+id/et_name"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="工程名称"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -115,8 +259,101 @@
                 android:background="#FFE5E5E5" />
 
 
+            <!--行政区域-->
+            <LinearLayout
+                android:background="#80FFFFFF"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="行政区域"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                </LinearLayout>
+                <EditText
+                    android:enabled="false"
+                    android:id="@+id/et_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:paddingBottom="@dimen/d_5"
+                    android:paddingTop="@dimen/d_5"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:hint="行政区域"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="施工单位"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:enabled="false"
+                    android:id="@+id/et_BuildingCompany"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="施工单位"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
             <!--施工单位-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -154,56 +391,16 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <!--工程名称-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="工程名称"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <EditText
-                    android:id="@+id/et_name"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:hint="工程名称"
-                    android:singleLine="true"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
             <!--天气-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -248,13 +445,118 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="天气"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
 
+                <EditText
+                    android:id="@+id/et_weather"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="天气"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--当日是否涉及隐蔽工程-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="当日是否涉及隐蔽工程"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <RadioGroup
+                    android:id="@+id/rg_isHidden"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/rb_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
             <!--施工地点-->
             <LinearLayout
                 android:visibility="gone"
@@ -304,6 +606,7 @@
 
             <!--施工作业面-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -341,6 +644,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -350,6 +654,7 @@
 
             <!--桩号-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_zh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -395,6 +700,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -416,6 +722,14 @@
 
             <!--检查内容及其存在的问题-->
             <LinearLayout
+                android:background="#80FFFFFF"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -436,13 +750,13 @@
                 <EditText
                     android:id="@+id/et_problem"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_30"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginTop="@dimen/d_5"
-                    android:layout_weight="1"
+                    android:paddingBottom="@dimen/d_5"
                     android:background="@null"
                     android:ellipsize="end"
                     android:gravity="left"
@@ -544,7 +858,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_marginTop="@dimen/d_5"
-                    android:layout_weight="1"
+                    android:paddingBottom="@dimen/d_5"
                     android:background="@null"
                     android:ellipsize="end"
                     android:gravity="left"
@@ -681,8 +995,57 @@
                 android:background="#FFE5E5E5" />
 
 
+            <!--形象进度-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="形象进度(%)"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <EditText
+                    android:digits="1234567890."
+                    android:inputType="number"
+                    android:id="@+id/et_process"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:hint="形象进度"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
             <!--完成工程量-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -720,6 +1083,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -727,9 +1091,9 @@
                 android:background="#FFE5E5E5" />
 
 
-
             <!--其他情况-->
             <TextView
+                android:visibility="gone"
                 android:layout_marginBottom="@dimen/d_10"
                 android:layout_marginTop="@dimen/d_10"
                 android:layout_width="wrap_content"
@@ -743,6 +1107,7 @@
 
             <!--其他情况-->
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -781,6 +1146,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -789,46 +1155,60 @@
 
             <!--选择图片-->
             <LinearLayout
-                android:id="@+id/ll_selectImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ll_selectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="添加照片"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/d_15"
+                        android:layout_marginRight="@dimen/d_15"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#A6000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/d_18"
+                        android:layout_height="@dimen/d_18"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="添加照片"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
+                    android:text="*如有隐蔽工程,照片需要包含隐蔽工程照片"
+                    android:textColor="#ff0000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
             <View

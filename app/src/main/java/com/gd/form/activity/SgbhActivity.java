@@ -45,6 +45,8 @@ import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.ServerModel;
+import com.gd.form.model.StationWaterDetailModel;
+import com.gd.form.model.WaterModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -59,6 +61,7 @@ import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,6 +93,10 @@ public class SgbhActivity extends BaseActivity {
     TextView tv_spr;
     @BindView(R.id.et_clqk)
     EditText et_clqk;
+    @BindView(R.id.et_distance)
+    EditText etDistance;
+    @BindView(R.id.tv_manager)
+    TextView tvManager;
 
     private TimePickerView pvTime;
     private ListDialog dialog;
@@ -97,6 +104,7 @@ public class SgbhActivity extends BaseActivity {
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 102;
     private int SELECT_APPROVER = 103;
+    private int SELECT_WATER = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> path;
@@ -107,13 +115,14 @@ public class SgbhActivity extends BaseActivity {
     private List<String> nameList;
     private String stationId, pipeId, location;
     private String isFull = "是";
-    private String token, userId;
+    private String token, userId, ownerId, waterId;
     private String ossFilePath;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
     private String selectFileName;
     private String selectFilePath;
     private Dialog mWeiboDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +195,7 @@ public class SgbhActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("W001/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -220,7 +229,6 @@ public class SgbhActivity extends BaseActivity {
 
     @OnClick({
             R.id.ll_location,
-            R.id.ll_sgxs,
             R.id.ll_cz,
             R.id.ll_jcsj,
             R.id.ll_zh,
@@ -228,7 +236,6 @@ public class SgbhActivity extends BaseActivity {
             R.id.ll_tbrq,
             R.id.iv_back,
             R.id.rl_selectImage,
-            R.id.ll_spr,
             R.id.btn_commit,
     })
     public void onClick(View view) {
@@ -277,8 +284,7 @@ public class SgbhActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_zh:
-                Intent intentStation = new Intent(this, StationActivity.class);
-                startActivityForResult(intentStation, SELECT_STATION);
+                getWaterStations();
                 break;
 
             case R.id.ll_jcsj:
@@ -299,6 +305,31 @@ public class SgbhActivity extends BaseActivity {
         }
     }
 
+    private void getWaterStations() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getWaterStations(token, jsonObject)
+                .enqueue(new NetCallback<List<WaterModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<WaterModel> list) {
+                        Bundle bundle = new Bundle();
+                        List<WaterModel> waterModels = new ArrayList<>();
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                WaterModel waterModel = list.get(i);
+                                waterModel.setType("select");
+                                waterModels.add(waterModel);
+                            }
+                            bundle.putSerializable("waters", (Serializable) waterModels);
+                        }
+                        Intent intent = new Intent(SgbhActivity.this, WaterProtectionListActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, SELECT_WATER);
+
+                    }
+                });
+    }
+
     //提交数据
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
@@ -315,13 +346,14 @@ public class SgbhActivity extends BaseActivity {
         jsonObject.addProperty("pipeid", Integer.valueOf(pipeId));
         jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
         jsonObject.addProperty("hydraulicform", tv_sgxs.getText().toString());
-        jsonObject.addProperty("material", tv_cz.getText().toString());
-        jsonObject.addProperty("condition", isFull);
+        jsonObject.addProperty("material", etDistance.getText().toString());
+        jsonObject.addProperty("condition", ownerId);
         jsonObject.addProperty("solution", et_clqk.getText().toString());
         jsonObject.addProperty("locate", location);
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);
+        jsonObject.addProperty("waterid", waterId);
         if (!TextUtils.isEmpty(photoSb.toString())) {
             jsonObject.addProperty("picturepath", photoSb.toString());
         } else {
@@ -332,7 +364,7 @@ public class SgbhActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Net.create(Api.class).commitWaterProtection(token,jsonObject)
+        Net.create(Api.class).commitWaterProtection(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
@@ -355,20 +387,28 @@ public class SgbhActivity extends BaseActivity {
             ToastUtil.show("请选择桩号");
             return false;
         }
+        if (TextUtils.isEmpty(etDistance.getText().toString())) {
+            ToastUtil.show("距离不能为空");
+            return false;
+        }
         if (TextUtils.isEmpty(tv_sgxs.getText().toString())) {
             ToastUtil.show("请选择水工形式");
             return false;
         }
-        if (TextUtils.isEmpty(tv_cz.getText().toString())) {
-            ToastUtil.show("请选择材质");
+        if (TextUtils.isEmpty(tvManager.getText().toString())) {
+            ToastUtil.show("所属责任人不能为空");
             return false;
         }
+//        if (TextUtils.isEmpty(tv_cz.getText().toString())) {
+//            ToastUtil.show("请选择材质");
+//            return false;
+//        }
         if (TextUtils.isEmpty(et_clqk.getText().toString())) {
             ToastUtil.show("请输入处理情况");
             return false;
         }
         if (TextUtils.isEmpty(tv_location.getText().toString())) {
-            ToastUtil.show("请选择坐标");
+            ToastUtil.show("填报位置不能为空");
             return false;
         }
         if (TextUtils.isEmpty(tv_spr.getText().toString())) {
@@ -488,8 +528,33 @@ public class SgbhActivity extends BaseActivity {
             if (!TextUtils.isEmpty(approverName)) {
                 tv_spr.setText(approverName);
             }
+        } else if (requestCode == SELECT_WATER) {
+            waterId = data.getStringExtra("waterId");
+            String name = data.getStringExtra("name");
+            tv_zh.setText(name);
+            getWaterDetail(waterId);
         }
 
+    }
+
+    private void getWaterDetail(String waterId) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", Integer.parseInt(waterId));
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getWaterStationDetail(token, jsonObject)
+                .enqueue(new NetCallback<StationWaterDetailModel>(this, true) {
+                    @Override
+                    public void onResponse(StationWaterDetailModel result) {
+                        ownerId = result.getOwnerid();
+                        pipeId = result.getPipeid() + "";
+                        approverId = result.getApprovalid();
+                        stationId = result.getStakeid() + "";
+                        etDistance.setText(result.getStakefrom());
+                        tv_sgxs.setText(result.getHydraulicform());
+                        tvManager.setText(result.getOwnername());
+                        tv_spr.setText(result.getApprovalname());
+                    }
+                });
     }
 
     //上传阿里云文件
@@ -504,6 +569,7 @@ public class SgbhActivity extends BaseActivity {
                     WeiboDialogUtils.closeDialog(mWeiboDialog);
                 }
             }
+
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
                 ToastUtil.show("上传失败请重试");
@@ -519,6 +585,7 @@ public class SgbhActivity extends BaseActivity {
         });
 
     }
+
     public void uploadOffice(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
         // 此处调用异步上传方法
@@ -528,6 +595,7 @@ public class SgbhActivity extends BaseActivity {
                 ossFilePath = fileName;
                 WeiboDialogUtils.closeDialog(mWeiboDialog);
             }
+
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
                 ToastUtil.show("上传失败请重试");

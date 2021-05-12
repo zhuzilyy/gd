@@ -38,10 +38,13 @@ import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
+import com.gd.form.model.StakeModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -53,6 +56,7 @@ import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,11 +71,14 @@ public class DeviceActivity extends BaseActivity {
     private int SELECT_APPROVER = 102;
     private int SELECT_ADDRESS = 103;
     private int SELECT_AREA = 104;
+    private int SELECT_STAKE = 105;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private String approverName;
     private String approverId;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_stationNo)
+    TextView tvStationNo;
     @BindView(R.id.tv_area)
     TextView tvArea;
     @BindView(R.id.tv_pipeName)
@@ -108,6 +115,10 @@ public class DeviceActivity extends BaseActivity {
     RecyclerView rvResultPhoto;
     @BindView(R.id.ll_location)
     LinearLayout llLocation;
+    @BindView(R.id.ll_scfj)
+    LinearLayout llSelectFile;
+    @BindView(R.id.view_file)
+    View viewFile;
     private Dialog mWeiboDialog;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
@@ -122,6 +133,7 @@ public class DeviceActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
     private int departmentId, pipeId;
+    private String stakeId;
 
     @Override
     protected void setStatusBar() {
@@ -143,6 +155,8 @@ public class DeviceActivity extends BaseActivity {
         tvTitle.setText("去耦合器测试");
         dialog = new ListDialog(this);
         llLocation.setVisibility(View.GONE);
+        llSelectFile.setVisibility(View.GONE);
+        viewFile.setVisibility(View.GONE);
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         dialog = new ListDialog(this);
@@ -191,7 +205,7 @@ public class DeviceActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("w014/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -237,15 +251,18 @@ public class DeviceActivity extends BaseActivity {
             R.id.ll_pipeName,
             R.id.ll_location,
             R.id.ll_scfj,
-            R.id.ll_spr,
             R.id.ll_address,
             R.id.btn_commit,
             R.id.ll_selectPic,
+            R.id.ll_stationNo,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_stationNo:
+                getStations();
                 break;
             case R.id.ll_selectPic:
                 initPermissions();
@@ -309,45 +326,95 @@ public class DeviceActivity extends BaseActivity {
         }
     }
 
+    private void getStations() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getStationsByDepartmentType(token, jsonObject)
+                .enqueue(new NetCallback<List<StakeModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<StakeModel> list) {
+                        List<StakeModel> stakeModelList = new ArrayList<>();
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                StakeModel stakeModel = list.get(i);
+                                stakeModel.setSelect("select");
+                                stakeModelList.add(stakeModel);
+                            }
+                            Intent intent = new Intent(DeviceActivity.this, PipeBaseInfoActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("stakes", (Serializable) (stakeModelList));
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, SELECT_STAKE);
+                        } else {
+                            ToastUtil.show("暂无数据");
+                        }
+                    }
+                });
+    }
+
     private boolean paramsComplete() {
 //        if (TextUtils.isEmpty(etNo.getText().toString())) {
 //            ToastUtil.show("请输入序号");
 //            return false;
 //        }
-        if (TextUtils.isEmpty(tvArea.getText().toString())) {
-            ToastUtil.show("请选择作业区");
-            return false;
-        }
-        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
-            ToastUtil.show("请选择管道名称");
-            return false;
-        }
-        if (TextUtils.isEmpty(etDeviceNo.getText().toString())) {
-            ToastUtil.show("请输入去耦合器桩号");
+//        if (TextUtils.isEmpty(tvArea.getText().toString())) {
+//            ToastUtil.show("请选择作业区");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
+//            ToastUtil.show("请选择管道名称");
+//            return false;
+//        }
+        if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
+            ToastUtil.show("请选择桩号");
             return false;
         }
         if (TextUtils.isEmpty(etPosition.getText().toString())) {
             ToastUtil.show("请输入管地电位");
             return false;
         }
+        if (!NumberUtil.isNumber(etPosition.getText().toString())) {
+            ToastUtil.show("管地电位格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etDisturbanceVoltage.getText().toString())) {
             ToastUtil.show("请输入交流干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etDisturbanceVoltage.getText().toString())) {
+            ToastUtil.show("交流干扰电压格式输入不正确");
             return false;
         }
         if (TextUtils.isEmpty(etGroundPosition.getText().toString())) {
             ToastUtil.show("请输入对地电位");
             return false;
         }
+        if (!NumberUtil.isNumber(etGroundPosition.getText().toString())) {
+            ToastUtil.show("对地电位格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etJDisturbanceVoltage.getText().toString())) {
             ToastUtil.show("请输入交流干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etJDisturbanceVoltage.getText().toString())) {
+            ToastUtil.show("交流干扰电压格式输入不正确");
             return false;
         }
         if (TextUtils.isEmpty(etAlternatingCurrent.getText().toString())) {
             ToastUtil.show("请输入交流电流");
             return false;
         }
+        if (!NumberUtil.isNumber(etAlternatingCurrent.getText().toString())) {
+            ToastUtil.show("交流电流格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(etDc.getText().toString())) {
             ToastUtil.show("请输入直流电流");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etDc.getText().toString())) {
+            ToastUtil.show("直流电流格式输入不正确");
             return false;
         }
         if (TextUtils.isEmpty(etGroundMaterial.getText().toString())) {
@@ -358,14 +425,14 @@ public class DeviceActivity extends BaseActivity {
             ToastUtil.show("请输入接地电阻");
             return false;
         }
+        if (!NumberUtil.isNumber(etGroundResistance.getText().toString())) {
+            ToastUtil.show("接地电阻格式输入不正确");
+            return false;
+        }
         if (TextUtils.isEmpty(tvAddress.getText().toString())) {
             ToastUtil.show("请输入当前位置");
             return false;
         }
-//        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-//            ToastUtil.show("请输入当前坐标");
-//            return false;
-//        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
@@ -385,9 +452,9 @@ public class DeviceActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("departmentid", departmentId);
+//        jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
-        jsonObject.addProperty("stakeid", etDeviceNo.getText().toString());
+        jsonObject.addProperty("stakeid", stakeId);
         jsonObject.addProperty("col1", etPosition.getText().toString());
         jsonObject.addProperty("col2", etDisturbanceVoltage.getText().toString());
         jsonObject.addProperty("col3", etGroundPosition.getText().toString());
@@ -410,7 +477,6 @@ public class DeviceActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitDevice(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -462,7 +528,7 @@ public class DeviceActivity extends BaseActivity {
             tvFileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("w014/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
@@ -479,8 +545,27 @@ public class DeviceActivity extends BaseActivity {
         } else if (requestCode == SELECT_AREA) {
             String area = data.getStringExtra("area");
             tvAddress.setText(area);
-        }
+        } else if (requestCode == SELECT_STAKE) {
+            String name = data.getStringExtra("name");
+            stakeId = data.getStringExtra("id");
+            pipeId = data.getIntExtra("lineId", 0);
+            tvStationNo.setText(name);
+            getDefaultManager();
 
+        }
+    }
+
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tvSpr.setText(pipemploys.getName());
+                    }
+                });
     }
 
     //上传阿里云文件

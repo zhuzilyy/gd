@@ -86,7 +86,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_overTime"
-                android:layout_width="134dp"
+                android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
                 android:layout_weight="1"
@@ -150,13 +150,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/d_20"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="horizontal"
             android:weightSum="3">
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/ll_rwfxt"
+                android:id="@+id/ll_refuse"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="@dimen/d_10"
@@ -167,14 +167,14 @@
                     android:layout_width="@dimen/d_30"
                     android:layout_height="@dimen/d_30"
                     android:layout_gravity="center"
-                    android:src="@mipmap/rwfxt" />
+                    android:src="@mipmap/refuse" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="任务分析图"
+                    android:text="审核未通过"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 

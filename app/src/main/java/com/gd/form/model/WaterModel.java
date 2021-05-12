@@ -10,6 +10,7 @@ public class WaterModel implements Serializable {
     private double stakeform;
     private int id;
     private int stakeid;
+    private String type;
     public String getDistance() {
         return distance;
     }
@@ -65,15 +66,11 @@ public class WaterModel implements Serializable {
         this.stakeform = stakeform;
     }
 
-    @Override
-    public String toString() {
-        return "WaterModel{" +
-                "distance='" + distance + '\'' +
-                ", maintain='" + maintain + '\'' +
-                ", name='" + name + '\'' +
-                ", stakename='" + stakename + '\'' +
-                ", id=" + id +
-                ", stakeid=" + stakeid +
-                '}';
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

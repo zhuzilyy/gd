@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
@@ -101,6 +105,68 @@ public class VideoMonitoringActivity extends BaseActivity {
     EditText etResult;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
+    @BindView(R.id.ll_scfj)
+    LinearLayout llSelectFile;
+
+    @BindView(R.id.rg_isThird)
+    RadioGroup rgIsThird;
+    @BindView(R.id.rb_yes)
+    RadioButton rbYes;
+    @BindView(R.id.rb_no)
+    RadioButton rbNo;
+
+    @BindView(R.id.rg_isMachine)
+    RadioGroup rgIsMachine;
+    @BindView(R.id.rb_yesMachine)
+    RadioButton rbYesMachine;
+    @BindView(R.id.rb_noMachine)
+    RadioButton rbNoMachine;
+
+    @BindView(R.id.rg_isComplete)
+    RadioGroup rgIsComplete;
+    @BindView(R.id.rb_yesComplete)
+    RadioButton rbYesComplete;
+    @BindView(R.id.rb_noComplete)
+    RadioButton rbNoComplete;
+
+    @BindView(R.id.rg_isCover)
+    RadioGroup rgIsCover;
+    @BindView(R.id.rb_yesCover)
+    RadioButton rbYesCover;
+    @BindView(R.id.rb_noCover)
+    RadioButton rbNoCover;
+
+    @BindView(R.id.rg_isBuilding)
+    RadioGroup rgIsBuilding;
+    @BindView(R.id.rb_yesBuild)
+    RadioButton rbYesBuild;
+    @BindView(R.id.rb_noBuild)
+    RadioButton rbNoBuild;
+
+    @BindView(R.id.rg_isClear)
+    RadioGroup rgIsClear;
+    @BindView(R.id.rb_yesClear)
+    RadioButton rbYesClear;
+    @BindView(R.id.rb_noClear)
+    RadioButton rbNoClear;
+
+    @BindView(R.id.rg_isNormal)
+    RadioGroup rgIsNormal;
+    @BindView(R.id.rb_yesNormal)
+    RadioButton rbYesNormal;
+    @BindView(R.id.rb_noNormal)
+    RadioButton rbNoNormal;
+
+    @BindView(R.id.rg_isOther)
+    RadioGroup rgIsOther;
+    @BindView(R.id.rb_yesOther)
+    RadioButton rbYesOther;
+    @BindView(R.id.rb_noOther)
+    RadioButton rbNoOther;
+
+
     private Dialog mWeiboDialog;
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
@@ -115,6 +181,8 @@ public class VideoMonitoringActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
     private int pipeId;
+    private String col1 = "否", col2 = "否", col3 = "否", col4 = "否", col5 = "否", col6 = "是", col7 = "是", col8 = "否";
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -130,7 +198,8 @@ public class VideoMonitoringActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("视频监控查看记录");
         dialog = new ListDialog(this);
-
+        llLocation.setVisibility(View.GONE);
+        llSelectFile.setVisibility(View.GONE);
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         dialog = new ListDialog(this);
@@ -142,6 +211,136 @@ public class VideoMonitoringActivity extends BaseActivity {
         initConfig();
         initTimePicker();
         getPipelineInfoListRequest();
+        iniListener();
+        getDefaultManager();
+    }
+
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                    @Override
+                    public void onResponse(Pipemploys pipemploys) {
+                        approverId = pipemploys.getId();
+                        tvSpr.setText(pipemploys.getName());
+                    }
+                });
+    }
+
+    private void iniListener() {
+        rgIsThird.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yes:
+                        col1 = "是";
+                        break;
+                    case R.id.rb_no:
+                        col1 = "否";
+                        break;
+                }
+            }
+        });
+
+
+        rgIsMachine.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesMachine:
+                        col2 = "是";
+                        break;
+                    case R.id.rb_noMachine:
+                        col2 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsComplete.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesComplete:
+                        col3 = "是";
+                        break;
+                    case R.id.rb_noComplete:
+                        col3 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsCover.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesCover:
+                        col4 = "是";
+                        break;
+                    case R.id.rb_noCover:
+                        col4 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsBuilding.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesBuild:
+                        col5 = "是";
+                        break;
+                    case R.id.rb_noBuild:
+                        col5 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsClear.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesClear:
+                        col6 = "是";
+                        break;
+                    case R.id.rb_noClear:
+                        col6 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsNormal.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesNormal:
+                        col7 = "是";
+                        break;
+                    case R.id.rb_noNormal:
+                        col7 = "否";
+                        break;
+                }
+            }
+        });
+
+        rgIsOther.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesOther:
+                        col8 = "是";
+                        break;
+                    case R.id.rb_noOther:
+                        col8 = "否";
+                        break;
+                }
+            }
+        });
     }
 
     private void initConfig() {
@@ -183,7 +382,7 @@ public class VideoMonitoringActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("w010/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -284,7 +483,7 @@ public class VideoMonitoringActivity extends BaseActivity {
                 initPermissions();
                 break;
             case R.id.btn_commit:
-                if(paramsComplete()){
+                if (paramsComplete()) {
                     commit();
                 }
                 break;
@@ -324,14 +523,6 @@ public class VideoMonitoringActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
-            ToastUtil.show("请选择管线");
-            return false;
-        }
-        if (TextUtils.isEmpty(etNo.getText().toString())) {
-            ToastUtil.show("请输入高后果区名称（编号)");
-            return false;
-        }
         if (TextUtils.isEmpty(etDes.getText().toString())) {
             ToastUtil.show("请输入异常描述");
             return false;
@@ -340,24 +531,13 @@ public class VideoMonitoringActivity extends BaseActivity {
             ToastUtil.show("请输入处置过程");
             return false;
         }
-        if (TextUtils.isEmpty(etPerson.getText().toString())) {
-            ToastUtil.show("请输入确认人");
-            return false;
-        }
-        if (TextUtils.isEmpty(etResult.getText().toString())) {
-            ToastUtil.show("请输入处置结果");
-            return false;
-        }
-        if (TextUtils.isEmpty(tvLocation.getText().toString())) {
-            ToastUtil.show("请选择坐标");
-            return false;
-        }
         if (TextUtils.isEmpty(tvSpr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
         }
         return true;
     }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -381,6 +561,7 @@ public class VideoMonitoringActivity extends BaseActivity {
             }
         }
     }
+
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
         if (nameList.size() > 0) {
@@ -393,13 +574,16 @@ public class VideoMonitoringActivity extends BaseActivity {
             }
         }
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("pipeid", pipeId);
-        jsonObject.addProperty("highwarncode",etNo.getText().toString());
         jsonObject.addProperty("exceptiondesc", etDes.getText().toString());
         jsonObject.addProperty("dealprocess", etProcess.getText().toString());
-        jsonObject.addProperty("confirmer", etPerson.getText().toString());
-        jsonObject.addProperty("dealresult", etResult.getText().toString());
-        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("col1", col1);
+        jsonObject.addProperty("col2", col2);
+        jsonObject.addProperty("col3", col3);
+        jsonObject.addProperty("col4", col4);
+        jsonObject.addProperty("col5", col5);
+        jsonObject.addProperty("col6", col6);
+        jsonObject.addProperty("col7", col7);
+        jsonObject.addProperty("col8", col8);
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);
@@ -429,6 +613,7 @@ public class VideoMonitoringActivity extends BaseActivity {
                     }
                 });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -441,7 +626,7 @@ public class VideoMonitoringActivity extends BaseActivity {
             tvFileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("w010/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
@@ -459,6 +644,7 @@ public class VideoMonitoringActivity extends BaseActivity {
         }
 
     }
+
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);

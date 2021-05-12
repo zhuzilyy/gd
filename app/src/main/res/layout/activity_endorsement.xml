@@ -73,7 +73,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,18 +87,17 @@
                 <EditText
                     android:id="@+id/et_des"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_50"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:background="@null"
                     android:ellipsize="end"
                     android:gravity="top|left"
                     android:hint="请输入情况描述"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
@@ -119,7 +118,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -133,18 +132,17 @@
                 <EditText
                     android:id="@+id/et_record"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_50"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_marginTop="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:background="@null"
                     android:ellipsize="end"
                     android:gravity="top|left"
                     android:hint="请输入处理记录"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 

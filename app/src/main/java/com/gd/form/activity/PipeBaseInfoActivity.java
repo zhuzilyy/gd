@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -62,7 +63,6 @@ public class PipeBaseInfoActivity extends BaseActivity {
                 llNoData.setVisibility(View.VISIBLE);
             }
         }
-        deleteDialog = new DeleteDialog(PipeBaseInfoActivity.this);
         initViews();
         initData();
     }
@@ -84,17 +84,13 @@ public class PipeBaseInfoActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                deleteDialog.show();
-            }
-        });
-        deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
-            @Override
-            public void onPositiveClick() {
-                deleteDialog.dismiss();
-            }
-            @Override
-            public void onNegativeClick() {
-                deleteDialog.dismiss();
+                StakeModel stakeModel = resultModelList.get(position);
+                Intent intent = new Intent();
+                intent.putExtra("name",stakeModel.getName());
+                intent.putExtra("id",stakeModel.getId()+"");
+                intent.putExtra("lineId",stakeModel.getLineid());
+                setResult(RESULT_OK,intent);
+                finish();
             }
         });
     }

@@ -100,6 +100,7 @@ public class StandingBookActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道及附属设施");
         dialog = new ListDialog(this);
+        pipeList = new ArrayList<>();
         token = (String) SPUtil.get(StandingBookActivity.this, "token", "");
         userId = (String) SPUtil.get(StandingBookActivity.this, "userId", "");
         myReceiver = new MyReceiver();
@@ -165,12 +166,12 @@ public class StandingBookActivity extends BaseActivity {
     private void setData(SearchPipeModel searchPipeModel) {
         if (searchPipeModel.getDeptCount() > 0) {
             tvArea.setText(searchPipeModel.getDptList().get(0).getName());
+            departmentId = searchPipeModel.getDptList().get(0).getId()+"";
         }
-        departmentId = searchPipeModel.getDptList().get(0).getId()+"";
-        pipeList = searchPipeModel.getLineList();
-        pipeId = searchPipeModel.getLineList().get(0).getId()+"";
         if (searchPipeModel.getLineCount() > 0 && TextUtils.isEmpty(tvPipeName.getText().toString())) {
             tvPipeName.setText(searchPipeModel.getLineList().get(0).getName());
+            pipeList = searchPipeModel.getLineList();
+            pipeId = searchPipeModel.getLineList().get(0).getId()+"";
         }
         if (searchPipeModel.getStakeCount() > 0) {
             tvPipeTagBaseInfo.setText("管道标识基础信息(" + searchPipeModel.getStakeCount() + ")");
@@ -333,7 +334,7 @@ public class StandingBookActivity extends BaseActivity {
                 openActivity(PipeManagerActivity.class, bundle);
                 break;
             case R.id.ll_pipeName:
-                if(pipeList.size()==0){
+                if(pipeList.size()==0 ){
                     ToastUtil.show("暂无数据");
                     return;
                 }

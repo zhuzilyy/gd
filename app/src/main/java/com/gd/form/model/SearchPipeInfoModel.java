@@ -12,6 +12,7 @@ public class SearchPipeInfoModel implements Serializable {
     private double smile;
     private int stakeid;
     private String stakename;
+    private String type;
     public double getEmile() {
         return emile;
     }
@@ -82,5 +83,13 @@ public class SearchPipeInfoModel implements Serializable {
 
     public void setStakename(String stakename) {
         this.stakename = stakename;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

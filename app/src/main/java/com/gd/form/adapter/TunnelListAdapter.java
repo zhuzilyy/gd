@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gd.form.R;
@@ -29,6 +30,7 @@ public class TunnelListAdapter extends BaseRecyclerViewAdapter<SearchPipeInfoMod
 
     @Override
     protected void bindData(BaseViewHolder viewHolder, SearchPipeInfoModel model, int position) {
+        LinearLayout llShowButton = viewHolder.getView(R.id.ll_showButton);
         TextView tvName = viewHolder.getView(R.id.tv_name);
         TextView tvStartStationNo = viewHolder.getView(R.id.tv_startStationNo);
         TextView tvEndStationNo = viewHolder.getView(R.id.tv_endStationNo);
@@ -37,11 +39,16 @@ public class TunnelListAdapter extends BaseRecyclerViewAdapter<SearchPipeInfoMod
         tvEndStationNo.setText(model.getEndstakename());
         Button btnCheck = viewHolder.getView(R.id.btn_check);
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
-//        if(model.getMaintain().equals("1")){
-//            btnUpdate.setVisibility(View.VISIBLE);
-//        }else if(model.getMaintain().equals("0")){
-//            btnUpdate.setVisibility(View.GONE);
-//        }
+        if(model.getMaintain().equals("1")){
+            btnUpdate.setVisibility(View.VISIBLE);
+        }else if(model.getMaintain().equals("0")){
+            btnUpdate.setVisibility(View.GONE);
+        }
+        if("select".equals(model.getType())){
+            llShowButton.setVisibility(View.GONE);
+        }else{
+            llShowButton.setVisibility(View.VISIBLE);
+        }
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

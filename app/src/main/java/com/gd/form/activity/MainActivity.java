@@ -12,6 +12,13 @@ import androidx.viewpager.widget.ViewPager;
 import com.gd.form.R;
 import com.gd.form.adapter.MyFragmentPagerAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
+import com.gd.form.model.OssModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
+import com.gd.form.utils.SPUtil;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -37,6 +44,7 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
+    private String token, userId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext,R.color.colorFF52A7F9));
@@ -58,9 +66,26 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
         vpager.setAdapter(mAdapter);
         vpager.setCurrentItem(PAGE_TWO);
         vpager.addOnPageChangeListener(this);
+        token = (String) SPUtil.get(this, "token", "");
+        getOssData();
     }
 
-
+    private void getOssData() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getOssData(token)
+                .enqueue(new NetCallback<OssModel>(this, true) {
+                    @Override
+                    public void onResponse(OssModel ossModel) {
+                      if(ossModel!=null){
+                          Constant.ACCESSKEYID = ossModel.getAccessKeyId();
+                          Constant.ACCESSKEYSECRET = ossModel.getAccessKeySecret();
+                          Constant.BUCKETSTRING = ossModel.getBucketString();
+                          Constant.ENDPOINT = ossModel.getEndpoint();
+                      }
+                    }
+                });
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

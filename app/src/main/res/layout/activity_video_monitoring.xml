@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/layout_title"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <!--日期-->
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,24 +58,25 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--时间-->
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/ll_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,13 +113,14 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
             <!--管线-->
             <LinearLayout
                 android:id="@+id/ll_pipeName"
@@ -124,7 +129,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -161,12 +167,14 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--高后果区名称（编号）-->
             <LinearLayout
@@ -175,7 +183,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -205,6 +214,230 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:paddingTop="@dimen/d_10"
+                android:paddingBottom="@dimen/d_10"
+                android:text="检查内容"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--可视范围内是否有第三方施工-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="可视范围内是否有第三方施工"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/rg_isThird"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--可视范围内是否有大型机械出入-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="可视范围内是否有大型机械出入"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/rg_isMachine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesMachine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noMachine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--可视范围内标志桩、加密桩是否完好-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="可视范围内标志桩、加密桩是否完好"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/rg_isComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -213,7 +446,146 @@
                 android:background="#FFE5E5E5" />
 
 
-            <!--异常描述-->
+            <!--可视范围巡检小道是否被杂草覆盖-->
+            <LinearLayout
+                android:background="#80FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="可视范围巡检小道是否被杂草覆盖"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/rg_isCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesCover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noCover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--可视范围是否有新增占压物或建筑物-->
+            <LinearLayout
+                android:background="#80FFFFFF"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="可视范围是否有新增占压物或建筑物"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+                </LinearLayout>
+                <RadioGroup
+                    android:id="@+id/rg_isBuilding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:paddingBottom="@dimen/d_5"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesBuild"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noBuild"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--视频监控画面是否清晰-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,12 +600,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="异常描述"
+                    android:text="视频监控画面是否清晰"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <EditText
-                    android:id="@+id/et_des"
+                <RadioGroup
+                    android:id="@+id/rg_isClear"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -242,14 +614,210 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="异常描述"
-                    android:singleLine="true"
+                    android:orientation="horizontal"
                     android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesClear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noClear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--视频监控是否正常显示-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="视频监控是否正常显示"
+                    android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
+                <RadioGroup
+                    android:id="@+id/rg_isNormal"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--是否有其他异常情况-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="是否有其他异常情况"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <RadioGroup
+                    android:id="@+id/rg_isOther"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:id="@+id/rb_yesOther"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noOther"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--异常描述-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="异常描述"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:hint="异常描述"
+                    android:paddingTop="@dimen/d_5"
+                    android:paddingBottom="@dimen/d_5"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -259,41 +827,46 @@
 
             <!--处置过程-->
             <LinearLayout
+                android:background="#80FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="处置过程"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="处置过程"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_process"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
                     android:background="@null"
                     android:ellipsize="end"
-                    android:gravity="end"
                     android:hint="处置过程"
-                    android:singleLine="true"
+                    android:paddingTop="@dimen/d_5"
+                    android:paddingBottom="@dimen/d_5"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -308,7 +881,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -338,12 +912,14 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--处置结果-->
             <LinearLayout
@@ -352,7 +928,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -382,22 +959,24 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--记录人-->
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -426,57 +1005,75 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
             <!--选择图片-->
             <LinearLayout
-                android:id="@+id/ll_selectPic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_selectPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="监控截图"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/d_5"
+                        android:layout_marginEnd="@dimen/d_15"
+                        android:layout_marginRight="@dimen/d_15"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <ImageView
+                        android:layout_width="@dimen/d_18"
+                        android:layout_height="@dimen/d_18"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="添加照片"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:background="@null"
-                    android:gravity="end"
                     android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
+                    android:text="*截图需包含全部视频监控界面"
+                    android:textColor="#ff0000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
-
             </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvResultPhoto"
                 android:layout_width="match_parent"
@@ -490,7 +1087,8 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-            <include layout="@layout/layout_common"/>
+
+            <include layout="@layout/layout_common" />
         </LinearLayout>
     </ScrollView>
 

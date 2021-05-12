@@ -15,12 +15,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_10"
-                android:background="#FFF3F3F3" />
-
+            <!--桩号-->
             <LinearLayout
+                android:id="@+id/ll_stationNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -34,107 +31,33 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="作业区"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:id="@+id/tv_area"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="管道名称"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:id="@+id/tv_pipeName"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="去耦合器桩号"
+                    android:text="桩号"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <TextView
                     android:id="@+id/tv_stationNo"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
+                    android:background="@null"
                     android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
 
@@ -144,6 +67,20 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
+
+
+            <!--管道-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_marginBottom="@dimen/d_10"
+                android:text="管道"
+                android:textColor="#000000"
+                android:textSize="@dimen/s_16"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -229,7 +166,18 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-
+            <!--接地-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_marginBottom="@dimen/d_10"
+                android:text="接地"
+                android:textColor="#000000"
+                android:textSize="@dimen/s_16"
+                android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -489,32 +437,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="位置"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    android:paddingBottom="@dimen/d_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="填报位置"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="@dimen/d_0"
+                        android:layout_height="wrap_content"/>
+                    <ImageView
+                        android:layout_width="@dimen/d_18"
+                        android:layout_height="@dimen/d_18"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_location"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:background="@null"
-                    android:gravity="end"
-                    android:singleLine="true"
                     android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />

@@ -16,18 +16,23 @@ import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
 import com.gd.form.model.NextStationModel;
 import com.gd.form.model.NoApproveModel;
+import com.gd.form.model.OssModel;
 import com.gd.form.model.OverTimeModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ResultMsg;
 import com.gd.form.model.SearchArea;
+import com.gd.form.model.SearchBuildingModel;
 import com.gd.form.model.SearchForm;
 import com.gd.form.model.SearchPerson;
+import com.gd.form.model.SearchPipeInfoModel;
 import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
+import com.gd.form.model.StakeModel;
 import com.gd.form.model.StationDetailInfo;
 import com.gd.form.model.StationNoModel;
+import com.gd.form.model.StationWaterDetailModel;
 import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
@@ -35,6 +40,7 @@ import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaitingApproveModel;
 import com.gd.form.model.WaterDetailModel;
 import com.gd.form.model.WaterInsuranceDetailModel;
+import com.gd.form.model.WaterModel;
 import com.gd.form.model.WaterProtectionModel;
 import com.gd.form.model.WeightCarDetailModel;
 import com.google.gson.JsonObject;
@@ -623,7 +629,7 @@ public interface Api {
      *
      * @return
      */
-    @POST("DataFormGetOverList.html")
+    @POST("DataFormMultiWaitStatusList.html")
     Call<List<OverTimeModel>> overTimeList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
@@ -639,8 +645,8 @@ public interface Api {
      *
      * @return
      */
-    @POST("DataFormGetAllMsg.html")
-    Call<TaskCountModel> getTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    @POST("GetTasksTotal.html")
+    Call<TaskCountModel> getTaskTotal(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 修改密码
@@ -811,6 +817,134 @@ public interface Api {
     @POST("pipemploysGetListUIByEmpID.html")
     Call<List<Pipemploys>> getPipeManagerByUserId(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+    /**
+     * 获取水工桩号
+     *
+     * @return
+     */
+    @POST("waterprojectByEmpDpt.html")
+    Call<List<WaterModel>> getWaterStations(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取水工详情
+     *
+     * @return
+     */
+    @POST("waterProtectCheckSelectKey.html")
+    Call<StationWaterDetailModel> getWaterStationDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取隧道
+     *
+     * @return
+     */
+    @POST("pipeaccountGetAll.html")
+    Call<List<SearchPipeInfoModel>> getAllTunnelList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取默认审批人
+     *
+     * @return
+     */
+    @POST("pipemploysGetMaster.html")
+    Call<Pipemploys> getTunnelDefaultManager(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 获取违章违建的数据
+     *
+     * @return
+     */
+    @POST("lllegalconstructionsinfoGetByDpt.html")
+    Call<List<SearchBuildingModel>> getBuildings(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取违章违建隐患内容描述
+     *
+     * @return
+     */
+    @POST("lllegalconstructionsinfoGetTitleByKey.html")
+    Call<BuildingModel> getBuildingDees(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取违章违建隐患内容描述
+     *
+     * @return
+     */
+    @POST("StationsGetByDpt.html")
+    Call<List<String>> getStations(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取场站名称
+     *
+     * @return
+     */
+    @POST("StationsGetByDptType.html")
+    Call<List<StakeModel>> getStationsByDepartmentType(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取水保工程
+     *
+     * @return
+     */
+    @POST("waterprojectByEmpDpt.html")
+    Call<List<WaterModel>> getWatersByDepartment(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取水保工程详情
+     *
+     * @return
+     */
+    @POST("waterProtectSelectTitleKey.html")
+    Call<WaterInsuranceDetailModel> getWatersByKey(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取阿里云oss数据
+     *
+     * @return
+     */
+    @GET("ossapiconnectionget.html")
+    Call<OssModel> getOssData(@Header("TokenValue") String token);
+
+    /**
+     * 获取消息数量
+     *
+     * @return
+     */
+    @POST("DataFormGetAllMsg.html")
+    Call<TaskCountModel> getTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 审批未通过接口
+     *
+     * @return
+     */
+    @POST("DataFormMultiWaitStatusList.html")
+    Call<List<OverTimeModel>> getRefuseList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新水工保护
+     *
+     * @return
+     */
+    @POST("w001_dataformdataUpdate.html")
+    Call<ServerModel> updateWater(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新水工保护
+     *
+     * @return
+     */
+    @POST("w005_dataformdataUpdate.html")
+    Call<ServerModel> updateBuildingRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新视频监控
+     *
+     * @return
+     */
+    @POST("w010_dataformdataUpdate.html")
+    Call<ServerModel> updateVideoRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 }
 

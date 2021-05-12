@@ -147,13 +147,13 @@ public class SearchDataActivity extends BaseActivity {
                 break;
             case R.id.btn_search:
                 if (paramsComplete()) {
-                    JsonObject params = new JsonObject();
-                    params.addProperty("departmentid",selectAreaId);
-                    params.addProperty("profeid",selectTypeId);
-                    params.addProperty("employid",selectPersonId);
-                    params.addProperty("startime",tvStartTime.getText().toString());
-                    params.addProperty("endtime",tvEndTime.getText().toString());
-                    params.addProperty("basecode",formBaseCode);
+//                    JsonObject params = new JsonObject();
+//                    params.addProperty("departmentid",selectAreaId);
+//                    params.addProperty("profeid",selectTypeId);
+//                    params.addProperty("employid",selectPersonId);
+//                    params.addProperty("startime",tvStartTime.getText().toString());
+//                    params.addProperty("endtime",tvEndTime.getText().toString());
+//                    params.addProperty("basecode",formBaseCode);
                     Bundle bundle = new Bundle();
                     bundle.putInt("departmentid",selectAreaId);
                     bundle.putInt("profeid",selectTypeId);

@@ -136,7 +136,7 @@ public class NoApproveActivity extends BaseActivity {
                     case "重车碾压调查表":
                         openActivity(ApproveWeightCarActivity.class, bundle);
                         break;
-                    case "违章违建处理记录":
+                    case "现有违章违建记录":
                         openActivity(ApproveBuildingActivity.class, bundle);
                         break;
                     case "徒步巡检表（结对子）":
@@ -157,7 +157,7 @@ public class NoApproveActivity extends BaseActivity {
                     case "区域阴保电位测试":
                         openActivity(ApproveElectricity.class, bundle);
                         break;
-                    case "阀室绝缘件性能测试":
+                    case "绝缘件性能测试":
                         openActivity(ApproveInsulationActivity.class, bundle);
                         break;
                     case "去耦合器测试":

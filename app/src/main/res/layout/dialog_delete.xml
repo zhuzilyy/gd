@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/dialog_delete_bg"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:background="@drawable/dialog_upload_file"
+        android:gravity="center"
+        android:paddingStart="@dimen/d_20"
+        android:paddingLeft="@dimen/d_20"
+        android:paddingTop="@dimen/d_10"
+        android:paddingEnd="@dimen/d_10"
+        android:paddingRight="@dimen/d_20"
+        android:paddingBottom="@dimen/d_10"
+        android:text="提示"
+        android:textColor="#FFFFFFFF"
+        android:textSize="@dimen/s_14" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_1"
+        android:background="#FFE3E3E3" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:paddingLeft="@dimen/d_10"
+        android:text="确定删除"
+        android:textColor="#FF333333"
+        android:textSize="@dimen/s_16" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_1"
+        android:background="#FFE3E3E3" />
+    <LinearLayout
+        android:background="@drawable/dialog_upload_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_delete_cancel"
+            android:gravity="center"
+            android:paddingLeft="@dimen/d_10"
+            android:text="取消"
+            android:textColor="#FF333333"
+            android:textSize="@dimen/s_16" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#FFE3E3E3" />
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_delete_confirm"
+            android:gravity="center"
+            android:paddingLeft="@dimen/d_10"
+            android:text="确定"
+            android:textColor="@color/colorFF52A7F9"
+            android:textSize="@dimen/s_16" />
+
+    </LinearLayout>
+</LinearLayout>

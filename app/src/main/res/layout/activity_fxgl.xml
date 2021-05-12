@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="防汛管理"
+            android:text="工程管理"
             android:textColor="@color/write"
             android:layout_marginRight="@dimen/d_40"
             android:layout_marginEnd="@dimen/d_40"
@@ -88,6 +88,7 @@
 
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_concealed_work"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,6 +125,7 @@
 
             </LinearLayout>
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_0_5"
                 android:background="#FFE5E5E5"

@@ -28,6 +28,7 @@ public class TunnelDataDetail {
     private int stakeid;
     private String locate;
     private String pipelength;
+    private String pipeString;
 
     public String getCol1() {
         return col1;
@@ -243,5 +244,13 @@ public class TunnelDataDetail {
 
     public void setPipelength(String pipelength) {
         this.pipelength = pipelength;
+    }
+
+    public String getPipeString() {
+        return pipeString;
+    }
+
+    public void setPipeString(String pipeString) {
+        this.pipeString = pipeString;
     }
 }
