@@ -214,13 +214,53 @@ public class ApproveVideoActivity extends BaseActivity {
             tag = bundle.getString("tag");
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
-                llChooseImages.setEnabled(false);
             } else if (tag.equals("update")) {
                 btnApprove.setText("提交");
-                llChooseImages.setEnabled(true);
+
                 ivApproveStatus.setVisibility(View.GONE);
                 llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            }
+            if(tag.equals("detail") || tag.equals("approve")){
+                rbYes.setEnabled(false);
+                rbNo.setEnabled(false);
+                rbYesMachine.setEnabled(false);
+                rbNoMachine.setEnabled(false);
+                rbYesComplete.setEnabled(false);
+                rbNoComplete.setEnabled(false);
+                rbYesCover.setEnabled(false);
+                rbNoCover.setEnabled(false);
+                rbYesBuild.setEnabled(false);
+                rbNoBuild.setEnabled(false);
+                rbYesClear.setEnabled(false);
+                rbNoClear.setEnabled(false);
+                rbYesNormal.setEnabled(false);
+                rbNoNormal.setEnabled(false);
+                rbYesOther.setEnabled(false);
+                rbNoOther.setEnabled(false);
+                etDes.setEnabled(false);
+                etProcess.setEnabled(false);
+                llChooseImages.setEnabled(false);
+            }else{
+                rbYes.setEnabled(true);
+                rbNo.setEnabled(true);
+                rbYesMachine.setEnabled(true);
+                rbNoMachine.setEnabled(true);
+                rbYesComplete.setEnabled(true);
+                rbNoComplete.setEnabled(true);
+                rbYesCover.setEnabled(true);
+                rbNoCover.setEnabled(true);
+                rbYesBuild.setEnabled(true);
+                rbNoBuild.setEnabled(true);
+                rbYesClear.setEnabled(true);
+                rbNoClear.setEnabled(true);
+                rbYesNormal.setEnabled(true);
+                rbNoNormal.setEnabled(true);
+                rbYesOther.setEnabled(true);
+                rbNoOther.setEnabled(true);
+                etDes.setEnabled(true);
+                etProcess.setEnabled(true);
+                llChooseImages.setEnabled(true);
             }
             formId = bundle.getString("formId");
         }
@@ -527,7 +567,7 @@ public class ApproveVideoActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approverId = approval.split(":")[0];
                                 }
-                                if (tag.equals("detail")) {
+                                if (tag.equals("detail") || tag.equals("approve")) {
                                     //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
                                     tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
                                     if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {

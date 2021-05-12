@@ -7,8 +7,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,12 +31,17 @@ import com.bumptech.glide.Glide;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
 import com.gd.form.model.InsulationDetail;
 import com.gd.form.model.InsulationDetailModel;
+import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.Util;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -49,20 +57,20 @@ public class ApproveInsulationActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_stationName)
     TextView tvStationName;
-    @BindView(R.id.tv_pipeElectricity)
-    TextView tvPipeElectricity;
-    @BindView(R.id.tv_pipePressure)
-    TextView tvPipePressure;
-    @BindView(R.id.tv_groundElectricity)
-    TextView tvGroundElectricity;
-    @BindView(R.id.tv_groundPressure)
-    TextView tvGroundPressure;
-    @BindView(R.id.tv_blankElectricity)
-    TextView tvBlankElectricity;
-    @BindView(R.id.tv_lightingPressure)
-    TextView tvLightingPressure;
-    @BindView(R.id.tv_remark)
-    TextView tvRemark;
+    @BindView(R.id.et_pipeElectricity)
+    EditText etPipeElectricity;
+    @BindView(R.id.et_pipePressure)
+    EditText etPipePressure;
+    @BindView(R.id.et_groundElectricity)
+    EditText etGroundElectricity;
+    @BindView(R.id.et_groundPressure)
+    EditText etGroundPressure;
+    @BindView(R.id.et_blankElectricity)
+    EditText etBlankElectricity;
+    @BindView(R.id.et_lightingPressure)
+    EditText etLightingPressure;
+    @BindView(R.id.et_remark)
+    EditText etRemark;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -87,6 +95,22 @@ public class ApproveInsulationActivity extends BaseActivity {
     LinearLayout llFile;
     @BindView(R.id.ll_selectImages)
     LinearLayout llSelectImages;
+    @BindView(R.id.ll_approveStatus)
+    LinearLayout llApproveStatus;
+
+    @BindView(R.id.rg_isProperty)
+    RadioGroup rgIsProperty;
+    @BindView(R.id.rb_yesProperty)
+    RadioButton rbYesProperty;
+    @BindView(R.id.rb_noProperty)
+    RadioButton rbNoProperty;
+
+    @BindView(R.id.rg_isBury)
+    RadioGroup rgIsBury;
+    @BindView(R.id.rb_yesBury)
+    RadioButton rbYesBury;
+    @BindView(R.id.rb_noBury)
+    RadioButton rbNoBury;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -94,6 +118,9 @@ public class ApproveInsulationActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+    private String tag, location, approveId;
+    private String property, lightingStatus;
+    private int pipeId;
 
     @Override
     protected void setStatusBar() {
@@ -119,9 +146,39 @@ public class ApproveInsulationActivity extends BaseActivity {
         userId = (String) SPUtil.get(ApproveInsulationActivity.this, "userId", "");
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
-            String tag = bundle.getString("tag");
+            tag = bundle.getString("tag");
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
+            } else if (tag.equals("update")) {
+                ivApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
+                llApproveStatus.setVisibility(View.GONE);
+                btnApprove.setText("提交");
+            }
+            if (tag.equals("detail") || tag.equals("approve")) {
+                etPipeElectricity.setEnabled(false);
+                etPipePressure.setEnabled(false);
+                etGroundElectricity.setEnabled(false);
+                etGroundPressure.setEnabled(false);
+                etBlankElectricity.setEnabled(false);
+                etLightingPressure.setEnabled(false);
+                etRemark.setEnabled(false);
+                rbYesProperty.setEnabled(false);
+                rbNoProperty.setEnabled(false);
+                rbYesBury.setEnabled(false);
+                rbNoBury.setEnabled(false);
+            } else {
+                etPipeElectricity.setEnabled(true);
+                etPipePressure.setEnabled(true);
+                etGroundElectricity.setEnabled(true);
+                etGroundPressure.setEnabled(true);
+                etBlankElectricity.setEnabled(true);
+                etLightingPressure.setEnabled(true);
+                etRemark.setEnabled(true);
+                rbYesProperty.setEnabled(true);
+                rbNoProperty.setEnabled(true);
+                rbYesBury.setEnabled(true);
+                rbNoBury.setEnabled(true);
             }
             formId = bundle.getString("formId");
         }
@@ -132,7 +189,39 @@ public class ApproveInsulationActivity extends BaseActivity {
         photoAdapter = new PhotoAdapter(this, path);
         rvResultPhoto.setAdapter(photoAdapter);
         getDetail(formId);
+        initListener();
 
+    }
+
+    private void initListener() {
+        rgIsProperty.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesProperty:
+                        property = "正常";
+                        break;
+                    case R.id.rb_noProperty:
+                        property = "问题";
+                        break;
+
+                }
+            }
+        });
+        rgIsBury.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesBury:
+                        lightingStatus = "正常";
+                        break;
+                    case R.id.rb_noBury:
+                        lightingStatus = "问题";
+                        break;
+
+                }
+            }
+        });
     }
 
     /**
@@ -155,15 +244,19 @@ public class ApproveInsulationActivity extends BaseActivity {
                         if (model != null) {
                             InsulationDetail dataDetail = model.getDatadetail();
                             tvStationName.setText(dataDetail.getStationdesc());
-                            tvRemark.setText(dataDetail.getRemarks());
-                            tvPipeElectricity.setText(dataDetail.getCol1());
-                            tvPipePressure.setText(dataDetail.getCol2());
-                            tvGroundElectricity.setText(dataDetail.getCol3());
-                            tvGroundPressure.setText(dataDetail.getCol4());
-                            tvBlankElectricity.setText(dataDetail.getCol5());
-                            tvLightingPressure.setText(dataDetail.getCol7());
+                            etRemark.setText(dataDetail.getRemarks());
+                            etPipeElectricity.setText(dataDetail.getCol1());
+                            etPipePressure.setText(dataDetail.getCol2());
+                            etGroundElectricity.setText(dataDetail.getCol3());
+                            etGroundPressure.setText(dataDetail.getCol4());
+                            etBlankElectricity.setText(dataDetail.getCol5());
+                            etLightingPressure.setText(dataDetail.getCol7());
+                            location = dataDetail.getLocate();
+                            property = dataDetail.getCol6();
+                            lightingStatus = dataDetail.getCol8();
+                            pipeId = dataDetail.getPipeid();
                             String location = model.getDatadetail().getLocate();
-                            tvRemark.setText(dataDetail.getRemarks());
+                            etRemark.setText(dataDetail.getRemarks());
                             if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
@@ -206,18 +299,21 @@ public class ApproveInsulationActivity extends BaseActivity {
                                 String approval = model.getDatapproval().getEmployid();
                                 if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
                                     tvSpr.setText(approval.split(":")[1]);
+                                    approveId = approval.split(":")[0];
                                 }
-                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                    llApproveAdvice.setVisibility(View.VISIBLE);
-                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                }
-                                //显示审批图片
-                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                    Glide.with(ApproveInsulationActivity.this).
-                                            load(model.getDatapproval().getSignfilepath()).
-                                            into(ivApproveStatus);
+                                if (tag.equals("detail") || tag.equals("approve")) {
+                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
+                                        llApproveAdvice.setVisibility(View.VISIBLE);
+                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                    }
+                                    //显示审批图片
+                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                        Glide.with(ApproveInsulationActivity.this).
+                                                load(model.getDatapproval().getSignfilepath()).
+                                                into(ivApproveStatus);
+                                    }
                                 }
                             }
 
@@ -235,9 +331,15 @@ public class ApproveInsulationActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                Bundle bundle = new Bundle();
-                bundle.putString("formid", formId);
-                openActivity(ApproveFormActivity.class, bundle);
+                if (tag.equals("update")) {
+                    if (paramsComplete()) {
+                        commit();
+                    }
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("formid", formId);
+                    openActivity(ApproveFormActivity.class, bundle);
+                }
                 break;
             case R.id.ll_file:
                 if (!TextUtils.isEmpty(filePath)) {
@@ -248,6 +350,106 @@ public class ApproveInsulationActivity extends BaseActivity {
                 break;
 
         }
+    }
+
+    private boolean paramsComplete() {
+        if (TextUtils.isEmpty(etPipeElectricity.getText().toString())) {
+            ToastUtil.show("请输入管道电位");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etPipeElectricity.getText().toString())) {
+            ToastUtil.show("管道电位格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etPipePressure.getText().toString())) {
+            ToastUtil.show("请输入管道干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etPipePressure.getText().toString())) {
+            ToastUtil.show("管道干扰电压格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etGroundElectricity.getText().toString())) {
+            ToastUtil.show("请输入接地侧电位");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etGroundElectricity.getText().toString())) {
+            ToastUtil.show("接地侧电位格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etGroundPressure.getText().toString())) {
+            ToastUtil.show("请输入接地侧干扰电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etGroundPressure.getText().toString())) {
+            ToastUtil.show("入接地侧干扰电压格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etBlankElectricity.getText().toString())) {
+            ToastUtil.show("请输入放空侧电位");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etBlankElectricity.getText().toString())) {
+            ToastUtil.show("放空侧电位格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etLightingPressure.getText().toString())) {
+            ToastUtil.show("请输入管道避雷器电压");
+            return false;
+        }
+        if (!NumberUtil.isNumber(etLightingPressure.getText().toString())) {
+            ToastUtil.show("管道避雷器电压格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etRemark.getText().toString())) {
+            ToastUtil.show("请输入备注");
+            return false;
+        }
+        return true;
+    }
+
+    private void commit() {
+        etPipeElectricity.setEnabled(false);
+        etPipePressure.setEnabled(false);
+        etGroundElectricity.setEnabled(false);
+        etGroundPressure.setEnabled(false);
+        etBlankElectricity.setEnabled(false);
+        etLightingPressure.setEnabled(false);
+        etRemark.setEnabled(false);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", formId);
+        jsonObject.addProperty("departmentid", 0);
+        jsonObject.addProperty("pipeid", pipeId);
+        jsonObject.addProperty("stationdesc", tvStationName.getText().toString());
+        jsonObject.addProperty("col1", etPipeElectricity.getText().toString());
+        jsonObject.addProperty("col2", etPipePressure.getText().toString());
+        jsonObject.addProperty("col3", etGroundElectricity.getText().toString());
+        jsonObject.addProperty("col4", etGroundPressure.getText().toString());
+        jsonObject.addProperty("col5", etBlankElectricity.getText().toString());
+        jsonObject.addProperty("col6", property);
+        jsonObject.addProperty("col7", etLightingPressure.getText().toString());
+        jsonObject.addProperty("col8", lightingStatus);
+        jsonObject.addProperty("remarks", etRemark.getText().toString());
+        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approveId);
+        jsonObject.addProperty("filepath", "00");
+        jsonObject.addProperty("picturepath", "00");
+        Net.create(Api.class).updateProperty(token, jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
+                            finish();
+                        }
+
+                    }
+                });
     }
 
     /**

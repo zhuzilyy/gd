@@ -97,18 +97,19 @@
                     android:text="管道电位(-V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-
-                <TextView
-                    android:id="@+id/tv_pipeElectricity"
+                <EditText
+                    android:id="@+id/et_pipeElectricity"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
+                    android:background="@null"
                     android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
@@ -141,8 +142,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_pipePressure"
+                <EditText
+                    android:id="@+id/et_pipePressure"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -194,8 +195,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_groundElectricity"
+                <EditText
+                    android:id="@+id/et_groundElectricity"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -238,8 +239,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_groundPressure"
+                <EditText
+                    android:id="@+id/et_groundPressure"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -280,8 +281,8 @@
                     android:text="放空侧电位(-V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-                <TextView
-                    android:id="@+id/tv_blankElectricity"
+                <EditText
+                    android:id="@+id/et_blankElectricity"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -384,8 +385,8 @@
                     android:text="管道避雷器电压(V)"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-                <TextView
-                    android:id="@+id/tv_lightingPressure"
+                <EditText
+                    android:id="@+id/et_lightingPressure"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -487,8 +488,8 @@
                     android:text="备注"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-                <TextView
-                    android:id="@+id/tv_remark"
+                <EditText
+                    android:id="@+id/et_remark"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

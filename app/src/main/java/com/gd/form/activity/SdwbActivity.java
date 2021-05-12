@@ -622,26 +622,10 @@ public class SdwbActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-//        if (TextUtils.isEmpty(tv_gddw.getText().toString())) {
-//            ToastUtil.show("请选择管道单位");
-//            return false;
-//        }
         if (TextUtils.isEmpty(tv_sdmc.getText().toString())) {
             ToastUtil.show("请选择隧道名称");
             return false;
         }
-//        if (TextUtils.isEmpty(tv_sdwz.getText().toString())) {
-//            ToastUtil.show("请选择隧道位置");
-//            return false;
-//        }
-//        if (TextUtils.isEmpty(et_pipeLength.getText().toString())) {
-//            ToastUtil.show("请输入管道长度");
-//            return false;
-//        }
-//        if (!NumberUtil.isNumber(et_pipeLength.getText().toString())) {
-//            ToastUtil.show("管道长度输入格式不正确");
-//            return false;
-//        }
         if (TextUtils.isEmpty(et_wgxw_problem.getText().toString())) {
             ToastUtil.show("请输入违规行为问题描述");
             return false;

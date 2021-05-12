@@ -946,6 +946,38 @@ public interface Api {
     @POST("w010_dataformdataUpdate.html")
     Call<ServerModel> updateVideoRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+    /**
+     * 更细水工施工检查日志
+     *
+     * @return
+     */
+    @POST("w015_dataformdataUpdate.html")
+    Call<ServerModel> updateWaterCheck(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新区域阴保
+     *
+     * @return
+     */
+    @POST("w012_dataformdataUpdate.html")
+    Call<ServerModel> updateZone(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新耦合器
+     *
+     * @return
+     */
+    @POST("w014_dataformdataAdd.html")
+    Call<ServerModel> updateDevice(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新绝缘件性能
+     *
+     * @return
+     */
+    @POST("w013_dataformdataUpdate.html")
+    Call<ServerModel> updateProperty(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
 }
 
 

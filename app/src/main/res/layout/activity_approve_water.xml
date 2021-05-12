@@ -527,7 +527,7 @@
                         android:background="@android:color/transparent"
                         android:button="@null"
                         android:drawableLeft="@drawable/radio_btn"
-                        android:text="头上报输气管理处" />
+                        android:text="口头上报输气管理处" />
                     <RadioButton
                         android:id="@+id/rb_writeUpload"
                         android:layout_width="match_parent"

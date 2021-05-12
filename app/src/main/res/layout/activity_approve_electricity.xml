@@ -124,8 +124,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_ground"
+                <EditText
+                    android:id="@+id/et_ground"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -166,17 +166,19 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_base"
+                <EditText
+                    android:id="@+id/et_base"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
+                    android:background="@null"
                     android:gravity="end"
+                    android:singleLine="true"
+                    android:text="基准电位"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
@@ -209,8 +211,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_resistance"
+                <EditText
+                    android:id="@+id/et_resistance"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -295,8 +297,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_temperature"
+                <EditText
+                    android:id="@+id/et_temperature"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -337,8 +339,8 @@
                     android:text="备注"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
-                <TextView
-                    android:id="@+id/tv_remark"
+                <EditText
+                    android:id="@+id/et_remark"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

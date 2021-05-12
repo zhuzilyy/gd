@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,12 +29,17 @@ import com.bumptech.glide.Glide;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
 import com.gd.form.model.ElectricityDetail;
 import com.gd.form.model.ElectricityDetailModel;
+import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.Util;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -49,18 +55,18 @@ public class ApproveElectricity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_position)
     TextView tvPosition;
-    @BindView(R.id.tv_ground)
-    TextView tvGround;
-    @BindView(R.id.tv_base)
-    TextView tvBase;
-    @BindView(R.id.tv_resistance)
-    TextView tvResistance;
+    @BindView(R.id.et_ground)
+    EditText etGround;
+    @BindView(R.id.et_base)
+    EditText etBase;
+    @BindView(R.id.et_resistance)
+    EditText etResistance;
     @BindView(R.id.tv_weather)
     TextView tvWeather;
-    @BindView(R.id.tv_temperature)
-    TextView tvTemperature;
-    @BindView(R.id.tv_remark)
-    TextView tvRemark;
+    @BindView(R.id.et_remark)
+    EditText etRemark;
+    @BindView(R.id.et_temperature)
+    EditText etTemperature;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
     @BindView(R.id.tv_spr)
@@ -87,6 +93,8 @@ public class ApproveElectricity extends BaseActivity {
     LinearLayout llSelectImages;
     @BindView(R.id.tv_stationName)
     TextView tvStationName;
+    @BindView(R.id.ll_approveStatus)
+    LinearLayout llApproveStatus;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -94,6 +102,7 @@ public class ApproveElectricity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> path;
     private String filePath;
+    private String tag, approveId, location;
 
     @Override
     protected void setStatusBar() {
@@ -119,9 +128,29 @@ public class ApproveElectricity extends BaseActivity {
         userId = (String) SPUtil.get(ApproveElectricity.this, "userId", "");
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
-            String tag = bundle.getString("tag");
+            tag = bundle.getString("tag");
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
+            } else if (tag.equals("update")) {
+                ivApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
+                llApproveStatus.setVisibility(View.GONE);
+                btnApprove.setText("提交");
+            }
+            if(tag.equals("detail") || tag.equals("approve")){
+                etGround.setEnabled(false);
+                etBase.setEnabled(false);
+                etGround.setEnabled(false);
+                etResistance.setEnabled(false);
+                etTemperature.setEnabled(false);
+                etRemark.setEnabled(false);
+            }else{
+                etGround.setEnabled(true);
+                etBase.setEnabled(true);
+                etGround.setEnabled(true);
+                etResistance.setEnabled(true);
+                etTemperature.setEnabled(true);
+                etRemark.setEnabled(true);
             }
             formId = bundle.getString("formId");
         }
@@ -146,21 +175,22 @@ public class ApproveElectricity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Log.i("tag","params==="+params);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).getElectricityDetail(token, params)
                 .enqueue(new NetCallback<ElectricityDetailModel>(this, true) {
                     @Override
                     public void onResponse(ElectricityDetailModel model) {
                         if (model != null) {
                             ElectricityDetail dataDetail = model.getDatadetail();
+                            location = dataDetail.getLocate();
                             tvStationName.setText(dataDetail.getStationame());
                             tvPosition.setText(dataDetail.getTestlocate());
-                            tvGround.setText(dataDetail.getCol1());
-                            tvBase.setText(dataDetail.getCol2());
-                            tvResistance.setText(dataDetail.getCol3());
+                            etGround.setText(dataDetail.getCol1());
+                            etBase.setText(dataDetail.getCol2());
+                            etResistance.setText(dataDetail.getCol3());
                             tvWeather.setText(dataDetail.getWeathers());
-                            tvTemperature.setText(dataDetail.getTemperature());
-                            tvRemark.setText(dataDetail.getRemarks());
+                            etTemperature.setText(dataDetail.getTemperature());
+                            etRemark.setText(dataDetail.getRemarks());
                             String location = model.getDatadetail().getLocate();
                             if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
@@ -205,18 +235,21 @@ public class ApproveElectricity extends BaseActivity {
                                 String approval = model.getDatapproval().getEmployid();
                                 if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
                                     tvSpr.setText(approval.split(":")[1]);
+                                    approveId = approval.split(":")[0];
                                 }
-                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                    llApproveAdvice.setVisibility(View.VISIBLE);
-                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                }
-                                //显示审批图片
-                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                    Glide.with(ApproveElectricity.this).
-                                            load(model.getDatapproval().getSignfilepath()).
-                                            into(ivApproveStatus);
+                                if (tag.equals("detail") || tag.equals("approve")) {
+                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
+                                        llApproveAdvice.setVisibility(View.VISIBLE);
+                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                    }
+                                    //显示审批图片
+                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                        Glide.with(ApproveElectricity.this).
+                                                load(model.getDatapproval().getSignfilepath()).
+                                                into(ivApproveStatus);
+                                    }
                                 }
                             }
                         }
@@ -233,9 +266,15 @@ public class ApproveElectricity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_approve:
-                Bundle bundle = new Bundle();
-                bundle.putString("formid", formId);
-                openActivity(ApproveFormActivity.class, bundle);
+                if (tag.equals("update")) {
+                    if (paramsComplete()) {
+                        commit();
+                    }
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("formid", formId);
+                    openActivity(ApproveFormActivity.class, bundle);
+                }
                 break;
             case R.id.ll_file:
                 if (!TextUtils.isEmpty(filePath)) {
@@ -246,6 +285,84 @@ public class ApproveElectricity extends BaseActivity {
                 break;
 
         }
+    }
+
+    private boolean paramsComplete() {
+        if (TextUtils.isEmpty(etGround.getText().toString())) {
+            ToastUtil.show("请输入管地电位");
+            return false;
+        }
+        if (!NumberUtil.isNumber((etGround.getText().toString()))) {
+            ToastUtil.show("管地电位格式输入不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etBase.getText().toString())) {
+            ToastUtil.show("请输入基准电位");
+            return false;
+        }
+        if (!NumberUtil.isNumber((etBase.getText().toString()))) {
+            ToastUtil.show("基准电位格式输入不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etResistance.getText().toString())) {
+            ToastUtil.show("请输入土壤电阻率");
+            return false;
+        }
+        if (!NumberUtil.isNumber((etResistance.getText().toString()))) {
+            ToastUtil.show("土壤电阻率格式输入不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(tvWeather.getText().toString())) {
+            ToastUtil.show("请选择天气");
+            return false;
+        }
+        if (TextUtils.isEmpty(etTemperature.getText().toString())) {
+            ToastUtil.show("请输入温度");
+            return false;
+        }
+        if (!NumberUtil.isNumber((etTemperature.getText().toString()))) {
+            ToastUtil.show("温度格式输入不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(etRemark.getText().toString())) {
+            ToastUtil.show("请输入备注");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void commit() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", formId);
+        jsonObject.addProperty("stationame", tvStationName.getText().toString());
+        jsonObject.addProperty("testlocate", tvPosition.getText().toString());
+        jsonObject.addProperty("col1", etGround.getText().toString());
+        jsonObject.addProperty("col2", etBase.getText().toString());
+        jsonObject.addProperty("col3", etResistance.getText().toString());
+        jsonObject.addProperty("remarks", etRemark.getText().toString());
+        jsonObject.addProperty("weathers", tvWeather.getText().toString());
+        jsonObject.addProperty("temperature", etTemperature.getText().toString());
+        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approveId);
+        jsonObject.addProperty("picturepath", "00");
+        jsonObject.addProperty("filepath", "00");
+        Net.create(Api.class).updateZone(token, jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
+                            finish();
+                        }
+
+                    }
+                });
     }
 
     /**

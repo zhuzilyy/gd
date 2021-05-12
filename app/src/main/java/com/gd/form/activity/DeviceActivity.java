@@ -353,18 +353,6 @@ public class DeviceActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-//        if (TextUtils.isEmpty(etNo.getText().toString())) {
-//            ToastUtil.show("请输入序号");
-//            return false;
-//        }
-//        if (TextUtils.isEmpty(tvArea.getText().toString())) {
-//            ToastUtil.show("请选择作业区");
-//            return false;
-//        }
-//        if (TextUtils.isEmpty(tvPipeName.getText().toString())) {
-//            ToastUtil.show("请选择管道名称");
-//            return false;
-//        }
         if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
             ToastUtil.show("请选择桩号");
             return false;

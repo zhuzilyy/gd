@@ -445,10 +445,6 @@ public class InsulatingPropertyActivity extends BaseActivity {
     }
 
     private boolean paramsComplete() {
-//        if (TextUtils.isEmpty(etNo.getText().toString())) {
-//            ToastUtil.show("请输入序号");
-//            return false;
-//        }
         if (TextUtils.isEmpty(tvStationName.getText().toString())) {
             ToastUtil.show("请输入场站名称");
             return false;

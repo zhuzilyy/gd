@@ -149,13 +149,20 @@ public class ApproveBuildingActivity extends BaseActivity {
             tag = bundle.getString("tag");
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
-                llChooseImages.setEnabled(false);
             } else if (tag.equals("update")) {
                 btnApprove.setText("提交");
-                llChooseImages.setEnabled(true);
                 ivApproveStatus.setVisibility(View.GONE);
                 llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            }
+            if(tag.equals("detail") || tag.equals("approve")){
+                etDes.setEnabled(false);
+                etRecord.setEnabled(false);
+                llChooseImages.setEnabled(false);
+            }else{
+                etDes.setEnabled(true);
+                etRecord.setEnabled(true);
+                llChooseImages.setEnabled(true);
             }
             formId = bundle.getString("formId");
         }
@@ -303,7 +310,7 @@ public class ApproveBuildingActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approverId = approval.split(":")[0];
                                 }
-                                if(tag.equals("detail")){
+                                if(tag.equals("detail")||tag.equals("approve")){
                                     //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
                                     tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
                                     if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {

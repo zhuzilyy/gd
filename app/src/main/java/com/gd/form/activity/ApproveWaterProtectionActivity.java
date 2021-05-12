@@ -163,6 +163,11 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                 llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
             }
+            if(tag.equals("detail") ||tag.equals("approve")){
+                etHandleMethod.setEnabled(false);
+            }else{
+                etHandleMethod.setEnabled(true);
+            }
             formId = bundle.getString("formId");
         }
         llFile.setVisibility(View.GONE);
@@ -295,7 +300,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-                            if ("detail".equals(tag)) {
+                            if (tag.equals("detail") || tag.equals("approve")) {
                                 //上传的文件
                                 if (model.getDataupload() != null) {
                                     if ("00".equals(model.getDataupload().getFilename())) {
