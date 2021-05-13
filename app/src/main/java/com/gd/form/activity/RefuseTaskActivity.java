@@ -1,5 +1,9 @@
 package com.gd.form.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +46,7 @@ public class RefuseTaskActivity extends BaseActivity {
     private OVerTimeAdapter adapter;
     private String token, userId;
     private List<OverTimeModel> refuseList;
-
+    private MyReceiver myReceiver;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -71,10 +75,13 @@ public class RefuseTaskActivity extends BaseActivity {
         });
         initData();
         getOverTimeList();
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.action.update.waitingTask");
+        registerReceiver(myReceiver,intentFilter);
     }
 
     private void initData() {
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new OVerTimeAdapter(this, refuseList, R.layout.adapter_item_waiting);
         recyclerView.setAdapter(adapter);
@@ -85,7 +92,7 @@ public class RefuseTaskActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "update");
                 bundle.putString("formId", refuseList.get(position).getFormid());
-                Log.i("tag","formId=="+refuseList.get(position).getFormid());
+                Log.i("tag", "formId==" + refuseList.get(position).getFormid());
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
@@ -128,6 +135,7 @@ public class RefuseTaskActivity extends BaseActivity {
         });
 
     }
+
     private void getOverTimeList() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
@@ -151,7 +159,7 @@ public class RefuseTaskActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({ R.id.iv_back})
+    @OnClick({R.id.iv_back})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -159,5 +167,22 @@ public class RefuseTaskActivity extends BaseActivity {
                 break;
         }
     }
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null){
+                if(intent.getAction().equals("com.action.update.waitingTask")){
+                    getOverTimeList();
+                }
+            }
+        }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(myReceiver!=null){
+            unregisterReceiver(myReceiver);
+        }
+    }
 }

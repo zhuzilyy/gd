@@ -34,10 +34,13 @@ import com.gd.form.model.StationDetailInfo;
 import com.gd.form.model.StationNoModel;
 import com.gd.form.model.StationWaterDetailModel;
 import com.gd.form.model.TaskCountModel;
+import com.gd.form.model.TaskDetailModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
 import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaitingApproveModel;
+import com.gd.form.model.WaitingHandleTaskModel;
+import com.gd.form.model.WaitingTakModel;
 import com.gd.form.model.WaterDetailModel;
 import com.gd.form.model.WaterInsuranceDetailModel;
 import com.gd.form.model.WaterModel;
@@ -187,6 +190,14 @@ public interface Api {
      */
     @POST("w002_dataformdataAdd.html")
     Call<ServerModel> commitTunnel(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 隧道外部表单提交
+     *
+     * @return
+     */
+    @POST("w002_dataformdataUpdate.html")
+    Call<ServerModel> updateTunnelRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 重车表单提交
@@ -967,7 +978,7 @@ public interface Api {
      *
      * @return
      */
-    @POST("w014_dataformdataAdd.html")
+    @POST("w014_dataformdataUpdate.html")
     Call<ServerModel> updateDevice(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
@@ -977,6 +988,72 @@ public interface Api {
      */
     @POST("w013_dataformdataUpdate.html")
     Call<ServerModel> updateProperty(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 下发任务
+     *
+     * @return
+     */
+    @POST("worktasksAdd.html")
+    Call<ServerModel> addTask(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取下发任务待处理列表
+     *
+     * @return
+     */
+    @POST("worktasksSelectWait.html")
+    Call<List<WaitingHandleTaskModel>> getWaitingHandleTask(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取下发任务待处理详情
+     *
+     * @return
+     */
+    @POST("worktasksSelectKey.html")
+    Call<TaskDetailModel> getTaskDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 完成任务
+     *
+     * @return
+     */
+    @POST("worktasksFinish.html")
+    Call<ServerModel> finishTask(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 下发任务列表
+     *
+     * @return
+     */
+    @POST("worktasksSelectMulit.html")
+    Call<List<WaitingHandleTaskModel>> workTaskList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 下发任务列表
+     *
+     * @return
+     */
+    @POST("worktasksSelectWaitCount.html")
+    Call<WaitingTakModel> getWaitingTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 下发任务列表
+     *
+     * @return
+     */
+    @POST("DataFormMultiWaitStatusListCount.html")
+    Call<WaitingTakModel> refuseTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+//    /**
+//     * 更新app
+//     *
+//     * @return
+//     */
+//    @POST("AppUpdateVersion.html")
+//    Call<WaitingTakModel> getWaitingTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
 
 }
 

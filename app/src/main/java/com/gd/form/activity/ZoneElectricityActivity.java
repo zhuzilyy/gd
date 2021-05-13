@@ -208,7 +208,6 @@ public class ZoneElectricityActivity extends BaseActivity {
             R.id.ll_weather,
             R.id.ll_location,
             R.id.ll_scfj,
-            R.id.ll_spr,
             R.id.btn_commit,
             R.id.ll_selectPic,
             R.id.ll_stationName,

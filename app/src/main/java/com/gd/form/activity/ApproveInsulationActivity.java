@@ -151,9 +151,11 @@ public class ApproveInsulationActivity extends BaseActivity {
                 btnApprove.setVisibility(View.GONE);
             } else if (tag.equals("update")) {
                 ivApproveStatus.setVisibility(View.GONE);
-                llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
                 btnApprove.setText("提交");
+            } else if (tag.equals("approve")) {
+                llApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
             }
             if (tag.equals("detail") || tag.equals("approve")) {
                 etPipeElectricity.setEnabled(false);
@@ -254,6 +256,16 @@ public class ApproveInsulationActivity extends BaseActivity {
                             location = dataDetail.getLocate();
                             property = dataDetail.getCol6();
                             lightingStatus = dataDetail.getCol8();
+                            if (property.equals("正常")) {
+                                rbYesProperty.setChecked(true);
+                            } else {
+                                rbNoProperty.setChecked(true);
+                            }
+                            if (lightingStatus.equals("正常")) {
+                                rbYesBury.setChecked(true);
+                            } else {
+                                rbNoBury.setChecked(true);
+                            }
                             pipeId = dataDetail.getPipeid();
                             String location = model.getDatadetail().getLocate();
                             etRemark.setText(dataDetail.getRemarks());
@@ -301,19 +313,19 @@ public class ApproveInsulationActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approveId = approval.split(":")[0];
                                 }
-                                if (tag.equals("detail") || tag.equals("approve")) {
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveInsulationActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                        && (tag.equals("detail") || tag.equals("update"))
+                                        && model.getDatapproval().getApprovalresult()!=3) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveInsulationActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
                                 }
                             }
 

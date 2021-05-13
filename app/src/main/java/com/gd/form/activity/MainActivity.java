@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.gd.form.BuildConfig;
 import com.gd.form.R;
 import com.gd.form.adapter.MyFragmentPagerAdapter;
 import com.gd.form.base.BaseActivity;
@@ -68,8 +69,45 @@ public class MainActivity extends BaseActivity implements  ViewPager.OnPageChang
         vpager.addOnPageChangeListener(this);
         token = (String) SPUtil.get(this, "token", "");
         getOssData();
+//        updateApp();
     }
 
+    private void updateApp() {
+
+//        UpdateConfiguration configuration = new UpdateConfiguration()
+//                //输出错误日志
+//                .setEnableLog(true)
+//                //设置自定义的下载
+//                //.setHttpManager()
+//                //下载完成自动跳动安装页面
+//                .setJumpInstallPage(true)
+//                //设置对话框背景图片 (图片规范参照demo中的示例图)
+//                //.setDialogImage(R.drawable.ic_dialog)
+//                //设置按钮的颜色
+//                //.setDialogButtonColor(Color.parseColor("#E743DA"))
+//                //设置对话框强制更新时进度条和文字的颜色
+//                .setDialogProgressBarColor(Color.parseColor("#ff895b"))
+//                //设置按钮的文字颜色
+//                .setDialogButtonTextColor(Color.WHITE)
+//                //设置是否显示通知栏进度
+//                .setShowNotification(true)
+//                //设置是否提示后台下载toast
+//                .setShowBgdToast(false)
+//                //设置强制更新
+//                .setForcedUpgrade(false);
+//        设置对话框按钮的点击监听
+        int updateVersionCode = BuildConfig.VERSION_CODE + 1;
+//        DownloadManager manager = DownloadManager.getInstance();
+//        manager.setApkName("map.apk")
+//                .setApkUrl(appDownload)
+//                .setSmallIcon(R.mipmap.logo)
+//                .setShowNewerToast(false)
+//                .setConfiguration(configuration)
+//                .setApkVersionCode(updateVersionCode)
+//                .setApkVersionName(appVersion)
+//                .setApkDescription(stringBuilder.toString())
+//                .download();
+    }
     private void getOssData() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);

@@ -45,8 +45,8 @@
         <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
         <service android:name="com.amap.api.location.APSService" />
         <provider
+            android:authorities="${applicationId}.fileprovider"
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.gd.form.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -369,6 +369,21 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RefuseTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TaskDispatchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WaitingHandleTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TaskDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchTaskResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchTaskActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"

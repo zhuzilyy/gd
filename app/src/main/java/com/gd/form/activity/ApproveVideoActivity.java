@@ -216,10 +216,11 @@ public class ApproveVideoActivity extends BaseActivity {
                 btnApprove.setVisibility(View.GONE);
             } else if (tag.equals("update")) {
                 btnApprove.setText("提交");
-
                 ivApproveStatus.setVisibility(View.GONE);
-                llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            }else if(tag.equals("approve")){
+                llApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
             }
             if(tag.equals("detail") || tag.equals("approve")){
                 rbYes.setEnabled(false);
@@ -567,19 +568,18 @@ public class ApproveVideoActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approverId = approval.split(":")[0];
                                 }
-                                if (tag.equals("detail") || tag.equals("approve")) {
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveVideoActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                && (tag.equals("detail") || tag.equals("update"))) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveVideoActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
                                 }
                             }
                         }

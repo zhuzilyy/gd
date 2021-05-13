@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="任务发送人" />
+
+        <TextView
+            android:textColor="#000"
+            android:id="@+id/tv_sendName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical"
+            android:text=""
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="任务接收人" />
+
+        <TextView
+            android:textColor="#000"
+            android:text="张三"
+            android:id="@+id/tv_receiveName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="到期时间" />
+
+        <TextView
+            android:textColor="#000"
+            android:text="未知"
+            android:id="@+id/tv_endTime"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="完成时间" />
+
+        <TextView
+            android:textColor="#000"
+            android:text="未知"
+            android:id="@+id/tv_finishTime"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical" />
+
+    </LinearLayout>
+
+    <View
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_10"
+        android:background="#ececec" />
+</LinearLayout>

@@ -174,13 +174,16 @@ public class ApproveWaterActivity extends BaseActivity {
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             tag = bundle.getString("tag");
+            Log.i("tag","tag==="+tag);
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
             }else if(tag.equals("update")){
                 btnApprove.setText("提交");
                 ivApproveStatus.setVisibility(View.GONE);
-                llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            }else if(tag.equals("approve")){
+                llApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
             }
             if(tag.equals("detail")||tag.equals("approve")){
                 etWeather.setEnabled(false);
@@ -327,6 +330,8 @@ public class ApproveWaterActivity extends BaseActivity {
                             if (!TextUtils.isEmpty(model.getStakeString()) && model.getStakeString().contains(":")) {
                                 tvStationNo.setText(model.getStakeString().split(":")[1]);
                             }
+
+                            handleMethod = dataDetail.getHandlemode();
                             stakeId = dataDetail.getStakeid();
                             etDistance.setText(dataDetail.getStakefrom());
                             etName.setText(dataDetail.getProtectname());
@@ -342,7 +347,7 @@ public class ApproveWaterActivity extends BaseActivity {
                             } else {
                                 rbWriteUpload.setChecked(true);
                             }
-
+                            isHidden = dataDetail.getCol3();
                             if (dataDetail.getCol3().equals("是")) {
                                 rbYes.setChecked(true);
                             } else {
@@ -352,11 +357,11 @@ public class ApproveWaterActivity extends BaseActivity {
                             etProcess.setText(dataDetail.getCol2());
 
                             //上传的图片
-                            if (!TextUtils.isEmpty(dataDetail.getCol1picture())) {
-                                if ("00".equals(dataDetail.getCol1picture())) {
+                            if (model.getDataupload()!=null) {
+                                if ("00".equals(model.getDataupload().getPicturepath())) {
                                     tvPhoto.setText("无");
                                 } else {
-                                    String[] photoArr = dataDetail.getCol1picture().split(";");
+                                    String[] photoArr = model.getDataupload().getPicturepath().split(";");
                                     for (int i = 0; i < photoArr.length; i++) {
                                         path.add(photoArr[i]);
                                         photoAdapter.notifyDataSetChanged();
@@ -383,19 +388,18 @@ public class ApproveWaterActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approverId = approval.split(":")[0];
                                 }
-                                if(tag.equals("detail") || tag.equals("approve")){
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveWaterActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                        && (tag.equals("detail") || tag.equals("update"))
+                                        && model.getDatapproval().getApprovalresult()!=3) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveWaterActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
                                 }
                             }
 
@@ -504,6 +508,7 @@ public class ApproveWaterActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
+        Log.i("tag","jsonObject=="+jsonObject);
         Net.create(Api.class).updateWaterCheck(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

@@ -156,25 +156,58 @@
             android:orientation="horizontal"
             android:weightSum="3">
             <LinearLayout
+                android:gravity="center"
                 android:id="@+id/ll_refuse"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/d_10"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="@dimen/d_30"
-                    android:layout_height="@dimen/d_30"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/refuse" />
-
+                <RelativeLayout
+                    android:id="@+id/rl_refuse"
+                    android:padding="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="@dimen/d_30"
+                        android:layout_height="@dimen/d_30"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/refuse" />
+                </RelativeLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
                     android:text="审核未通过"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:id="@+id/ll_task_waiting_handle"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/rl_task_waiting_handle"
+                    android:padding="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/iv_task"
+                        android:layout_width="@dimen/d_30"
+                        android:layout_height="@dimen/d_30"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/waiting_handle" />
+                </RelativeLayout>
+                <TextView
+                    android:layout_marginTop="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="接收任务待处理"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 

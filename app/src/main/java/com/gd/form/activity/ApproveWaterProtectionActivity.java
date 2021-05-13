@@ -151,6 +151,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             tag = bundle.getString("tag");
+            Log.i("tag", "tag===" + tag);
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
                 etDistance.setEnabled(false);
@@ -160,12 +161,15 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                 etDistance.setEnabled(true);
                 llChooseImages.setEnabled(true);
                 ivApproveStatus.setVisibility(View.GONE);
+                llApproveStatus.setVisibility(View.GONE);
+            } else if (tag.equals("approve")) {
                 llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
             }
-            if(tag.equals("detail") ||tag.equals("approve")){
+            if (tag.equals("detail") || tag.equals("approve")) {
                 etHandleMethod.setEnabled(false);
-            }else{
+                llChooseImages.setEnabled(false);
+            } else {
                 etHandleMethod.setEnabled(true);
             }
             formId = bundle.getString("formId");
@@ -300,36 +304,37 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
                             } else {
                                 tvPhoto.setText("无");
                             }
-                            if (tag.equals("detail") || tag.equals("approve")) {
-                                //上传的文件
-                                if (model.getDataupload() != null) {
-                                    if ("00".equals(model.getDataupload().getFilename())) {
-                                        tvFileName.setText("无");
-                                    } else {
-                                        tvFileName.setText(model.getDataupload().getFilename());
-                                        filePath = model.getDataupload().getFilepath();
-                                    }
-                                } else {
+
+                            //上传的文件
+                            if (model.getDataupload() != null) {
+                                if ("00".equals(model.getDataupload().getFilename())) {
                                     tvFileName.setText("无");
+                                } else {
+                                    tvFileName.setText(model.getDataupload().getFilename());
+                                    filePath = model.getDataupload().getFilepath();
                                 }
-                                if (model.getDatapproval() != null) {
-                                    //审批人
-                                    String approval = model.getDatapproval().getEmployid();
-                                    if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
-                                        tvSpr.setText(approval.split(":")[1]);
-                                    }
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveWaterProtectionActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                            } else {
+                                tvFileName.setText("无");
+                            }
+                            if (model.getDatapproval() != null) {
+                                //审批人
+                                String approval = model.getDatapproval().getEmployid();
+                                if (!TextUtils.isEmpty(approval) && approval.contains(":")) {
+                                    tvSpr.setText(approval.split(":")[1]);
+                                }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                        && (tag.equals("detail") || tag.equals("update"))
+                                        && model.getDatapproval().getApprovalresult()!= 3) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveWaterProtectionActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
                                 }
                             }
 
@@ -405,6 +410,7 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("picturepath", "00");
         }
+        Log.i("tag", "jsonObject==" + jsonObject);
         Net.create(Api.class).updateWater(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

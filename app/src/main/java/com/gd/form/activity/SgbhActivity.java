@@ -541,6 +541,7 @@ public class SgbhActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", Integer.parseInt(waterId));
         jsonObject.addProperty("empid", userId);
+        Log.i("tag","jsonObject=="+jsonObject);
         Net.create(Api.class).getWaterStationDetail(token, jsonObject)
                 .enqueue(new NetCallback<StationWaterDetailModel>(this, true) {
                     @Override

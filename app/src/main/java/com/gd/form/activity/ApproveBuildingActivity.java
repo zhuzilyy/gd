@@ -122,8 +122,9 @@ public class ApproveBuildingActivity extends BaseActivity {
     private String ossFilePath;
     private String selectFileName;
     private String selectFilePath;
-    private int pipeId,stakeId;
-    private String location,approverId;
+    private int pipeId, stakeId;
+    private String location, approverId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -152,14 +153,16 @@ public class ApproveBuildingActivity extends BaseActivity {
             } else if (tag.equals("update")) {
                 btnApprove.setText("提交");
                 ivApproveStatus.setVisibility(View.GONE);
-                llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            } else if (tag.equals("approve")) {
+                llApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
             }
-            if(tag.equals("detail") || tag.equals("approve")){
+            if (tag.equals("detail") || tag.equals("approve")) {
                 etDes.setEnabled(false);
                 etRecord.setEnabled(false);
                 llChooseImages.setEnabled(false);
-            }else{
+            } else {
                 etDes.setEnabled(true);
                 etRecord.setEnabled(true);
                 llChooseImages.setEnabled(true);
@@ -310,21 +313,20 @@ public class ApproveBuildingActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approverId = approval.split(":")[0];
                                 }
-                                if(tag.equals("detail")||tag.equals("approve")){
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveBuildingActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                        && (tag.equals("detail") || tag.equals("update"))
+                                        && model.getDatapproval().getApprovalresult() != 3) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
                                     tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                                 }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveBuildingActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
+                                }
+                                tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
                             }
 
                         }
@@ -358,10 +360,10 @@ public class ApproveBuildingActivity extends BaseActivity {
                 }
                 break;
             case R.id.ll_file:
-                if(tag.equals("update")){
+                if (tag.equals("update")) {
                     Intent intentAddress = new Intent(ApproveBuildingActivity.this, SelectFileActivity.class);
                     startActivityForResult(intentAddress, FILE_REQUEST_CODE);
-                }else{
+                } else {
                     if (!TextUtils.isEmpty(filePath)) {
                         Uri uri = Uri.parse(filePath);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -372,6 +374,7 @@ public class ApproveBuildingActivity extends BaseActivity {
 
         }
     }
+
     private boolean paramsComplete() {
         if (TextUtils.isEmpty(etDes.getText().toString())) {
             ToastUtil.show("请输入问题描述");
@@ -383,6 +386,7 @@ public class ApproveBuildingActivity extends BaseActivity {
         }
         return true;
     }
+
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
         if (nameList.size() > 0) {
@@ -430,6 +434,7 @@ public class ApproveBuildingActivity extends BaseActivity {
                     }
                 });
     }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(ApproveBuildingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -533,6 +538,7 @@ public class ApproveBuildingActivity extends BaseActivity {
             //选择桩号
         }
     }
+
     public void uploadOffice(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
         // 此处调用异步上传方法

@@ -49,6 +49,7 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.model.ServerModel;
 import com.gd.form.model.TunnelDataDetail;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.net.Api;
@@ -222,6 +223,9 @@ public class ApproveTunnelActivity extends BaseActivity {
     private OSSCredentialProvider ossCredentialProvider;
     private OSS oss;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private int pipeId;
+    private String location;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -248,14 +252,17 @@ public class ApproveTunnelActivity extends BaseActivity {
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
                 llChooseImages.setEnabled(false);
-            } else if(tag.equals("update")){
+            } else if (tag.equals("update")) {
                 btnApprove.setText("提交");
                 llChooseImages.setEnabled(true);
                 ivApproveStatus.setVisibility(View.GONE);
-                llApproveAdvice.setVisibility(View.GONE);
+//                llApproveAdvice.setVisibility(View.GONE);
                 llApproveStatus.setVisibility(View.GONE);
+            } else if (tag.equals("approve")) {
+                llApproveStatus.setVisibility(View.GONE);
+                llApproveAdvice.setVisibility(View.GONE);
             }
-            if(tag.equals("detail") || tag.equals("approve")){
+            if (tag.equals("detail") || tag.equals("approve")) {
                 rbAlarmNo.setEnabled(false);
                 rbAlarmYes.setEnabled(false);
                 rbBadNo.setEnabled(false);
@@ -291,7 +298,8 @@ public class ApproveTunnelActivity extends BaseActivity {
                 etTransitPro.setEnabled(false);
                 etSmellPro.setEnabled(false);
                 etAlarmPro.setEnabled(false);
-            }else{
+                llChooseImages.setEnabled(false);
+            } else {
                 rbAlarmNo.setEnabled(true);
                 rbAlarmYes.setEnabled(true);
                 rbBadNo.setEnabled(true);
@@ -519,7 +527,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("W002/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("W002/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -583,6 +591,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                         if (model != null) {
                             TunnelDataDetail dataDetail = model.getDatadetail();
                             tvPipeName.setText(model.getPipeString());
+                            pipeId = model.getDatadetail().getPipeid();
                             if (dataDetail.getCol1().equals("无违章采石、采矿、爆破行为")) {
                                 rbNo.setChecked(true);
                             } else if (dataDetail.getCol1().equals("有违章采石、采矿、爆破行为")) {
@@ -590,7 +599,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col1 = dataDetail.getCol1();
                             col1Desc = dataDetail.getCol1desc();
-                            etBuildingPro.setText(dataDetail.getCol1desc());
+                            etBuildingPro.setText(col1Desc);
 
                             if (dataDetail.getCol2().equals("无第三方施工行为")) {
                                 rbThirdNo.setChecked(true);
@@ -599,7 +608,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col2 = dataDetail.getCol2();
                             col2Desc = dataDetail.getCol2desc();
-                            etThirdPro.setText(dataDetail.getCol2desc());
+                            etThirdPro.setText(col2Desc);
 
                             if (dataDetail.getCol3().equals("无可疑人员、车辆逗留现象")) {
                                 rbSuspectNo.setChecked(true);
@@ -608,7 +617,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col3 = dataDetail.getCol3();
                             col3Desc = dataDetail.getCol3desc();
-                            etSuspectPro.setText(dataDetail.getCol3desc());
+                            etSuspectPro.setText(col3Desc);
 
 
                             if (dataDetail.getCol4().equals("完好")) {
@@ -616,11 +625,11 @@ public class ApproveTunnelActivity extends BaseActivity {
                             } else if (dataDetail.getCol4().equals("发生局部破损")) {
                                 rbBlockMiddle.setChecked(true);
                             } else if (dataDetail.getCol4().equals("发生大面积破损")) {
-                                rbBadNo.setChecked(true);
+                                rbBlockNo.setChecked(true);
                             }
                             col4 = dataDetail.getCol4();
                             col4Desc = dataDetail.getCol4desc();
-                            etBlockPro.setText(dataDetail.getCol4());
+                            etBlockPro.setText(col4Desc);
 
                             if (dataDetail.getCol5().equals("无裂缝、沉降，四周有无滑坡、水土流失")) {
                                 rbCaveNo.setChecked(true);
@@ -631,7 +640,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col5 = dataDetail.getCol5();
                             col5Desc = dataDetail.getCol5desc();
-                            etCavePro.setText(dataDetail.getCol5desc());
+                            etCavePro.setText(col5Desc);
 
 
                             if (dataDetail.getCol6().equals("完好，无破损")) {
@@ -643,7 +652,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col6 = dataDetail.getCol6();
                             col6Desc = dataDetail.getCol6desc();
-                            etWaterPro.setText(dataDetail.getCol6desc());
+                            etWaterPro.setText(col6Desc);
 
 
                             if (dataDetail.getCol7().equals("无管道本体翘起、下沉，无管沟沉降")) {
@@ -651,11 +660,11 @@ public class ApproveTunnelActivity extends BaseActivity {
                             } else if (dataDetail.getCol7().equals("有管道本体偏离原有位置")) {
                                 rbTransitMiddle.setChecked(true);
                             } else if (dataDetail.getCol7().equals("有管沟沉降情况")) {
-                                rbThirdYes.setChecked(true);
+                                rbTransitYes.setChecked(true);
                             }
                             col7 = dataDetail.getCol7();
                             col7Desc = dataDetail.getCol7desc();
-                            etTransitPro.setText(dataDetail.getCol7desc());
+                            etTransitPro.setText(col7Desc);
 
                             if (dataDetail.getCol8().equals("无异响、异味现象")) {
                                 rbBadNo.setChecked(true);
@@ -664,7 +673,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col8 = dataDetail.getCol8();
                             col8Desc = dataDetail.getCol8desc();
-                            etTransitPro.setText(dataDetail.getCol8desc());
+                            etSmellPro.setText(col8Desc);
 
                             if (dataDetail.getCol9().equals("检测合格")) {
                                 rbGasYes.setChecked(true);
@@ -673,7 +682,7 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col9 = dataDetail.getCol9();
                             col9Desc = dataDetail.getCol9desc();
-                            etGasPro.setText(dataDetail.getCol9desc());
+                            etGasPro.setText(col9Desc);
 
                             if (dataDetail.getCol10().equals("外观完好")) {
                                 rbAlarmYes.setChecked(true);
@@ -682,10 +691,10 @@ public class ApproveTunnelActivity extends BaseActivity {
                             }
                             col10 = dataDetail.getCol10();
                             col10Desc = dataDetail.getCol10desc();
-                            etAlarmPro.setText(dataDetail.getCol9desc());
+                            etAlarmPro.setText(col10Desc);
                             etOtherPro.setText(dataDetail.getCol11());
 
-                            String location = model.getDatadetail().getLocate();
+                            location = model.getDatadetail().getLocate();
                             if (!TextUtils.isEmpty(location) && location.contains(",")) {
                                 String[] locationArr = location.split(",");
                                 LatLng latLng = new LatLng(Double.parseDouble(locationArr[1]), Double.parseDouble(locationArr[0]));
@@ -731,20 +740,19 @@ public class ApproveTunnelActivity extends BaseActivity {
                                     tvSpr.setText(approval.split(":")[1]);
                                     approveId = approval.split(":")[0];
                                 }
-                                Log.i("tag","tag==="+tag);
-                                if (tag.equals("detail") || tag.equals("approve")) {
-                                    //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
-                                    tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())) {
-                                        llApproveAdvice.setVisibility(View.VISIBLE);
-                                        tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
-                                    }
-                                    //显示审批图片
-                                    if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
-                                        Glide.with(ApproveTunnelActivity.this).
-                                                load(model.getDatapproval().getSignfilepath()).
-                                                into(ivApproveStatus);
-                                    }
+                                //审批状态，0-表示批复不同意，1-表示批复同意，3-表示未批复
+                                tvApproveStatus.setText(Util.getApprovalStatus(model.getDatapproval().getApprovalresult()));
+                                if (!TextUtils.isEmpty(model.getDatapproval().getApprovalcomment())
+                                        && (tag.equals("detail") || tag.equals("update"))
+                                        && model.getDatapproval().getApprovalresult()!=3) {
+                                    llApproveAdvice.setVisibility(View.VISIBLE);
+                                    tvApproveAdvice.setText(model.getDatapproval().getApprovalcomment());
+                                }
+                                //显示审批图片
+                                if (!TextUtils.isEmpty(model.getDatapproval().getSignfilepath())) {
+                                    Glide.with(ApproveTunnelActivity.this).
+                                            load(model.getDatapproval().getSignfilepath()).
+                                            into(ivApproveStatus);
                                 }
                             }
                         }
@@ -768,7 +776,7 @@ public class ApproveTunnelActivity extends BaseActivity {
             case R.id.btn_approve:
                 if (tag.equals("update")) {
                     if (paramsComplete()) {
-//                        commit();
+                        commit();
                     }
                 } else {
                     Bundle bundle = new Bundle();
@@ -786,6 +794,7 @@ public class ApproveTunnelActivity extends BaseActivity {
 
         }
     }
+
     private boolean paramsComplete() {
         if (TextUtils.isEmpty(etBuildingPro.getText().toString())) {
             ToastUtil.show("请输入违规行为问题描述");
@@ -834,73 +843,71 @@ public class ApproveTunnelActivity extends BaseActivity {
 
         return true;
     }
-//    private void commit() {
-//        StringBuilder photoSb = new StringBuilder();
-//        if (nameList.size() > 0) {
-//            for (int i = 0; i < nameList.size(); i++) {
-//                if (i != nameList.size() - 1) {
-//                    photoSb.append(nameList.get(i) + ";");
-//                } else {
-//                    photoSb.append(nameList.get(i));
-//                }
-//            }
-//        }
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("pipeid", stationId);
-//        jsonObject.addProperty("departmentid", departmentId);
-//        jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
-//        jsonObject.addProperty("pipelength", et_pipeLength.getText().toString());
-//        jsonObject.addProperty("col1", col1);
-//        jsonObject.addProperty("col1desc", et_wgxw_problem.getText().toString());
-//        jsonObject.addProperty("col2", col2);
-//        jsonObject.addProperty("col2desc", et_dsfsg_problem.getText().toString());
-//        jsonObject.addProperty("col3", col3);
-//        jsonObject.addProperty("col3desc", et_kyxx_problem.getText().toString());
-//        jsonObject.addProperty("col4", col4);
-//        jsonObject.addProperty("col4desc", et_zqfd_problem.getText().toString());
-//        jsonObject.addProperty("col5", col5);
-//        jsonObject.addProperty("col5desc", et_dk_problem.getText().toString());
-//        jsonObject.addProperty("col6", col6);
-//        jsonObject.addProperty("col6desc", et_sgss_problem.getText().toString());
-//        jsonObject.addProperty("col7", col7);
-//        jsonObject.addProperty("col7desc", et_gdrdgdd_problem.getText().toString());
-//        jsonObject.addProperty("col8", col8);
-//        jsonObject.addProperty("col8desc", et_yxyw_problem.getText().toString());
-//        jsonObject.addProperty("col9", col9);
-//        jsonObject.addProperty("col9desc", et_krq_problem.getText().toString());
-//        jsonObject.addProperty("col10", col10);
-//        jsonObject.addProperty("col10desc", et_bjxt_problem.getText().toString());
-//        jsonObject.addProperty("col11", et_other_problem.getText().toString());
-//        jsonObject.addProperty("locate", location);
-//        jsonObject.addProperty("creator", userId);
-//        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
-//        jsonObject.addProperty("approvalid", approverId);
-//        if (!TextUtils.isEmpty(photoSb.toString())) {
-//            jsonObject.addProperty("picturepath", photoSb.toString());
-//        } else {
-//            jsonObject.addProperty("picturepath", "00");
-//        }
-//        if (!TextUtils.isEmpty(ossFilePath)) {
-//            jsonObject.addProperty("filepath", ossFilePath);
-//        } else {
-//            jsonObject.addProperty("filepath", "00");
-//        }
-//        Log.i("tag","jsonObject=="+jsonObject);
-//        Net.create(Api.class).commitTunnel(token, jsonObject)
-//                .enqueue(new NetCallback<ServerModel>(this, true) {
-//                    @Override
-//                    public void onResponse(ServerModel result) {
-//                        ToastUtil.show(result.getMsg());
-//                        if (result.getCode() == Constant.SUCCESS_CODE) {
-//                            Intent intent = new Intent();
-//                            intent.setAction("com.action.update.waitingTask");
-//                            sendBroadcast(intent);
-//                            finish();
-//                        }
-//
-//                    }
-//                });
-//    }
+
+    private void commit() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", formId);
+        jsonObject.addProperty("pipeid", pipeId);
+        jsonObject.addProperty("stakeid", 0);
+        jsonObject.addProperty("pipelength", 0);
+        jsonObject.addProperty("col1", col1);
+        jsonObject.addProperty("col1desc", etBuildingPro.getText().toString());
+        jsonObject.addProperty("col2", col2);
+        jsonObject.addProperty("col2desc", etThirdPro.getText().toString());
+        jsonObject.addProperty("col3", col3);
+        jsonObject.addProperty("col3desc", etSuspectPro.getText().toString());
+        jsonObject.addProperty("col4", col4);
+        jsonObject.addProperty("col4desc", etBlockPro.getText().toString());
+        jsonObject.addProperty("col5", col5);
+        jsonObject.addProperty("col5desc", etCavePro.getText().toString());
+        jsonObject.addProperty("col6", col6);
+        jsonObject.addProperty("col6desc", etWaterPro.getText().toString());
+        jsonObject.addProperty("col7", col7);
+        jsonObject.addProperty("col7desc", etTransitPro.getText().toString());
+        jsonObject.addProperty("col8", col8);
+        jsonObject.addProperty("col8desc", etSmellPro.getText().toString());
+        jsonObject.addProperty("col9", col9);
+        jsonObject.addProperty("col9desc", etGasPro.getText().toString());
+        jsonObject.addProperty("col10", col10);
+        jsonObject.addProperty("col10desc", etAlarmPro.getText().toString());
+        jsonObject.addProperty("col11", etOtherPro.getText().toString());
+        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("creator", userId);
+        jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
+        jsonObject.addProperty("approvalid", approveId);
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("picturepath", photoSb.toString());
+        } else {
+            jsonObject.addProperty("picturepath", "00");
+        }
+        jsonObject.addProperty("filepath", "00");
+        Log.i("tag", "jsonObject===" + jsonObject);
+        Net.create(Api.class).updateTunnelRecord(token, jsonObject)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        ToastUtil.show(result.getMsg());
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.waitingTask");
+                            sendBroadcast(intent);
+                            finish();
+                        }
+
+                    }
+                });
+    }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(ApproveTunnelActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -924,6 +931,7 @@ public class ApproveTunnelActivity extends BaseActivity {
             }
         }
     }
+
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
@@ -952,6 +960,7 @@ public class ApproveTunnelActivity extends BaseActivity {
         });
 
     }
+
     /**
      * 方法必须重写
      */

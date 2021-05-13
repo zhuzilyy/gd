@@ -21,7 +21,6 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.SearchArea;
-import com.gd.form.model.SearchForm;
 import com.gd.form.model.SearchPerson;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
@@ -40,7 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SearchDataActivity extends BaseActivity {
+public class SearchTaskActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_startTime)
@@ -49,20 +48,18 @@ public class SearchDataActivity extends BaseActivity {
     TextView tvEndTime;
     @BindView(R.id.tv_area)
     TextView tvArea;
-    @BindView(R.id.tv_type)
-    TextView tvType;
     @BindView(R.id.tv_name)
     TextView tvName;
-    @BindView(R.id.tv_formType)
-    TextView tvFormType;
+    @BindView(R.id.tv_taskStatus)
+    TextView tvTaskStatus;
     private TimePickerView pvTime;
     private String token, userId;
-    private List<String> areaList, personTypeList, personNameList, formNameList, formBaseCodeList, personIdList;
-    private List<Integer> areaIdList, personTypeIdList;
     private ListDialog dialog;
-    private int selectAreaId, selectTypeId;
-    private String formBaseCode, selectPersonId;
     private long longStartTime, longEndTime;
+    private List<String> areaList, personNameList, personIdList,taskStatusList;
+    private List<Integer> areaIdList;
+    private int selectAreaId;
+    private String selectPersonId,taskStatus;
 
     @Override
     protected void setStatusBar() {
@@ -71,59 +68,47 @@ public class SearchDataActivity extends BaseActivity {
 
     @Override
     protected int getActLayoutId() {
-        return R.layout.activity_search_data;
+        return R.layout.activity_search_task;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("数据查询");
+        tvTitle.setText("任务查询");
         initTimePicker();
-        token = (String) SPUtil.get(SearchDataActivity.this, "token", "");
-        userId = (String) SPUtil.get(SearchDataActivity.this, "userId", "");
+        token = (String) SPUtil.get(SearchTaskActivity.this, "token", "");
+        userId = (String) SPUtil.get(SearchTaskActivity.this, "userId", "");
+        dialog = new ListDialog(this);
         areaList = new ArrayList<>();
-        personTypeList = new ArrayList<>();
         areaIdList = new ArrayList<>();
-        personTypeIdList = new ArrayList<>();
         personNameList = new ArrayList<>();
         personIdList = new ArrayList<>();
-        formNameList = new ArrayList<>();
-        formBaseCodeList = new ArrayList<>();
-        dialog = new ListDialog(this);
-        initPersonTypeData();
-    }
-
-    private void initPersonTypeData() {
-        personTypeIdList.add(100);
-        personTypeIdList.add(200);
-        personTypeList.add("作业区主任");
-        personTypeList.add("管段责任人");
+        taskStatusList = new ArrayList<>();
+        taskStatusList.add("下发任务待完成");
+        taskStatusList.add("下发任务已完成");
+        taskStatusList.add("下发任务超期未完成");
     }
 
     @OnClick({
             R.id.iv_back,
             R.id.ll_area,
-            R.id.ll_type,
             R.id.ll_name,
             R.id.ll_startTime,
             R.id.ll_endTime,
-            R.id.ll_formType,
             R.id.btn_search,
+            R.id.ll_taskStatus,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.ll_area:
-                getArea();
-                break;
-            case R.id.ll_type:
-                dialog.setData(personTypeList);
+            case R.id.ll_taskStatus:
+                dialog.setData(taskStatusList);
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
-                    tvType.setText(personTypeList.get(positionM));
-                    selectTypeId = personTypeIdList.get(positionM);
+                    tvTaskStatus.setText(taskStatusList.get(positionM));
+                    taskStatus = (positionM+1)+"";
                     dialog.dismiss();
                 });
                 break;
@@ -134,27 +119,22 @@ public class SearchDataActivity extends BaseActivity {
                 }
                 getPersonName();
                 break;
+            case R.id.ll_area:
+                getArea();
+                break;
             case R.id.ll_startTime:
             case R.id.ll_endTime:
                 pvTime.show(view);
                 break;
-            case R.id.ll_formType:
-                if (TextUtils.isEmpty(tvArea.getText().toString())) {
-                    ToastUtil.show("请先选择作业区");
-                    return;
-                }
-                getFormType();
-                break;
             case R.id.btn_search:
                 if (paramsComplete()) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("departmentid",selectAreaId);
-                    bundle.putInt("profeid",selectTypeId);
-                    bundle.putString("employid",selectPersonId);
-                    bundle.putString("startime",tvStartTime.getText().toString());
-                    bundle.putString("endtime",tvEndTime.getText().toString());
-                    bundle.putString("basecode",formBaseCode);
-                    openActivity(FormActivity.class,bundle);
+                    bundle.putInt("departmentId", selectAreaId);
+                    bundle.putString("employId", selectPersonId);
+                    bundle.putString("startTime", tvStartTime.getText().toString());
+                    bundle.putString("endTime", tvEndTime.getText().toString());
+                    bundle.putString("taskStatus", taskStatus);
+                    openActivity(SearchTaskResultActivity.class, bundle);
                 }
                 break;
         }
@@ -163,10 +143,6 @@ public class SearchDataActivity extends BaseActivity {
     private boolean paramsComplete() {
         if (TextUtils.isEmpty(tvArea.getText().toString())) {
             ToastUtil.show("请选择作业区有");
-            return false;
-        }
-        if (TextUtils.isEmpty(tvType.getText().toString())) {
-            ToastUtil.show("请选择人员类型");
             return false;
         }
         if (TextUtils.isEmpty(tvName.getText().toString())) {
@@ -181,44 +157,15 @@ public class SearchDataActivity extends BaseActivity {
             ToastUtil.show("请选择结束时间");
             return false;
         }
-        if (TextUtils.isEmpty(tvFormType.getText().toString())) {
-            ToastUtil.show("请选择工单类型");
-            return false;
-        }
-        if (longEndTime<longStartTime) {
+        if (longEndTime < longStartTime) {
             ToastUtil.show("结束时间不能早于开始时间");
             return false;
         }
+        if (TextUtils.isEmpty(tvTaskStatus.getText().toString())) {
+            ToastUtil.show("请选择任务状态");
+            return false;
+        }
         return true;
-    }
-
-    //获取工单类型
-    private void getFormType() {
-        JsonObject params = new JsonObject();
-        params.addProperty("formid", "1");
-        Net.create(Api.class).getSearchForm(token, params)
-                .enqueue(new NetCallback<List<SearchForm>>(this, true) {
-                    @Override
-                    public void onResponse(List<SearchForm> result) {
-                        formBaseCodeList.clear();
-                        formNameList.clear();
-                        if (result.size() > 0) {
-                            for (int i = 0; i < result.size(); i++) {
-                                formNameList.add(result.get(i).getName());
-                                formBaseCodeList.add(result.get(i).getBasecode());
-                            }
-                            formNameList.add("ALL");
-                            formBaseCodeList.add("ALL");
-                            dialog.setData(formNameList);
-                            dialog.show();
-                            dialog.setListItemClick(positionM -> {
-                                tvFormType.setText(formNameList.get(positionM));
-                                formBaseCode = formBaseCodeList.get(positionM);
-                                dialog.dismiss();
-                            });
-                        }
-                    }
-                });
     }
 
     //获取人员名称
