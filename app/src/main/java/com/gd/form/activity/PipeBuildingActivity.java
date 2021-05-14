@@ -463,7 +463,7 @@ public class PipeBuildingActivity extends BaseActivity {
                             etDes.setText(buildingModel.getDangerdesc());
                             tvRiskEvaluate.setText(buildingModel.getRiskevaluation());
                             tvRiskType.setText(buildingModel.getDangertype());
-                            etBeforeChangeMethod.setText(buildingModel.getPresolution());
+                            etBeforeChangeMethod.setText(buildingModel.getPresolution().trim());
                             etChangeMethod.setText(buildingModel.getAftsolution());
                             stationId = buildingModel.getStakeid();
                             pipeId = buildingModel.getPipeid();

@@ -364,6 +364,7 @@ public class SgbhActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
+        Log.i("tag","jsonObject==="+jsonObject);
         Net.create(Api.class).commitWaterProtection(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

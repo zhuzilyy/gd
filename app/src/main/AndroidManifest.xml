@@ -107,12 +107,6 @@
             android:name=".activity.MapActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".demo.ExpandMainActivity"></activity>
-
-        <activity android:name=".demo.IndicatorExpandActivity"></activity>
-
-        <activity android:name=".demo.NormalExpandActivity"></activity>
-        <activity android:name=".demo.SimpleExpandActivity"></activity>
         <activity
             android:name=".activity.SelectFileActivity"
             android:screenOrientation="portrait" />

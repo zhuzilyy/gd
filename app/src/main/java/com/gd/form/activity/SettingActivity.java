@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.gd.form.BuildConfig;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.utils.ActivityCollectorUtil;
@@ -30,6 +31,8 @@ public class SettingActivity extends BaseActivity {
     TextView tvDepartmentName;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_versionName)
+    TextView tvVersionName;
 
     @Override
     protected void setStatusBar() {
@@ -55,6 +58,7 @@ public class SettingActivity extends BaseActivity {
         tvDepartmentName.setText(dptName);
         tvTel.setText(telNumber);
         tvMail.setText(mail);
+        tvVersionName.setText("当前版本:V"+ BuildConfig.VERSION_NAME);
     }
 
     @OnClick({

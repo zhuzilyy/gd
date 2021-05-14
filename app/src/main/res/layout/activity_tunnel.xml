@@ -208,11 +208,13 @@
                 <EditText
                     android:id="@+id/et_location"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_40"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
+                    android:layout_marginBottom="@dimen/d_5"
+                    android:layout_marginTop="@dimen/d_5"
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:hint="行政位置"
@@ -322,42 +324,44 @@
                 android:background="#FFE5E5E5" />
             <!--隧道及隧道口情况-->
             <LinearLayout
-                android:id="@+id/ll_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
-                android:gravity="center"
-                android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/ll_status"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="隧道及隧道口情况"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
+                    android:background="#80FFFFFF"
+                    android:paddingTop="@dimen/d_12"
+                    >
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:text="隧道及隧道口情况"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                </LinearLayout>
                 <TextView
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:id="@+id/tv_status"
-                    android:layout_width="@dimen/d_0"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:gravity="end"
                     android:hint="隧道及隧道口情况"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
             </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -372,7 +376,7 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -386,15 +390,15 @@
                 <EditText
                     android:id="@+id/et_method"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
                     android:background="@null"
                     android:hint="管道在隧道内的架设方式"
-                    android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 

@@ -289,4 +289,12 @@
         android:text="退出登录"
         android:textColor="@color/write"
         android:textSize="@dimen/s_18" />
+    <TextView
+        android:textSize="16sp"
+        android:id="@+id/tv_versionName"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/d_40"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

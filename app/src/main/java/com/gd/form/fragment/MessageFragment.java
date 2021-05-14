@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -100,11 +99,25 @@ public class MessageFragment extends BaseFragment {
                         } else {
                             badges.get(3).hide(true);
                         }
-                        getTaskTotal();
+                        getNoApproveCount();
+
+                    }
+                });
+    }
+
+    private void getNoApproveCount() {
+        JsonObject params = new JsonObject();
+        params.addProperty("employid", userId);
+        Net.create(Api.class).getTaskCount(token, params)
+                .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(TaskCountModel model) {
+                        getTaskTotal(model.getApproval1());
                         getRefuseCount();
                     }
                 });
     }
+
     private void getRefuseCount() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
@@ -122,7 +135,8 @@ public class MessageFragment extends BaseFragment {
                     }
                 });
     }
-    private void getTaskTotal() {
+
+    private void getTaskTotal(int noApproveCount) {
         JsonObject params = new JsonObject();
         params.addProperty("empid", userId);
         Net.create(Api.class).getTaskTotal(token, params)
@@ -130,6 +144,7 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(TaskCountModel model) {
                         int waitingTask = model.getApproval1() + model.getWaitCount();
+                        waitingTask += noApproveCount;
                         if (waitingTask > 0) {
                             badges.get(0).setShowShadow(false).setBadgeNumber(waitingTask);
                         } else {
@@ -182,12 +197,10 @@ public class MessageFragment extends BaseFragment {
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i("tag", "22222222222");
             String action = intent.getAction();
             if (action.equals("com.action.update.waitingTask")
                     || action.equals("com.action.updateApprove")
                     || action.equals("com.action.update.task")) {
-                Log.i("tag", "33333333333");
                 getWaitingTaskCount();
             }
         }

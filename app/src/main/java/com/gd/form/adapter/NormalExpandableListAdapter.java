@@ -1,4 +1,4 @@
-package com.gd.form.demo;
+package com.gd.form.adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.gd.form.R;
-import com.gd.form.utils.ToastUtil;
 
 
 /**

@@ -70,8 +70,8 @@ public class ZoneElectricityActivity extends BaseActivity {
     private String approverId;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_weather)
-    TextView tvWeather;
+    @BindView(R.id.et_weather)
+    EditText etWeather;
     @BindView(R.id.tv_spr)
     TextView tvSpr;
     @BindView(R.id.tv_fileName)
@@ -205,7 +205,6 @@ public class ZoneElectricityActivity extends BaseActivity {
     }
 
     @OnClick({R.id.iv_back,
-            R.id.ll_weather,
             R.id.ll_location,
             R.id.ll_scfj,
             R.id.btn_commit,
@@ -229,20 +228,20 @@ public class ZoneElectricityActivity extends BaseActivity {
                     commit();
                 }
                 break;
-            case R.id.ll_weather:
-                List<String> weatherList = new ArrayList<>();
-                weatherList.add("晴");
-                weatherList.add("阴");
-                weatherList.add("小雪");
-                weatherList.add("大雪");
-                weatherList.add("雨");
-                dialog.setData(weatherList);
-                dialog.show();
-                dialog.setListItemClick(positionM -> {
-                    tvWeather.setText(weatherList.get(positionM));
-                    dialog.dismiss();
-                });
-                break;
+//            case R.id.ll_weather:
+//                List<String> weatherList = new ArrayList<>();
+//                weatherList.add("晴");
+//                weatherList.add("阴");
+//                weatherList.add("小雪");
+//                weatherList.add("大雪");
+//                weatherList.add("雨");
+//                dialog.setData(weatherList);
+//                dialog.show();
+//                dialog.setListItemClick(positionM -> {
+//                    tvWeather.setText(weatherList.get(positionM));
+//                    dialog.dismiss();
+//                });
+//                break;
             case R.id.ll_location:
                 Intent intent = new Intent(this, MapActivity.class);
                 startActivityForResult(intent, SELECT_ADDRESS);
@@ -313,8 +312,8 @@ public class ZoneElectricityActivity extends BaseActivity {
             ToastUtil.show("土壤电阻率格式输入不正确");
             return false;
         }
-        if (TextUtils.isEmpty(tvWeather.getText().toString())) {
-            ToastUtil.show("请选择天气");
+        if (TextUtils.isEmpty(etWeather.getText().toString())) {
+            ToastUtil.show("请输入天气");
             return false;
         }
         if (TextUtils.isEmpty(etTemperature.getText().toString())) {
@@ -358,7 +357,7 @@ public class ZoneElectricityActivity extends BaseActivity {
         jsonObject.addProperty("col2", etBasePosition.getText().toString());
         jsonObject.addProperty("col3", etGround.getText().toString());
         jsonObject.addProperty("remarks", etRemark.getText().toString());
-        jsonObject.addProperty("weathers", tvWeather.getText().toString());
+        jsonObject.addProperty("weathers", etWeather.getText().toString());
         jsonObject.addProperty("temperature", etTemperature.getText().toString());
         jsonObject.addProperty("locate", location);
         jsonObject.addProperty("creator", userId);

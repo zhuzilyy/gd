@@ -347,7 +347,6 @@
 
             <!--天气-->
             <LinearLayout
-                android:id="@+id/ll_weather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -365,8 +364,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_weather"
+                <EditText
+                    android:id="@+id/et_weather"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"
@@ -377,17 +376,10 @@
                     android:background="@null"
                     android:gravity="end"
                     android:singleLine="true"
+                    android:hint="天气"
                     android:text=""
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
-
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
 
             </LinearLayout>
             <View

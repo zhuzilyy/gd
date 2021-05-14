@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -356,6 +357,7 @@ public class ApproveDeviceActivity extends BaseActivity {
         jsonObject.addProperty("approvalid", approveId);
         jsonObject.addProperty("picturepath", "00");
         jsonObject.addProperty("filepath", "00");
+        Log.i("tag","jsonObject==="+jsonObject);
         Net.create(Api.class).updateDevice(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

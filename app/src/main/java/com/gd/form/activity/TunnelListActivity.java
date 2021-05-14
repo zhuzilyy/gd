@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,6 +61,9 @@ public class TunnelListActivity extends BaseActivity {
                 llNoData.setVisibility(View.GONE);
             } else {
                 llNoData.setVisibility(View.VISIBLE);
+            }
+            for (int i = 0; i <resultPipeList.size() ; i++) {
+                Log.i("tag","--"+resultPipeList.get(i).getMaintain());
             }
         }
         initViews();

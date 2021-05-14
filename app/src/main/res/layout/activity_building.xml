@@ -699,7 +699,6 @@
                 android:paddingTop="@dimen/d_5"
                 android:background="@null"
                 android:hint="隐患内容描述"
-                android:singleLine="true"
                 android:textColor="#A6000000"
                 android:textSize="@dimen/s_16" />
             </LinearLayout>
@@ -945,6 +944,8 @@
 
                 </LinearLayout>
                 <EditText
+                    android:layout_marginTop="@dimen/d_5"
+                    android:layout_marginBottom="@dimen/d_5"
                     android:id="@+id/et_beforeChangeMethod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -952,8 +953,6 @@
                     android:layout_marginLeft="@dimen/d_15"
                     android:layout_marginEnd="@dimen/d_15"
                     android:layout_marginRight="@dimen/d_15"
-                    android:paddingBottom="@dimen/d_5"
-                    android:paddingTop="@dimen/d_5"
                     android:background="@null"
                     android:hint="日常管控措施"
                     android:textColor="#A6000000"

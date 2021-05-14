@@ -90,7 +90,7 @@ public class SignActivity extends BaseActivity {
                 Bitmap bitmap = signatureView.getSignBitmap(true, 10);
                 byte[] bitmapByte = Util.getBitmapByte(bitmap);
                 //首先上传图片
-                String fileName = userId + "_" + TimeUtil.getFileNameTime();
+                String fileName = "signs/"+userId + "_" + TimeUtil.getFileNameTime();
                 uploadFiles(fileName, bitmapByte);
                 break;
             case R.id.btn_clear:
@@ -134,7 +134,6 @@ public class SignActivity extends BaseActivity {
         params.addProperty("approvalcomment", advice);
         params.addProperty("signfilepath", fileName);
         params.addProperty("creatime", TimeUtil.longToFormatTimeHMS(System.currentTimeMillis()));
-        Log.i("tag","params=="+params);
         Net.create(Api.class).approve(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

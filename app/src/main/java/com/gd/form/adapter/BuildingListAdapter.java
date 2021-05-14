@@ -39,9 +39,9 @@ public class BuildingListAdapter extends BaseRecyclerViewAdapter<SearchBuildingM
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
         Button btnCheck = viewHolder.getView(R.id.btn_check);
         if(model.getMaintain().equals("1")){
-            llUpdate.setVisibility(View.VISIBLE);
+            btnUpdate.setVisibility(View.VISIBLE);
         }else if(model.getMaintain().equals("0")){
-            llUpdate.setVisibility(View.GONE);
+            btnUpdate.setVisibility(View.GONE);
         }
         if("select".equals(model.getSelect())){
             llUpdate.setVisibility(View.GONE);

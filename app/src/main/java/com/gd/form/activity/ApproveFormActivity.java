@@ -61,18 +61,26 @@ public class ApproveFormActivity extends BaseActivity {
             R.id.iv_back,
             R.id.btn_agree,
             R.id.btn_refuse,
+            R.id.btn_noSignCommit,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.btn_noSignCommit:
+                if (TextUtils.isEmpty(etAdvice.getText().toString())) {
+                    ToastUtil.show("请输入审批意见");
+                    return;
+                }
+                approve(etAdvice.getText().toString(),1);
+                break;
             case R.id.btn_refuse:
                 if (TextUtils.isEmpty(etAdvice.getText().toString())) {
                     ToastUtil.show("请输入审批意见");
                     return;
                 }
-                approve(etAdvice.getText().toString());
+                approve(etAdvice.getText().toString(),0);
                 break;
             case R.id.btn_agree:
                 if (TextUtils.isEmpty(etAdvice.getText().toString())) {
@@ -80,17 +88,18 @@ public class ApproveFormActivity extends BaseActivity {
                     return;
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString("formId",formId);
-                bundle.putString("advice",etAdvice.getText().toString());
-                openActivity(SignActivity.class,bundle);
+                bundle.putString("formId", formId);
+                bundle.putString("advice", etAdvice.getText().toString());
+                openActivity(SignActivity.class, bundle);
                 break;
 
         }
     }
-    private void approve(String advice) {
+
+    private void approve(String advice,int status) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        params.addProperty("approvalresult", 0);
+        params.addProperty("approvalresult", status);
         params.addProperty("approvalcomment", advice);
         params.addProperty("signfilepath", "00");
         params.addProperty("creatime", TimeUtil.longToFormatTimeHMS(System.currentTimeMillis()));
@@ -98,7 +107,7 @@ public class ApproveFormActivity extends BaseActivity {
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        if(result.getCode() == Constant.SUCCESS_CODE){
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.setAction("com.action.updateApprove");
                             sendBroadcast(intent);

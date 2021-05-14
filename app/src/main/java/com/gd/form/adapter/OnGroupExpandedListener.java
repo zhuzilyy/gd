@@ -1,4 +1,4 @@
-package com.gd.form.demo;
+package com.gd.form.adapter;
 
 /**
  * @author Richie on 2017.07.31

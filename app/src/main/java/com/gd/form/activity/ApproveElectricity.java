@@ -61,8 +61,8 @@ public class ApproveElectricity extends BaseActivity {
     EditText etBase;
     @BindView(R.id.et_resistance)
     EditText etResistance;
-    @BindView(R.id.tv_weather)
-    TextView tvWeather;
+    @BindView(R.id.et_weather)
+    EditText etWeather;
     @BindView(R.id.et_remark)
     EditText etRemark;
     @BindView(R.id.et_temperature)
@@ -146,6 +146,7 @@ public class ApproveElectricity extends BaseActivity {
                 etResistance.setEnabled(false);
                 etTemperature.setEnabled(false);
                 etRemark.setEnabled(false);
+                etWeather.setEnabled(false);
             }else{
                 etGround.setEnabled(true);
                 etBase.setEnabled(true);
@@ -153,6 +154,7 @@ public class ApproveElectricity extends BaseActivity {
                 etResistance.setEnabled(true);
                 etTemperature.setEnabled(true);
                 etRemark.setEnabled(true);
+                etWeather.setEnabled(true);
             }
             formId = bundle.getString("formId");
         }
@@ -190,7 +192,7 @@ public class ApproveElectricity extends BaseActivity {
                             etGround.setText(dataDetail.getCol1());
                             etBase.setText(dataDetail.getCol2());
                             etResistance.setText(dataDetail.getCol3());
-                            tvWeather.setText(dataDetail.getWeathers());
+                            etWeather.setText(dataDetail.getWeathers());
                             etTemperature.setText(dataDetail.getTemperature());
                             etRemark.setText(dataDetail.getRemarks());
                             String location = model.getDatadetail().getLocate();
@@ -314,8 +316,8 @@ public class ApproveElectricity extends BaseActivity {
             ToastUtil.show("土壤电阻率格式输入不正确");
             return false;
         }
-        if (TextUtils.isEmpty(tvWeather.getText().toString())) {
-            ToastUtil.show("请选择天气");
+        if (TextUtils.isEmpty(etWeather.getText().toString())) {
+            ToastUtil.show("请输入天气");
             return false;
         }
         if (TextUtils.isEmpty(etTemperature.getText().toString())) {
@@ -343,7 +345,7 @@ public class ApproveElectricity extends BaseActivity {
         jsonObject.addProperty("col2", etBase.getText().toString());
         jsonObject.addProperty("col3", etResistance.getText().toString());
         jsonObject.addProperty("remarks", etRemark.getText().toString());
-        jsonObject.addProperty("weathers", tvWeather.getText().toString());
+        jsonObject.addProperty("weathers", etWeather.getText().toString());
         jsonObject.addProperty("temperature", etTemperature.getText().toString());
         jsonObject.addProperty("locate", location);
         jsonObject.addProperty("creator", userId);

@@ -39,26 +39,26 @@ public class HighZoneListAdapter extends BaseRecyclerViewAdapter<SearchHighZoneM
         tvPipeManager.setText(model.getOwnername());
         Button btnCheck = viewHolder.getView(R.id.btn_check);
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
-//        if(model.getMaintain().equals("1")){
-//            btnUpdate.setVisibility(View.VISIBLE);
-//        }else if(model.getMaintain().equals("0")){
-//            btnUpdate.setVisibility(View.GONE);
-//        }
+        if (model.getMaintain().equals("1")) {
+            btnUpdate.setVisibility(View.VISIBLE);
+        } else if (model.getMaintain().equals("0")) {
+            btnUpdate.setVisibility(View.GONE);
+        }
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,PipeHighZoneActivity.class);
-                intent.putExtra("tag","check");
-                intent.putExtra("highZoneId",model.getId()+"");
+                Intent intent = new Intent(context, PipeHighZoneActivity.class);
+                intent.putExtra("tag", "check");
+                intent.putExtra("highZoneId", model.getId() + "");
                 context.startActivity(intent);
             }
         });
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,PipeHighZoneActivity.class);
-                intent.putExtra("tag","update");
-                intent.putExtra("highZoneId",model.getId()+"");
+                Intent intent = new Intent(context, PipeHighZoneActivity.class);
+                intent.putExtra("tag", "update");
+                intent.putExtra("highZoneId", model.getId() + "");
                 context.startActivity(intent);
             }
         });

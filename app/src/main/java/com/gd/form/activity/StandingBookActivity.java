@@ -129,6 +129,7 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("pipeid", pipeId);
             params.addProperty("stakeid", startStationId);
             params.addProperty("estakeid", endStationId);
+            Log.i("tag","111111111");
             getPipeInfoByStationId(params);
         } else {
             params.addProperty("appempid", userId);
@@ -136,7 +137,9 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("pipeid", pipeId);
             params.addProperty("empid", employId);
             getPipeInfo(params);
+            Log.i("tag","2222222");
         }
+        Log.i("tag","params==="+params);
     }
 
     private void getPipeInfoByStationId(JsonObject params) {
@@ -175,24 +178,38 @@ public class StandingBookActivity extends BaseActivity {
         }
         if (searchPipeModel.getStakeCount() > 0) {
             tvPipeTagBaseInfo.setText("管道标识基础信息(" + searchPipeModel.getStakeCount() + ")");
+        }else{
+            tvPipeTagBaseInfo.setText("管道标识基础信息");
         }
         if (searchPipeModel.getOwnerCount() > 0) {
             tvPipePerson.setText("管道责任人(" + searchPipeModel.getOwnerCount() + ")");
+        }else{
+            tvPipePerson.setText("管道责任人");
         }
         if (searchPipeModel.getStationCount() > 0) {
             tvStation.setText("场站名称(" + searchPipeModel.getStationCount() + ")");
+        }else{
+            tvStation.setText("场站名称");
         }
         if (searchPipeModel.getHigharesCount() > 0) {
             tvHighZone.setText("高后果区(" + searchPipeModel.getHigharesCount() + ")");
+        }else{
+            tvHighZone.setText("高后果区");
         }
         if (searchPipeModel.getLlegalCount() > 0) {
             tvBuilding.setText("违章违建(" + searchPipeModel.getLlegalCount() + ")");
+        }else{
+            tvBuilding.setText("违章违建");
         }
         if (searchPipeModel.getPipeCount() > 0) {
             tvTunnel.setText("隧道(" + searchPipeModel.getPipeCount() + ")");
+        }else{
+            tvTunnel.setText("隧道");
         }
         if (searchPipeModel.getWaterprjCount() > 0) {
             tvWater.setText("水保工程(" + searchPipeModel.getWaterprjCount() + ")");
+        }else{
+            tvWater.setText("水保工程");
         }
         if (searchPipeModel.getWindCount() > 0) {
             tvWindVane.setText("风向标(" + searchPipeModel.getWindCount() + ")");

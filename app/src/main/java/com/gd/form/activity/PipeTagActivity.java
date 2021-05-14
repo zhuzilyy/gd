@@ -358,11 +358,11 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                 finish();
                 break;
             case R.id.ll_pipeManager:
-                if(TextUtils.isEmpty(tvArea.getText().toString())){
-                    ToastUtil.show("请先选择作业区");
-                    return;
-                }
-                getPipeManager();
+//                if(TextUtils.isEmpty(tvArea.getText().toString())){
+//                    ToastUtil.show("请先选择作业区");
+//                    return;
+//                }
+//                getPipeManager();
 //                Intent intentApprover = new Intent(PipeTagActivity.this, ApproverActivity.class);
 //                startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
@@ -702,13 +702,13 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                         if (model != null) {
                             highZoneId = model.getHighareasid();
                             tunnelId = model.getPipeaccountid();
-//                            approverId = model.getOwnerid();
+                            approverId = model.getOwnerid();
                             prefixName = model.getPrixname();
                             tvUpStationKm.setText(model.getStakemile() + "");
                             tvDownStationNo.setText(model.getNextname());
                             tvDownStationKm.setText(model.getNextmile() + "");
                             tvStationNoPrefix.setText(model.getPrixname());
-//                            tvPipeManager.setText(model.getOwnername());
+                            tvPipeManager.setText(model.getOwnername());
                         }
                     }
                 });

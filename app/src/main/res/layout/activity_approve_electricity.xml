@@ -253,8 +253,8 @@
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
-                <TextView
-                    android:id="@+id/tv_weather"
+                <EditText
+                    android:id="@+id/et_weather"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/d_15"

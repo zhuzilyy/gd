@@ -37,6 +37,7 @@ import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.TaskDetailModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
+import com.gd.form.model.UpdateModel;
 import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaitingApproveModel;
 import com.gd.form.model.WaitingHandleTaskModel;
@@ -978,7 +979,7 @@ public interface Api {
      *
      * @return
      */
-    @POST("w014_dataformdataUpdate.html")
+    @POST("w014_dataformdataUpdte.html")
     Call<ServerModel> updateDevice(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
@@ -1046,13 +1047,13 @@ public interface Api {
     @POST("DataFormMultiWaitStatusListCount.html")
     Call<WaitingTakModel> refuseTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
-//    /**
-//     * 更新app
-//     *
-//     * @return
-//     */
-//    @POST("AppUpdateVersion.html")
-//    Call<WaitingTakModel> getWaitingTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    /**
+     * 更新app
+     *
+     * @return
+     */
+    @POST("AppUpdateVersion.html")
+    Call<UpdateModel> appUpdate(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }
