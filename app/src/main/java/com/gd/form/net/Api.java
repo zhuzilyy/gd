@@ -3,6 +3,7 @@ package com.gd.form.net;
 import com.gd.form.model.BuildingDetailModel;
 import com.gd.form.model.BuildingModel;
 import com.gd.form.model.Department;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.DeviceDetailModel;
 import com.gd.form.model.ElectricityDetailModel;
 import com.gd.form.model.FormModel;
@@ -859,7 +860,7 @@ public interface Api {
      * @return
      */
     @POST("pipemploysGetMaster.html")
-    Call<Pipemploys> getTunnelDefaultManager(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    Call<List<DepartmentPerson>> getTunnelDefaultManager(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**

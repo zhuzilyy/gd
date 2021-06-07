@@ -37,8 +37,8 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.GlideImageLoader;
-import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.WaterInsuranceDetailModel;
 import com.gd.form.model.WaterModel;
@@ -313,8 +313,7 @@ public class WaterInsuranceActivity extends BaseActivity {
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.ll_spr:
-                Intent intentApprover = new Intent(this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+                getDefaultManager();
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(this, MapActivity.class);
@@ -532,7 +531,6 @@ public class WaterInsuranceActivity extends BaseActivity {
             stakeId = data.getStringExtra("stakeId");
             tvStationNo.setText(stationName);
             getWaterDetail(stationId);
-            getDefaultManager();
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
@@ -571,11 +569,28 @@ public class WaterInsuranceActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
         Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
-                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
                     @Override
-                    public void onResponse(Pipemploys pipemploys) {
-                        approverId = pipemploys.getId();
-                        tvSpr.setText(pipemploys.getName());
+                    public void onResponse(List<DepartmentPerson> list) {
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if(list!=null && list.size()>0){
+                            for (int i = 0; i <list.size() ; i++) {
+                                DepartmentPerson departmentPerson = list.get(i);
+                                nameList.add(departmentPerson.getName());
+                                idList.add(departmentPerson.getId());
+                            }
+                            if (dialog == null) {
+                                dialog = new ListDialog(mContext);
+                            }
+                            dialog.setData(nameList);
+                            dialog.show();
+                            dialog.setListItemClick(positionM -> {
+                                tvSpr.setText(nameList.get(positionM));
+                                approverId = idList.get(positionM);
+                                dialog.dismiss();
+                            });
+                        }
                     }
                 });
     }

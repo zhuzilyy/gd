@@ -56,10 +56,11 @@ public class SearchTaskActivity extends BaseActivity {
     private String token, userId;
     private ListDialog dialog;
     private long longStartTime, longEndTime;
-    private List<String> areaList, personNameList, personIdList,taskStatusList;
+    private List<String> areaList, personNameList, personIdList, taskStatusList;
     private List<Integer> areaIdList;
     private int selectAreaId;
-    private String selectPersonId,taskStatus;
+    private String selectPersonId, taskStatus;
+    private int selectPosition = 0;
 
     @Override
     protected void setStatusBar() {
@@ -84,6 +85,10 @@ public class SearchTaskActivity extends BaseActivity {
         personNameList = new ArrayList<>();
         personIdList = new ArrayList<>();
         taskStatusList = new ArrayList<>();
+        taskStatusList.add("待办任务");
+        taskStatusList.add("超期任务");
+        taskStatusList.add("超期未批");
+        taskStatusList.add("审核未通过");
         taskStatusList.add("下发任务待完成");
         taskStatusList.add("下发任务已完成");
         taskStatusList.add("下发任务超期未完成");
@@ -108,8 +113,9 @@ public class SearchTaskActivity extends BaseActivity {
                 dialog.show();
                 dialog.setListItemClick(positionM -> {
                     tvTaskStatus.setText(taskStatusList.get(positionM));
-                    taskStatus = (positionM+1)+"";
+                    taskStatus = (positionM - 3) + "";
                     dialog.dismiss();
+                    selectPosition = positionM;
                 });
                 break;
             case R.id.ll_name:
@@ -128,13 +134,26 @@ public class SearchTaskActivity extends BaseActivity {
                 break;
             case R.id.btn_search:
                 if (paramsComplete()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("departmentId", selectAreaId);
-                    bundle.putString("employId", selectPersonId);
-                    bundle.putString("startTime", tvStartTime.getText().toString());
-                    bundle.putString("endTime", tvEndTime.getText().toString());
-                    bundle.putString("taskStatus", taskStatus);
-                    openActivity(SearchTaskResultActivity.class, bundle);
+                    if (selectPosition < 4) {
+                        if (selectPosition == 0) {
+                            openActivity(WaitingActivity.class);
+                        } else if (selectPosition == 1) {
+                            openActivity(OverTimeTaskActivity.class);
+                        }else if(selectPosition == 2){
+                            openActivity(NoApproveActivity.class);
+                        }else if(selectPosition == 3){
+                            openActivity(RefuseTaskActivity.class);
+                        }
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("departmentId", selectAreaId);
+                        bundle.putString("employId", selectPersonId);
+                        bundle.putString("startTime", tvStartTime.getText().toString());
+                        bundle.putString("endTime", tvEndTime.getText().toString());
+                        bundle.putString("taskStatus", taskStatus);
+                        openActivity(SearchTaskResultActivity.class, bundle);
+                    }
+
                 }
                 break;
         }

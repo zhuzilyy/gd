@@ -11,6 +11,7 @@ public class WaterModel implements Serializable {
     private int id;
     private int stakeid;
     private String type;
+    private CreateTime creatime;
     public String getDistance() {
         return distance;
     }
@@ -72,5 +73,13 @@ public class WaterModel implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public CreateTime getCreatime() {
+        return creatime;
+    }
+
+    public void setCreatime(CreateTime creatime) {
+        this.creatime = creatime;
     }
 }

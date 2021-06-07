@@ -44,9 +44,9 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
-import com.gd.form.model.Pipemploys;
 import com.gd.form.model.SearchPipeInfoModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
@@ -446,6 +446,7 @@ public class SdwbActivity extends BaseActivity {
             R.id.ll_location,
             R.id.ll_sdmc,
             R.id.ll_sdwz,
+            R.id.ll_spr,
             R.id.ll_gddz,
             R.id.ll_scfj,
             R.id.ll_tbrq,
@@ -521,8 +522,7 @@ public class SdwbActivity extends BaseActivity {
 //                startActivityForResult(intent, 1);
                 break;
             case R.id.ll_spr:
-                Intent intentApprover = new Intent(this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+                getDefaultManager();
                 break;
         }
     }
@@ -784,19 +784,35 @@ public class SdwbActivity extends BaseActivity {
             String stationName = data.getStringExtra("stationName");
             stationId = data.getStringExtra("stationId");
             tv_sdmc.setText(stationName);
-            getDefaultManager();
         }
 
     }
     private void getDefaultManager() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("empid",userId);
+        jsonObject.addProperty("empid", userId);
         Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
-                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
                     @Override
-                    public void onResponse(Pipemploys pipemploys) {
-                        approverId = pipemploys.getId();
-                        tv_spr.setText(pipemploys.getName());
+                    public void onResponse(List<DepartmentPerson> list) {
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if(list!=null && list.size()>0){
+                            for (int i = 0; i <list.size() ; i++) {
+                                DepartmentPerson departmentPerson = list.get(i);
+                                nameList.add(departmentPerson.getName());
+                                idList.add(departmentPerson.getId());
+                            }
+                            if (dialog == null) {
+                                dialog = new ListDialog(mContext);
+                            }
+                            dialog.setData(nameList);
+                            dialog.show();
+                            dialog.setListItemClick(positionM -> {
+                                tv_spr.setText(nameList.get(positionM));
+                                approverId = idList.get(positionM);
+                                dialog.dismiss();
+                            });
+                        }
                     }
                 });
     }

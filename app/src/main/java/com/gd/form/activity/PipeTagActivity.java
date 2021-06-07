@@ -108,12 +108,30 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     LinearLayout llUpStationNo;
     @BindView(R.id.ll_downStationNo)
     LinearLayout llDownStationNo;
+    @BindView(R.id.ll_upStationKm)
+    LinearLayout llUpStationKm;
     @BindView(R.id.ll_pipeManager)
     LinearLayout llPipeManager;
+    @BindView(R.id.ll_downStationKm)
+    LinearLayout llDownStationKm;
+    @BindView(R.id.ll_stationNoPrefix)
+    LinearLayout llStationNoPrefix;
     @BindView(R.id.tv_upStationKm)
     TextView tvUpStationKm;
     @BindView(R.id.tv_downStationKm)
     TextView tvDownStationKm;
+
+    @BindView(R.id.view_upStationNo)
+    View viewUpStationNo;
+    @BindView(R.id.view_upStationKm)
+    View viewUpStationKm;
+    @BindView(R.id.view_downStationNo)
+    View viewDownStationNo;
+    @BindView(R.id.view_downStationKm)
+    View viewDownStationKm;
+    @BindView(R.id.view_stationNoPrefix)
+    View viewStationNoPrefix;
+
     private int departmentId, pipeId;
     private ListLandTagDialog landTypeDialog;
     private ListDialog dialog;
@@ -181,6 +199,16 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                 getDetailInfo(id, lineId);
                 tvRight.setVisibility(View.VISIBLE);
                 tvTitle.setText("维护桩体");
+                llUpStationNo.setVisibility(View.GONE);
+                viewUpStationNo.setVisibility(View.GONE);
+                llUpStationKm.setVisibility(View.GONE);
+                viewUpStationKm.setVisibility(View.GONE);
+                llDownStationNo.setVisibility(View.GONE);
+                viewDownStationNo.setVisibility(View.GONE);
+                llDownStationKm.setVisibility(View.GONE);
+                viewDownStationKm.setVisibility(View.GONE);
+                llStationNoPrefix.setVisibility(View.GONE);
+                viewStationNoPrefix.setVisibility(View.GONE);
 //                llArea.setEnabled(false);
 //                llPipeName.setEnabled(false);
 //                llGroundTagType.setEnabled(false);
@@ -231,7 +259,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.parseInt(id));
         params.addProperty("pipeid", Integer.parseInt(lineId));
-        Log.i("tag", "params==1==" + params);
+        Log.i("tag","params==="+params);
         Net.create(Api.class).getStationDetailInfo(token, params)
                 .enqueue(new NetCallback<List<StationDetailInfo>>(this, true) {
                     @Override
@@ -246,7 +274,14 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             }
                             tvGroundTagType.setText(stationDetailInfo.getStaketype());
                             tvUpStationNo.setText(stationDetailInfo.getName());
-                            etCorner.setText(stationDetailInfo.getCornerinfo());
+                            if(!TextUtils.isEmpty(stationDetailInfo.getCornerinfo())){
+                                etCorner.setText(stationDetailInfo.getCornerinfo());
+                            }
+                            if(tvGroundTagType.getText().equals("转角桩")){
+                                etCorner.setEnabled(true);
+                            }else{
+                                etCorner.setEnabled(false);
+                            }
                             etLongitude.setText(stationDetailInfo.getEastlongitude());
                             etLatitude.setText(stationDetailInfo.getNorthlatitude());
                             tvLandForm.setText(stationDetailInfo.getTopagraphy());
@@ -482,8 +517,8 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                     public void onResponse(List<Pipemploys> list) {
                         List<String> nameList = new ArrayList<>();
                         List<String> idList = new ArrayList<>();
-                        if(list!=null && list.size()>0){
-                            for (int i = 0; i <list.size() ; i++) {
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
                                 nameList.add(list.get(i).getName());
                                 idList.add(list.get(i).getId());
                             }
@@ -621,8 +656,9 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
             ToastUtil.show("里程信息要介于上游桩和下游桩之间");
             return false;
         }
+
         if (TextUtils.isEmpty(etCorner.getText().toString())) {
-            ToastUtil.show("非转角桩为0");
+            ToastUtil.show("请输入转角信息");
             return false;
         }
         if (TextUtils.isEmpty(etLongitude.getText().toString())) {
@@ -709,6 +745,11 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             tvDownStationKm.setText(model.getNextmile() + "");
                             tvStationNoPrefix.setText(model.getPrixname());
                             tvPipeManager.setText(model.getOwnername());
+                            if(tvGroundTagType.getText().equals("转角桩")){
+                                etCorner.setEnabled(true);
+                            }else{
+                                etCorner.setEnabled(false);
+                            }
                         }
                     }
                 });

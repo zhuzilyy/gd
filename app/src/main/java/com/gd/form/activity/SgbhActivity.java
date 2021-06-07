@@ -43,6 +43,7 @@ import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StationWaterDetailModel;
@@ -231,6 +232,7 @@ public class SgbhActivity extends BaseActivity {
             R.id.ll_location,
             R.id.ll_cz,
             R.id.ll_jcsj,
+            R.id.ll_spr,
             R.id.ll_zh,
             R.id.ll_scfj,
             R.id.ll_tbrq,
@@ -299,8 +301,7 @@ public class SgbhActivity extends BaseActivity {
                 initPermissions();
                 break;
             case R.id.ll_spr:
-                Intent intentApprover = new Intent(SgbhActivity.this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+                getDefaultManager();
                 break;
         }
     }
@@ -558,7 +559,35 @@ public class SgbhActivity extends BaseActivity {
                     }
                 });
     }
-
+    private void getDefaultManager() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("empid", userId);
+        Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
+                .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
+                    @Override
+                    public void onResponse(List<DepartmentPerson> list) {
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if(list!=null && list.size()>0){
+                            for (int i = 0; i <list.size() ; i++) {
+                                DepartmentPerson departmentPerson = list.get(i);
+                                nameList.add(departmentPerson.getName());
+                                idList.add(departmentPerson.getId());
+                            }
+                            if (dialog == null) {
+                                dialog = new ListDialog(mContext);
+                            }
+                            dialog.setData(nameList);
+                            dialog.show();
+                            dialog.setListItemClick(positionM -> {
+                                tv_spr.setText(nameList.get(positionM));
+                                approverId = idList.get(positionM);
+                                dialog.dismiss();
+                            });
+                        }
+                    }
+                });
+    }
     //上传阿里云文件
     public void uploadFiles(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);

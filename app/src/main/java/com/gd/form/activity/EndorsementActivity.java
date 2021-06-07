@@ -35,8 +35,8 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.BuildingModel;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.GlideImageLoader;
-import com.gd.form.model.Pipemploys;
 import com.gd.form.model.SearchBuildingModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
@@ -46,6 +46,7 @@ import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
@@ -98,7 +99,7 @@ public class EndorsementActivity extends BaseActivity {
     private GalleryConfig galleryConfig;
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
-
+    private ListDialog dialog;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -189,6 +190,7 @@ public class EndorsementActivity extends BaseActivity {
             R.id.ll_location,
             R.id.ll_scfj,
             R.id.btn_commit,
+            R.id.ll_spr,
     })
     public void click(View view) {
         switch (view.getId()) {
@@ -205,8 +207,7 @@ public class EndorsementActivity extends BaseActivity {
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.ll_spr:
-                Intent intentApprover = new Intent(this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+               getDefaultManager();
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(this, MapActivity.class);
@@ -385,7 +386,6 @@ public class EndorsementActivity extends BaseActivity {
             stakeId = data.getStringExtra("stakeId");
             tvStationNo.setText(illegalName);
             getBuildingDesc(buildId);
-            getDefaultManager();
         }
 
     }
@@ -394,11 +394,28 @@ public class EndorsementActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
         Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
-                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
                     @Override
-                    public void onResponse(Pipemploys pipemploys) {
-                        approverId = pipemploys.getId();
-                        tv_spr.setText(pipemploys.getName());
+                    public void onResponse(List<DepartmentPerson> list) {
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if(list!=null && list.size()>0){
+                            for (int i = 0; i <list.size() ; i++) {
+                                DepartmentPerson departmentPerson = list.get(i);
+                                nameList.add(departmentPerson.getName());
+                                idList.add(departmentPerson.getId());
+                            }
+                            if (dialog == null) {
+                                dialog = new ListDialog(mContext);
+                            }
+                            dialog.setData(nameList);
+                            dialog.show();
+                            dialog.setListItemClick(positionM -> {
+                                tv_spr.setText(nameList.get(positionM));
+                                approverId = idList.get(positionM);
+                                dialog.dismiss();
+                            });
+                        }
                     }
                 });
     }

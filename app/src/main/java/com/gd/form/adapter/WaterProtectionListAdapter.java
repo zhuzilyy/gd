@@ -3,6 +3,7 @@ package com.gd.form.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.gd.form.R;
 import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.model.WaterModel;
+import com.gd.form.utils.TimeUtil;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
         TextView tvStationNo = viewHolder.getView(R.id.tv_stationNo);
         TextView tvDistance = viewHolder.getView(R.id.tv_distance);
         TextView tvName = viewHolder.getView(R.id.tv_name);
+        TextView tvTime = viewHolder.getView(R.id.tv_time);
         LinearLayout llUpdate = viewHolder.getView(R.id.ll_update);
         View viewUpdate = viewHolder.getView(R.id.view_update);
         tvStationNo.setText(model.getStakename());
@@ -44,8 +47,15 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
             llUpdate.setVisibility(View.GONE);
         }
         if ("select".equals(model.getType())) {
+            tvTime.setText(TimeUtil.longToFormatTime(System.currentTimeMillis()));
             llUpdate.setVisibility(View.GONE);
+
         } else {
+            if(model.getCreatime()!=null){
+                if(!TextUtils.isEmpty(model.getCreatime().getTime()+"")){
+                    tvTime.setText(TimeUtil.longToFormatTime(model.getCreatime().getTime()));
+                }
+            }
             llUpdate.setVisibility(View.VISIBLE);
         }
         viewHolder.getContentView().setOnClickListener(view -> {

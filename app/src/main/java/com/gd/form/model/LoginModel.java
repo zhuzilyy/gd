@@ -8,6 +8,7 @@ public class LoginModel {
     private String dptname;
     private String telenumber;
     private String mail;
+    private int dptid;
     private int roleid;
     public String getMsg() {
         return msg;
@@ -70,5 +71,13 @@ public class LoginModel {
 
     public void setRoleid(int roleid) {
         this.roleid = roleid;
+    }
+
+    public int getDptid() {
+        return dptid;
+    }
+
+    public void setDptid(int dptid) {
+        this.dptid = dptid;
     }
 }

@@ -214,6 +214,7 @@
 
             </LinearLayout>
             <View
+                android:id="@+id/view_upStationNo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -266,6 +267,7 @@
 
             </LinearLayout>
             <View
+                android:id="@+id/view_upStationKm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -319,6 +321,7 @@
 
             </LinearLayout>
             <View
+                android:id="@+id/view_downStationNo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -371,6 +374,7 @@
 
             </LinearLayout>
             <View
+                android:id="@+id/view_downStationKm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -423,6 +427,7 @@
 
             </LinearLayout>
             <View
+                android:id="@+id/view_stationNoPrefix"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -592,6 +597,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
+                    android:text="0"
                     android:id="@+id/et_corner"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -603,7 +609,6 @@
                     android:background="@null"
                     android:ellipsize="end"
                     android:gravity="end"
-                    android:hint="非转角桩为0"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />

@@ -1,6 +1,8 @@
 package com.gd.form.model;
 
-public class CreateTime {
+import java.io.Serializable;
+
+public class CreateTime implements Serializable {
     private long time;
 
     public long getTime() {

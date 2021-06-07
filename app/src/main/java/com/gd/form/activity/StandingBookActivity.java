@@ -129,7 +129,6 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("pipeid", pipeId);
             params.addProperty("stakeid", startStationId);
             params.addProperty("estakeid", endStationId);
-            Log.i("tag","111111111");
             getPipeInfoByStationId(params);
         } else {
             params.addProperty("appempid", userId);
@@ -137,7 +136,6 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("pipeid", pipeId);
             params.addProperty("empid", employId);
             getPipeInfo(params);
-            Log.i("tag","2222222");
         }
         Log.i("tag","params==="+params);
     }

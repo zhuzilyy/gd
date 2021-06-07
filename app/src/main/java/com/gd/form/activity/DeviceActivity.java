@@ -36,9 +36,9 @@ import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.Department;
+import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.Pipelineinfo;
-import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StakeModel;
 import com.gd.form.net.Api;
@@ -255,6 +255,7 @@ public class DeviceActivity extends BaseActivity {
             R.id.btn_commit,
             R.id.ll_selectPic,
             R.id.ll_stationNo,
+            R.id.ll_spr,
     })
     public void click(View view) {
         switch (view.getId()) {
@@ -315,8 +316,7 @@ public class DeviceActivity extends BaseActivity {
                 startActivityForResult(intent, SELECT_ADDRESS);
                 break;
             case R.id.ll_spr:
-                Intent intentApprover = new Intent(this, ApproverActivity.class);
-                startActivityForResult(intentApprover, SELECT_APPROVER);
+                getDefaultManager();
                 break;
             case R.id.ll_scfj:
                 Intent intentAddress = new Intent(this, SelectFileActivity.class);
@@ -538,7 +538,6 @@ public class DeviceActivity extends BaseActivity {
             stakeId = data.getStringExtra("id");
             pipeId = data.getIntExtra("lineId", 0);
             tvStationNo.setText(name);
-            getDefaultManager();
 
         }
     }
@@ -547,11 +546,28 @@ public class DeviceActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
         Net.create(Api.class).getTunnelDefaultManager(token, jsonObject)
-                .enqueue(new NetCallback<Pipemploys>(this, true) {
+                .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
                     @Override
-                    public void onResponse(Pipemploys pipemploys) {
-                        approverId = pipemploys.getId();
-                        tvSpr.setText(pipemploys.getName());
+                    public void onResponse(List<DepartmentPerson> list) {
+                        List<String> nameList = new ArrayList<>();
+                        List<String> idList = new ArrayList<>();
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                DepartmentPerson departmentPerson = list.get(i);
+                                nameList.add(departmentPerson.getName());
+                                idList.add(departmentPerson.getId());
+                            }
+                            if (dialog == null) {
+                                dialog = new ListDialog(mContext);
+                            }
+                            dialog.setData(nameList);
+                            dialog.show();
+                            dialog.setListItemClick(positionM -> {
+                                tvSpr.setText(nameList.get(positionM));
+                                approverId = idList.get(positionM);
+                                dialog.dismiss();
+                            });
+                        }
                     }
                 });
     }

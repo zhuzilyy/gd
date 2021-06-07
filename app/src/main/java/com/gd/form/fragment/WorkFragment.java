@@ -1,7 +1,9 @@
 package com.gd.form.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.gd.form.R;
 import com.gd.form.activity.AddWaterInsuranceActivity;
@@ -16,16 +18,34 @@ import com.gd.form.activity.SearchTaskActivity;
 import com.gd.form.activity.TaskDispatchActivity;
 import com.gd.form.activity.XhglActivity;
 import com.gd.form.base.BaseFragment;
+import com.gd.form.utils.SPUtil;
 import com.jaeger.library.StatusBarUtil;
 
+import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.gd.form.constants.Constant.PIPE_DEPARTMENT;
 
 
 public class WorkFragment extends BaseFragment {
+    @BindView(R.id.ll_task_dispatch)
+    LinearLayout llTaskDispatch;
+    @BindView(R.id.ll_task)
+    LinearLayout llTask;
+
     @Override
     protected void initView(Bundle bundle) {
         StatusBarUtil.setTranslucentForImageView(getActivity(), 0, null);
-
+        String departmentId = (String) SPUtil.get(getContext(), "departmentId", "");
+        if (!TextUtils.isEmpty(departmentId)) {
+            if (PIPE_DEPARTMENT == Integer.parseInt(departmentId)) {
+                llTaskDispatch.setVisibility(View.VISIBLE);
+                llTask.setVisibility(View.VISIBLE);
+            } else {
+                llTaskDispatch.setVisibility(View.GONE);
+                llTask.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
