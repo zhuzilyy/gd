@@ -6,6 +6,10 @@ import com.gd.form.model.Department;
 import com.gd.form.model.DepartmentPerson;
 import com.gd.form.model.DeviceDetailModel;
 import com.gd.form.model.ElectricityDetailModel;
+import com.gd.form.model.ElectricityRecordDetailModel;
+import com.gd.form.model.EventDetailModel;
+import com.gd.form.model.EventHistoryDetailModel;
+import com.gd.form.model.EventHistoryModel;
 import com.gd.form.model.FormModel;
 import com.gd.form.model.HiddenDetailModel;
 import com.gd.form.model.HighZoneDetailModel;
@@ -36,9 +40,12 @@ import com.gd.form.model.StationNoModel;
 import com.gd.form.model.StationWaterDetailModel;
 import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.TaskDetailModel;
+import com.gd.form.model.TestStakeModel;
 import com.gd.form.model.TunnelDetailModel;
 import com.gd.form.model.TunnelModel;
 import com.gd.form.model.UpdateModel;
+import com.gd.form.model.UploadEventModel;
+import com.gd.form.model.UploadEventStakeModel;
 import com.gd.form.model.VideoDetailModel;
 import com.gd.form.model.WaitingApproveModel;
 import com.gd.form.model.WaitingHandleTaskModel;
@@ -1056,7 +1063,111 @@ public interface Api {
     @POST("AppUpdateVersion.html")
     Call<UpdateModel> appUpdate(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+    /**
+     * 获取桩号
+     *
+     * @return
+     */
+    @POST("GetElecTestStakesByEmp.html")
+    Call<List<TestStakeModel>> getStakes(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+    /**
+     * 添加阴保测试
+     *
+     * @return
+     */
+    @POST("w020_dataformdataAdd.html")
+    Call<ServerModel> commitElectricityRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取阴保详情
+     *
+     * @return
+     */
+    @POST("W020GetdataByKey.html")
+    Call<ElectricityRecordDetailModel> getElectricityRecordDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 修改阴保记录
+     *
+     * @return
+     */
+    @POST("w020_dataformdataUpdte.html")
+    Call<ServerModel> updateElectricityRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取上传事件列表
+     *
+     * @return
+     */
+    @POST("EventMultiGetList.html")
+    Call<List<UploadEventModel>> getEventList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取事件详情
+     *
+     * @return
+     */
+    @POST("GetReportEventByKey.html")
+    Call<EventDetailModel> getEventDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取事件上报的测试桩号
+     *
+     * @return
+     */
+    @POST("GetpipestakeinfoByOwners.html")
+    Call<List<UploadEventStakeModel>> getUploadStakeList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 维护上报事件
+     *
+     * @return
+     */
+    @POST("reportEventAdd.html")
+    Call<ServerModel> addUploadEvent(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 维护上报事件
+     *
+     * @return
+     */
+    @POST("reportEventUpdate.html")
+    Call<ServerModel> UpdateUploadEvent(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 增加处理记录
+     *
+     * @return
+     */
+    @POST("reportEventRecordAdd.html")
+    Call<ServerModel> addEventRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 事件历史记录
+     *
+     * @return
+     */
+    @POST("EventRecordMultiGetList.html")
+    Call<List<EventHistoryModel>> getEventHistory(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 事件历史记录详情
+     *
+     * @return
+     */
+    @POST("GetReportEventRecordByKey.html")
+    Call<EventHistoryDetailModel> getEventHistoryDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
+     * 完成事件
+     *
+     * @return
+     */
+    @POST("SetReportEventStatusByKey.html")
+    Call<ServerModel> finishEvent(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 

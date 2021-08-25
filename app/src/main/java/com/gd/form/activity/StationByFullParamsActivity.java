@@ -3,7 +3,6 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -90,7 +89,6 @@ public class StationByFullParamsActivity extends BaseActivity {
         jsonObject.addProperty("pipeid", Integer.parseInt(pipeId));
         jsonObject.addProperty("name", keyWord);
         jsonObject.addProperty("dptid", Integer.parseInt(departmentId));
-        Log.i("tag","jsonObject==="+jsonObject);
         Net.create(Api.class).getStationByDptidAndPipeIdAndKey(token,jsonObject)
                 .enqueue(new NetCallback<List<StationNoModel>>(this, true) {
                     @Override

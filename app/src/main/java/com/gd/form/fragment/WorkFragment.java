@@ -16,6 +16,7 @@ import com.gd.form.activity.SearchDataActivity;
 import com.gd.form.activity.SearchStationActivity;
 import com.gd.form.activity.SearchTaskActivity;
 import com.gd.form.activity.TaskDispatchActivity;
+import com.gd.form.activity.UploadRecordActivity;
 import com.gd.form.activity.XhglActivity;
 import com.gd.form.base.BaseFragment;
 import com.gd.form.utils.SPUtil;
@@ -66,6 +67,7 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_addOrReduce,
             R.id.ll_waterInsurance,
             R.id.ll_search_task,
+            R.id.ll_upload_record,
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
@@ -104,6 +106,9 @@ public class WorkFragment extends BaseFragment {
                 break;
             case R.id.ll_search_task:
                 openActivity(SearchTaskActivity.class, bundle);
+                break;
+            case R.id.ll_upload_record:
+                openActivity(UploadRecordActivity.class, bundle);
                 break;
         }
     }

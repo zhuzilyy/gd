@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,6 +48,8 @@ public class RefuseTaskActivity extends BaseActivity {
     private String token, userId;
     private List<OverTimeModel> refuseList;
     private MyReceiver myReceiver;
+    private String employId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -74,11 +77,16 @@ public class RefuseTaskActivity extends BaseActivity {
             refreshLayout.finishLoadMore(2000);
         });
         initData();
+        if (getIntent() != null) {
+            if (getIntent().getExtras() != null) {
+                employId = getIntent().getExtras().getString("employId");
+            }
+        }
         getOverTimeList();
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.update.waitingTask");
-        registerReceiver(myReceiver,intentFilter);
+        registerReceiver(myReceiver, intentFilter);
     }
 
     private void initData() {
@@ -130,6 +138,9 @@ public class RefuseTaskActivity extends BaseActivity {
                     case "去耦合器测试":
                         openActivity(ApproveDeviceActivity.class, bundle);
                         break;
+                    case "阴保电位测试记录":
+                        openActivity(ApproveElectricityRecordActivity.class, bundle);
+                        break;
                 }
             }
         });
@@ -138,7 +149,11 @@ public class RefuseTaskActivity extends BaseActivity {
 
     private void getOverTimeList() {
         JsonObject params = new JsonObject();
-        params.addProperty("employid", userId);
+        if (!TextUtils.isEmpty(employId)) {
+            params.addProperty("employid", employId);
+        } else {
+            params.addProperty("employid", userId);
+        }
         params.addProperty("basecode", "ALL");
         params.addProperty("status", 0);
         Net.create(Api.class).getRefuseList(token, params)
@@ -167,11 +182,12 @@ public class RefuseTaskActivity extends BaseActivity {
                 break;
         }
     }
+
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null){
-                if(intent.getAction().equals("com.action.update.waitingTask")){
+            if (intent != null) {
+                if (intent.getAction().equals("com.action.update.waitingTask")) {
                     getOverTimeList();
                 }
             }
@@ -181,7 +197,7 @@ public class RefuseTaskActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(myReceiver!=null){
+        if (myReceiver != null) {
             unregisterReceiver(myReceiver);
         }
     }

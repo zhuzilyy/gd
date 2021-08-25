@@ -40,12 +40,18 @@ public class XhglActivity extends BaseActivity {
             R.id.ll_tbxj,
             R.id.ll_wrj,
             R.id.ll_video_monitoring,
+            R.id.ll_upload,
 
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_video_monitoring:
                 openActivity(VideoMonitoringActivity.class);
+                break;
+            case R.id.ll_upload:
+                Bundle bundle = new Bundle();
+                bundle.putString("tag","add");
+                openActivity(UploadEventActivity.class,bundle);
                 break;
             case R.id.iv_back:
                 finish();

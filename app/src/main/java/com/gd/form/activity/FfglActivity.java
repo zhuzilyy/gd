@@ -35,6 +35,7 @@ public class FfglActivity extends BaseActivity {
             R.id.ll_zone_electricity,
             R.id.ll_insulating_property,
             R.id.ll_gdsm,
+            R.id.ll_electricity_record,
     })
     public void onClick(View view) {
         switch (view.getId()) {
@@ -49,6 +50,9 @@ public class FfglActivity extends BaseActivity {
                 break;
             case R.id.ll_gdsm:
                 openActivity(DeviceActivity.class);
+                break;
+            case R.id.ll_electricity_record:
+                openActivity(ElectricityRecordActivity.class);
                 break;
 
         }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class NoApproveActivity extends BaseActivity {
     private List<NoApproveModel> noApproveModelList;
     private MyReceiver myReceiver;
     private String formBaseCode;
+    private String employId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -84,6 +86,11 @@ public class NoApproveActivity extends BaseActivity {
         });
         initData();
         formBaseCode = "all";
+        if(getIntent()!=null){
+            if(getIntent().getExtras()!=null){
+                employId =  getIntent().getExtras().getString("employId");
+            }
+        }
         getNoApproveList();
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -93,7 +100,11 @@ public class NoApproveActivity extends BaseActivity {
 
     private void getNoApproveList() {
         JsonObject params = new JsonObject();
-        params.addProperty("employid", userId);
+        if(!TextUtils.isEmpty(employId)){
+            params.addProperty("employid", employId);
+        }else{
+            params.addProperty("employid", userId);
+        }
         params.addProperty("basecode", formBaseCode);
         params.addProperty("approvaltype", 2);
         params.addProperty("status", 3);

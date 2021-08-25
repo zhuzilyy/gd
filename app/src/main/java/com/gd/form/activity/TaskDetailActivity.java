@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -81,6 +82,12 @@ public class TaskDetailActivity extends BaseActivity {
     TextView tvFileName;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
+    @BindView(R.id.ll_selectImage)
+    LinearLayout llSelectImage;
+    @BindView(R.id.ll_scfj)
+    LinearLayout llSelectFile;
+    @BindView(R.id.tv_pic)
+    TextView tvPic;
     private String taskId;
     private String token, userId;
     private String tag;
@@ -97,6 +104,8 @@ public class TaskDetailActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
     private IHandlerCallBack iHandlerCallBack;
+    private TaskDetailModel taskDetailModel;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -122,6 +131,7 @@ public class TaskDetailActivity extends BaseActivity {
             } else {
                 llRealFinishTime.setVisibility(View.VISIBLE);
                 viewFinishTime.setVisibility(View.VISIBLE);
+                llSelectImage.setEnabled(false);
                 btnCommit.setVisibility(View.GONE);
                 etFinisStatus.setEnabled(false);
             }
@@ -134,6 +144,7 @@ public class TaskDetailActivity extends BaseActivity {
         initConfig();
         getTaskDetail(taskId);
     }
+
     private void initGallery() {
         iHandlerCallBack = new IHandlerCallBack() {
             @Override
@@ -171,6 +182,7 @@ public class TaskDetailActivity extends BaseActivity {
             }
         };
     }
+
     private void initConfig() {
         galleryConfig = new GalleryConfig.Builder()
                 .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）
@@ -194,13 +206,16 @@ public class TaskDetailActivity extends BaseActivity {
         rvResultPhoto.setAdapter(photoAdapter);
 
     }
+
     private void getTaskDetail(String taskId) {
         JsonObject params = new JsonObject();
         params.addProperty("id", taskId);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).getTaskDetail(token, params)
                 .enqueue(new NetCallback<TaskDetailModel>(this, true) {
                     @Override
                     public void onResponse(TaskDetailModel result) {
+                        taskDetailModel = result;
                         if (result != null) {
                             etRequire.setText(result.getTaskcontent());
                             tvPlantFinishTime.setText(TimeUtil.longToFormatTime(result.getPlantime().getTime()));
@@ -209,6 +224,37 @@ public class TaskDetailActivity extends BaseActivity {
                                 tvRealFinishTime.setText(TimeUtil.longToFormatTime(result.getFinishtime().getTime()));
                             }
                             tvSendPerson.setText(result.getCreatorname());
+                            if (result.getUploadpicture() != null && !tag.equals("unFinish")) {
+                                if (!TextUtils.isEmpty(result.getUploadpicture()) &&
+                                        !result.getUploadpicture().equals("00")) {
+                                    if (result.getUploadpicture().contains(";")) {
+                                        String[] pathArr = result.getUploadpicture().split(";");
+                                        for (int i = 0; i < pathArr.length; i++) {
+                                            path.add(pathArr[i]);
+                                            photoAdapter.notifyDataSetChanged();
+                                        }
+                                    } else {
+                                        path.add(result.getUploadpicture());
+                                        photoAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    tvPic.setText("暂无图片");
+                                }
+                            }
+
+                            if (result.getUploadfile() != null && !tag.equals("unFinish")) {
+                                if (!TextUtils.isEmpty(result.getUploadfile()) &&
+                                        !result.getUploadfile().equals("00")) {
+                                    if (result.getFilename().contains("/")) {
+                                        String subFileName = result.getFilename().split("/")[1];
+                                        tvFileName.setText(subFileName);
+                                    } else {
+                                        tvFileName.setText(result.getFilename());
+                                    }
+                                } else {
+                                    tvFileName.setText("暂无文件");
+                                }
+                            }
                         }
                     }
                 });
@@ -226,8 +272,18 @@ public class TaskDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_scfj:
-                Intent intentAddress = new Intent(this, SelectFileActivity.class);
-                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+                if (tag.equals("unFinish")) {
+                    Intent intentAddress = new Intent(this, SelectFileActivity.class);
+                    startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+                } else {
+                    if (!TextUtils.isEmpty(taskDetailModel.getUploadfile()) &&
+                            !taskDetailModel.getUploadfile().equals("00")) {
+                        Uri uri = Uri.parse(taskDetailModel.getUploadfile());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                }
+
                 break;
             case R.id.ll_selectImage:
                 initPermissions();
@@ -241,6 +297,7 @@ public class TaskDetailActivity extends BaseActivity {
                 break;
         }
     }
+
     //授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(TaskDetailActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -322,6 +379,7 @@ public class TaskDetailActivity extends BaseActivity {
         }
 
     }
+
     public void uploadOffice(String fileName, String filePath) {
         PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
         // 此处调用异步上传方法

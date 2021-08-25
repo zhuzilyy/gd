@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,10 +57,12 @@ public class WaitingHandleFragment extends BaseFragment {
     TextView tvFormType;
     private OVerTimeAdapter adapter;
     private String token, userId;
-    private List<String> formBaseCodeList,formNameList;
+    private List<String> formBaseCodeList, formNameList;
     private ListDialog dialog;
     private List<OverTimeModel> waitingHandleList;
     private MyReceiver myReceiver;
+    private String employId;
+
     @Override
     protected void initView(Bundle bundle) {
         waitingHandleList = new ArrayList<>();
@@ -78,11 +81,16 @@ public class WaitingHandleFragment extends BaseFragment {
             refreshLayout.finishLoadMore(2000);
         });
         initData();
+        if (getActivity().getIntent() != null) {
+            if (getActivity().getIntent().getExtras() != null) {
+                employId = getActivity().getIntent().getExtras().getString("employId");
+            }
+        }
         getOverTimeList();
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.update.waitingTask");
-        getActivity().registerReceiver(myReceiver,intentFilter);
+        getActivity().registerReceiver(myReceiver, intentFilter);
     }
 
     @Override
@@ -140,9 +148,15 @@ public class WaitingHandleFragment extends BaseFragment {
         });
 
     }
+
     private void getOverTimeList() {
         JsonObject params = new JsonObject();
-        params.addProperty("empid", userId);
+        if (!TextUtils.isEmpty(employId)) {
+            params.addProperty("empid", employId);
+        } else {
+            params.addProperty("empid", userId);
+        }
+
         Net.create(Api.class).getTaskTotal(token, params)
                 .enqueue(new NetCallback<TaskCountModel>(getActivity(), true) {
                     @Override
@@ -161,6 +175,7 @@ public class WaitingHandleFragment extends BaseFragment {
                     }
                 });
     }
+
     @OnClick({R.id.ll_selectDepartment})
     public void click(View view) {
         switch (view.getId()) {
@@ -197,18 +212,20 @@ public class WaitingHandleFragment extends BaseFragment {
                     }
                 });
     }
-    class MyReceiver extends BroadcastReceiver{
+
+    class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("com.action.update.waitingTask")){
+            if (intent.getAction().equals("com.action.update.waitingTask")) {
                 getOverTimeList();
             }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(myReceiver!=null){
+        if (myReceiver != null) {
             getActivity().unregisterReceiver(myReceiver);
         }
     }

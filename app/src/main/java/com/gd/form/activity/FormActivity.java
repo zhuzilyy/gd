@@ -101,7 +101,7 @@ public class FormActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
-                Log.i("tag","formId=="+formModelList.get(position).getFormid());
+                Log.i("tag", "formId==" + formModelList.get(position).getFormid());
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
@@ -139,6 +139,9 @@ public class FormActivity extends BaseActivity {
                     case "去耦合器测试":
                         openActivity(ApproveDeviceActivity.class, bundle);
                         break;
+                    case "阴保电位测试记录":
+                        openActivity(ApproveElectricityRecordActivity.class, bundle);
+                        break;
                 }
             }
         });
@@ -174,6 +177,7 @@ public class FormActivity extends BaseActivity {
 
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

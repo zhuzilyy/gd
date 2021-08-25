@@ -293,6 +293,7 @@
                         android:textSize="@dimen/s_16" />
 
                     <TextView
+                        android:id="@+id/tv_pic"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="@dimen/d_15"
@@ -327,7 +328,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/d_15"
                 android:layout_marginRight="@dimen/d_15"
-                android:paddingBottom="@dimen/d_5" />
+                />
 
 
             <LinearLayout

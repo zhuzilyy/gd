@@ -151,7 +151,6 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             tag = bundle.getString("tag");
-            Log.i("tag", "tag===" + tag);
             if (tag.equals("detail")) {
                 btnApprove.setVisibility(View.GONE);
                 etDistance.setEnabled(false);

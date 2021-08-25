@@ -7,11 +7,14 @@ public class TaskDetailModel {
     private int departmentid;
     private String departmentname;
     private String finishcontent;
+    private String filename;
     private int id;
     private String recipient;
     private String recipientname;
     private String taskcontent;
     private int taskstatus;
+    private String uploadfile;
+    private String uploadpicture;
     private CreateTime plantime;
     private CreateTime finishtime;
 
@@ -117,5 +120,29 @@ public class TaskDetailModel {
 
     public void setFinishtime(CreateTime finishtime) {
         this.finishtime = finishtime;
+    }
+
+    public String getUploadfile() {
+        return uploadfile;
+    }
+
+    public void setUploadfile(String uploadfile) {
+        this.uploadfile = uploadfile;
+    }
+
+    public String getUploadpicture() {
+        return uploadpicture;
+    }
+
+    public void setUploadpicture(String uploadpicture) {
+        this.uploadpicture = uploadpicture;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

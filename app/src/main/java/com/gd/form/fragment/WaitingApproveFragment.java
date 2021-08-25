@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.gd.form.R;
 import com.gd.form.activity.ApproveBuildingActivity;
 import com.gd.form.activity.ApproveDeviceActivity;
 import com.gd.form.activity.ApproveElectricity;
+import com.gd.form.activity.ApproveElectricityRecordActivity;
 import com.gd.form.activity.ApproveHiddenActivity;
 import com.gd.form.activity.ApproveHighZoneActivity;
 import com.gd.form.activity.ApproveHikingActivity;
@@ -60,6 +62,8 @@ public class WaitingApproveFragment extends BaseFragment {
     private List<WaitingApproveModel> waitingApproveModelList;
     private String formBaseCode;
     private MyReceiver myReceiver;
+    private String employId;
+
     @Override
     protected void initView(Bundle bundle) {
         token = (String) SPUtil.get(getActivity(), "token", "");
@@ -78,17 +82,28 @@ public class WaitingApproveFragment extends BaseFragment {
         });
         initData();
         formBaseCode = "all";
+        if (getActivity().getIntent() != null) {
+            if (getActivity().getIntent().getExtras() != null) {
+                employId = getActivity().getIntent().getExtras().getString("employId");
+            }
+        }
         getApproveList();
 
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.updateApprove");
-        getActivity().registerReceiver(myReceiver,intentFilter);
+        getActivity().registerReceiver(myReceiver, intentFilter);
+
+
     }
 
     private void getApproveList() {
         JsonObject params = new JsonObject();
-        params.addProperty("employid", userId);
+        if (!TextUtils.isEmpty(employId)) {
+            params.addProperty("employid", employId);
+        } else {
+            params.addProperty("employid", userId);
+        }
         params.addProperty("basecode", formBaseCode);
         params.addProperty("approvaltype", 1);
         params.addProperty("status", 3);
@@ -165,6 +180,9 @@ public class WaitingApproveFragment extends BaseFragment {
                     case "去耦合器测试":
                         openActivity(ApproveDeviceActivity.class, bundle);
                         break;
+                    case "阴保电位测试记录":
+                        openActivity(ApproveElectricityRecordActivity.class, bundle);
+                        break;
                 }
             }
         });
@@ -209,6 +227,7 @@ public class WaitingApproveFragment extends BaseFragment {
                     }
                 });
     }
+
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -217,10 +236,11 @@ public class WaitingApproveFragment extends BaseFragment {
             }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(myReceiver!=null){
+        if (myReceiver != null) {
             getActivity().unregisterReceiver(myReceiver);
         }
     }

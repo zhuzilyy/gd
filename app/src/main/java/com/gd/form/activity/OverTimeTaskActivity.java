@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class OverTimeTaskActivity extends BaseActivity {
     private List<String> formBaseCodeList, formNameList;
     private ListDialog dialog;
     private List<OverTimeModel> overTimeModelList;
-
+    private String employId;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -79,6 +80,11 @@ public class OverTimeTaskActivity extends BaseActivity {
             refreshLayout.finishLoadMore(2000);
         });
         initData();
+        if(getIntent()!=null){
+            if(getIntent().getExtras()!=null){
+                employId =  getIntent().getExtras().getString("employId");
+            }
+        }
         getOverTimeList();
     }
 
@@ -158,7 +164,12 @@ public class OverTimeTaskActivity extends BaseActivity {
 //    }
     private void getOverTimeList() {
         JsonObject params = new JsonObject();
-        params.addProperty("empid", userId);
+        if(!TextUtils.isEmpty(employId)){
+            params.addProperty("empid", employId);
+        }else{
+            params.addProperty("empid", userId);
+        }
+
         Net.create(Api.class).getTaskTotal(token, params)
                 .enqueue(new NetCallback<TaskCountModel>(this, true) {
                     @Override

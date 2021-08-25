@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:textSize="@dimen/s_14"
+            android:id="@+id/mainSearchEditText"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_9"
+            android:layout_marginLeft="@dimen/d_9"
+            android:layout_marginTop="@dimen/d_5"
+            android:layout_marginEnd="@dimen/d_9"
+            android:layout_marginRight="@dimen/d_9"
+            android:layout_marginBottom="@dimen/d_5"
+            android:background="@drawable/main_edit_bg"
+            android:drawableRight="@mipmap/main_search"
+            android:drawablePadding="@dimen/d_9"
+            android:hint="请输入搜索内容"
+            android:imeOptions="actionSearch"
+            android:padding="@dimen/d_6"
+            android:singleLine="true" />
+        <Button
+            android:background="@drawable/bg_search"
+            android:layout_marginRight="@dimen/d_10"
+            android:textColor="#fff"
+            android:id="@+id/btn_search"
+            android:text="搜索"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/stationRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_10"
+                    android:background="#FFF3F3F3" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/stationRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <include layout="@layout/view_no_data"/>
+    </RelativeLayout>
+
+</LinearLayout>

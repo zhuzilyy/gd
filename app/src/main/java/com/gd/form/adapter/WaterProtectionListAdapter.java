@@ -47,7 +47,7 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
             llUpdate.setVisibility(View.GONE);
         }
         if ("select".equals(model.getType())) {
-            tvTime.setText(TimeUtil.longToFormatTime(System.currentTimeMillis()));
+            tvTime.setText(TimeUtil.longToFormatTime(model.getCreatime().getTime()));
             llUpdate.setVisibility(View.GONE);
 
         } else {

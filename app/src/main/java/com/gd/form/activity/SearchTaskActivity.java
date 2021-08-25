@@ -135,14 +135,16 @@ public class SearchTaskActivity extends BaseActivity {
             case R.id.btn_search:
                 if (paramsComplete()) {
                     if (selectPosition < 4) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("employId",selectPersonId);
                         if (selectPosition == 0) {
-                            openActivity(WaitingActivity.class);
+                            openActivity(WaitingActivity.class,bundle);
                         } else if (selectPosition == 1) {
-                            openActivity(OverTimeTaskActivity.class);
+                            openActivity(OverTimeTaskActivity.class,bundle);
                         }else if(selectPosition == 2){
-                            openActivity(NoApproveActivity.class);
+                            openActivity(NoApproveActivity.class,bundle);
                         }else if(selectPosition == 3){
-                            openActivity(RefuseTaskActivity.class);
+                            openActivity(RefuseTaskActivity.class,bundle);
                         }
                     } else {
                         Bundle bundle = new Bundle();

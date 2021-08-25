@@ -45,8 +45,8 @@
         <!-- 定位需要的服务 使用2.0的定位需要加上这个 -->
         <service android:name="com.amap.api.location.APSService" />
         <provider
-            android:authorities="${applicationId}.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -378,6 +378,36 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SearchTaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ElectricityRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StationStakeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ApproveElectricityRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadEventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadEventListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadEventStakeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddEventRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EventHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EventHistoryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
