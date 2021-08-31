@@ -256,7 +256,6 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Log.i("tag", "params==" + params);
         Net.create(Api.class).getWaterProtectionDetail(token, params)
                 .enqueue(new NetCallback<WaterProtectionModel>(this, true) {
                     @Override
@@ -409,7 +408,6 @@ public class ApproveWaterProtectionActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("picturepath", "00");
         }
-        Log.i("tag", "jsonObject==" + jsonObject);
         Net.create(Api.class).updateWater(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

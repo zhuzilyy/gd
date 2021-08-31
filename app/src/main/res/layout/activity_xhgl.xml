@@ -251,7 +251,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="现有违章违建记录"
+                    android:text="现有违章违建巡检记录"
                     />
 
             </LinearLayout>
@@ -470,7 +470,7 @@
                     android:layout_marginEnd="@dimen/d_15"
                     android:background="@null"
                     android:singleLine="true"
-                    android:text="事件上报"
+                    android:text="事件记录"
                     />
 
             </LinearLayout>

@@ -114,7 +114,8 @@ public class SgbhActivity extends BaseActivity {
     private String approverName;
     private String approverId;
     private List<String> nameList;
-    private String stationId, pipeId, location;
+    private String location;
+    private int stationId,pipeId;
     private String isFull = "是";
     private String token, userId, ownerId, waterId;
     private String ossFilePath;
@@ -286,9 +287,10 @@ public class SgbhActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_zh:
-                getWaterStations();
+//                getWaterStations();
+                Intent intentStartStation = new Intent(this, WaterStationActivity.class);
+                startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
-
             case R.id.ll_jcsj:
             case R.id.ll_tbrq:
                 pvTime.show(view);
@@ -513,10 +515,14 @@ public class SgbhActivity extends BaseActivity {
             uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
-            stationId = data.getStringExtra("stationId");
-            pipeId = data.getStringExtra("pipeId");
+            stationId = Integer.parseInt(data.getStringExtra("stationId"));
+            pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
             String stationName = data.getStringExtra("stationName");
             tv_zh.setText(stationName);
+//            stationId = data.getStringExtra("stationId");
+//            pipeId = data.getStringExtra("pipeId");
+//            String stationName = data.getStringExtra("stationName");
+//            tv_zh.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
@@ -549,9 +555,9 @@ public class SgbhActivity extends BaseActivity {
                     @Override
                     public void onResponse(StationWaterDetailModel result) {
                         ownerId = result.getOwnerid();
-                        pipeId = result.getPipeid() + "";
+                        pipeId = result.getPipeid();
                         approverId = result.getApprovalid();
-                        stationId = result.getStakeid() + "";
+                        stationId = result.getStakeid();
                         etDistance.setText(result.getStakefrom());
                         tv_sgxs.setText(result.getHydraulicform());
                         tvManager.setText(result.getOwnername());

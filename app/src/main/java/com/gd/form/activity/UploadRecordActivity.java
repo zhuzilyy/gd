@@ -75,7 +75,7 @@ public class UploadRecordActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initTimePicker();
-        tvTitle.setText("上报事件查询处理");
+        tvTitle.setText("事件记录查询");
         token = (String) SPUtil.get(UploadRecordActivity.this, "token", "");
         userId = (String) SPUtil.get(UploadRecordActivity.this, "userId", "");
         dialog = new ListDialog(this);

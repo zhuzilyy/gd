@@ -124,8 +124,7 @@ public class PipeHighZoneActivity extends BaseActivity {
     @BindView(R.id.ll_selectFile3)
     LinearLayout llSelectFile3;
     private String isAdd = "是";
-    private String stationId, pipeName;
-    private String token, userId, highZoneId;
+    private String token,highZoneId;
     private final int SEARCH_HIGHZONE = 100;
     private int FILE_REQUEST_CODE1 = 101;
     private int FILE_REQUEST_CODE2 = 102;
@@ -157,7 +156,6 @@ public class PipeHighZoneActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = (String) SPUtil.get(PipeHighZoneActivity.this, "token", "");
-        userId = (String) SPUtil.get(PipeHighZoneActivity.this, "userId", "");
         tvTitle.setText("高后果区");
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);

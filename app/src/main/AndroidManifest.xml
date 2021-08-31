@@ -410,6 +410,9 @@
             android:name=".activity.EventHistoryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.WaterStationActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

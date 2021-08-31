@@ -76,13 +76,7 @@ public class ElectricityRecordActivity extends BaseActivity {
         tvTitle.setText("阴保电位测试记录");
         token = (String) SPUtil.get(ElectricityRecordActivity.this, "token", "");
         userId = (String) SPUtil.get(ElectricityRecordActivity.this, "userId", "");
-        getDetail();
     }
-
-    private void getDetail() {
-
-    }
-
     @OnClick({
             R.id.iv_back,
             R.id.ll_stationNo,

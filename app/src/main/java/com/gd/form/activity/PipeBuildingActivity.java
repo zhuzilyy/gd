@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -65,6 +66,9 @@ import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -143,6 +147,8 @@ public class PipeBuildingActivity extends BaseActivity {
     LinearLayout llLocation;
     @BindView(R.id.tv_totalLevel)
     TextView tvTotalLevel;
+    @BindView(R.id.flow_layout)
+    TagFlowLayout mFlowLayout;
     private String isHighZone = "是";
     private TimePickerView pvTime;
     private String token, userId, buildingId;
@@ -162,8 +168,8 @@ public class PipeBuildingActivity extends BaseActivity {
     private OSS oss;
     private int stationId, pipeId;
     private double rateLevel, resultLevel;
-    private List<String> oldPicList;
-
+    private TagAdapter<String> mAdapter;
+    private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙"};
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -189,7 +195,6 @@ public class PipeBuildingActivity extends BaseActivity {
         riskResultList = new ArrayList<>();
         riskTypeList = new ArrayList<>();
         path = new ArrayList<>();
-        oldPicList = new ArrayList<>();
         nameList = new ArrayList<>();
         if (getIntent() != null) {
             String tag = getIntent().getExtras().getString("tag");
@@ -427,6 +432,18 @@ public class PipeBuildingActivity extends BaseActivity {
                         isHighZone = "否";
                         break;
                 }
+            }
+        });
+
+        final LayoutInflater mInflater = LayoutInflater.from(this);
+        mFlowLayout.setAdapter(mAdapter = new com.zhy.view.flowlayout.TagAdapter<String>(dataSource) {
+
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) mInflater.inflate(R.layout.background_tag,
+                        mFlowLayout, false);
+                tv.setText(s);
+                return tv;
             }
         });
     }

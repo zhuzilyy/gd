@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -30,12 +31,14 @@
     </LinearLayout>
 
     <View
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_0_5"
         android:layout_marginLeft="@dimen/d_5"
         android:layout_marginRight="@dimen/d_5"
         android:background="@color/color_divider" />
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -61,6 +64,7 @@
     </LinearLayout>
 
     <View
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_0_5"
         android:layout_marginLeft="@dimen/d_5"
@@ -107,7 +111,6 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:visibility="gone"
             android:id="@+id/btn_delete"
             android:layout_width="@dimen/d_60"
             android:layout_height="@dimen/d_30"

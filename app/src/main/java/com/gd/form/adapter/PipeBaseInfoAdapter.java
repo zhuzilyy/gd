@@ -53,6 +53,14 @@ public class PipeBaseInfoAdapter extends BaseRecyclerViewAdapter<StakeModel> {
                 context.startActivity(intent);
             }
         });
+        viewHolder.getContentView().findViewById(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onItemClickListener(v,viewHolder.getLayoutPosition());
+                }
+            }
+        });
         viewHolder.getContentView().setOnClickListener(view -> {
             if(onItemClickListener!=null){
                 onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());

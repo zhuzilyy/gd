@@ -63,6 +63,8 @@ public class SearchStationActivity extends BaseActivity {
     TextView tvPipeName;
     @BindView(R.id.tv_manager)
     TextView tvManager;
+    @BindView(R.id.tv_landType)
+    TextView tvLandType;
     private String token, userId;
     private String startStationId, startPipeId, endStationId, endPipeId;
     private List<Pipelineinfo> pipeLineInfoList;
@@ -74,7 +76,8 @@ public class SearchStationActivity extends BaseActivity {
     private int departmentId;
     private String approverName, approverId;
     private int selectPipeId;
-
+    private List<String> landTypeList;
+    private String selectLandType;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -93,8 +96,17 @@ public class SearchStationActivity extends BaseActivity {
         pipeLineInfoList = new ArrayList<>();
         departmentList = new ArrayList<>();
         managerList = new ArrayList<>();
+        landTypeList = new ArrayList<>();
         tvTitle.setText("台账信息维护");
         dialog = new ListDialog(this);
+        landTypeList.add("标志桩");
+        landTypeList.add("转角转");
+        landTypeList.add("电位测试桩");
+        landTypeList.add("排流桩");
+        landTypeList.add("警示牌");
+        landTypeList.add("加密桩");
+        landTypeList.add("光缆桩");
+        landTypeList.add("ALL");
     }
 
     @OnClick({
@@ -109,12 +121,22 @@ public class SearchStationActivity extends BaseActivity {
             R.id.btn_searchDepartment,
             R.id.ll_stationNo,
             R.id.ll_area,
+            R.id.ll_landType,
             R.id.ll_person})
     public void click(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_landType:
+                dialog.setData(landTypeList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvLandType.setText(landTypeList.get(positionM));
+                    selectLandType = landTypeList.get(positionM);
+                    dialog.dismiss();
+                });
                 break;
             case R.id.ll_manager:
                 getPipeManagerByUserId();
@@ -131,7 +153,7 @@ public class SearchStationActivity extends BaseActivity {
                 }
                 Intent intentEndStation = new Intent(this, StationByIdActivity.class);
                 intentEndStation.putExtra("tag", "end");
-                intentEndStation.putExtra("pipeId", selectPipeId+"");
+                intentEndStation.putExtra("pipeId", selectPipeId + "");
                 startActivityForResult(intentEndStation, SELECT_STATION);
                 break;
             case R.id.ll_startNo:
@@ -141,37 +163,54 @@ public class SearchStationActivity extends BaseActivity {
                 }
                 Intent intentStartStation = new Intent(this, StationByIdActivity.class);
                 intentStartStation.putExtra("tag", "start");
-                intentStartStation.putExtra("pipeId", selectPipeId+"");
+                intentStartStation.putExtra("pipeId", selectPipeId + "");
                 startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
             case R.id.ll_pipeName:
                 getPipelineInfoListRequest();
                 break;
             case R.id.btn_searchStaionNo:
-                bundle.putString("pipeid",selectPipeId+"");
-                bundle.putString("stakeid",startStationId);
-                bundle.putString("estakeid",endStationId);
-                openActivity(StandingBookActivity.class,bundle);
+                if(selectPipeId == 0){
+                    ToastUtil.show("请选择管道");
+                    return;
+                }
+                if(TextUtils.isEmpty(startStationId)){
+                    ToastUtil.show("请选择起始桩号");
+                    return;
+                }
+                if(TextUtils.isEmpty(endStationId)){
+                    ToastUtil.show("请选择结束桩号");
+                    return;
+                }
+                if(TextUtils.isEmpty(tvLandType.getText().toString())){
+                    ToastUtil.show("请选择地面标志类型");
+                    return;
+                }
+                bundle.putString("pipeid", selectPipeId + "");
+                bundle.putString("stakeid", startStationId);
+                bundle.putString("estakeid", endStationId);
+                bundle.putString("staketype", tvLandType.getText().toString());
+                openActivity(StandingBookActivity.class, bundle);
                 break;
             case R.id.btn_searchManager:
-                if(TextUtils.isEmpty(tvManager.getText().toString())){
+                if (TextUtils.isEmpty(tvManager.getText().toString())) {
                     ToastUtil.show("请选择负责人");
                     return;
                 }
-                bundle.putString("dptid","");
-                bundle.putString("pipeid","");
-                bundle.putString("empid",approverId);
-                openActivity(StandingBookActivity.class,bundle);
+                bundle.putString("dptid", "");
+                bundle.putString("pipeid", "");
+                bundle.putString("empid", approverId);
+                openActivity(StandingBookActivity.class, bundle);
                 break;
             case R.id.btn_searchDepartment:
-                if(TextUtils.isEmpty(tvDepartmentName.getText().toString())){
+                if (TextUtils.isEmpty(tvDepartmentName.getText().toString())) {
                     ToastUtil.show("请选择作业区");
                     return;
                 }
-                bundle.putString("dptid",departmentId+"");
-                bundle.putString("pipeid","");
-                bundle.putString("empid","");
-                openActivity(StandingBookActivity.class,bundle);
+                bundle.putString("dptid", departmentId + "");
+                bundle.putString("pipeid", "");
+                bundle.putString("empid", "");
+                openActivity(StandingBookActivity.class, bundle);
                 break;
             case R.id.ll_stationNo:
                 tvStationNo.setTextColor(Color.parseColor("#FF52A7F9"));
@@ -263,6 +302,7 @@ public class SearchStationActivity extends BaseActivity {
                     }
                 });
     }
+
     private void getPipeManagerByUserId() {
         JsonObject params = new JsonObject();
         params.addProperty("empid", userId);

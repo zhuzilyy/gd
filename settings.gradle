@@ -1,2 +1,2 @@
-include ':app', ':pickerview', ':wheelview',':gallerypick'
+include ':app', ':pickerview', ':wheelview', ':gallerypick', ':flowlayout-lib'
 

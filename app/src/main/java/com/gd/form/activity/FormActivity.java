@@ -145,7 +145,6 @@ public class FormActivity extends BaseActivity {
                 }
             }
         });
-        Log.i("tag", "params====" + params);
         Net.create(Api.class).getAllForms(token, params)
                 .enqueue(new NetCallback<List<FormModel>>(this, true) {
                     @Override

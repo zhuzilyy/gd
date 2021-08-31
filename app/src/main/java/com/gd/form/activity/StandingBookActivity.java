@@ -81,7 +81,7 @@ public class StandingBookActivity extends BaseActivity {
     private MyReceiver myReceiver;
     private String highZoneId, buildingId, stationName, startStationId, endStationId;
     private SearchStationModel searchStationModel;
-    private String newPipeTagId;
+    private String newPipeTagId,stakeType;
     private SearchPipeModel resultSearchPipeModel;
     private ListDialog dialog;
     private List<Pipelineinfo> pipeList;
@@ -118,6 +118,7 @@ public class StandingBookActivity extends BaseActivity {
             employId = bundle.getString("empid");
             startStationId = bundle.getString("stakeid");
             endStationId = bundle.getString("estakeid");
+            stakeType = bundle.getString("staketype");
         }
         getData();
     }
@@ -129,6 +130,7 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("pipeid", pipeId);
             params.addProperty("stakeid", startStationId);
             params.addProperty("estakeid", endStationId);
+            params.addProperty("staketype", stakeType);
             getPipeInfoByStationId(params);
         } else {
             params.addProperty("appempid", userId);
@@ -137,10 +139,10 @@ public class StandingBookActivity extends BaseActivity {
             params.addProperty("empid", employId);
             getPipeInfo(params);
         }
-        Log.i("tag","params==="+params);
     }
 
     private void getPipeInfoByStationId(JsonObject params) {
+        Log.i("tag","params==="+params);
         Net.create(Api.class).getPipeInfoByStationId(token, params)
                 .enqueue(new NetCallback<SearchPipeModel>(this, true) {
                     @Override

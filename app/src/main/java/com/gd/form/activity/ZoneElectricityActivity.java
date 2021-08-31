@@ -373,7 +373,6 @@ public class ZoneElectricityActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitZoneElectricity(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

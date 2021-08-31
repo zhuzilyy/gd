@@ -71,7 +71,7 @@ public class PipeMeasureActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道埋深测量");
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("测量记录");
+        tvRight.setText("记录");
         initTimePicker();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
@@ -200,14 +200,14 @@ public class PipeMeasureActivity extends BaseActivity {
             return false;
         }
 
-        if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
-            ToastUtil.show("埋深不足(m)不能为空");
-            return false;
-        }
-        if (!NumberUtil.isNumber(etDepthNotEnough.getText().toString())) {
-            ToastUtil.show("埋深不足(m)数据格式不正确");
-            return false;
-        }
+//        if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
+//            ToastUtil.show("埋深不足(m)不能为空");
+//            return false;
+//        }
+//        if (!NumberUtil.isNumber(etDepthNotEnough.getText().toString())) {
+//            ToastUtil.show("埋深不足(m)数据格式不正确");
+//            return false;
+//        }
 
         if (TextUtils.isEmpty(etMethod.getText().toString())) {
             ToastUtil.show("处理措施");

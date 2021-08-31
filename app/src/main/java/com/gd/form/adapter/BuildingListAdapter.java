@@ -45,7 +45,6 @@ public class BuildingListAdapter extends BaseRecyclerViewAdapter<SearchBuildingM
         }
         if("select".equals(model.getSelect())){
             llUpdate.setVisibility(View.GONE);
-            viewUpdate.setVisibility(View.GONE);
         }else{
             llUpdate.setVisibility(View.VISIBLE);
             viewUpdate.setVisibility(View.VISIBLE);

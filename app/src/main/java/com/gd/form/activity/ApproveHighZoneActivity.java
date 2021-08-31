@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -172,7 +171,6 @@ public class ApproveHighZoneActivity extends BaseActivity {
     private void getDetail(String formId) {
         JsonObject params = new JsonObject();
         params.addProperty("formid", formId);
-        Log.i("tag", "formid===" + formId);
         Net.create(Api.class).getHighZoneDetail(token, params)
                 .enqueue(new NetCallback<HighZoneDetailModel>(this, true) {
                     @Override

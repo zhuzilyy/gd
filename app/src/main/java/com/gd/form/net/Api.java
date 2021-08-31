@@ -1168,6 +1168,22 @@ public interface Api {
      */
     @POST("SetReportEventStatusByKey.html")
     Call<ServerModel> finishEvent(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除管道
+     *
+     * @return
+     */
+    @POST("pipestakeinfoDelete.html")
+    Call<ServerModel> deletePipe(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除管道
+     *
+     * @return
+     */
+    @POST("waterprojectByEmpDptSearch.html")
+    Call<List<StationNoModel>> getWaterStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 

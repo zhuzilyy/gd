@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/layout_title"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_title" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <!--作业区-->
             <LinearLayout
                 android:id="@+id/ll_area"
@@ -57,6 +60,7 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -110,6 +114,7 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -162,6 +167,7 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -213,6 +219,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_upStationNo"
                 android:layout_width="match_parent"
@@ -266,6 +273,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_upStationKm"
                 android:layout_width="match_parent"
@@ -320,6 +328,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_downStationNo"
                 android:layout_width="match_parent"
@@ -373,6 +382,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_downStationKm"
                 android:layout_width="match_parent"
@@ -426,6 +436,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:id="@+id/view_stationNoPrefix"
                 android:layout_width="match_parent"
@@ -454,8 +465,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:inputType="number"
-                    android:digits="1234567890-"
                     android:id="@+id/et_stationNameNo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -465,14 +474,17 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:digits="1234567890-"
                     android:ellipsize="end"
                     android:gravity="end"
                     android:hint="桩名信息"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -486,8 +498,7 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12"
-                >
+                android:paddingBottom="@dimen/d_12">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -500,8 +511,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:digits="1234567890."
-                    android:inputType="number"
                     android:id="@+id/et_kgInfo"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -511,14 +520,17 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:digits="1234567890."
                     android:ellipsize="end"
                     android:gravity="end"
                     android:hint="里程信息(Km)+m"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -571,6 +583,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -597,7 +610,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:text="0"
                     android:id="@+id/et_corner"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -610,10 +622,12 @@
                     android:ellipsize="end"
                     android:gravity="end"
                     android:singleLine="true"
+                    android:text="0"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -628,7 +642,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -658,12 +673,14 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
             <!--位置坐标信息-->
             <LinearLayout
@@ -672,7 +689,8 @@
                 android:background="#80FFFFFF"
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
-                android:paddingBottom="@dimen/d_12">
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -702,13 +720,78 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
+
+            <!--巡检路情况-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="巡检路情况(本桩至上个桩间)"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <RadioGroup
+                    android:id="@+id/rg_isCheckGood"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/rb_yesCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="合格" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
-
             <!--地形地貌-->
             <LinearLayout
                 android:id="@+id/ll_landForm"
@@ -755,6 +838,7 @@
                     android:src="@mipmap/ic_next" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -762,54 +846,8 @@
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
 
-
-            <!--行政位置-->
+            <!--是否在管道上方-->
             <LinearLayout
-                android:id="@+id/ll_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#80FFFFFF"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/d_12"
-               >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:text="行政位置"
-                    android:textColor="#FF000000"
-                    android:textSize="@dimen/s_16" />
-
-
-
-                <EditText
-                    android:id="@+id/et_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/d_40"
-                    android:layout_marginStart="@dimen/d_15"
-                    android:layout_marginLeft="@dimen/d_15"
-                    android:layout_marginEnd="@dimen/d_15"
-                    android:layout_marginRight="@dimen/d_15"
-                    android:gravity="center_vertical"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:hint="行政位置"
-                    android:textColor="#A6000000"
-                    android:textSize="@dimen/s_16" />
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d_1"
-                android:layout_marginStart="@dimen/d_12"
-                android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
-
-            <!--标准埋深-->
-            <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -823,13 +861,183 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
+                    android:text="是否在管道正上方"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <RadioGroup
+                    android:id="@+id/rg_isOnTop"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/rb_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
+            <!--是否完好-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="是否完好"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <RadioGroup
+                    android:id="@+id/rg_isComplete"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
+
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/rb_yesComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="是" />
+
+                    <RadioButton
+                        android:id="@+id/rb_noComplete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="否" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+            <!--行政位置-->
+            <LinearLayout
+                android:id="@+id/ll_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="行政位置"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+
+                <EditText
+                    android:id="@+id/et_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_40"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:hint="行政位置"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <!--标准埋深-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
                     android:text="标准埋深"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:digits="1234567890."
-                    android:inputType="number"
                     android:id="@+id/et_depth"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -839,21 +1047,24 @@
                     android:layout_marginRight="@dimen/d_15"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:digits="1234567890."
                     android:ellipsize="end"
                     android:gravity="end"
                     android:hint="标准埋深"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
-                android:background="#FFE5E5E5" />
+                android:background="#FFE5E5E5"
+                android:visibility="gone" />
 
 
             <!--地主信息姓名-->
@@ -893,6 +1104,7 @@
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -921,7 +1133,6 @@
                     android:textSize="@dimen/s_16" />
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/et_phone"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -934,11 +1145,13 @@
                     android:ellipsize="end"
                     android:gravity="end"
                     android:hint="地主信息-联系电话"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
@@ -982,12 +1195,114 @@
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5" />
+
+            <!--接地材料-->
+            <LinearLayout
+                android:id="@+id/ll_landMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="接地材料"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+
+                <TextView
+                    android:id="@+id/tv_material"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+            <LinearLayout
+                android:background="#80FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/rl_selectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/d_15"
+                        android:layout_marginLeft="@dimen/d_15"
+                        android:layout_marginTop="@dimen/d_10"
+                        android:layout_marginBottom="@dimen/d_10"
+                        android:text="添加照片"
+                        android:textColor="#FF000000"
+                        android:textSize="@dimen/s_16" />
+
+                    <ImageView
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/d_10"
+                        android:layout_marginRight="@dimen/d_10"
+                        android:src="@mipmap/ic_next" />
+                </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:id="@+id/rvResultPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/d_5"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:background="#FFE5E5E5"
+                android:layout_marginLeft="@dimen/d_12"
+                android:layout_marginStart="@dimen/d_12"/>
 
             <Button
                 android:id="@+id/btn_commit"

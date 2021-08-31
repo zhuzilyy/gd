@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
-            android:text="测量日期"
+            android:text="日期"
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
@@ -151,6 +151,7 @@
 
     <!--埋深不足-->
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80FFFFFF"
@@ -189,6 +190,7 @@
 
     </LinearLayout>
     <View
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_1"
         android:layout_marginStart="@dimen/d_12"
@@ -210,11 +212,12 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
-            android:text="处理措施"
+            android:text="维护记录"
             android:textColor="#FF000000"
             android:textSize="@dimen/s_16" />
 
         <EditText
+            android:maxLength="30"
             android:id="@+id/et_method"
             android:layout_width="@dimen/d_0"
             android:layout_height="match_parent"
@@ -226,7 +229,7 @@
             android:background="@null"
             android:ellipsize="end"
             android:gravity="end"
-            android:hint="处理措施"
+            android:hint="维护记录"
             android:singleLine="true"
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />

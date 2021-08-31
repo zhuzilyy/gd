@@ -612,7 +612,6 @@ public class VideoMonitoringActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag", "1111=" + jsonObject.toString());
         Net.create(Api.class).commitVideo(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

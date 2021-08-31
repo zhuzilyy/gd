@@ -15,9 +15,16 @@ import com.gd.form.R;
 import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.PipeBaseInfoAdapter;
 import com.gd.form.base.BaseActivity;
+import com.gd.form.constants.Constant;
+import com.gd.form.model.ServerModel;
 import com.gd.form.model.StakeModel;
+import com.gd.form.net.Api;
+import com.gd.form.net.Net;
+import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
+import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -37,12 +44,14 @@ public class PipeBaseInfoActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
-    private  DeleteDialog deleteDialog;
+    private DeleteDialog deleteDialog;
     private List<StakeModel> resultModelList;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
+
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_pipe_base_info;
@@ -66,6 +75,7 @@ public class PipeBaseInfoActivity extends BaseActivity {
         initViews();
         initData();
     }
+
     private void initViews() {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
 
@@ -85,15 +95,45 @@ public class PipeBaseInfoActivity extends BaseActivity {
             @Override
             public void onItemClickListener(View v, int position) {
                 StakeModel stakeModel = resultModelList.get(position);
-                Intent intent = new Intent();
-                intent.putExtra("name",stakeModel.getName());
-                intent.putExtra("id",stakeModel.getId()+"");
-                intent.putExtra("lineId",stakeModel.getLineid());
-                setResult(RESULT_OK,intent);
-                finish();
+                switch (v.getId()) {
+                    case R.id.btn_delete:
+                        delete(stakeModel.getId(),position);
+                        break;
+                    default:
+                        Intent intent = new Intent();
+                        intent.putExtra("name", stakeModel.getName());
+                        intent.putExtra("id", stakeModel.getId() + "");
+                        intent.putExtra("lineId", stakeModel.getLineid());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                        break;
+                }
+
+
             }
         });
     }
+    private void delete(int id,int position) {
+        JsonObject params = new JsonObject();
+        params.addProperty("id", id);
+        Net.create(Api.class).deletePipe(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel serverModel) {
+                        ToastUtil.show(serverModel.getMsg());
+                        if (serverModel.getCode() == Constant.SUCCESS_CODE) {
+                            resultModelList.remove(position);
+                            adapter.notifyDataSetChanged();
+                            if (resultModelList != null && resultModelList.size() > 0) {
+                                llNoData.setVisibility(View.GONE);
+                            } else {
+                                llNoData.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
+    }
+
     @OnClick({
             R.id.iv_back,
     })

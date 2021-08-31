@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,18 +16,36 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.gd.form.R;
+import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
+import com.gd.form.model.GlideImageLoader;
 import com.gd.form.model.NextStationModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
@@ -38,11 +57,16 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
+import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.gd.form.view.ListLandTagDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+import com.yancy.gallerypick.config.GalleryConfig;
+import com.yancy.gallerypick.config.GalleryPick;
+import com.yancy.gallerypick.inter.IHandlerCallBack;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -131,7 +155,16 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     View viewDownStationKm;
     @BindView(R.id.view_stationNoPrefix)
     View viewStationNoPrefix;
-
+    @BindView(R.id.rvResultPhoto)
+    RecyclerView rvResultPhoto;
+    @BindView(R.id.rg_isCheckGood)
+    RadioGroup rgIsCheckGood;
+    @BindView(R.id.rg_isOnTop)
+    RadioGroup rgIsOnTop;
+    @BindView(R.id.rg_isComplete)
+    RadioGroup rgIsComplete;
+    @BindView(R.id.tv_material)
+    TextView tvMaterial;
     private int departmentId, pipeId;
     private ListLandTagDialog landTypeDialog;
     private ListDialog dialog;
@@ -142,12 +175,18 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     private List<Pipelineinfo> pipelineInfoList;
     private int SELECT_STATION = 101;
     private int SELECT_APPROVER = 102;
+    private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private String upStationId, approverName, approverId, id, lineId, highZoneName = "", pipeName = "";
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     private AMapLocation currentAmapLocation;
     private StationDetailInfo stationDetailInfo;
+    private IHandlerCallBack iHandlerCallBack;
+    private List<String> path;
+    private GalleryConfig galleryConfig;
+    private PhotoAdapter photoAdapter;
+    private List<String> nameList;
     /**
      * 需要进行检测的权限数组
      */
@@ -168,7 +207,13 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     //是否需要检测后台定位权限，设置为true时，如果用户没有给予后台定位权限会弹窗提示
     private boolean needCheckBackLocation = false;
     private boolean isLoactionSuccess;
-
+    private Dialog mWeiboDialog;
+    private OSS oss;
+    private OSSCredentialProvider ossCredentialProvider;
+    private String checkStatus = "合格";
+    private String isOnTop = "是";
+    private String isComplete = "是";
+    private List<String> landMaterialList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -186,10 +231,17 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         tvRight.setVisibility(View.VISIBLE);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
+        ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
+        oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
         landTypeDialog = new ListLandTagDialog(this);
         departmentList = new ArrayList<>();
         pipelineInfoList = new ArrayList<>();
+        path = new ArrayList<>();
         dialog = new ListDialog(this);
+        landMaterialList = new ArrayList<>();
+        landMaterialList.add("锌带");
+        landMaterialList.add("镀锌扁钢");
+        landMaterialList.add("铜线");
         if (getIntent() != null) {
             tag = getIntent().getStringExtra("tag");
             //查看
@@ -229,7 +281,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
 //                llLocation.setEnabled(false);
             } else if (tag.equals("add")) {
                 tvRight.setVisibility(View.GONE);
-                tvRight.setText("测量");
+                tvRight.setText("测量与维护");
 //                llArea.setEnabled(true);
 //                llPipeName.setEnabled(true);
 //                llGroundTagType.setEnabled(true);
@@ -252,6 +304,52 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         }
         getLocation();
         pipeDepartmentInfoGetList();
+        initGallery();
+        initConfig();
+        initListener();
+    }
+
+    private void initListener() {
+        rgIsCheckGood.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesCheck:
+                        checkStatus = "合格";
+                        break;
+                    case R.id.rb_noCheck:
+                        checkStatus = "不合格";
+                        break;
+                }
+            }
+        });
+
+        rgIsOnTop.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yes:
+                        isOnTop = "是";
+                        break;
+                    case R.id.rb_noCheck:
+                        isOnTop = "否";
+                        break;
+                }
+            }
+        });
+        rgIsComplete.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yesComplete:
+                        isComplete = "是";
+                        break;
+                    case R.id.rb_noComplete:
+                        isComplete = "否";
+                        break;
+                }
+            }
+        });
     }
 
     //获取详情
@@ -259,7 +357,6 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.parseInt(id));
         params.addProperty("pipeid", Integer.parseInt(lineId));
-        Log.i("tag","params==="+params);
         Net.create(Api.class).getStationDetailInfo(token, params)
                 .enqueue(new NetCallback<List<StationDetailInfo>>(this, true) {
                     @Override
@@ -274,12 +371,12 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             }
                             tvGroundTagType.setText(stationDetailInfo.getStaketype());
                             tvUpStationNo.setText(stationDetailInfo.getName());
-                            if(!TextUtils.isEmpty(stationDetailInfo.getCornerinfo())){
+                            if (!TextUtils.isEmpty(stationDetailInfo.getCornerinfo())) {
                                 etCorner.setText(stationDetailInfo.getCornerinfo());
                             }
-                            if(tvGroundTagType.getText().equals("转角桩")){
+                            if (tvGroundTagType.getText().equals("转角桩")) {
                                 etCorner.setEnabled(true);
-                            }else{
+                            } else {
                                 etCorner.setEnabled(false);
                             }
                             etLongitude.setText(stationDetailInfo.getEastlongitude());
@@ -315,6 +412,96 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                         }
                     }
                 });
+    }
+
+    private void initGallery() {
+        iHandlerCallBack = new IHandlerCallBack() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(List<String> photoList) {
+                path.clear();
+                for (String s : photoList) {
+                    path.add(s);
+                }
+                photoAdapter.notifyDataSetChanged();
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(PipeTagActivity.this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                for (int i = 0; i < path.size(); i++) {
+                    String suffix = path.get(i).substring(path.get(i).length() - 4);
+                    uploadFiles("stakes/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                }
+
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        };
+
+    }
+
+    //上传阿里云文件
+    public void uploadFiles(String fileName, String filePath) {
+        PutObjectRequest put = new PutObjectRequest(Constant.BUCKETSTRING, fileName, filePath);
+        // 此处调用异步上传方法
+        OSSAsyncTask ossAsyncTask = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                nameList.add(fileName);
+                if (nameList.size() == path.size()) {
+                    WeiboDialogUtils.closeDialog(mWeiboDialog);
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                ToastUtil.show("上传失败请重试");
+                // 请求异常。
+                if (clientException != null) {
+                    // 本地异常，如网络异常等。
+                }
+                if (serviceException != null) {
+
+
+                }
+            }
+        });
+
+    }
+
+    private void initConfig() {
+        galleryConfig = new GalleryConfig.Builder()
+                .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）
+                .iHandlerCallBack(iHandlerCallBack)     // 监听接口（必填）
+                .provider("com.gd.form.fileprovider")   // provider(必填)
+                .pathList(path)                         // 记录已选的图片
+                .multiSelect(true)                      // 是否多选   默认：false
+                .multiSelect(true, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
+                .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
+                .crop(false)                             // 快捷开启裁剪功能，仅当单选 或直接开启相机时有效
+                .crop(false, 1, 1, 500, 500)             // 配置裁剪功能的参数，   默认裁剪比例 1:1
+                .isShowCamera(true)                     // 是否现实相机按钮  默认：false
+                .filePath("/Gallery/Pictures")// 图片存放路径
+                .build();
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvResultPhoto.setLayoutManager(gridLayoutManager);
+        photoAdapter = new PhotoAdapter(this, path);
+        rvResultPhoto.setAdapter(photoAdapter);
     }
 
     private void getLocation() {
@@ -386,11 +573,24 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
             R.id.ll_pipeName,
             R.id.ll_upStationNo,
             R.id.ll_pipeManager,
+            R.id.rl_selectImage,
+            R.id.ll_landMaterial,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_landMaterial:
+                dialog.setData(landMaterialList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvMaterial.setText(landMaterialList.get(positionM));
+                    dialog.dismiss();
+                });
+                break;
+            case R.id.rl_selectImage:
+                initPermissions();
                 break;
             case R.id.ll_pipeManager:
 //                if(TextUtils.isEmpty(tvArea.getText().toString())){
@@ -508,6 +708,19 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         }
     }
 
+    // 授权管理
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(mContext, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        } else {
+            GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(this);
+        }
+    }
+
     private void getPipeManager() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("dptid", departmentId);
@@ -575,6 +788,16 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     }
 
     private void addPipeTag() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
@@ -593,6 +816,15 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         jsonObject.addProperty("remarks", etRemark.getText().toString());
         jsonObject.addProperty("highareasid", highZoneId);
         jsonObject.addProperty("pipeaccountid", tunnelId);
+        jsonObject.addProperty("routinginspection", checkStatus);
+        jsonObject.addProperty("abovepipe", isOnTop);
+        jsonObject.addProperty("perfectflag", isComplete);
+        jsonObject.addProperty("landmaterial",tvMaterial.getText().toString());
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            jsonObject.addProperty("uploadpicture", "00");
+        }
         Log.i("tag", "jsonObject===" + jsonObject);
         Net.create(Api.class).addPipeStakeInfo(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
@@ -685,18 +917,18 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
 //            ToastUtil.show("标准埋深格式不正确");
 //            return false;
 //        }
-        if (TextUtils.isEmpty(etName.getText().toString())) {
-            ToastUtil.show("请输入地主信息-姓名");
-            return false;
-        }
-        if (TextUtils.isEmpty(etPhone.getText().toString())) {
-            ToastUtil.show("请输入地主信息-联系电话");
-            return false;
-        }
-        if (TextUtils.isEmpty(etRemark.getText().toString())) {
-            ToastUtil.show("请输入备注");
-            return false;
-        }
+//        if (TextUtils.isEmpty(etName.getText().toString())) {
+//            ToastUtil.show("请输入地主信息-姓名");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(etPhone.getText().toString())) {
+//            ToastUtil.show("请输入地主信息-联系电话");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(etRemark.getText().toString())) {
+//            ToastUtil.show("请输入备注");
+//            return false;
+//        }
         return true;
     }
 
@@ -745,9 +977,9 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             tvDownStationKm.setText(model.getNextmile() + "");
                             tvStationNoPrefix.setText(model.getPrixname());
                             tvPipeManager.setText(model.getOwnername());
-                            if(tvGroundTagType.getText().equals("转角桩")){
+                            if (tvGroundTagType.getText().equals("转角桩")) {
                                 etCorner.setEnabled(true);
-                            }else{
+                            } else {
                                 etCorner.setEnabled(false);
                             }
                         }

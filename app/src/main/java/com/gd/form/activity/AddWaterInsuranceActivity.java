@@ -12,9 +12,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +44,10 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
@@ -92,6 +100,8 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     EditText etDistance;
     @BindView(R.id.et_company)
     EditText etCompany;
+    @BindView(R.id.tv_buildTime)
+    TextView tvBuildTime;
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 103;
     private int FILE_REQUEST_CODE = 100;
@@ -113,6 +123,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
+    private TimePickerView pvTime;
     /**
      * 需要进行检测的权限数组
      */
@@ -137,6 +148,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙"};
     private TagAdapter<String> mAdapter;
     private Set<Integer> selectedIndex;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -175,7 +187,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             public void onSelected(Set<Integer> selectPosSet) {
                 selectedIndex = selectPosSet;
                 StringBuilder selectedTagBuilder = new StringBuilder();
-                if(selectedIndex!=null && selectedIndex.size()>0){
+                if (selectedIndex != null && selectedIndex.size() > 0) {
                     for (int i : selectedIndex) {
                         selectedTagBuilder.append(dataSource[i]);
                         selectedTagBuilder.append(":");
@@ -194,6 +206,55 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         initGallery();
         initConfig();
         getLocation();
+        initTimePicker();
+    }
+
+    private void initTimePicker() {
+        //Dialog 模式下，在底部弹出
+        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                tvBuildTime.setText(format.format(date));
+
+            }
+        }).setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+            @Override
+            public void onTimeSelectChanged(Date date) {
+                Log.i("pvTime", "onTimeSelectChanged");
+            }
+        }).setType(new boolean[]{true, true, true, false, false, false})
+                .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
+                .addOnCancelClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.i("pvTime", "onCancelClickListener");
+                    }
+                })
+                .setItemVisibleCount(5) //若设置偶数，实际值会加1（比如设置6，则最大可见条目为7）
+                .setLineSpacingMultiplier(2.0f)
+                .isAlphaGradient(true)
+                .build();
+
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+                dialogWindow.setDimAmount(0.3f);
+            }
+        }
     }
 
     private void getWaterInsuranceDetail() {
@@ -332,11 +393,15 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             R.id.ll_selectPic,
             R.id.ll_location,
             R.id.btn_commit,
+            R.id.ll_buildTime,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_buildTime:
+                pvTime.show(view);
                 break;
             case R.id.btn_commit:
                 if (paramsIsComplete()) {
@@ -397,7 +462,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         } else {
             params.addProperty("uploadfile", "00");
         }
-        Log.i("tag","params==="+params);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).addWaterProtection(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -442,7 +507,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         } else {
             params.addProperty("uploadfile", "00");
         }
-        Log.i("tag","params==="+params);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).updateWaterProtection(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -476,6 +541,10 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         }
         if (TextUtils.isEmpty(etCompany.getText().toString())) {
             ToastUtil.show("请输入施工单位");
+            return false;
+        }
+        if (TextUtils.isEmpty(tvBuildTime.getText().toString())) {
+            ToastUtil.show("请选择修建时间");
             return false;
         }
         if (TextUtils.isEmpty(selectPressureName)) {
