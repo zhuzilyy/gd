@@ -666,12 +666,12 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("dangertype", tvRiskType.getText().toString());
         params.addProperty("presolution", etBeforeChangeMethod.getText().toString());
         params.addProperty("aftsolution", etChangeMethod.getText().toString());
+
         if (!TextUtils.isEmpty(photoSb.toString())) {
             params.addProperty("uploadpicture", photoSb.toString());
         } else {
             params.addProperty("uploadpicture", "00");
         }
-        Log.i("tag", "params==" + params);
         Net.create(Api.class).updateBuilding(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

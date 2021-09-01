@@ -1,7 +1,6 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,6 +36,8 @@ public class PipeMeasureDetailActivity extends BaseActivity {
     TextView tvDepthNotEnough;
     @BindView(R.id.tv_method)
     TextView tvMethod;
+    @BindView(R.id.tv_tester)
+    TextView tvTester;
     private String token, userId;
     private String stationId, time;
 
@@ -59,8 +60,6 @@ public class PipeMeasureDetailActivity extends BaseActivity {
         if (getIntent() != null) {
             stationId = getIntent().getExtras().getString("stationId");
             time = getIntent().getExtras().getString("time");
-            Log.i("tag","stationId=="+stationId);
-            Log.i("tag","time=="+time);
         }
         getDetail(stationId, time);
     }
@@ -69,18 +68,19 @@ public class PipeMeasureDetailActivity extends BaseActivity {
         //获取测量数据
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", stationId);
-        params.addProperty("measuredate",TimeUtil.longToFormatTimeHMS(Long.parseLong(time)));
+        params.addProperty("measuredate", TimeUtil.longToFormatTimeHMS(Long.parseLong(time)));
         Net.create(Api.class).getMeasureRecordDetail(token, params)
                 .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override
                     public void onResponse(List<MeasureModel> list) {
-                        if(list!=null && list.size()>0){
+                        if (list != null && list.size() > 0) {
                             MeasureModel measureModel = list.get(0);
                             tvTime.setText(TimeUtil.longToFormatTime(measureModel.getMeasuredate().getTime()));
-                            tvPipeDepth.setText(measureModel.getPipedeep()+"");
-                            tvOpticalCableDepth.setText(measureModel.getCabledeep()+"");
-                            tvDepthNotEnough.setText(measureModel.getLockdeep()+"");
+                            tvPipeDepth.setText(measureModel.getPipedeep() + "");
+                            tvOpticalCableDepth.setText(measureModel.getCabledeep() + "");
+                            tvDepthNotEnough.setText(measureModel.getLockdeep() + "");
                             tvMethod.setText(measureModel.getResolution());
+                            tvTester.setText(measureModel.getTester());
                         }
                     }
                 });

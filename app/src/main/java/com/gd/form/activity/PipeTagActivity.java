@@ -246,6 +246,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
             tag = getIntent().getStringExtra("tag");
             //查看
             if (tag.equals("update")) {
+                tvRight.setText("测量与维护");
                 id = getIntent().getStringExtra("id");
                 lineId = getIntent().getStringExtra("lineId");
                 getDetailInfo(id, lineId);

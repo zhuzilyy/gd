@@ -4,7 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/layout_title" />
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:textSize="@dimen/s_14"
+            android:id="@+id/mainSearchEditText"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d_9"
+            android:layout_marginLeft="@dimen/d_9"
+            android:layout_marginTop="@dimen/d_5"
+            android:layout_marginEnd="@dimen/d_9"
+            android:layout_marginRight="@dimen/d_9"
+            android:layout_marginBottom="@dimen/d_5"
+            android:background="@drawable/main_edit_bg"
+            android:drawableRight="@mipmap/main_search"
+            android:drawablePadding="@dimen/d_9"
+            android:hint="请输入搜索内容"
+            android:imeOptions="actionSearch"
+            android:padding="@dimen/d_6"
+            android:singleLine="true" />
+        <Button
+            android:background="@drawable/bg_search"
+            android:layout_marginRight="@dimen/d_10"
+            android:textColor="#fff"
+            android:id="@+id/btn_search"
+            android:text="搜索"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"/>
 
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

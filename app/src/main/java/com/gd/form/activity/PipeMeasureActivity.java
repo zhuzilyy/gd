@@ -133,7 +133,7 @@ public class PipeMeasureActivity extends BaseActivity {
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 tvTime.setText(format.format(date));
 
             }
@@ -199,18 +199,8 @@ public class PipeMeasureActivity extends BaseActivity {
             ToastUtil.show("光缆埋深数据格式不正确");
             return false;
         }
-
-//        if (TextUtils.isEmpty(etDepthNotEnough.getText().toString())) {
-//            ToastUtil.show("埋深不足(m)不能为空");
-//            return false;
-//        }
-//        if (!NumberUtil.isNumber(etDepthNotEnough.getText().toString())) {
-//            ToastUtil.show("埋深不足(m)数据格式不正确");
-//            return false;
-//        }
-
         if (TextUtils.isEmpty(etMethod.getText().toString())) {
-            ToastUtil.show("处理措施");
+            ToastUtil.show("请输入维护记录");
             return false;
         }
         return true;

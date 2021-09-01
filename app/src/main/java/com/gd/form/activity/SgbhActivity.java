@@ -287,9 +287,9 @@ public class SgbhActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_zh:
-//                getWaterStations();
-                Intent intentStartStation = new Intent(this, WaterStationActivity.class);
-                startActivityForResult(intentStartStation, SELECT_STATION);
+                getWaterStations();
+//                Intent intentStartStation = new Intent(this, WaterStationActivity.class);
+//                startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
             case R.id.ll_jcsj:
             case R.id.ll_tbrq:

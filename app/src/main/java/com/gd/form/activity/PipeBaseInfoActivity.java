@@ -22,7 +22,6 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
-import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -120,8 +119,10 @@ public class PipeBaseInfoActivity extends BaseActivity {
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel serverModel) {
-                        ToastUtil.show(serverModel.getMsg());
                         if (serverModel.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update");
+                            sendBroadcast(intent);
                             resultModelList.remove(position);
                             adapter.notifyDataSetChanged();
                             if (resultModelList != null && resultModelList.size() > 0) {

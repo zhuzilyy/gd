@@ -451,7 +451,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         params.addProperty("locations", etLocation.getText().toString());
         params.addProperty("protectunit", etCompany.getText().toString());
         params.addProperty("creator", userId);
-        params.addProperty("creatime", TimeUtil.getCurrentTime());
+        params.addProperty("creatime", tvBuildTime.getText().toString());
         if (!TextUtils.isEmpty(photoSb.toString())) {
             params.addProperty("uploadpicture", photoSb.toString());
         } else {
@@ -462,7 +462,6 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         } else {
             params.addProperty("uploadfile", "00");
         }
-        Log.i("tag", "params===" + params);
         Net.create(Api.class).addWaterProtection(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

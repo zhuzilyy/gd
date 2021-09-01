@@ -202,14 +202,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#80FFFFFF"
-        android:gravity="center"
+        android:orientation="vertical"
         android:paddingTop="@dimen/d_12"
         android:paddingBottom="@dimen/d_12">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
             android:text="维护记录"
@@ -219,18 +218,16 @@
         <EditText
             android:maxLength="30"
             android:id="@+id/et_method"
-            android:layout_width="@dimen/d_0"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d_15"
             android:layout_marginLeft="@dimen/d_15"
             android:layout_marginEnd="@dimen/d_15"
             android:layout_marginRight="@dimen/d_15"
-            android:layout_weight="1"
+            android:layout_marginTop="@dimen/d_10"
             android:background="@null"
             android:ellipsize="end"
-            android:gravity="end"
             android:hint="维护记录"
-            android:singleLine="true"
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />
 

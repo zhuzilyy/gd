@@ -1,9 +1,9 @@
 package com.gd.form.net;
 
 
-
-
 import com.gd.form.app.App;
+
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -33,6 +33,9 @@ public class ServiceGenerator {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cookieJar(new CookieJarImpl(new SPCookieStore(App.getInstance())));
         builder.addInterceptor(new HeaderInterceptor());
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+        builder.readTimeout(60, TimeUnit.SECONDS);
+        builder.writeTimeout(60, TimeUnit.SECONDS);
         return builder.build();
     }
 }

@@ -1178,12 +1178,20 @@ public interface Api {
     Call<ServerModel> deletePipe(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     * 删除管道
+     * 搜索水工
      *
      * @return
      */
     @POST("waterprojectByEmpDptSearch.html")
-    Call<List<StationNoModel>> getWaterStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    Call<List<WaterModel>> getWaterStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 风向标、宣教栏、视频监控、其他 增加接口：
+     *
+     * @return
+     */
+    @POST("pipestakeothersAdd.html")
+    Call<ServerModel> addSomeOthers(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 
