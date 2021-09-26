@@ -413,6 +413,21 @@
             android:name=".activity.WaterStationActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SomeOthersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddProjectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProjectListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProjectRecordListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddProjectRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -165,6 +166,19 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     RadioGroup rgIsComplete;
     @BindView(R.id.tv_material)
     TextView tvMaterial;
+    @BindView(R.id.rb_yes)
+    RadioButton rbYes;
+    @BindView(R.id.rb_no)
+    RadioButton rbNo;
+    @BindView(R.id.rb_yesCheck)
+    RadioButton rbYesCheck;
+    @BindView(R.id.rb_noCheck)
+    RadioButton rbNoCheck;
+    @BindView(R.id.rb_yesComplete)
+    RadioButton rbYesComplete;
+    @BindView(R.id.rb_noComplete)
+    RadioButton rbNoComplete;
+
     private int departmentId, pipeId;
     private ListLandTagDialog landTypeDialog;
     private ListDialog dialog;
@@ -214,6 +228,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     private String isOnTop = "是";
     private String isComplete = "是";
     private List<String> landMaterialList;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -237,6 +252,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         departmentList = new ArrayList<>();
         pipelineInfoList = new ArrayList<>();
         path = new ArrayList<>();
+        nameList = new ArrayList<>();
         dialog = new ListDialog(this);
         landMaterialList = new ArrayList<>();
         landMaterialList.add("锌带");
@@ -358,6 +374,8 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.parseInt(id));
         params.addProperty("pipeid", Integer.parseInt(lineId));
+        Log.i("tag","id====="+id);
+        Log.i("tag","pipeid====="+ Integer.parseInt(lineId));
         Net.create(Api.class).getStationDetailInfo(token, params)
                 .enqueue(new NetCallback<List<StationDetailInfo>>(this, true) {
                     @Override
@@ -396,6 +414,29 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             pipeId = stationDetailInfo.getPipeid();
                             approverId = stationDetailInfo.getPipeowners();
                             tvPipeManager.setText(stationDetailInfo.getOwnername());
+                            if (stationDetailInfo.getAbovepipe().equals("是")) {
+                                rbYes.setChecked(true);
+                            } else {
+                                rbNo.setChecked(true);
+                            }
+                            if (stationDetailInfo.getPerfectflag().equals("是")) {
+                                rbYesComplete.setChecked(true);
+                            } else {
+                                rbNoComplete.setChecked(true);
+                            }
+                            if (stationDetailInfo.getRoutinginspection().equals("合格")) {
+                                rbYesCheck.setChecked(true);
+                            } else {
+                                rbNoCheck.setChecked(true);
+                            }
+                            if (!TextUtils.isEmpty(stationDetailInfo.getUploadpicture())) {
+                                String[] photoArr = stationDetailInfo.getUploadpicture().split(";");
+                                for (int i = 0; i < photoArr.length; i++) {
+                                    path.add(photoArr[i]);
+                                }
+                                photoAdapter.notifyDataSetChanged();
+                            }
+                            tvMaterial.setText(stationDetailInfo.getLandmaterial());
                             if (currentAmapLocation != null) {
                                 if (TextUtils.isEmpty(stationDetailInfo.getEastlongitude())) {
                                     etLongitude.setText(currentAmapLocation.getLongitude() + "");
@@ -749,6 +790,16 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     }
 
     private void updateTag() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
@@ -770,6 +821,15 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         jsonObject.addProperty("pipeaccountid", tunnelId);
         jsonObject.addProperty("highareasname", highZoneName);
         jsonObject.addProperty("pipeaccountname", pipeName);
+        jsonObject.addProperty("routinginspection", checkStatus);
+        jsonObject.addProperty("abovepipe", isOnTop);
+        jsonObject.addProperty("perfectflag", isComplete);
+        jsonObject.addProperty("landmaterial", tvMaterial.getText().toString());
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            jsonObject.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            jsonObject.addProperty("uploadpicture", "00");
+        }
         Log.i("tag", "jsonObject====" + jsonObject);
         Net.create(Api.class).updateStation(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
@@ -820,7 +880,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         jsonObject.addProperty("routinginspection", checkStatus);
         jsonObject.addProperty("abovepipe", isOnTop);
         jsonObject.addProperty("perfectflag", isComplete);
-        jsonObject.addProperty("landmaterial",tvMaterial.getText().toString());
+        jsonObject.addProperty("landmaterial", tvMaterial.getText().toString());
         if (!TextUtils.isEmpty(photoSb.toString())) {
             jsonObject.addProperty("uploadpicture", photoSb.toString());
         } else {

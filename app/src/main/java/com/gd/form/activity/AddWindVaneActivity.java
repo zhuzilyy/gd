@@ -132,8 +132,6 @@ public class AddWindVaneActivity extends BaseActivity {
                 tvTitle.setText("添加宣教栏");
             } else if (activityName.equals("other")) {
                 tvTitle.setText("添加地震监测等设备设施");
-//                llName.setVisibility(View.VISIBLE);
-//                viewName.setVisibility(View.VISIBLE);
             }
         }
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
@@ -386,12 +384,12 @@ public class AddWindVaneActivity extends BaseActivity {
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.putExtra("name", tvStationNo.getText().toString());
                             intent.putExtra("distance", etDistance.getText().toString());
                             intent.putExtra("id", stationId);
+                            intent.putExtra("otherId", result.getMsg());
                             intent.setAction("com.action.update");
                             sendBroadcast(intent);
                             setResult(RESULT_OK, intent);

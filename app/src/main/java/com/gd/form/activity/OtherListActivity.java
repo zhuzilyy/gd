@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
-import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -84,6 +84,9 @@ public class OtherListActivity extends BaseActivity {
         if(getIntent()!=null){
             pipeId =  getIntent().getExtras().getString("pipeId");
             departmentId =  getIntent().getExtras().getString("departmentId");
+            if(TextUtils.isEmpty(pipeId)){
+                tvRight.setVisibility(View.GONE);
+            }
         }
         initViews();
         initData();
@@ -106,8 +109,19 @@ public class OtherListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                deleteIndex = position;
-                deleteDialog.show();
+                switch (v.getId()){
+                    case R.id.btn_delete:
+                        deleteIndex = position;
+                        deleteDialog.show();
+                        break;
+                    case R.id.btn_check:
+                        Intent intent = new Intent(OtherListActivity.this, SomeOthersActivity.class);
+                        intent.putExtra("id",resultOtherList.get(position).getId());
+                        intent.putExtra("name","other");
+                        startActivity(intent);
+                        break;
+                }
+
             }
         });
         deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
@@ -125,13 +139,11 @@ public class OtherListActivity extends BaseActivity {
     private void deleteOther() {
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", resultOtherList.get(deleteIndex).getStakeid());
-        params.addProperty("othername", resultOtherList.get(deleteIndex).getName());
-        params.addProperty("others", resultOtherList.get(deleteIndex).getDistance());
-        Net.create(Api.class).deleteOther(token, params)
+        params.addProperty("id", resultOtherList.get(deleteIndex).getId());
+        Net.create(Api.class).deleteSomeOthers(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.setAction("com.action.update");
@@ -178,10 +190,12 @@ public class OtherListActivity extends BaseActivity {
             String otherName = data.getStringExtra("otherName");
             String distance = data.getStringExtra("distance");
             String id = data.getStringExtra("id");
+            String otherId = data.getStringExtra("otherId");
             SearchOtherModel searchOtherModel = new SearchOtherModel();
             searchOtherModel.setStakename(name);
             searchOtherModel.setDistance(distance);
             searchOtherModel.setName(otherName);
+            searchOtherModel.setId(otherId);
             searchOtherModel.setStakeid(Integer.parseInt(id));
             resultOtherList.add(searchOtherModel);
             adapter.notifyDataSetChanged();

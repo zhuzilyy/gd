@@ -87,10 +87,6 @@ public class FolderDataRecycleAdapter extends RecyclerView.Adapter<FolderDataRec
                 intent.setData(content_url);
                 mContext.startActivity(intent);
                 tipDialog.dismiss();
-//                Intent intent = new Intent(mContext, WebViewActivity.class);
-//                intent.putExtra("filePath", file.getAbsolutePath());
-//                mContext.startActivity(intent);
-//                tipDialog.dismiss();
             }
         });
         upload.setOnClickListener(new View.OnClickListener() {

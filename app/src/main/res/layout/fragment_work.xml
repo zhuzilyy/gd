@@ -487,7 +487,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="上报事件查询"
+                    android:text="事件记录查询"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 

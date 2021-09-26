@@ -45,7 +45,7 @@ public class PipeBaseInfoActivity extends BaseActivity {
     private String token, userId;
     private DeleteDialog deleteDialog;
     private List<StakeModel> resultModelList;
-
+    private int deletePosition = -1;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -60,6 +60,7 @@ public class PipeBaseInfoActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道标识信息");
+        deleteDialog = new DeleteDialog(this);
         token = (String) SPUtil.get(PipeBaseInfoActivity.this, "token", "");
         userId = (String) SPUtil.get(PipeBaseInfoActivity.this, "userId", "");
         if (getIntent() != null) {
@@ -96,7 +97,8 @@ public class PipeBaseInfoActivity extends BaseActivity {
                 StakeModel stakeModel = resultModelList.get(position);
                 switch (v.getId()) {
                     case R.id.btn_delete:
-                        delete(stakeModel.getId(),position);
+                        deletePosition = position;
+                        deleteDialog.show();
                         break;
                     default:
                         Intent intent = new Intent();
@@ -109,6 +111,17 @@ public class PipeBaseInfoActivity extends BaseActivity {
                 }
 
 
+            }
+        });
+        deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick() {
+                deleteDialog.dismiss();
+                delete(resultModelList.get(deletePosition).getId(),deletePosition);
+            }
+            @Override
+            public void onNegativeClick() {
+                deleteDialog.dismiss();
             }
         });
     }

@@ -214,7 +214,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 tvBuildTime.setText(format.format(date));
 
             }
@@ -462,6 +462,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         } else {
             params.addProperty("uploadfile", "00");
         }
+        Log.i("tag","params===="+params);
         Net.create(Api.class).addWaterProtection(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,7 +52,8 @@ public class VideoMonitorListActivity extends BaseActivity {
     private List<SearchVideoModel> resultVideoList;
     private final int ADD_VIDEO = 100;
     private int deleteIndex;
-    private String pipeId,departmentId;
+    private String pipeId, departmentId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -81,9 +83,12 @@ public class VideoMonitorListActivity extends BaseActivity {
                 llNoData.setVisibility(View.VISIBLE);
             }
         }
-        if(getIntent()!=null){
-            pipeId =  getIntent().getExtras().getString("pipeId");
-            departmentId =  getIntent().getExtras().getString("departmentId");
+        if (getIntent() != null) {
+            pipeId = getIntent().getExtras().getString("pipeId");
+            departmentId = getIntent().getExtras().getString("departmentId");
+            if(TextUtils.isEmpty(pipeId)){
+                tvRight.setVisibility(View.GONE);
+            }
         }
         initViews();
         initData();
@@ -107,8 +112,19 @@ public class VideoMonitorListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                deleteIndex = position;
-                deleteDialog.show();
+                switch (v.getId()) {
+                    case R.id.btn_delete:
+                        deleteIndex = position;
+                        deleteDialog.show();
+                        break;
+                    case R.id.btn_check:
+                        Intent intent = new Intent(VideoMonitorListActivity.this, SomeOthersActivity.class);
+                        intent.putExtra("id",resultVideoList.get(position).getId());
+                        intent.putExtra("name","videoMonitoring");
+                        startActivity(intent);
+                        break;
+                }
+
             }
         });
         deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
@@ -128,8 +144,8 @@ public class VideoMonitorListActivity extends BaseActivity {
     private void deleteVideo() {
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", resultVideoList.get(deleteIndex).getStakeid());
-        params.addProperty("viewmonitor", resultVideoList.get(deleteIndex).getDistance());
-        Net.create(Api.class).deleteVideo(token, params)
+        params.addProperty("id", resultVideoList.get(deleteIndex).getId());
+        Net.create(Api.class).deleteSomeOthers(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
@@ -164,8 +180,8 @@ public class VideoMonitorListActivity extends BaseActivity {
             case R.id.tv_right:
                 Intent intent = new Intent(VideoMonitorListActivity.this, AddWindVaneActivity.class);
                 intent.putExtra("name", "videoMonitoring");
-                intent.putExtra("departmentId",departmentId);
-                intent.putExtra("pipeId",pipeId);
+                intent.putExtra("departmentId", departmentId);
+                intent.putExtra("pipeId", pipeId);
                 startActivityForResult(intent, ADD_VIDEO);
                 break;
         }
@@ -181,9 +197,11 @@ public class VideoMonitorListActivity extends BaseActivity {
             String name = data.getStringExtra("name");
             String distance = data.getStringExtra("distance");
             String id = data.getStringExtra("id");
+            String otherId = data.getStringExtra("otherId");
             SearchVideoModel searchVideoModel = new SearchVideoModel();
             searchVideoModel.setStakename(name);
             searchVideoModel.setDistance(distance);
+            searchVideoModel.setId(otherId);
             searchVideoModel.setStakeid(Integer.parseInt(id));
             resultVideoList.add(searchVideoModel);
             adapter.notifyDataSetChanged();

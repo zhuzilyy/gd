@@ -18,4 +18,12 @@ public class ServerModel {
     public void setCode(int code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "ServerModel{" +
+                "msg='" + msg + '\'' +
+                ", code=" + code +
+                '}';
+    }
 }

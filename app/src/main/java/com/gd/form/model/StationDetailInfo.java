@@ -31,6 +31,20 @@ public class StationDetailInfo {
     private String waterprotect;
     private String windvanes;
     private String ownername;
+    private String routinginspection;
+    private String abovepipe;
+    private String perfectflag;
+    private String landmaterial;
+    private String uploadpicture;
+
+    public String getUploadpicture() {
+        return uploadpicture;
+    }
+
+    public void setUploadpicture(String uploadpicture) {
+        this.uploadpicture = uploadpicture;
+    }
+
     public String getOwnername() {
         return ownername;
     }
@@ -269,5 +283,37 @@ public class StationDetailInfo {
 
     public void setWindvanes(String windvanes) {
         this.windvanes = windvanes;
+    }
+
+    public String getRoutinginspection() {
+        return routinginspection;
+    }
+
+    public void setRoutinginspection(String routinginspection) {
+        this.routinginspection = routinginspection;
+    }
+
+    public String getAbovepipe() {
+        return abovepipe;
+    }
+
+    public void setAbovepipe(String abovepipe) {
+        this.abovepipe = abovepipe;
+    }
+
+    public String getPerfectflag() {
+        return perfectflag;
+    }
+
+    public void setPerfectflag(String perfectflag) {
+        this.perfectflag = perfectflag;
+    }
+
+    public String getLandmaterial() {
+        return landmaterial;
+    }
+
+    public void setLandmaterial(String landmaterial) {
+        this.landmaterial = landmaterial;
     }
 }

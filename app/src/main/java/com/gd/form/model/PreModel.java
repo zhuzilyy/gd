@@ -6,6 +6,15 @@ public class PreModel implements Serializable {
     private String distance;
     private int stakeid;
     private String stakename;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDistance() {
         return distance;

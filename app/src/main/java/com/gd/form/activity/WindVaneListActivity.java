@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
-import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -47,11 +47,12 @@ public class WindVaneListActivity extends BaseActivity {
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     private String token, userId;
-    private  DeleteDialog deleteDialog;
+    private DeleteDialog deleteDialog;
     private List<WindModel> resultWindList;
     private final int ADD_WIND = 100;
     private int deleteIndex;
-    private String pipeId,departmentId;
+    private String pipeId, departmentId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -81,9 +82,12 @@ public class WindVaneListActivity extends BaseActivity {
                 llNoData.setVisibility(View.VISIBLE);
             }
         }
-        if(getIntent()!=null){
-            pipeId =  getIntent().getExtras().getString("pipeId");
-            departmentId =  getIntent().getExtras().getString("departmentId");
+        if (getIntent() != null) {
+            pipeId = getIntent().getExtras().getString("pipeId");
+            departmentId = getIntent().getExtras().getString("departmentId");
+            if(TextUtils.isEmpty(pipeId)){
+                tvRight.setVisibility(View.GONE);
+            }
         }
         initViews();
         initData();
@@ -107,8 +111,19 @@ public class WindVaneListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                deleteIndex = position;
-                deleteDialog.show();
+                switch (v.getId()) {
+                    case R.id.btn_delete:
+                        deleteIndex = position;
+                        deleteDialog.show();
+                        break;
+                    case R.id.btn_check:
+                        Intent intent = new Intent(WindVaneListActivity.this, SomeOthersActivity.class);
+                        intent.putExtra("id",resultWindList.get(position).getId());
+                        intent.putExtra("name","windVane");
+                        startActivity(intent);
+                        break;
+                }
+
             }
         });
         deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
@@ -117,21 +132,22 @@ public class WindVaneListActivity extends BaseActivity {
                 deleteWind();
                 deleteDialog.dismiss();
             }
+
             @Override
             public void onNegativeClick() {
                 deleteDialog.dismiss();
             }
         });
     }
+
     private void deleteWind() {
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", resultWindList.get(deleteIndex).getStakeid());
-        params.addProperty("windvanes", resultWindList.get(deleteIndex).getDistance());
-        Net.create(Api.class).deleteWindVane(token, params)
+        params.addProperty("id", resultWindList.get(deleteIndex).getId());
+        Net.create(Api.class).deleteSomeOthers(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.setAction("com.action.update");
@@ -149,6 +165,7 @@ public class WindVaneListActivity extends BaseActivity {
                     }
                 });
     }
+
     @OnClick({
             R.id.iv_back,
             R.id.tv_right,
@@ -159,11 +176,11 @@ public class WindVaneListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_right:
-                Intent intent = new Intent(WindVaneListActivity.this,AddWindVaneActivity.class);
-                intent.putExtra("name","windVane");
-                intent.putExtra("departmentId",departmentId);
-                intent.putExtra("pipeId",pipeId);
-                startActivityForResult(intent,ADD_WIND);
+                Intent intent = new Intent(WindVaneListActivity.this, AddWindVaneActivity.class);
+                intent.putExtra("name", "windVane");
+                intent.putExtra("departmentId", departmentId);
+                intent.putExtra("pipeId", pipeId);
+                startActivityForResult(intent, ADD_WIND);
                 break;
         }
     }
@@ -171,17 +188,19 @@ public class WindVaneListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if (data == null) {
             return;
         }
-        if(requestCode == ADD_WIND){
-           String name =  data.getStringExtra("name");
-           String distance =  data.getStringExtra("distance");
-           String id =  data.getStringExtra("id");
+        if (requestCode == ADD_WIND) {
+            String name = data.getStringExtra("name");
+            String distance = data.getStringExtra("distance");
+            String id = data.getStringExtra("id");
+            String otherId = data.getStringExtra("otherId");
             WindModel windModel = new WindModel();
             windModel.setStakename(name);
             windModel.setDistance(distance);
             windModel.setStakeid(Integer.parseInt(id));
+            windModel.setId(otherId);
             resultWindList.add(windModel);
             adapter.notifyDataSetChanged();
             if (resultWindList != null && resultWindList.size() > 0) {

@@ -34,12 +34,22 @@ public class FxglActivity extends BaseActivity {
             R.id.iv_back,
             R.id.ll_waterInsurance,
             R.id.ll_concealed_work,
+            R.id.ll_addProject,
+            R.id.ll_project,
 
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_project:
+                openActivity(ProjectListActivity.class);
+                break;
+            case R.id.ll_addProject:
+                Bundle bundle = new Bundle();
+                bundle.putString("tag","add");
+                openActivity(AddProjectActivity.class,bundle);
                 break;
             case R.id.ll_waterInsurance:
                 openActivity(WaterInsuranceActivity.class);

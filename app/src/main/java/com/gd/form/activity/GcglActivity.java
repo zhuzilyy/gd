@@ -33,13 +33,17 @@ public class GcglActivity extends BaseActivity {
     @OnClick({
             R.id.iv_back,
             R.id.ll_engineering_field,
-
-
+            R.id.ll_addProject,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_addProject:
+                Bundle bundle = new Bundle();
+                bundle.putString("tag","add");
+                openActivity(AddProjectActivity.class,bundle);
                 break;
             case R.id.ll_engineering_field:
                 openActivity(EngineeringFieldActivity.class);

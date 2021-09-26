@@ -7,6 +7,7 @@ public class StationNoModel {
     private String eastlongitude;
     private int id;
     private int pipeid;
+    private int lineid;
     private String landinfo;
     private String landtel;
     private String locationdesc;
@@ -16,6 +17,14 @@ public class StationNoModel {
     private String staketype;
     private String standardeep;
     private String topagraphy;
+    public int getLineid() {
+        return lineid;
+    }
+
+    public void setLineid(int lineid) {
+        this.lineid = lineid;
+    }
+
     public String getCornerinfo() {
         return cornerinfo;
     }

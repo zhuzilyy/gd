@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -296,7 +295,6 @@ public class SearchStationActivity extends BaseActivity {
                         dialog.setListItemClick(positionM -> {
                             tvDepartmentName.setText(areaList.get(positionM));
                             departmentId = idList.get(positionM);
-                            Log.i("tag", "departmentId===" + departmentId);
                             dialog.dismiss();
                         });
                     }

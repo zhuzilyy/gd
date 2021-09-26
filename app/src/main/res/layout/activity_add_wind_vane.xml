@@ -13,7 +13,6 @@
         android:gravity="center"
         android:paddingTop="@dimen/d_12"
         android:paddingBottom="@dimen/d_12">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

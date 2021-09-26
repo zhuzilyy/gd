@@ -22,9 +22,13 @@ import com.gd.form.model.MeasureModel;
 import com.gd.form.model.NextStationModel;
 import com.gd.form.model.NoApproveModel;
 import com.gd.form.model.OssModel;
+import com.gd.form.model.OtherDetailModel;
 import com.gd.form.model.OverTimeModel;
 import com.gd.form.model.Pipelineinfo;
 import com.gd.form.model.Pipemploys;
+import com.gd.form.model.ProgressModel;
+import com.gd.form.model.ProjectDetailModel;
+import com.gd.form.model.ProjectModel;
 import com.gd.form.model.ResultMsg;
 import com.gd.form.model.SearchArea;
 import com.gd.form.model.SearchBuildingModel;
@@ -1192,6 +1196,70 @@ public interface Api {
      */
     @POST("pipestakeothersAdd.html")
     Call<ServerModel> addSomeOthers(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 风向标、宣教栏、视频监控、其他详情
+     *
+     * @return
+     */
+    @POST("pipestakeothersSelectKey.html")
+    Call<OtherDetailModel> otherDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 风向标、宣教栏、视频监控、其他详情
+     *
+     * @return
+     */
+    @POST("pipestakeothersdelete.html")
+    Call<ServerModel> deleteSomeOthers(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 添加工程
+     *
+     * @return
+     */
+    @POST("projectManageAdd.html")
+    Call<ServerModel> addProject(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 更新工程
+     *
+     * @return
+     */
+    @POST("projectManageUpdate.html")
+    Call<ServerModel> updateProject(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 添加工程
+     *
+     * @return
+     */
+    @POST("getProjectByDeptId.html")
+    Call<List<ProjectModel>> getProjectList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取添加的工程详情
+     *
+     * @return
+     */
+    @POST("getProjectByPrimaryKey.html")
+    Call<ProjectDetailModel> getProjectDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取进度列表
+     *
+     * @return
+     */
+    @POST("getProjectRecordsByprjid.html")
+    Call<List<ProgressModel>> getProjectProgressList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取进度列表
+     *
+     * @return
+     */
+    @POST("projectRecordAdd.html")
+    Call<ServerModel> addProjectRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 }
 
 

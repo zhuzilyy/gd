@@ -46,7 +46,7 @@ public class WaterProtectionListActivity extends BaseActivity {
     private WaterProtectionListAdapter adapter;
     private String token, userId;
     private List<WaterModel> resultWaterList;
-
+    private String activityName;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -65,6 +65,7 @@ public class WaterProtectionListActivity extends BaseActivity {
         userId = (String) SPUtil.get(WaterProtectionListActivity.this, "userId", "");
         if (getIntent() != null) {
             List<WaterModel> waterModelList = (List<WaterModel>) getIntent().getExtras().getSerializable("waters");
+            activityName = getIntent().getExtras().getString("activityName");
             if (waterModelList != null && waterModelList.size() > 0) {
                 resultWaterList = waterModelList;
                 llNoData.setVisibility(View.GONE);
@@ -135,7 +136,9 @@ public class WaterProtectionListActivity extends BaseActivity {
                         resultWaterList.clear();
                         for (int i = 0; i < list.size(); i++) {
                             WaterModel waterModel = list.get(i);
-                            waterModel.setType("select");
+                            if("approveWater".equals(activityName)){
+                                waterModel.setType("select");
+                            }
                             resultWaterList.add(waterModel);
                         }
                         if (list != null && list.size() > 0) {

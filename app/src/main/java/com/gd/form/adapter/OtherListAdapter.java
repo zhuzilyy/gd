@@ -32,8 +32,13 @@ public class OtherListAdapter extends BaseRecyclerViewAdapter<SearchOtherModel> 
         tvStationNo.setText(model.getStakename());
         tvDistance.setText(model.getDistance());
         viewHolder.getContentView().findViewById(R.id.btn_delete).setOnClickListener(view -> {
-            if(onItemClickListener!=null){
-                onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
+            }
+        });
+        viewHolder.getContentView().findViewById(R.id.btn_check).setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
             }
         });
     }

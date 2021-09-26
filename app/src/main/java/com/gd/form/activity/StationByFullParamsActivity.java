@@ -48,7 +48,8 @@ public class StationByFullParamsActivity extends BaseActivity {
     private List<StationNoModel> stationNoModelList;
     private StationAdapter adapter;
     private String selectTag;
-    private String token, userId,pipeId,departmentId;
+    private String token, userId, pipeId, departmentId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,7 @@ public class StationByFullParamsActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                  //跳转到标识列表界面
+                //跳转到标识列表界面
                 Intent intent = new Intent();
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
                 intent.putExtra("stationId", stationNoModelList.get(position).getId() + "");
@@ -89,7 +90,7 @@ public class StationByFullParamsActivity extends BaseActivity {
         jsonObject.addProperty("pipeid", Integer.parseInt(pipeId));
         jsonObject.addProperty("name", keyWord);
         jsonObject.addProperty("dptid", Integer.parseInt(departmentId));
-        Net.create(Api.class).getStationByDptidAndPipeIdAndKey(token,jsonObject)
+        Net.create(Api.class).getStationByDptidAndPipeIdAndKey(token, jsonObject)
                 .enqueue(new NetCallback<List<StationNoModel>>(this, true) {
                     @Override
                     public void onResponse(List<StationNoModel> list) {

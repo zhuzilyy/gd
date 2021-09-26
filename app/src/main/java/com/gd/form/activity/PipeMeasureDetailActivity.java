@@ -81,6 +81,7 @@ public class PipeMeasureDetailActivity extends BaseActivity {
                             tvDepthNotEnough.setText(measureModel.getLockdeep() + "");
                             tvMethod.setText(measureModel.getResolution());
                             tvTester.setText(measureModel.getTester());
+
                         }
                     }
                 });

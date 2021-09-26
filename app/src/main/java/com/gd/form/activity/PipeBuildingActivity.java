@@ -73,7 +73,9 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -169,7 +171,10 @@ public class PipeBuildingActivity extends BaseActivity {
     private int stationId, pipeId;
     private double rateLevel, resultLevel;
     private TagAdapter<String> mAdapter;
-    private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙"};
+    private String[] dataSource = {"房屋(有人居住)", "房屋(无人居住)", "简易结构(简易厕所、杂货房、车棚等)", "厂房", "大棚", "围墙", "动物棚圈", "重物占压"};
+    private Set<Integer> selectedIndex;
+    private String selectPressureName;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -446,6 +451,21 @@ public class PipeBuildingActivity extends BaseActivity {
                 return tv;
             }
         });
+
+        mFlowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+            @Override
+            public void onSelected(Set<Integer> selectPosSet) {
+                selectedIndex = selectPosSet;
+                StringBuilder selectedTagBuilder = new StringBuilder();
+                if (selectedIndex != null && selectedIndex.size() > 0) {
+                    for (int i : selectedIndex) {
+                        selectedTagBuilder.append(dataSource[i]);
+                        selectedTagBuilder.append(":");
+                    }
+                }
+                selectPressureName = selectedTagBuilder.toString();
+            }
+        });
     }
 
     private void getBuildingData(String buildingId) {
@@ -461,11 +481,25 @@ public class PipeBuildingActivity extends BaseActivity {
                             if (!TextUtils.isEmpty(pipeDesc)) {
                                 String[] descArr = pipeDesc.split(":");
                                 tvPipeName.setText(descArr[0]);
-//                                etStartStationNo.setText(descArr[1]);
                             }
                             etLocation.setText(buildingModel.getLocationdesc());
                             tvPipeProperty.setText(buildingModel.getOverpropety());
-                            tvType.setText(buildingModel.getOvertype());
+                            Set<Integer> set = new HashSet<>();
+                            StringBuilder selectedTagBuilder = new StringBuilder();
+                            if (!TextUtils.isEmpty(buildingModel.getOvertype())) {
+                                String[] arrayName = buildingModel.getOvertype().split(":");
+                                for (int i = 0; i < dataSource.length; i++) {
+                                    for (int j = 0; j < arrayName.length; j++) {
+                                        if (dataSource[i].equals(arrayName[j])) {
+                                            set.add(i);
+                                            selectedTagBuilder.append(dataSource[i]);
+                                            selectedTagBuilder.append(":");
+                                        }
+                                    }
+                                }
+                                selectPressureName = selectedTagBuilder.toString();
+                                mAdapter.setSelectedList(set);
+                            }
                             etName.setText(buildingModel.getOvername());
                             tvTime.setText(buildingModel.getGenernaldate());
                             if (buildingModel.getHighareasflag().equals("是")) {
@@ -487,7 +521,8 @@ public class PipeBuildingActivity extends BaseActivity {
                             tvRiskEvaluate.setText(buildingModel.getRiskevaluation1());
                             tvRiskResult.setText(buildingModel.getRiskevaluation2());
                             tvTotalLevel.setText(buildingModel.getRiskevaluation3());
-                            if (!TextUtils.isEmpty(buildingModel.getUploadpicture())) {
+                            if (!TextUtils.isEmpty(buildingModel.getUploadpicture()) &&
+                                    !buildingModel.getUploadpicture().equals("00")) {
                                 if (buildingModel.getUploadpicture().contains(";")) {
                                     String[] pathArr = buildingModel.getUploadpicture().split(";");
                                     for (int i = 0; i < pathArr.length; i++) {
@@ -524,6 +559,7 @@ public class PipeBuildingActivity extends BaseActivity {
                         if (rateLevel != 0 && resultLevel != 0) {
                             tvTotalLevel.setText(rateLevel * resultLevel + "");
                         }
+
                     }
                 });
     }
@@ -651,7 +687,7 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("pipeid", pipeId);
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("overpropety", tvPipeProperty.getText().toString());
-        params.addProperty("overtype", tvType.getText().toString());
+        params.addProperty("overtype", selectPressureName);
         params.addProperty("overname", etName.getText().toString());
         params.addProperty("genernaldate", tvTime.getText().toString());
         params.addProperty("highareasflag", isHighZone);
@@ -703,7 +739,7 @@ public class PipeBuildingActivity extends BaseActivity {
             ToastUtil.show("请选择占据性质");
             return false;
         }
-        if (TextUtils.isEmpty(tvType.getText().toString())) {
+        if (TextUtils.isEmpty(selectPressureName)) {
             ToastUtil.show("请选择占压类型");
             return false;
         }

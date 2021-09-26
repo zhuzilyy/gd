@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
-import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.DeleteDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -51,7 +51,8 @@ public class AdvocacyBoardListActivity extends BaseActivity {
     private List<PreModel> resultPreList;
     private final int ADD_BOARD = 100;
     private int deleteIndex;
-    private String pipeId,departmentId;
+    private String pipeId, departmentId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -81,13 +82,17 @@ public class AdvocacyBoardListActivity extends BaseActivity {
                 llNoData.setVisibility(View.VISIBLE);
             }
         }
-        if(getIntent()!=null){
-            pipeId =  getIntent().getExtras().getString("pipeId");
-            departmentId =  getIntent().getExtras().getString("departmentId");
+        if (getIntent() != null) {
+            pipeId = getIntent().getExtras().getString("pipeId");
+            departmentId = getIntent().getExtras().getString("departmentId");
+            if(TextUtils.isEmpty(pipeId)){
+                tvRight.setVisibility(View.GONE);
+            }
         }
         initViews();
         initData();
     }
+
     private void initViews() {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
 
@@ -106,8 +111,20 @@ public class AdvocacyBoardListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                deleteIndex = position;
-                deleteDialog.show();
+                switch (v.getId()) {
+                    case R.id.btn_delete:
+                        deleteIndex = position;
+                        deleteDialog.show();
+                        break;
+                    case R.id.btn_check:
+                        Intent intent = new Intent(AdvocacyBoardListActivity.this, SomeOthersActivity.class);
+                        intent.putExtra("id",resultPreList.get(position).getId());
+                        intent.putExtra("name","advocacyBoard");
+                        startActivity(intent);
+                        break;
+
+                }
+
             }
         });
         deleteDialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
@@ -116,21 +133,22 @@ public class AdvocacyBoardListActivity extends BaseActivity {
                 deleteDialog.dismiss();
                 deleteBoard();
             }
+
             @Override
             public void onNegativeClick() {
                 deleteDialog.dismiss();
             }
         });
     }
+
     private void deleteBoard() {
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", resultPreList.get(deleteIndex).getStakeid());
-        params.addProperty("pedurail", resultPreList.get(deleteIndex).getDistance());
-        Net.create(Api.class).deleteBoard(token, params)
+        params.addProperty("id", resultPreList.get(deleteIndex).getId());
+        Net.create(Api.class).deleteSomeOthers(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        ToastUtil.show(result.getMsg());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.setAction("com.action.update");
@@ -148,6 +166,7 @@ public class AdvocacyBoardListActivity extends BaseActivity {
                     }
                 });
     }
+
     @OnClick({
             R.id.iv_back,
             R.id.tv_right,
@@ -158,27 +177,30 @@ public class AdvocacyBoardListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_right:
-                Intent intent = new Intent(AdvocacyBoardListActivity.this,AddWindVaneActivity.class);
-                intent.putExtra("name","advocacyBoard");
-                intent.putExtra("departmentId",departmentId);
-                intent.putExtra("pipeId",pipeId);
-                startActivityForResult(intent,ADD_BOARD);
+                Intent intent = new Intent(AdvocacyBoardListActivity.this, AddWindVaneActivity.class);
+                intent.putExtra("name", "advocacyBoard");
+                intent.putExtra("departmentId", departmentId);
+                intent.putExtra("pipeId", pipeId);
+                startActivityForResult(intent, ADD_BOARD);
                 break;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if (data == null) {
             return;
         }
-        if(requestCode == ADD_BOARD){
-            String name =  data.getStringExtra("name");
-            String distance =  data.getStringExtra("distance");
-            String id =  data.getStringExtra("id");
+        if (requestCode == ADD_BOARD) {
+            String name = data.getStringExtra("name");
+            String distance = data.getStringExtra("distance");
+            String id = data.getStringExtra("id");
+            String otherId = data.getStringExtra("otherId");
             PreModel preModel = new PreModel();
             preModel.setStakename(name);
             preModel.setDistance(distance);
+            preModel.setId(otherId);
             preModel.setStakeid(Integer.parseInt(id));
             resultPreList.add(preModel);
             adapter.notifyDataSetChanged();

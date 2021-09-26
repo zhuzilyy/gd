@@ -326,6 +326,7 @@ public class SgbhActivity extends BaseActivity {
                             bundle.putSerializable("waters", (Serializable) waterModels);
                         }
                         Intent intent = new Intent(SgbhActivity.this, WaterProtectionListActivity.class);
+                        bundle.putString("activityName","approveWater");
                         intent.putExtras(bundle);
                         startActivityForResult(intent, SELECT_WATER);
 
