@@ -107,6 +107,7 @@ public class PipeMeasureActivity extends BaseActivity {
 
         }
     }
+
     private void commit() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("stakeid", Integer.valueOf(stationId));
@@ -181,27 +182,23 @@ public class PipeMeasureActivity extends BaseActivity {
             ToastUtil.show("请选择测量时间");
             return false;
         }
-
-        if (TextUtils.isEmpty(etPipeDepth.getText().toString())) {
-            ToastUtil.show("管道埋深不能为空");
+        if (TextUtils.isEmpty(etPipeDepth.getText().toString()) &&
+                TextUtils.isEmpty(etOpticalCableDepth.getText().toString()) &&
+                TextUtils.isEmpty(etMethod.getText().toString())) {
+            ToastUtil.show("管道埋深,光缆埋深,维护记录不能同时为空");
             return false;
         }
-        if (!NumberUtil.isNumber(etPipeDepth.getText().toString())) {
-            ToastUtil.show("管道埋深据格式不正确");
-            return false;
+        if (!TextUtils.isEmpty(etPipeDepth.getText().toString())) {
+            if (!NumberUtil.isNumber(etPipeDepth.getText().toString())) {
+                ToastUtil.show("管道埋深据格式不正确");
+                return false;
+            }
         }
-
-        if (TextUtils.isEmpty(etOpticalCableDepth.getText().toString())) {
-            ToastUtil.show("光缆埋深不能为空");
-            return false;
-        }
-        if (!NumberUtil.isNumber(etOpticalCableDepth.getText().toString())) {
-            ToastUtil.show("光缆埋深数据格式不正确");
-            return false;
-        }
-        if (TextUtils.isEmpty(etMethod.getText().toString())) {
-            ToastUtil.show("请输入维护记录");
-            return false;
+        if (!TextUtils.isEmpty(etOpticalCableDepth.getText().toString())) {
+            if (!NumberUtil.isNumber(etOpticalCableDepth.getText().toString())) {
+                ToastUtil.show("光缆埋深数据格式不正确");
+                return false;
+            }
         }
         return true;
     }

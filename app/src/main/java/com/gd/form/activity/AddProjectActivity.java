@@ -44,11 +44,14 @@ import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -78,6 +81,8 @@ public class AddProjectActivity extends BaseActivity {
     EditText etProgressDetail;
     @BindView(R.id.et_remark)
     EditText etRemark;
+    @BindView(R.id.tv_projectType)
+    TextView tvProjectType;
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_STATION = 101;
     private String selectFileName;
@@ -91,12 +96,12 @@ public class AddProjectActivity extends BaseActivity {
     private TimePickerView pvTime;
     private String tag, projectId;
     private ProjectDetailModel projectDetailModel;
-
+    private ListDialog projectTypeDialog;
+    private List<String> typeList;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
-
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_add_project;
@@ -112,7 +117,7 @@ public class AddProjectActivity extends BaseActivity {
         tag = getIntent().getExtras().getString("tag");
         if ("detail".equals(tag)) {
             tvRight.setVisibility(View.VISIBLE);
-            tvRight.setText("进度记录");
+            tvRight.setText("跟踪管理");
             tvTitle.setText("项目工程详情");
             projectId = getIntent().getExtras().getString("projectId");
             getDetail(projectId);
@@ -120,6 +125,11 @@ public class AddProjectActivity extends BaseActivity {
             tvRight.setVisibility(View.GONE);
             tvTitle.setText("项目工程新增");
         }
+        typeList = new ArrayList<>();
+        typeList.add("相关工程");
+        typeList.add("计划项目");
+        projectTypeDialog = new ListDialog(this);
+        projectTypeDialog.setData(typeList);
         initTimePicker();
     }
 
@@ -132,6 +142,7 @@ public class AddProjectActivity extends BaseActivity {
                     public void onResponse(ProjectDetailModel result) {
                         if (result != null) {
                             projectDetailModel = result;
+                            tvProjectType.setText(result.getProcessdesc());
                             tvStationNo.setText(result.getStakename());
                             etDistance.setText(result.getStakefrom());
                             etProjectName.setText(result.getConstructionname());
@@ -160,11 +171,19 @@ public class AddProjectActivity extends BaseActivity {
             R.id.ll_stationNo,
             R.id.ll_time,
             R.id.btn_commit,
+            R.id.ll_projectType,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_projectType:
+                projectTypeDialog.show();
+                projectTypeDialog.setListItemClick(positionM -> {
+                      tvProjectType.setText(typeList.get(positionM));
+                    projectTypeDialog.dismiss();
+                });
                 break;
             case R.id.btn_commit:
                 if (!infoIsComplete()) {
@@ -190,15 +209,15 @@ public class AddProjectActivity extends BaseActivity {
                     Uri uri = Uri.parse(projectDetailModel.getUploadfile());
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
-                }else{
+                } else {
                     Intent intentAddress = new Intent(AddProjectActivity.this, SelectFileActivity.class);
                     startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 }
                 break;
             case R.id.tv_right:
                 Bundle bundle = new Bundle();
-                bundle.putString("projectId", projectId);
-                openActivity(ProjectRecordListActivity.class, bundle);
+                bundle.putString("projectId",projectId);
+                openActivity(AddProjectRecordActivity.class,bundle);
                 break;
         }
     }
@@ -211,17 +230,13 @@ public class AddProjectActivity extends BaseActivity {
         params.addProperty("constructionname", etProjectName.getText().toString());
         params.addProperty("constructionunit", etConstructName.getText().toString());
         params.addProperty("constructiondesc", etBaseInfo.getText().toString());
-        params.addProperty("construcitondate", tvTime.getText().toString());
-        params.addProperty("constructionprocess", etProgress.getText().toString());
-        params.addProperty("processdesc", etProgressDetail.getText().toString());
+        params.addProperty("construcitondate", TimeUtil.getCurrentTimeYYmmdd());
+        params.addProperty("constructionprocess", "0");
+        params.addProperty("processdesc", tvProjectType.getText().toString());
         params.addProperty("remark", etRemark.getText().toString());
         params.addProperty("creator", userId);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
-        if (!TextUtils.isEmpty(ossFilePath)) {
-            params.addProperty("uploadfile", ossFilePath);
-        } else {
-            params.addProperty("uploadfile", "00");
-        }
+        params.addProperty("uploadfile", "00");
         Net.create(Api.class).addProject(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -248,17 +263,13 @@ public class AddProjectActivity extends BaseActivity {
         params.addProperty("constructionname", etProjectName.getText().toString());
         params.addProperty("constructionunit", etConstructName.getText().toString());
         params.addProperty("constructiondesc", etBaseInfo.getText().toString());
-        params.addProperty("construcitondate", tvTime.getText().toString());
-        params.addProperty("constructionprocess", etProgress.getText().toString());
-        params.addProperty("processdesc", etProgressDetail.getText().toString());
+        params.addProperty("construcitondate",TimeUtil.getCurrentTimeYYmmdd());
+        params.addProperty("constructionprocess", "0");
+        params.addProperty("processdesc", tvProjectType.getText().toString());
         params.addProperty("remark", etRemark.getText().toString());
         params.addProperty("creator", userId);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
-        if (!TextUtils.isEmpty(ossFilePath)) {
-            params.addProperty("uploadfile", ossFilePath);
-        } else {
-            params.addProperty("uploadfile", "00");
-        }
+        params.addProperty("uploadfile", "00");
         Net.create(Api.class).updateProject(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -277,6 +288,10 @@ public class AddProjectActivity extends BaseActivity {
     }
 
     private boolean infoIsComplete() {
+        if (TextUtils.isEmpty(tvProjectType.getText().toString())) {
+            ToastUtil.show("请选择工程类型");
+            return true;
+        }
         if (TextUtils.isEmpty(tvStationNo.getText().toString())) {
             ToastUtil.show("请选择桩号");
             return true;
@@ -299,30 +314,6 @@ public class AddProjectActivity extends BaseActivity {
         }
         if (TextUtils.isEmpty(etConstructName.getText().toString())) {
             ToastUtil.show("请输入施工单位");
-            return true;
-        }
-        if (TextUtils.isEmpty(tvTime.getText().toString())) {
-            ToastUtil.show("请选择开工时间");
-            return true;
-        }
-        if (TextUtils.isEmpty(etProgress.getText().toString())) {
-            ToastUtil.show("请输入施工进度");
-            return true;
-        }
-        if (!NumberUtil.isNumber(etProgress.getText().toString())) {
-            ToastUtil.show("施工进度格式输入不正确");
-            return true;
-        }
-        if (Double.parseDouble(etProgress.getText().toString()) > 100) {
-            ToastUtil.show("施工进度输入不正确");
-            return true;
-        }
-        if (Double.parseDouble(etProgress.getText().toString()) < 0) {
-            ToastUtil.show("施工进度输入不正确");
-            return true;
-        }
-        if (TextUtils.isEmpty(etProgressDetail.getText().toString())) {
-            ToastUtil.show("请输入集体进度描述");
             return true;
         }
         if (TextUtils.isEmpty(etRemark.getText().toString())) {

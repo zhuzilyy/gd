@@ -12,6 +12,7 @@ import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.utils.ActivityCollectorUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.view.DeleteDialog;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -33,7 +34,7 @@ public class SettingActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_versionName)
     TextView tvVersionName;
-
+    private DeleteDialog dialog;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -59,6 +60,20 @@ public class SettingActivity extends BaseActivity {
         tvTel.setText(telNumber);
         tvMail.setText(mail);
         tvVersionName.setText("当前版本:V"+ BuildConfig.VERSION_NAME);
+        dialog = new DeleteDialog(this);
+        dialog.setContent("确定退出");
+        dialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick() {
+                ActivityCollectorUtil.finishAllActivity();
+                openActivity(LoginActivity.class);
+            }
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+
     }
 
     @OnClick({
@@ -72,8 +87,7 @@ public class SettingActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_quit:
-                ActivityCollectorUtil.finishAllActivity();
-                openActivity(LoginActivity.class);
+                dialog.show();
                 break;
             case R.id.ll_changePwd:
                 openActivity(ChangePwdActivity.class);

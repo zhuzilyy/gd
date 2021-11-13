@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,8 +60,6 @@ public class ProjectRecordListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("新增");
         tvTitle.setText("进度记录");
         progressModelList = new ArrayList<>();
         projectId = getIntent().getExtras().getString("projectId");
@@ -79,6 +78,7 @@ public class ProjectRecordListActivity extends BaseActivity {
     private void getData(String projectId) {
         JsonObject params = new JsonObject();
         params.addProperty("projectid", projectId);
+        Log.i("tag","params===="+params);
         Net.create(Api.class).getProjectProgressList(token, params)
                 .enqueue(new NetCallback<List<ProgressModel>>(this, true) {
                     @Override

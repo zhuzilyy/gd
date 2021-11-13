@@ -33,7 +33,6 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectModel> {
     protected void bindData(BaseViewHolder viewHolder, ProjectModel progress, int position) {
         TextView tvProgress = viewHolder.getView(R.id.tv_progress);
         ProgressBar progressBar = viewHolder.getView(R.id.progressBar);
-        TextView tvStatus = viewHolder.getView(R.id.tv_status);
         TextView tvName = viewHolder.getView(R.id.tv_name);
         tvName.setText(progress.getProjectname());
         tvProgress.setText("当前进度"+progress.getConstructionprocess()+"%");
@@ -44,33 +43,7 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectModel> {
         }else{
             progressBar.setProgressDrawable(context.getDrawable(R.drawable.progress_bg2));
         }
-        progressBar.setProgress(Integer.parseInt(progress.getConstructionprocess()));
-//        TextView tvCondition = viewHolder.getView(R.id.tv_condition);
-//        TextView tvTime = viewHolder.getView(R.id.tv_time);
-//        TextView tvCount = viewHolder.getView(R.id.tv_count);
-//        LinearLayout llOperate = viewHolder.getView(R.id.ll_operate);
-//        tvName.setText(ticketModel.getCouponType());
-//        tvCondition.setText(ticketModel.getCouponMeta());
-//        tvCount.setText(ticketModel.getRemainder() + "张");
-//        String startTime = TimeUtil.longToFormatTime(ticketModel.getDrawStartDate());
-//        String endTime = TimeUtil.longToFormatTime(ticketModel.getDrawEndDate());
-//        tvTime.setText(startTime + "至" + endTime);
-//        if(ticketModel.isCanShowOperation()){
-//            llOperate.setVisibility(View.VISIBLE);
-//        }else{
-//            llOperate.setVisibility(View.GONE);
-//        }
-//        viewHolder.getView(R.id.ll_container).setOnClickListener(view -> {
-//            onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
-//        });
-//        viewHolder.getView(R.id.ll_operate).setOnClickListener(view -> {
-//            onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
-//        });
-//        viewHolder.getView(R.id.btn_donate).setOnClickListener(view -> {
-//            if (onItemClickListener != null) {
-//                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
-//            }
-//        });
+//        progressBar.setProgress(Integer.parseInt(progress.getConstructionprocess()));
         viewHolder.getContentView().setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());

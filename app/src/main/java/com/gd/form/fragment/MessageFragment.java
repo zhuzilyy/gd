@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.Nullable;
 
 import com.gd.form.R;
 import com.gd.form.activity.NoApproveActivity;
@@ -79,6 +82,12 @@ public class MessageFragment extends BaseFragment {
         getActivity().registerReceiver(myReceiver, filterTask);
         getWaitingTaskCount();
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("tag","MessageFragmentMessageFragment");
     }
 
     @Override

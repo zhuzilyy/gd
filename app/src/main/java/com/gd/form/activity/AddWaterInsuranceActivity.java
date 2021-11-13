@@ -145,7 +145,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     private boolean needCheckBackLocation = false;
     private boolean isLoactionSuccess = false;
     private String tag, waterId;
-    private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙"};
+    private String[] dataSource = {"挡墙", "护坡", "排水渠", "盖板", "U形盖板", "过水面", "防冲墙","护岸"};
     private TagAdapter<String> mAdapter;
     private Set<Integer> selectedIndex;
 
@@ -260,7 +260,6 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     private void getWaterInsuranceDetail() {
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.valueOf(waterId));
-        Log.i("tag", "params===" + params);
         Net.create(Api.class).waterProtectionDetail(token, params)
                 .enqueue(new NetCallback<WaterInsuranceDetailModel>(this, true) {
                     @Override

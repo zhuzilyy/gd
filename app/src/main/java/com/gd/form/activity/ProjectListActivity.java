@@ -45,6 +45,8 @@ public class ProjectListActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.tv_departmentName)
     TextView tvDepartmentName;
+    @BindView(R.id.tv_right)
+    TextView tvRight;
     private ProjectAdapter adapter;
     private String token, userId, departmentId;
     private List<ProjectModel> projectModelList;
@@ -53,6 +55,7 @@ public class ProjectListActivity extends BaseActivity {
     private List<String> areaList;
     private List<Integer> idList;
     private MyReceiver myReceiver;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -66,6 +69,8 @@ public class ProjectListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("新增");
         tvTitle.setText("项目工程");
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
@@ -93,7 +98,7 @@ public class ProjectListActivity extends BaseActivity {
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.status.change");
-        registerReceiver(myReceiver,intentFilter);
+        registerReceiver(myReceiver, intentFilter);
     }
 
     private void getData() {
@@ -136,14 +141,19 @@ public class ProjectListActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.iv_back, R.id.ll_departmentName})
+    @OnClick({R.id.iv_back, R.id.ll_departmentName, R.id.tv_right})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.tv_right:
+                Bundle bundle = new Bundle();
+                bundle.putString("tag","add");
+                openActivity(AddProjectActivity.class,bundle);
+                break;
             case R.id.ll_departmentName:
-                if(areaList.size()==0){
+                if (areaList.size() == 0) {
                     pipeDepartmentInfoGetList();
                 }
                 dialog.setData(areaList);
@@ -157,11 +167,12 @@ public class ProjectListActivity extends BaseActivity {
                 break;
         }
     }
+
     class MyReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("com.action.status.change")){
+            if (intent.getAction().equals("com.action.status.change")) {
                 projectModelList.clear();
                 getData();
             }
@@ -171,7 +182,7 @@ public class ProjectListActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(myReceiver!=null){
+        if (myReceiver != null) {
             unregisterReceiver(myReceiver);
         }
     }

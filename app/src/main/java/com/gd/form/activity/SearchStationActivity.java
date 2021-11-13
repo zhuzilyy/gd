@@ -343,6 +343,11 @@ public class SearchStationActivity extends BaseActivity {
                     tvStartStationNo.setText(stationName);
                     startStationId = data.getStringExtra("stationId");
                     startPipeId = data.getStringExtra("pipeId");
+                    if(TextUtils.isEmpty(tvEndStationNo.getText().toString())){
+                        tvEndStationNo.setText(stationName);
+                        startStationId = data.getStringExtra("stationId");
+                        endPipeId = data.getStringExtra("pipeId");
+                    }
                 } else {
                     tvEndStationNo.setText(stationName);
                     endStationId = data.getStringExtra("stationId");

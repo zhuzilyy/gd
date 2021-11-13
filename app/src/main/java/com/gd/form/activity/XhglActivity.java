@@ -41,6 +41,7 @@ public class XhglActivity extends BaseActivity {
             R.id.ll_wrj,
             R.id.ll_video_monitoring,
             R.id.ll_upload,
+            R.id.ll_waterInsurance,
 
     })
     public void onClick(View view) {
@@ -48,10 +49,13 @@ public class XhglActivity extends BaseActivity {
             case R.id.ll_video_monitoring:
                 openActivity(VideoMonitoringActivity.class);
                 break;
+            case R.id.ll_waterInsurance:
+                openActivity(WaterInsuranceActivity.class);
+                break;
             case R.id.ll_upload:
                 Bundle bundle = new Bundle();
-                bundle.putString("tag","add");
-                openActivity(UploadEventActivity.class,bundle);
+                bundle.putString("tag", "add");
+                openActivity(UploadEventActivity.class, bundle);
                 break;
             case R.id.iv_back:
                 finish();

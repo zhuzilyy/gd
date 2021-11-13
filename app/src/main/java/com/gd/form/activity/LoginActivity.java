@@ -74,7 +74,6 @@ public class LoginActivity extends BaseActivity {
                     SPUtil.put(LoginActivity.this, "pwd", "");
                 }
                 login(etUserName.getText().toString(), etPwd.getText().toString());
-
                 break;
 
         }

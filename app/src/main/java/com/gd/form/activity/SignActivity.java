@@ -138,7 +138,6 @@ public class SignActivity extends BaseActivity {
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
                     public void onResponse(ServerModel result) {
-                        Log.i("tag","==="+result.getCode());
                         if (result.getCode() == Constant.SUCCESS_CODE) {
                             Intent intent = new Intent();
                             intent.setAction("com.action.updateApprove");

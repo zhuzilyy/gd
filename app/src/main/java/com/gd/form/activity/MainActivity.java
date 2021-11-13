@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -11,9 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.azhon.appupdate.BuildConfig;
 import com.azhon.appupdate.config.UpdateConfiguration;
 import com.azhon.appupdate.manager.DownloadManager;
-import com.gd.form.BuildConfig;
 import com.gd.form.R;
 import com.gd.form.adapter.MyFragmentPagerAdapter;
 import com.gd.form.base.BaseActivity;
@@ -42,8 +43,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     RadioButton rb_user;
     @BindView(R.id.vpager)
     ViewPager vpager;
-
-
     private MyFragmentPagerAdapter mAdapter;
     private DownloadManager manager;
     //几个代表页面的常量
@@ -66,8 +65,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i("tag","1111111111111");
         super.onCreate(savedInstanceState);
-
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         rb_work.setChecked(true);
 
@@ -110,14 +109,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     public void onResponse(UpdateModel model) {
                         if (model != null) {
                             if (BuildConfig.VERSION_CODE < model.getVersioncode()) {
-                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion());
+                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion(),model.getVersioncode());
                             }
                         }
                     }
                 });
     }
 
-    private void down(String apkUrl, String content, String appVersion) {
+    private void down(String apkUrl, String content, String appVersion,int versionCode) {
         StringBuilder stringBuilder = new StringBuilder();
         if (!TextUtils.isEmpty(content)) {
             String[] split = content.split(",");
@@ -130,7 +129,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setShowNewerToast(true)
                 .setConfiguration(configuration)
-                .setApkVersionCode(2)
+                .setApkVersionCode(versionCode)
                 .setApkVersionName(appVersion)
                 .setApkDescription(content)
                 .download();
