@@ -75,4 +75,7 @@
         <item name="android:windowHideAnimation">@anim/dialog_exit</item>
         <!-- 指定消失的动画xml  -->
     </style>
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@mipmap/splash</item>
+    </style>
 </resources>

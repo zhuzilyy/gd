@@ -143,7 +143,7 @@ public class AddProjectRecordActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("wateracount/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("projectfile/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -263,16 +263,15 @@ public class AddProjectRecordActivity extends BaseActivity {
         params.addProperty("creator", userId);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
         if (!TextUtils.isEmpty(photoSb.toString())) {
-            params.addProperty("picturepath", photoSb.toString());
+            params.addProperty("uploadpicture", photoSb.toString());
         } else {
-            params.addProperty("picturepath", "00");
+            params.addProperty("uploadpicture", "00");
         }
         if (!TextUtils.isEmpty(ossFilePath)) {
-            params.addProperty("filepath", ossFilePath);
+            params.addProperty("uploadfile", ossFilePath);
         } else {
-            params.addProperty("filepath", "00");
+            params.addProperty("uploadfile", "00");
         }
-        Log.i("tag", "params===" + params);
         Net.create(Api.class).addProjectRecord(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

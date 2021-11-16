@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -37,16 +38,20 @@ import butterknife.OnClick;
 public class ProjectListActivity extends BaseActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.tv_departmentName)
     TextView tvDepartmentName;
-    @BindView(R.id.tv_right)
-    TextView tvRight;
+    @BindView(R.id.tv_relativeProject)
+    TextView tvRelativeProject;
+    @BindView(R.id.view_relativeProject)
+    View viewRelativeProject;
+    @BindView(R.id.tv_planProject)
+    TextView tvPlanProject;
+    @BindView(R.id.view_planProject)
+    View viewPlanProject;
     private ProjectAdapter adapter;
     private String token, userId, departmentId;
     private List<ProjectModel> projectModelList;
@@ -55,7 +60,7 @@ public class ProjectListActivity extends BaseActivity {
     private List<String> areaList;
     private List<Integer> idList;
     private MyReceiver myReceiver;
-
+    private String type = "相关工程";
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -69,9 +74,6 @@ public class ProjectListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("新增");
-        tvTitle.setText("项目工程");
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
         departmentId = (String) SPUtil.get(this, "departmentId", "");
@@ -99,11 +101,17 @@ public class ProjectListActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.action.status.change");
         registerReceiver(myReceiver, intentFilter);
+
+
+        IntentFilter intentFilterAddSuccess = new IntentFilter();
+        intentFilterAddSuccess.addAction("com.action.add.success");
+        registerReceiver(myReceiver, intentFilterAddSuccess);
     }
 
     private void getData() {
         JsonObject params = new JsonObject();
         params.addProperty("departmentid", departmentId);
+        params.addProperty("projecttype", type);
         Net.create(Api.class).getProjectList(token, params)
                 .enqueue(new NetCallback<List<ProjectModel>>(this, true) {
                     @Override
@@ -141,16 +149,43 @@ public class ProjectListActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.iv_back, R.id.ll_departmentName, R.id.tv_right})
+    @OnClick({
+            R.id.iv_back,
+            R.id.ll_departmentName,
+            R.id.tv_right,
+            R.id.ll_relativeProject,
+            R.id.ll_planProject})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_relativeProject:
+                if(type.equals("相关工程")){
+                    return;
+                }
+                type = "相关工程";
+                tvRelativeProject.setTextColor(Color.parseColor("#FF52A7F9"));
+                viewRelativeProject.setVisibility(View.VISIBLE);
+                tvPlanProject.setTextColor(Color.parseColor("#000000"));
+                viewPlanProject.setVisibility(View.INVISIBLE);
+                getData();
+                break;
+            case R.id.ll_planProject:
+                if(type.equals("计划工程")){
+                    return;
+                }
+                type = "计划工程";
+                getData();
+                tvPlanProject.setTextColor(Color.parseColor("#FF52A7F9"));
+                viewPlanProject.setVisibility(View.VISIBLE);
+                tvRelativeProject.setTextColor(Color.parseColor("#000000"));
+                viewRelativeProject.setVisibility(View.INVISIBLE);
+                break;
             case R.id.tv_right:
                 Bundle bundle = new Bundle();
-                bundle.putString("tag","add");
-                openActivity(AddProjectActivity.class,bundle);
+                bundle.putString("tag", "add");
+                openActivity(AddProjectActivity.class, bundle);
                 break;
             case R.id.ll_departmentName:
                 if (areaList.size() == 0) {
@@ -172,7 +207,8 @@ public class ProjectListActivity extends BaseActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("com.action.status.change")) {
+            if (intent.getAction().equals("com.action.status.change") ||
+                    intent.getAction().equals("com.action.add.success")) {
                 projectModelList.clear();
                 getData();
             }

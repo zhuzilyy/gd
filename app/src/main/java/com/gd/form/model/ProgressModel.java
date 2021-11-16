@@ -4,6 +4,9 @@ public class ProgressModel {
     private String constructionprocess;
     private String processdesc;
     private String projectid;
+    private String filename;
+    private String uploadfile;
+    private String uploadpicture;
     private CreateTime recorddate;
 
     public String getConstructionprocess() {
@@ -36,5 +39,29 @@ public class ProgressModel {
 
     public void setRecorddate(CreateTime recorddate) {
         this.recorddate = recorddate;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getUploadfile() {
+        return uploadfile;
+    }
+
+    public void setUploadfile(String uploadfile) {
+        this.uploadfile = uploadfile;
+    }
+
+    public String getUploadpicture() {
+        return uploadpicture;
+    }
+
+    public void setUploadpicture(String uploadpicture) {
+        this.uploadpicture = uploadpicture;
     }
 }

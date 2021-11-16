@@ -3,7 +3,41 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/layout_title"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="#FF52A7F9"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/d_24"
+            android:layout_height="@dimen/d_24"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_back"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginStart="@dimen/d_15"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="工程管理"
+            android:textColor="@color/write"
+            android:layout_marginRight="@dimen/d_40"
+            android:layout_marginEnd="@dimen/d_40"
+            android:textSize="@dimen/s_20"/>
+        <TextView
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/d_10"
+            android:textColor="@color/write"
+            android:text="新增"
+            android:textSize="@dimen/s_16" />
+    </LinearLayout>
     <!--作业区-->
     <LinearLayout
         android:id="@+id/ll_departmentName"
@@ -56,7 +90,56 @@
         android:layout_marginStart="@dimen/d_12"
         android:layout_marginLeft="@dimen/d_12"
         android:background="#FFE5E5E5" />
-
+    <LinearLayout
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50">
+        <LinearLayout
+            android:gravity="center"
+            android:id="@+id/ll_relativeProject"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="#FF52A7F9"
+                android:id="@+id/tv_relativeProject"
+                android:textSize="@dimen/s_16"
+                android:text="相关工程"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_marginTop="@dimen/d_10"
+                android:id="@+id/view_relativeProject"
+                android:background="#FF52A7F9"
+                android:layout_width="@dimen/d_60"
+                android:layout_height="@dimen/d_2"/>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:id="@+id/ll_planProject"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="#000"
+                android:id="@+id/tv_planProject"
+                android:textSize="@dimen/s_16"
+                android:text="计划工程"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <View
+                android:visibility="invisible"
+                android:layout_marginTop="@dimen/d_10"
+                android:id="@+id/view_planProject"
+                android:background="#FF52A7F9"
+                android:layout_width="@dimen/d_60"
+                android:layout_height="@dimen/d_2"/>
+        </LinearLayout>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

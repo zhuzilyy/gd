@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
+import com.gd.form.adapter.OnItemClickListener;
 import com.gd.form.adapter.ProjectRecordAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.ProgressModel;
@@ -68,6 +70,16 @@ public class ProjectRecordListActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new ProjectRecordAdapter(this, progressModelList, R.layout.adapter_project_record);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View v, int position) {
+                if(v.getId() == R.id.ll_upload){
+                    Uri uri = Uri.parse(progressModelList.get(position).getUploadfile());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+            }
+        });
 
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();

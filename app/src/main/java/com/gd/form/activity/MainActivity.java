@@ -3,10 +3,11 @@ package com.gd.form.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public static final int PAGE_THREE = 2;
     private String token, userId;
     private UpdateConfiguration configuration;
+    private long exitTime = 0;//根据连续点击之间时间判断 是否退出
 
     @Override
     protected void setStatusBar() {
@@ -65,7 +67,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.i("tag","1111111111111");
         super.onCreate(savedInstanceState);
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         rb_work.setChecked(true);
@@ -109,14 +110,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     public void onResponse(UpdateModel model) {
                         if (model != null) {
                             if (BuildConfig.VERSION_CODE < model.getVersioncode()) {
-                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion(),model.getVersioncode());
+                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion(), model.getVersioncode());
                             }
                         }
                     }
                 });
     }
 
-    private void down(String apkUrl, String content, String appVersion,int versionCode) {
+    private void down(String apkUrl, String content, String appVersion, int versionCode) {
         StringBuilder stringBuilder = new StringBuilder();
         if (!TextUtils.isEmpty(content)) {
             String[] split = content.split(",");
@@ -202,5 +203,24 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+   /*
+    根据点击时间判断
+    */
+    private void exit() {
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(getApplicationContext(), "再点击一次退出", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
 }

@@ -87,7 +87,6 @@
         android:background="#80FFFFFF"
         android:paddingTop="@dimen/d_12"
         android:paddingBottom="@dimen/d_5">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,7 +106,104 @@
             android:textColorHint="#FF888888"
             android:textSize="@dimen/s_16" />
     </LinearLayout>
+    <!--选择图片-->
+    <LinearLayout
+        android:id="@+id/ll_selectImage"
+        android:background="#80FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:layout_marginStart="@dimen/d_12"
+            android:layout_marginLeft="@dimen/d_12"
+            android:background="#FFE5E5E5" />
+        <RelativeLayout
+            android:id="@+id/rl_selectImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/d_15"
+                android:layout_marginLeft="@dimen/d_15"
+                android:layout_marginTop="@dimen/d_10"
+                android:layout_marginBottom="@dimen/d_10"
+                android:text="添加照片"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/s_16" />
 
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/d_10"
+                android:layout_marginRight="@dimen/d_10"
+                android:src="@mipmap/ic_next" />
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginRight="@dimen/d_15"
+            android:id="@+id/rvResultPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/d_5"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_1"
+            android:background="#FFE5E5E5"
+            android:layout_marginLeft="@dimen/d_12"
+            android:layout_marginStart="@dimen/d_12"/>
+    </LinearLayout>
+    <!--附件-->
+    <LinearLayout
+        android:id="@+id/ll_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#80FFFFFF"
+        android:gravity="center"
+        android:paddingTop="@dimen/d_12"
+        android:paddingBottom="@dimen/d_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:text="附件"
+            android:textColor="#FF000000"
+            android:textSize="@dimen/s_16" />
+
+        <TextView
+            android:id="@+id/tv_fileName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/d_15"
+            android:layout_marginLeft="@dimen/d_15"
+            android:layout_marginEnd="@dimen/d_15"
+            android:layout_marginRight="@dimen/d_15"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#A6000000"
+            android:textSize="@dimen/s_16" />
+
+        <ImageView
+            android:layout_width="@dimen/d_18"
+            android:layout_height="@dimen/d_18"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:src="@mipmap/ic_next" />
+
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/d_5"

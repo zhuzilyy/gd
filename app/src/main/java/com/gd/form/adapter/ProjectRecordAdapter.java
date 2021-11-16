@@ -2,14 +2,21 @@ package com.gd.form.adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gd.form.R;
 import com.gd.form.model.ProgressModel;
 import com.gd.form.utils.TimeUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,10 +41,39 @@ public class ProjectRecordAdapter extends BaseRecyclerViewAdapter<ProgressModel>
         TextView tvTime = viewHolder.getView(R.id.tv_time);
         TextView tvProgress = viewHolder.getView(R.id.tv_progress);
         TextView tvDetail = viewHolder.getView(R.id.tv_detail);
+        LinearLayout llSelectImages = viewHolder.getView(R.id.ll_selectImage);
+        RecyclerView rvResultPhoto = viewHolder.getView(R.id.rvResultPhoto);
+        LinearLayout llUpload = viewHolder.getView(R.id.ll_upload);
+        TextView tvFileName = viewHolder.getView(R.id.tv_fileName);
+        if (progress.getUploadpicture().equals("00") || TextUtils.isEmpty(progress.getUploadpicture())) {
+            llSelectImages.setVisibility(View.GONE);
+        }else{
+            String[] photoArr = progress.getUploadpicture().split(";");
+            List<String> path = new ArrayList<>();
+            for (int i = 0; i < photoArr.length; i++) {
+                path.add(photoArr[i]);
+            }
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+            gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            rvResultPhoto.setLayoutManager(gridLayoutManager);
+            PhotoAdapter photoAdapter = new PhotoAdapter(context, path);
+            rvResultPhoto.setAdapter(photoAdapter);
+        }
+        if(progress.getUploadfile().equals("00") || TextUtils.isEmpty(progress.getUploadfile())){
+            llUpload.setVisibility(View.GONE);
+        }else{
+            String[] fileName = progress.getFilename().split("_");
+            tvFileName.setText(fileName[fileName.length-1]);
+        }
         tvTime.setText(TimeUtil.longToFormatTime(progress.getRecorddate().getTime()));
         tvDetail.setText(progress.getProcessdesc());
-        tvProgress.setText(progress.getConstructionprocess()+"%");
+        tvProgress.setText(progress.getConstructionprocess() + "%");
         viewHolder.getContentView().setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
+            }
+        });
+        viewHolder.getContentView().findViewById(R.id.ll_upload).setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
             }

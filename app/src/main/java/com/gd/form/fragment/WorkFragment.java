@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import com.gd.form.R;
 import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.activity.FfglActivity;
-import com.gd.form.activity.FxglActivity;
 import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
 import com.gd.form.activity.PipeTagActivity;
+import com.gd.form.activity.ProjectListActivity;
 import com.gd.form.activity.SearchDataActivity;
 import com.gd.form.activity.SearchStationActivity;
 import com.gd.form.activity.SearchTaskActivity;
@@ -83,7 +83,8 @@ public class WorkFragment extends BaseFragment {
                 openActivity(XhglActivity.class);
                 break;
             case R.id.ll_job_fxgl:
-                openActivity(FxglActivity.class);
+//                openActivity(FxglActivity.class);
+                openActivity(ProjectListActivity.class);
                 break;
             case R.id.ll_job_ghg:
                 openActivity(GhgActivity.class);
