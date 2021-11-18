@@ -99,7 +99,7 @@ public class SearchStationActivity extends BaseActivity {
         tvTitle.setText("台账信息维护");
         dialog = new ListDialog(this);
         landTypeList.add("标志桩");
-        landTypeList.add("转角转");
+        landTypeList.add("转角桩");
         landTypeList.add("电位测试桩");
         landTypeList.add("排流桩");
         landTypeList.add("警示牌");

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -76,13 +77,12 @@ public class ProjectListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
-        departmentId = (String) SPUtil.get(this, "departmentId", "");
+//        departmentId = (String) SPUtil.get(this, "departmentId", "");
         projectModelList = new ArrayList<>();
         departmentList = new ArrayList<>();
         areaList = new ArrayList<>();
         idList = new ArrayList<>();
         dialog = new ListDialog(this);
-        getData();
         pipeDepartmentInfoGetList();
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new ProjectAdapter(this, projectModelList, R.layout.adapter_project);
@@ -112,6 +112,7 @@ public class ProjectListActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("departmentid", departmentId);
         params.addProperty("projecttype", type);
+        Log.i("tag","params===="+params);
         Net.create(Api.class).getProjectList(token, params)
                 .enqueue(new NetCallback<List<ProjectModel>>(this, true) {
                     @Override
@@ -133,6 +134,7 @@ public class ProjectListActivity extends BaseActivity {
     private void pipeDepartmentInfoGetList() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
+        Log.i("tag","params===="+params);
         Net.create(Api.class).getDepartmentById(token, params)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
@@ -143,8 +145,10 @@ public class ProjectListActivity extends BaseActivity {
                                 areaList.add(departmentList.get(i).getName());
                                 idList.add(departmentList.get(i).getId());
                             }
+                            tvDepartmentName.setText(departmentList.get(0).getName());
+                            departmentId = departmentList.get(0).getId()+"";
+                            getData();
                         }
-
                     }
                 });
     }
@@ -172,10 +176,10 @@ public class ProjectListActivity extends BaseActivity {
                 getData();
                 break;
             case R.id.ll_planProject:
-                if(type.equals("计划工程")){
+                if(type.equals("计划项目")){
                     return;
                 }
-                type = "计划工程";
+                type = "计划项目";
                 getData();
                 tvPlanProject.setTextColor(Color.parseColor("#FF52A7F9"));
                 viewPlanProject.setVisibility(View.VISIBLE);

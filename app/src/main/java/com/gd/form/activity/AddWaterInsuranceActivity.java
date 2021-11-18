@@ -162,6 +162,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String type = getIntent().getExtras().getString("tag");
         tvTitle.setText("增加水工台账");
         nameList = new ArrayList<>();
         path = new ArrayList<>();
@@ -200,6 +201,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             tag = getIntent().getExtras().getString("tag");
             waterId = getIntent().getExtras().getString("waterId");
             if ("update".equals(tag)) {
+                tvTitle.setText("维护水工台账");
                 getWaterInsuranceDetail();
             }
         }
@@ -260,6 +262,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     private void getWaterInsuranceDetail() {
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.valueOf(waterId));
+        Log.i("tag","params===="+params);
         Net.create(Api.class).waterProtectionDetail(token, params)
                 .enqueue(new NetCallback<WaterInsuranceDetailModel>(this, true) {
                     @Override
@@ -273,7 +276,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                         selectPressureName = detailModel.getProtectname();
                         Set<Integer> set = new HashSet<>();
                         if (!TextUtils.isEmpty(detailModel.getProtectname())) {
-                            String[] arrayName = detailModel.getProtectname().split(":");
+                            String[] arrayName = detailModel.getProtectname().split("、");
                             for (int i = 0; i < dataSource.length; i++) {
                                 for (int j = 0; j < arrayName.length; j++) {
                                     if (dataSource[i].equals(arrayName[j])) {

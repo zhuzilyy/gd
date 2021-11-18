@@ -377,6 +377,7 @@ public class WaterInsuranceActivity extends BaseActivity {
                             Intent intent = new Intent(WaterInsuranceActivity.this, WaterProtectionListActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("waters", (Serializable) waterModelList);
+                            bundle.putString("activityName","selectWater");
                             intent.putExtras(bundle);
                             startActivityForResult(intent, SELECT_STATION);
                         }

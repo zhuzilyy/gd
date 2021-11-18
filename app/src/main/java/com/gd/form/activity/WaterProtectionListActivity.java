@@ -138,6 +138,8 @@ public class WaterProtectionListActivity extends BaseActivity {
                             WaterModel waterModel = list.get(i);
                             if("approveWater".equals(activityName)){
                                 waterModel.setType("select");
+                            }else if("selectWater".equals(activityName)){
+                                waterModel.setType("select");
                             }
                             resultWaterList.add(waterModel);
                         }

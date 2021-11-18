@@ -128,7 +128,7 @@
                 android:textColor="#000"
                 android:id="@+id/tv_planProject"
                 android:textSize="@dimen/s_16"
-                android:text="计划工程"
+                android:text="计划项目"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <View
