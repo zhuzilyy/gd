@@ -138,7 +138,7 @@ public class ApproveBuildingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("违章违建处理记录");
+        tvTitle.setText("现有违章违建记录");
         Util.activityList.add(this);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);

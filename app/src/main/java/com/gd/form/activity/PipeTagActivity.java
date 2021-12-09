@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -141,6 +142,10 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     LinearLayout llDownStationKm;
     @BindView(R.id.ll_stationNoPrefix)
     LinearLayout llStationNoPrefix;
+    @BindView(R.id.ll_landMaterial)
+    LinearLayout llLandMaterial;
+    @BindView(R.id.ll_selectImage)
+    LinearLayout llSelectImage;
     @BindView(R.id.tv_upStationKm)
     TextView tvUpStationKm;
     @BindView(R.id.tv_downStationKm)
@@ -178,7 +183,8 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     RadioButton rbYesComplete;
     @BindView(R.id.rb_noComplete)
     RadioButton rbNoComplete;
-
+    @BindView(R.id.btn_commit)
+    Button btnCommit;
     private int departmentId, pipeId;
     private ListLandTagDialog landTypeDialog;
     private ListDialog dialog;
@@ -190,6 +196,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     private int SELECT_STATION = 101;
     private int SELECT_APPROVER = 102;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private final String EMPTY_PIC = "00";
     private String upStationId, approverName, approverId, id, lineId, highZoneName = "", pipeName = "";
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
@@ -317,6 +324,40 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
 //                etPhone.setEnabled(true);
 //                etRemark.setEnabled(true);
 //                llLocation.setEnabled(true);
+            } else if (tag.equals("approve")) {
+                Log.i("tag", "22222222222");
+                tvTitle.setText("桩体详情");
+                tvRight.setVisibility(View.GONE);
+                String stakeId = getIntent().getStringExtra("stakeId");
+                String stakeStatus = getIntent().getStringExtra("stakeStatus");
+                getStationDetailInfoFromApprove(stakeId, stakeStatus);
+                llArea.setEnabled(false);
+                llPipeName.setEnabled(false);
+                llGroundTagType.setEnabled(false);
+                llUpStationNo.setEnabled(false);
+                llDownStationNo.setEnabled(false);
+                etStationNameNo.setEnabled(false);
+                etKgInfo.setEnabled(false);
+                llPipeManager.setEnabled(false);
+                etCorner.setEnabled(false);
+                etLongitude.setEnabled(false);
+                etLatitude.setEnabled(false);
+                llLandForm.setEnabled(false);
+                etLocation.setEnabled(false);
+                etDepth.setEnabled(false);
+                etName.setEnabled(false);
+                etPhone.setEnabled(false);
+                etRemark.setEnabled(false);
+                llLocation.setEnabled(false);
+                llLandMaterial.setEnabled(false);
+                llSelectImage.setEnabled(false);
+                rbNo.setEnabled(false);
+                rbNoCheck.setEnabled(false);
+                rbNoComplete.setEnabled(false);
+                rbYes.setEnabled(false);
+                rbYesCheck.setEnabled(false);
+                rbYesComplete.setEnabled(false);
+                btnCommit.setVisibility(View.GONE);
             }
         }
         getLocation();
@@ -374,8 +415,6 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject params = new JsonObject();
         params.addProperty("id", Integer.parseInt(id));
         params.addProperty("pipeid", Integer.parseInt(lineId));
-        Log.i("tag","id====="+id);
-        Log.i("tag","pipeid====="+ Integer.parseInt(lineId));
         Net.create(Api.class).getStationDetailInfo(token, params)
                 .enqueue(new NetCallback<List<StationDetailInfo>>(this, true) {
                     @Override
@@ -455,6 +494,94 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                     }
                 });
     }
+
+    //获取详情通过待审批界面
+    private void getStationDetailInfoFromApprove(String stakeId, String stakeStatus) {
+        JsonObject params = new JsonObject();
+        params.addProperty("appempid", userId);
+        params.addProperty("id", stakeId);
+        params.addProperty("stakestatus", Integer.parseInt(stakeStatus));
+        Log.i("tag", "params====" + params);
+        Net.create(Api.class).getStationDetailInfoFromApprove(token, params)
+                .enqueue(new NetCallback<StationDetailInfo>(this, true) {
+                    @Override
+                    public void onResponse(StationDetailInfo stationDetailInfo) {
+
+                        if (!TextUtils.isEmpty(stationDetailInfo.getDesc())) {
+                            if (stationDetailInfo.getDesc().contains(":")) {
+                                tvArea.setText(stationDetailInfo.getDesc().split(":")[0]);
+                                tvPipeName.setText(stationDetailInfo.getDesc().split(":")[1]);
+                            }
+                        }
+                        tvGroundTagType.setText(stationDetailInfo.getStaketype());
+                        tvUpStationNo.setText(stationDetailInfo.getName());
+                        if (!TextUtils.isEmpty(stationDetailInfo.getCornerinfo())) {
+                            etCorner.setText(stationDetailInfo.getCornerinfo());
+                        }
+                        if (tvGroundTagType.getText().equals("转角桩")) {
+                            etCorner.setEnabled(true);
+                        } else {
+                            etCorner.setEnabled(false);
+                        }
+                        etLongitude.setText(stationDetailInfo.getEastlongitude());
+                        etLatitude.setText(stationDetailInfo.getNorthlatitude());
+                        tvLandForm.setText(stationDetailInfo.getTopagraphy());
+                        etKgInfo.setText(stationDetailInfo.getMileageinfo());
+                        etLocation.setText(stationDetailInfo.getLocationdesc());
+                        etName.setText(stationDetailInfo.getLandinfo());
+                        etPhone.setText(stationDetailInfo.getLandtel());
+                        etRemark.setText(stationDetailInfo.getRemarks());
+                        upStationId = stationDetailInfo.getId() + "";
+                        etStationNameNo.setText(stationDetailInfo.getName());
+                        highZoneName = stationDetailInfo.getHighareasname();
+                        pipeName = stationDetailInfo.getPipeaccountname();
+                        departmentId = stationDetailInfo.getDepartmentid();
+                        pipeId = stationDetailInfo.getPipeid();
+                        approverId = stationDetailInfo.getPipeowners();
+                        tvPipeManager.setText(stationDetailInfo.getOwnername());
+                        if (stationDetailInfo.getAbovepipe().equals("是")) {
+                            rbYes.setChecked(true);
+                        } else {
+                            rbNo.setChecked(true);
+                        }
+                        if (stationDetailInfo.getPerfectflag().equals("是")) {
+                            rbYesComplete.setChecked(true);
+                        } else {
+                            rbNoComplete.setChecked(true);
+                        }
+                        if (stationDetailInfo.getRoutinginspection().equals("合格")) {
+                            rbYesCheck.setChecked(true);
+                        } else {
+                            rbNoCheck.setChecked(true);
+                        }
+                        if (!TextUtils.isEmpty(stationDetailInfo.getUploadpicture()) &&
+                                !EMPTY_PIC.equals(stationDetailInfo.getUploadpicture())) {
+                            String[] photoArr = stationDetailInfo.getUploadpicture().split(";");
+                            for (int i = 0; i < photoArr.length; i++) {
+                                path.add(photoArr[i]);
+                            }
+                            photoAdapter.notifyDataSetChanged();
+                        }
+                        tvMaterial.setText(stationDetailInfo.getLandmaterial());
+                        if (currentAmapLocation != null) {
+                            if (TextUtils.isEmpty(stationDetailInfo.getEastlongitude())) {
+                                etLongitude.setText(currentAmapLocation.getLongitude() + "");
+
+                            }
+                            if (TextUtils.isEmpty(stationDetailInfo.getNorthlatitude())) {
+                                etLatitude.setText(currentAmapLocation.getLatitude() + "");
+                            }
+                            if (TextUtils.isEmpty(stationDetailInfo.getLocationdesc())) {
+                                etLocation.setText(currentAmapLocation.getAddress());
+                            }
+                        }
+                        getStationInfo();
+
+                    }
+
+                });
+    }
+
 
     private void initGallery() {
         iHandlerCallBack = new IHandlerCallBack() {
@@ -615,7 +742,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
             R.id.ll_pipeName,
             R.id.ll_upStationNo,
             R.id.ll_pipeManager,
-            R.id.rl_selectImage,
+            R.id.ll_selectImage,
             R.id.ll_landMaterial,
     })
     public void onClick(View view) {
@@ -631,7 +758,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                     dialog.dismiss();
                 });
                 break;
-            case R.id.rl_selectImage:
+            case R.id.ll_selectImage:
                 initPermissions();
                 break;
             case R.id.ll_pipeManager:
@@ -803,6 +930,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
+        jsonObject.addProperty("appempid", userId);
         jsonObject.addProperty("id", Integer.parseInt(id));
         jsonObject.addProperty("name", tvUpStationNo.getText().toString());
         jsonObject.addProperty("desc", tvArea.getText().toString() + ":" + tvPipeName.getText().toString());
@@ -862,6 +990,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
         jsonObject.addProperty("pipeid", pipeId);
+        jsonObject.addProperty("appempid", userId);
         jsonObject.addProperty("prixname", prefixName);
         jsonObject.addProperty("tailname", etStationNameNo.getText().toString());
         jsonObject.addProperty("staketype", tvGroundTagType.getText().toString());

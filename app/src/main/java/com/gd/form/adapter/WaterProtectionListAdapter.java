@@ -1,15 +1,12 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gd.form.R;
-import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.model.WaterModel;
 import com.gd.form.utils.TimeUtil;
 
@@ -66,12 +63,9 @@ public class WaterProtectionListAdapter extends BaseRecyclerViewAdapter<WaterMod
         viewHolder.getView(R.id.btn_update).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, AddWaterInsuranceActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("tag", "update");
-                bundle.putString("waterId", model.getId() + "");
-                intent.putExtras(bundle);
-                context.startActivity(intent, bundle);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClickListener(v, viewHolder.getLayoutPosition());
+                }
             }
         });
     }

@@ -1,6 +1,6 @@
 package com.gd.form.model;
 
-public class LoginModel {
+public class LoginModel{
     private String msg;
     private int code;
     private String employname;
@@ -80,4 +80,5 @@ public class LoginModel {
     public void setDptid(int dptid) {
         this.dptid = dptid;
     }
+
 }

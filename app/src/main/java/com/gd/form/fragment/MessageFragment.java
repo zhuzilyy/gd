@@ -17,6 +17,7 @@ import com.gd.form.R;
 import com.gd.form.activity.NoApproveActivity;
 import com.gd.form.activity.OverTimeTaskActivity;
 import com.gd.form.activity.RefuseTaskActivity;
+import com.gd.form.activity.StationWaitingApproveActivity;
 import com.gd.form.activity.WaitingActivity;
 import com.gd.form.activity.WaitingHandleTaskActivity;
 import com.gd.form.base.BaseFragment;
@@ -87,7 +88,6 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("tag","MessageFragmentMessageFragment");
     }
 
     @Override
@@ -121,6 +121,12 @@ public class MessageFragment extends BaseFragment {
                 .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
                     @Override
                     public void onResponse(TaskCountModel model) {
+                        int noApprove = model.getApproval2();
+                        if (noApprove > 0) {
+                            badges.get(2).setShowShadow(false).setBadgeNumber(noApprove);
+                        } else {
+                            badges.get(2).hide(true);
+                        }
                         getTaskTotal(model.getApproval1());
                         getRefuseCount();
                     }
@@ -148,11 +154,12 @@ public class MessageFragment extends BaseFragment {
     private void getTaskTotal(int noApproveCount) {
         JsonObject params = new JsonObject();
         params.addProperty("empid", userId);
+        Log.i("tag", "params===" + params);
         Net.create(Api.class).getTaskTotal(token, params)
                 .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
                     @Override
                     public void onResponse(TaskCountModel model) {
-                        int waitingTask = model.getApproval1() + model.getWaitCount();
+                        int waitingTask = model.getWaitCount();
                         waitingTask += noApproveCount;
                         if (waitingTask > 0) {
                             badges.get(0).setShowShadow(false).setBadgeNumber(waitingTask);
@@ -165,12 +172,6 @@ public class MessageFragment extends BaseFragment {
                         } else {
                             badges.get(1).hide(true);
                         }
-                        int noApprove = model.getApproval2();
-                        if (noApprove > 0) {
-                            badges.get(2).setShowShadow(false).setBadgeNumber(noApprove);
-                        } else {
-                            badges.get(2).hide(true);
-                        }
 
                     }
                 });
@@ -182,11 +183,15 @@ public class MessageFragment extends BaseFragment {
             R.id.ll_noApprove,
             R.id.ll_task_waiting_handle,
             R.id.ll_refuse,
+            R.id.ll_station_approve,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.ll_waiting:
                 openActivity(WaitingActivity.class);
+                break;
+            case R.id.ll_station_approve:
+                openActivity(StationWaitingApproveActivity.class);
                 break;
             case R.id.ll_task_waiting_handle:
                 openActivity(WaitingHandleTaskActivity.class);

@@ -9,6 +9,17 @@ public class StationWaterDetailModel {
     private String stakefrom;
     private int pipeid;
     private int stakeid;
+    private String stakename;
+    private String waterid;
+
+    public String getWaterid() {
+        return waterid;
+    }
+
+    public void setWaterid(String waterid) {
+        this.waterid = waterid;
+    }
+
     public String getApprovalid() {
         return approvalid;
     }
@@ -71,6 +82,14 @@ public class StationWaterDetailModel {
 
     public void setStakeid(int stakeid) {
         this.stakeid = stakeid;
+    }
+
+    public String getStakename() {
+        return stakename;
+    }
+
+    public void setStakename(String stakename) {
+        this.stakename = stakename;
     }
 
     @Override

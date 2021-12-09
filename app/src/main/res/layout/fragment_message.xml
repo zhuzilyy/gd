@@ -214,6 +214,36 @@
             </LinearLayout>
 
 
+
+            <LinearLayout
+                android:gravity="center"
+                android:id="@+id/ll_station_approve"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:padding="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="@dimen/d_32"
+                        android:layout_height="@dimen/d_32"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/approve_station" />
+                </RelativeLayout>
+                <TextView
+                    android:layout_marginTop="@dimen/d_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="台账待审批"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

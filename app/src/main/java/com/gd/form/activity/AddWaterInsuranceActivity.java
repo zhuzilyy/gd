@@ -124,6 +124,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     private TimePickerView pvTime;
+    private int waterIndex = -1;
     /**
      * 需要进行检测的权限数组
      */
@@ -191,15 +192,16 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                 if (selectedIndex != null && selectedIndex.size() > 0) {
                     for (int i : selectedIndex) {
                         selectedTagBuilder.append(dataSource[i]);
-                        selectedTagBuilder.append(":");
+                        selectedTagBuilder.append("、");
                     }
+                    selectPressureName = selectedTagBuilder.toString();
                 }
-                selectPressureName = selectedTagBuilder.toString();
             }
         });
         if (getIntent() != null) {
             tag = getIntent().getExtras().getString("tag");
             waterId = getIntent().getExtras().getString("waterId");
+            waterIndex = getIntent().getExtras().getInt("waterIndex");
             if ("update".equals(tag)) {
                 tvTitle.setText("维护水工台账");
                 getWaterInsuranceDetail();
@@ -273,7 +275,9 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                         etCompany.setText(detailModel.getProtectunit());
                         stationId = detailModel.getStakeid();
                         pipeId = detailModel.getPipeid();
+                        tvBuildTime.setText(TimeUtil.longToFormatTimeHMS(detailModel.getCreatime().getTime()));
                         selectPressureName = detailModel.getProtectname();
+                        Log.i("tag","selectPressureName==="+selectPressureName);
                         Set<Integer> set = new HashSet<>();
                         if (!TextUtils.isEmpty(detailModel.getProtectname())) {
                             String[] arrayName = detailModel.getProtectname().split("、");
@@ -449,7 +453,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         params.addProperty("pipeid", Integer.valueOf(pipeId));
         params.addProperty("stakeid", Integer.valueOf(stationId));
         params.addProperty("stakefrom", etDistance.getText().toString());
-        params.addProperty("protectname", selectPressureName);
+        params.addProperty("protectname", selectPressureName.substring(0,selectPressureName.length()-1));
         params.addProperty("locations", etLocation.getText().toString());
         params.addProperty("protectunit", etCompany.getText().toString());
         params.addProperty("creator", userId);
@@ -494,7 +498,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         params.addProperty("pipeid", pipeId);
         params.addProperty("stakeid", stationId);
         params.addProperty("stakefrom", etDistance.getText().toString());
-        params.addProperty("protectname", selectPressureName);
+        params.addProperty("protectname", selectPressureName.substring(0,selectPressureName.length()-1));
         params.addProperty("locations", etLocation.getText().toString());
         params.addProperty("protectunit", etCompany.getText().toString());
         params.addProperty("creator", userId);
@@ -515,7 +519,11 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
+                            Intent intent = new Intent();
+                            intent.putExtra("waterIndex",waterIndex);
+                            intent.putExtra("name", selectPressureName.substring(0,selectPressureName.length()-1));
                             ToastUtil.show("保存成功");
+                            setResult(RESULT_OK,intent);
                             finish();
                         } else {
                             ToastUtil.show("保存失败");

@@ -29,7 +29,7 @@ public class UrlConstant {
      * @return 拼接后完整的访问路径
      */
     public String getServerUrl() {
-        return  "http://49.233.51.19:8080/Spring/";
+        return  "http://101.42.96.15:8080/Spring/";
     }
 
 }

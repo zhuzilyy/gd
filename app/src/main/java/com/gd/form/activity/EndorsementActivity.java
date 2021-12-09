@@ -100,6 +100,8 @@ public class EndorsementActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
     private ListDialog dialog;
+    private String formId;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -120,6 +122,12 @@ public class EndorsementActivity extends BaseActivity {
         initConfig();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
+        if(getIntent().getExtras()!=null){
+            formId = getIntent().getExtras().getString("formId");
+            if (!TextUtils.isEmpty(formId)) {
+                getBuildingData(formId);
+            }
+        }
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
     }
@@ -163,7 +171,7 @@ public class EndorsementActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("W005/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("W005/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -207,7 +215,7 @@ public class EndorsementActivity extends BaseActivity {
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.ll_spr:
-               getDefaultManager();
+                getDefaultManager();
                 break;
             case R.id.ll_location:
                 Intent intent = new Intent(this, MapActivity.class);
@@ -231,6 +239,7 @@ public class EndorsementActivity extends BaseActivity {
     private void getBuildings() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
+        Log.i("tag","jsonObject==="+jsonObject);
         Net.create(Api.class).getBuildings(token, jsonObject)
                 .enqueue(new NetCallback<List<SearchBuildingModel>>(this, true) {
                     @Override
@@ -247,8 +256,28 @@ public class EndorsementActivity extends BaseActivity {
                             Intent intent = new Intent(EndorsementActivity.this, BuildingListActivity.class);
                             intent.putExtras(bundle);
                             startActivityForResult(intent, SELECT_BUILDING);
-                        }else{
+                        } else {
                             ToastUtil.show("暂无数据");
+                        }
+                    }
+                });
+    }
+
+
+    private void getBuildingData(String id) {
+        JsonObject params = new JsonObject();
+        params.addProperty("id", id);
+        Log.i("tag","params===="+params);
+        Net.create(Api.class).getBuildingData(token, params)
+                .enqueue(new NetCallback<List<BuildingModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<BuildingModel> result) {
+                        if (result != null && result.size() > 0) {
+                            BuildingModel buildingModel = result.get(0);
+                            tvStationNo.setText(buildingModel.getOvername());
+                            etDes.setText(buildingModel.getDangerdesc());
+                            buildId = buildingModel.getId()+"";
+                            stakeId = buildingModel.getStakeid()+"";
                         }
                     }
                 });
@@ -308,6 +337,7 @@ public class EndorsementActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
+        Log.i("tag","jsonObject==="+jsonObject);
         Net.create(Api.class).commitIllegalBuilding(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -360,7 +390,7 @@ public class EndorsementActivity extends BaseActivity {
             tv_fileName.setText(selectFileName);
             mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
             mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice("W005/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            uploadOffice("W005/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
             stationId = data.getStringExtra("stationId");
@@ -399,8 +429,8 @@ public class EndorsementActivity extends BaseActivity {
                     public void onResponse(List<DepartmentPerson> list) {
                         List<String> nameList = new ArrayList<>();
                         List<String> idList = new ArrayList<>();
-                        if(list!=null && list.size()>0){
-                            for (int i = 0; i <list.size() ; i++) {
+                        if (list != null && list.size() > 0) {
+                            for (int i = 0; i < list.size(); i++) {
                                 DepartmentPerson departmentPerson = list.get(i);
                                 nameList.add(departmentPerson.getName());
                                 idList.add(departmentPerson.getId());

@@ -428,6 +428,9 @@
             android:name=".activity.AddProjectRecordActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.StationWaitingApproveActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

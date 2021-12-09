@@ -124,7 +124,8 @@ public class SgbhActivity extends BaseActivity {
     private String selectFileName;
     private String selectFilePath;
     private Dialog mWeiboDialog;
-
+    private String formId;
+    private boolean isFirstShowStationNo = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +134,10 @@ public class SgbhActivity extends BaseActivity {
         nameList = new ArrayList<>();
         token = (String) SPUtil.get(SgbhActivity.this, "token", "");
         userId = (String) SPUtil.get(SgbhActivity.this, "userId", "");
+        formId = getIntent().getStringExtra("formId");
+        if(!TextUtils.isEmpty(formId)){
+            getWaterDetail(formId);
+        }
         initGallery();
         initConfig();
         initListener();
@@ -516,14 +521,11 @@ public class SgbhActivity extends BaseActivity {
             uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
+            isFirstShowStationNo = false;
             stationId = Integer.parseInt(data.getStringExtra("stationId"));
             pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
             String stationName = data.getStringExtra("stationName");
             tv_zh.setText(stationName);
-//            stationId = data.getStringExtra("stationId");
-//            pipeId = data.getStringExtra("pipeId");
-//            String stationName = data.getStringExtra("stationName");
-//            tv_zh.setText(stationName);
         } else if (requestCode == SELECT_ADDRESS) {
             String latitude = data.getStringExtra("latitude");
             String longitude = data.getStringExtra("longitude");
@@ -546,9 +548,9 @@ public class SgbhActivity extends BaseActivity {
 
     }
 
-    private void getWaterDetail(String waterId) {
+    private void getWaterDetail(String id) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", Integer.parseInt(waterId));
+        jsonObject.addProperty("id", Integer.parseInt(id));
         jsonObject.addProperty("empid", userId);
         Log.i("tag","jsonObject=="+jsonObject);
         Net.create(Api.class).getWaterStationDetail(token, jsonObject)
@@ -563,6 +565,10 @@ public class SgbhActivity extends BaseActivity {
                         tv_sgxs.setText(result.getHydraulicform());
                         tvManager.setText(result.getOwnername());
                         tv_spr.setText(result.getApprovalname());
+                        if(!TextUtils.isEmpty(formId) && isFirstShowStationNo){
+                            tv_zh.setText(result.getStakename());
+                            waterId = result.getWaterid();
+                        }
                     }
                 });
     }

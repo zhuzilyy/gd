@@ -31,7 +31,7 @@ public class EventHistoryAdapter extends BaseRecyclerViewAdapter<EventHistoryMod
         TextView tvEmploy = viewHolder.getView(R.id.tv_employ);
         TextView tvTime = viewHolder.getView(R.id.tv_time);
         tvEventName.setText(model.getEventname());
-        tvEmploy.setText(model.getCreator());
+        tvEmploy.setText(model.getCreatorname());
         tvTime.setText(TimeUtil.longToFormatTimeHMS(model.getCreatime().getTime()));
         viewHolder.getContentView().setOnClickListener(new View.OnClickListener() {
             @Override

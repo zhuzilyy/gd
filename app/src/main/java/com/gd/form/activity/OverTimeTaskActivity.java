@@ -2,6 +2,7 @@ package com.gd.form.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -97,6 +98,7 @@ public class OverTimeTaskActivity extends BaseActivity {
             @Override
             public void onItemClickListener(View v, int position) {
                 String formName = overTimeModelList.get(position).getFormname();
+                Log.i("tag","formName===="+formName);
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(SgbhActivity.class);

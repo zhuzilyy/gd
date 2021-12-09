@@ -106,9 +106,12 @@ public class WaitingHandleFragment extends BaseFragment {
             @Override
             public void onItemClickListener(View v, int position) {
                 String formName = waitingHandleList.get(position).getFormname();
+                String formId = waitingHandleList.get(position).getFormid();
+                Bundle bundle = new Bundle();
+                bundle.putString("formId",formId);
                 switch (formName) {
                     case "水工保护巡检表":
-                        openActivity(SgbhActivity.class);
+                        openActivity(SgbhActivity.class,bundle);
                         break;
                     case "隧道外部检查表":
                         openActivity(SdwbActivity.class);
@@ -117,7 +120,7 @@ public class WaitingHandleFragment extends BaseFragment {
                         openActivity(WeightCarActivity.class);
                         break;
                     case "现有违章违建记录":
-                        openActivity(EndorsementActivity.class);
+                        openActivity(EndorsementActivity.class,bundle);
                         break;
                     case "徒步巡检表（结对子）":
                         openActivity(HikingCheckActivity.class);

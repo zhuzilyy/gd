@@ -4,39 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:textColor="#000"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/d_40"
-            android:layout_marginLeft="@dimen/d_10"
-            android:gravity="center_vertical"
-            android:text="名称" />
-
-        <TextView
-            android:textColor="#000"
-            android:text="桩号"
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d_40"
-            android:layout_marginLeft="@dimen/d_10"
-            android:layout_marginRight="@dimen/d_10"
-            android:gravity="right|center_vertical" />
-
-    </LinearLayout>
-
-    <View
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/d_0_5"
-        android:layout_marginLeft="@dimen/d_5"
-        android:layout_marginRight="@dimen/d_5"
-        android:background="@color/color_divider" />
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -51,13 +18,14 @@
 
         <TextView
             android:textColor="#000"
-            android:text="桩号"
             android:id="@+id/tv_stationNo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
             android:layout_marginRight="@dimen/d_10"
-            android:gravity="right|center_vertical" />
+            android:gravity="right|center_vertical"
+            android:text="通州二区"
+            />
 
     </LinearLayout>
 
@@ -78,18 +46,17 @@
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
             android:gravity="center_vertical"
-            android:text="距离(m)" />
+            android:text="申请人" />
 
         <TextView
             android:textColor="#000"
-            android:id="@+id/tv_distance"
+            android:text="张三"
+            android:id="@+id/tv_applyName"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_40"
             android:layout_marginLeft="@dimen/d_10"
             android:layout_marginRight="@dimen/d_10"
-            android:gravity="right|center_vertical"
-            android:text="距离"
-            />
+            android:gravity="right|center_vertical" />
 
     </LinearLayout>
 
@@ -99,32 +66,113 @@
         android:layout_marginLeft="@dimen/d_5"
         android:layout_marginRight="@dimen/d_5"
         android:background="@color/color_divider" />
+
+
     <LinearLayout
-        android:padding="@dimen/d_10"
-        android:gravity="end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="申请操作" />
+
+        <TextView
+            android:textColor="#000"
+            android:text="未知"
+            android:id="@+id/tv_apply_operation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:gravity="center_vertical"
+            android:text="申请日期" />
+
+        <TextView
+            android:textColor="#000"
+            android:text="未知"
+            android:id="@+id/tv_apply_time"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_10"
+            android:layout_marginRight="@dimen/d_10"
+            android:gravity="right|center_vertical" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+    <LinearLayout
+        android:layout_marginTop="@dimen/d_10"
+        android:layout_marginBottom="@dimen/d_10"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/btn_check"
-            android:layout_width="@dimen/d_60"
-            android:layout_height="@dimen/d_30"
-            android:layout_marginLeft="@dimen/d_10"
-            android:layout_marginRight="@dimen/d_10"
-            android:background="@drawable/bg_standing"
-            android:text="查看"
+            android:layout_marginLeft="@dimen/d_20"
             android:textColor="#fff"
-            />
+            android:background="@drawable/bg_agreement"
+            android:id="@+id/btn_agree"
+            android:text="同意"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp"/>
         <Button
-            android:id="@+id/btn_delete"
-            android:layout_width="@dimen/d_60"
-            android:layout_height="@dimen/d_30"
-            android:layout_marginLeft="@dimen/d_10"
-            android:layout_marginRight="@dimen/d_10"
-            android:background="@drawable/bg_standing"
-            android:text="删除"
+            android:layout_marginRight="@dimen/d_20"
+            android:layout_marginLeft="@dimen/d_20"
             android:textColor="#fff"
-            />
+            android:background="@drawable/bg_agreement"
+            android:id="@+id/btn_disagree"
+            android:text="不同意"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp"/>
+        <Button
+            android:layout_marginRight="@dimen/d_20"
+            android:textColor="#fff"
+            android:background="@drawable/bg_agreement"
+            android:id="@+id/btn_detail"
+            android:text="详情"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="30dp"/>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"
+        android:layout_marginLeft="@dimen/d_5"
+        android:layout_marginRight="@dimen/d_5"
+        android:background="@color/color_divider" />
+
 
     <View
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.gd.form.model;
 
 public class WaterInsuranceDetailModel {
+    private CreateTime creatime;
     private String creator;
     private String filename;
     private String locations;
@@ -116,5 +117,13 @@ public class WaterInsuranceDetailModel {
 
     public void setStakename(String stakename) {
         this.stakename = stakename;
+    }
+
+    public CreateTime getCreatime() {
+        return creatime;
+    }
+
+    public void setCreatime(CreateTime creatime) {
+        this.creatime = creatime;
     }
 }

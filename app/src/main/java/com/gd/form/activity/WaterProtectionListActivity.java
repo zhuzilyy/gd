@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -47,6 +48,8 @@ public class WaterProtectionListActivity extends BaseActivity {
     private String token, userId;
     private List<WaterModel> resultWaterList;
     private String activityName;
+    private final int UPDATE_WATER = 100;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -95,14 +98,25 @@ public class WaterProtectionListActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                if ("select".equals(resultWaterList.get(position).getType())) {
-                    Intent intent = new Intent();
-                    intent.putExtra("name", resultWaterList.get(position).getStakename());
-                    intent.putExtra("waterId", resultWaterList.get(position).getId() + "");
-                    intent.putExtra("stakeId", resultWaterList.get(position).getStakeid() + "");
-                    setResult(RESULT_OK, intent);
-                    finish();
+                if (v.getId() == R.id.btn_update) {
+                    Intent intent = new Intent(WaterProtectionListActivity.this, AddWaterInsuranceActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("tag", "update");
+                    bundle.putString("waterId", resultWaterList.get(position).getId() + "");
+                    bundle.putInt("waterIndex",position);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, UPDATE_WATER);
+                } else {
+                    if ("select".equals(resultWaterList.get(position).getType())) {
+                        Intent intent = new Intent();
+                        intent.putExtra("name", resultWaterList.get(position).getStakename());
+                        intent.putExtra("waterId", resultWaterList.get(position).getId() + "");
+                        intent.putExtra("stakeId", resultWaterList.get(position).getStakeid() + "");
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 }
+
             }
         });
     }
@@ -125,20 +139,22 @@ public class WaterProtectionListActivity extends BaseActivity {
                 break;
         }
     }
+
     private void getData(String keyWord) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
         jsonObject.addProperty("key", keyWord);
-        Net.create(Api.class).getWaterStation(token,jsonObject)
+        Log.i("tag", "jsonObject====" + jsonObject);
+        Net.create(Api.class).getWaterStation(token, jsonObject)
                 .enqueue(new NetCallback<List<WaterModel>>(this, true) {
                     @Override
                     public void onResponse(List<WaterModel> list) {
                         resultWaterList.clear();
                         for (int i = 0; i < list.size(); i++) {
                             WaterModel waterModel = list.get(i);
-                            if("approveWater".equals(activityName)){
+                            if ("approveWater".equals(activityName)) {
                                 waterModel.setType("select");
-                            }else if("selectWater".equals(activityName)){
+                            } else if ("selectWater".equals(activityName)) {
                                 waterModel.setType("select");
                             }
                             resultWaterList.add(waterModel);
@@ -152,5 +168,20 @@ public class WaterProtectionListActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        if(requestCode == UPDATE_WATER){
+            int waterIndex = data.getIntExtra("waterIndex",-1);
+            String  name = data.getStringExtra("name");
+            resultWaterList.get(waterIndex).setName(name);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 }

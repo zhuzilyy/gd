@@ -128,6 +128,7 @@ public class PipeBaseInfoActivity extends BaseActivity {
     private void delete(int id,int position) {
         JsonObject params = new JsonObject();
         params.addProperty("id", id);
+        params.addProperty("appempid", userId);
         Net.create(Api.class).deletePipe(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override

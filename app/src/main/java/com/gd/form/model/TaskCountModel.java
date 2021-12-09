@@ -92,4 +92,20 @@ public class TaskCountModel {
     public void setTask2(int task2) {
         this.task2 = task2;
     }
+
+    @Override
+    public String toString() {
+        return "TaskCountModel{" +
+                "approval2=" + approval2 +
+                ", approval1=" + approval1 +
+                ", task1=" + task1 +
+                ", task2=" + task2 +
+                ", overCount=" + overCount +
+                ", overFinishCount=" + overFinishCount +
+                ", waitCount=" + waitCount +
+                ", overTaskList=" + overTaskList +
+                ", waitTaskList=" + waitTaskList +
+                ", overFinishTaskList=" + overFinishTaskList +
+                '}';
+    }
 }

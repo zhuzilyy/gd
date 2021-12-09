@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -137,6 +138,7 @@ public class NoApproveActivity extends BaseActivity {
                 bundle.putString("tag", "approve");
                 bundle.putString("formId", noApproveModelList.get(position).getFormid());
                 String formName = noApproveModelList.get(position).getFormname();
+                Log.i("tag","formName==="+formName);
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
@@ -147,7 +149,7 @@ public class NoApproveActivity extends BaseActivity {
                     case "重车碾压调查表":
                         openActivity(ApproveWeightCarActivity.class, bundle);
                         break;
-                    case "现有违章违建记录":
+                    case "违章违建处理记录":
                         openActivity(ApproveBuildingActivity.class, bundle);
                         break;
                     case "徒步巡检表（结对子）":

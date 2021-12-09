@@ -8,7 +8,7 @@ public class BuildingModel implements Serializable {
     private String dangertype;
     private String genernaldate;
     private String highareasflag;
-    private double id;
+    private int id;
     private String legaldesc;
     private String locationdesc;
     private String minspacing;
@@ -27,6 +27,16 @@ public class BuildingModel implements Serializable {
     private String riskevaluation2;
     private String riskevaluation3;
     private String uploadpicture;
+    private String stakename;
+
+    public String getStakename() {
+        return stakename;
+    }
+
+    public void setStakename(String stakename) {
+        this.stakename = stakename;
+    }
+
     public String getAftsolution() {
         return aftsolution;
     }
@@ -59,11 +69,11 @@ public class BuildingModel implements Serializable {
         this.highareasflag = highareasflag;
     }
 
-    public double getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(double id) {
+    public void setId(int id) {
         this.id = id;
     }
 

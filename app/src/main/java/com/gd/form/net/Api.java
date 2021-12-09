@@ -40,6 +40,7 @@ import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StakeModel;
 import com.gd.form.model.StationDetailInfo;
+import com.gd.form.model.StationNoApproveModel;
 import com.gd.form.model.StationNoModel;
 import com.gd.form.model.StationWaterDetailModel;
 import com.gd.form.model.TaskCountModel;
@@ -810,6 +811,14 @@ public interface Api {
     Call<List<StationDetailInfo>> getStationDetailInfo(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
+     * 获取桩的信息
+     *
+     * @return
+     */
+    @POST("approvalstakeinfoForPrimaryKey.html")
+    Call<StationDetailInfo> getStationDetailInfoFromApprove(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
      * 更新桩的信息
      *
      * @return
@@ -1036,7 +1045,7 @@ public interface Api {
     Call<ServerModel> finishTask(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     * 下发任务列表
+     *任务查询
      *
      * @return
      */
@@ -1044,7 +1053,7 @@ public interface Api {
     Call<List<WaitingHandleTaskModel>> workTaskList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     * 下发任务列表
+     * 审核未通过任务数量
      *
      * @return
      */
@@ -1052,7 +1061,7 @@ public interface Api {
     Call<WaitingTakModel> getWaitingTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     * 下发任务列表
+     * 接收任务待处理消息数量
      *
      * @return
      */
@@ -1260,6 +1269,23 @@ public interface Api {
      */
     @POST("projectRecordAdd.html")
     Call<ServerModel> addProjectRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+    /**
+     *获取待审批的管道桩列表
+     *
+     * @return
+     */
+    @POST("pipestakeapprovalWait.html")
+    Call<List<StationNoApproveModel>> getNoApproveStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     *审批管道桩台账
+     *
+     * @return
+     */
+    @POST("pipestakeapprovalHandle.html")
+    Call<ServerModel> approveStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
 }
 
 
