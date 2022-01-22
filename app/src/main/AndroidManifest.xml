@@ -431,6 +431,27 @@
             android:name=".activity.StationWaitingApproveActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.StandardFileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StandardFileListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadStandardFileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.KpiAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.KpiDisplayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.KpiListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.KpiUpdateActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

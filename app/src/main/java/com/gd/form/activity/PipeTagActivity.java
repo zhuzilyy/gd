@@ -150,7 +150,6 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     TextView tvUpStationKm;
     @BindView(R.id.tv_downStationKm)
     TextView tvDownStationKm;
-
     @BindView(R.id.view_upStationNo)
     View viewUpStationNo;
     @BindView(R.id.view_upStationKm)
@@ -185,6 +184,10 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     RadioButton rbNoComplete;
     @BindView(R.id.btn_commit)
     Button btnCommit;
+    @BindView(R.id.ll_stationNameNo)
+    LinearLayout llStationNameNo;
+    @BindView(R.id.view_stationNameNo)
+    View viewStationNameNo;
     private int departmentId, pipeId;
     private ListLandTagDialog landTypeDialog;
     private ListDialog dialog;
@@ -325,12 +328,23 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
 //                etRemark.setEnabled(true);
 //                llLocation.setEnabled(true);
             } else if (tag.equals("approve")) {
-                Log.i("tag", "22222222222");
                 tvTitle.setText("桩体详情");
                 tvRight.setVisibility(View.GONE);
                 String stakeId = getIntent().getStringExtra("stakeId");
                 String stakeStatus = getIntent().getStringExtra("stakeStatus");
                 getStationDetailInfoFromApprove(stakeId, stakeStatus);
+                llUpStationNo.setVisibility(View.GONE);
+                viewUpStationNo.setVisibility(View.GONE);
+                llUpStationKm.setVisibility(View.GONE);
+                viewUpStationKm.setVisibility(View.GONE);
+                llDownStationNo.setVisibility(View.GONE);
+                viewUpStationNo.setVisibility(View.GONE);
+                llDownStationKm.setVisibility(View.GONE);
+                viewDownStationKm.setVisibility(View.GONE);
+                llStationNoPrefix.setVisibility(View.GONE);
+                viewStationNoPrefix.setVisibility(View.GONE);
+                llStationNameNo.setVisibility(View.GONE);
+                viewStationNameNo.setVisibility(View.GONE);
                 llArea.setEnabled(false);
                 llPipeName.setEnabled(false);
                 llGroundTagType.setEnabled(false);
@@ -575,8 +589,6 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                                 etLocation.setText(currentAmapLocation.getAddress());
                             }
                         }
-                        getStationInfo();
-
                     }
 
                 });
@@ -964,7 +976,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
-                            ToastUtil.show("保存成功");
+                            ToastUtil.show(result.getMsg());
                             Intent intent = new Intent();
                             intent.setAction("com.action.update");
                             sendBroadcast(intent);
@@ -1021,7 +1033,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                     @Override
                     public void onResponse(ServerModel result) {
                         if (result.getCode() == Constant.SUCCESS_CODE) {
-                            ToastUtil.show("保存成功");
+                            ToastUtil.show(result.getMsg());
                             Intent intent = new Intent();
                             intent.setAction("com.action.update");
                             sendBroadcast(intent);

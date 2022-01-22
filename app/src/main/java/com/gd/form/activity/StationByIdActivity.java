@@ -3,7 +3,6 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -77,6 +76,7 @@ public class StationByIdActivity extends BaseActivity {
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
                 intent.putExtra("stationId", stationNoModelList.get(position).getId() + "");
                 intent.putExtra("pipeId", stationNoModelList.get(position).getLineid() + "");
+                intent.putExtra("location", stationNoModelList.get(position).getLocationdesc());
                 intent.putExtra("selectTag", selectTag);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -89,7 +89,6 @@ public class StationByIdActivity extends BaseActivity {
         jsonObject.addProperty("pipeid", pipeId);
         jsonObject.addProperty("name", keyWord);
         jsonObject.addProperty("id", userId);
-        Log.i("tag","jsonObject===="+jsonObject);
         Net.create(Api.class).getStationByFullParams(token,jsonObject)
                 .enqueue(new NetCallback<List<StationNoModel>>(this, true) {
                     @Override

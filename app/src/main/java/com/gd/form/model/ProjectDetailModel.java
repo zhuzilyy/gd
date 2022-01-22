@@ -2,7 +2,6 @@ package com.gd.form.model;
 
 public class ProjectDetailModel {
     private CreateTime constructiondate;
-    private CreateTime creatime;
     private String constructiondesc;
     private String constructionname;
     private String constructionprocess;
@@ -15,6 +14,15 @@ public class ProjectDetailModel {
     private String stakename;
     private String uploadfile;
     private int stakeid;
+    private String constructionlocation;
+    public String getConstructionlocation() {
+        return constructionlocation;
+    }
+
+    public void setConstructionlocation(String constructionlocation) {
+        this.constructionlocation = constructionlocation;
+    }
+
     public CreateTime getConstructiondate() {
         return constructiondate;
     }

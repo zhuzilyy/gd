@@ -10,11 +10,14 @@ import com.gd.form.activity.AddWaterInsuranceActivity;
 import com.gd.form.activity.FfglActivity;
 import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
+import com.gd.form.activity.KpiAddActivity;
+import com.gd.form.activity.KpiDisplayActivity;
 import com.gd.form.activity.PipeTagActivity;
 import com.gd.form.activity.ProjectListActivity;
 import com.gd.form.activity.SearchDataActivity;
 import com.gd.form.activity.SearchStationActivity;
 import com.gd.form.activity.SearchTaskActivity;
+import com.gd.form.activity.StandardFileActivity;
 import com.gd.form.activity.TaskDispatchActivity;
 import com.gd.form.activity.UploadRecordActivity;
 import com.gd.form.activity.XhglActivity;
@@ -33,7 +36,8 @@ public class WorkFragment extends BaseFragment {
     LinearLayout llTaskDispatch;
     @BindView(R.id.ll_task)
     LinearLayout llTask;
-
+    @BindView(R.id.ll_kpi_add)
+    LinearLayout llKpiAdd;
     @Override
     protected void initView(Bundle bundle) {
         StatusBarUtil.setTranslucentForImageView(getActivity(), 0, null);
@@ -45,6 +49,7 @@ public class WorkFragment extends BaseFragment {
             } else {
                 llTaskDispatch.setVisibility(View.GONE);
                 llTask.setVisibility(View.GONE);
+                llKpiAdd.setVisibility(View.GONE);
             }
         }
     }
@@ -68,6 +73,9 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_waterInsurance,
             R.id.ll_search_task,
             R.id.ll_upload_record,
+            R.id.ll_standard_file,
+            R.id.ll_kpi_add,
+            R.id.ll_kpi_display
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
@@ -75,15 +83,25 @@ public class WorkFragment extends BaseFragment {
             case R.id.ll_jobs:
                 openActivity(JobsActivity.class);
                 break;
+            case R.id.ll_kpi_display:
+                openActivity(KpiDisplayActivity.class);
+                break;
+            case R.id.ll_kpi_add:
+                openActivity(KpiAddActivity.class);
+                break;
+            case R.id.ll_standard_file:
+                openActivity(StandardFileActivity.class);
+                break;
             //数据查询
             case R.id.ll_search_data:
+                bundle.putString("name", "张三");
+                setArguments(bundle);
                 openActivity(SearchDataActivity.class);
                 break;
             case R.id.ll_job_xhgl:
                 openActivity(XhglActivity.class);
                 break;
             case R.id.ll_job_fxgl:
-//                openActivity(FxglActivity.class);
                 openActivity(ProjectListActivity.class);
                 break;
             case R.id.ll_job_ghg:
@@ -113,6 +131,5 @@ public class WorkFragment extends BaseFragment {
                 break;
         }
     }
-
 
 }

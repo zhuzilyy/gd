@@ -1,7 +1,7 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -126,7 +126,6 @@ public class StationWaitingApproveActivity extends BaseActivity {
         params.addProperty("creatime", time);
         params.addProperty("approvalresult", approvalResult);
         params.addProperty("approvaltime", TimeUtil.longToFormatTimeHMS(System.currentTimeMillis()));
-        Log.i("tag", "params====" + params);
         Net.create(Api.class).approveStation(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -134,6 +133,9 @@ public class StationWaitingApproveActivity extends BaseActivity {
                         if (serverModel.getCode() == Constant.SUCCESS_CODE) {
                             stationNoApproveModelList.remove(index);
                             approveAdapter.notifyDataSetChanged();
+                            Intent intent = new Intent();
+                            intent.setAction("com.action.update.approve");
+                            sendBroadcast(intent);
                             if (stationNoApproveModelList.size() == 0) {
                                 refreshLayout.setVisibility(View.GONE);
                                 llNoData.setVisibility(View.VISIBLE);

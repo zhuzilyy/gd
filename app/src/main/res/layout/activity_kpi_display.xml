@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/layout_title" />
+    <LinearLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_firstSeason"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_firstSeason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="一季度"
+                android:textColor="@color/colorFF52A7F9"
+                android:textSize="@dimen/s_16" />
+
+            <View
+                android:id="@+id/view_firstSeason"
+                android:layout_width="@dimen/d_50"
+                android:layout_height="@dimen/d_2"
+                android:layout_marginTop="@dimen/d_5"
+                android:background="@color/colorFF52A7F9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_secondSeason"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_secondSeason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="二季度"
+                android:textColor="#000"
+                android:textSize="@dimen/s_16" />
+
+            <View
+                android:id="@+id/view_secondSeason"
+                android:layout_width="@dimen/d_50"
+                android:layout_height="@dimen/d_2"
+                android:layout_marginTop="@dimen/d_5"
+                android:background="@color/colorFF52A7F9"
+                android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_thirdSeason"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_thirdSeason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="三季度"
+                android:textColor="#000"
+                android:textSize="@dimen/s_16" />
+
+            <View
+                android:id="@+id/view_thirdSeason"
+                android:layout_width="@dimen/d_50"
+                android:layout_height="@dimen/d_2"
+                android:layout_marginTop="@dimen/d_5"
+                android:background="@color/colorFF52A7F9"
+                android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_fourthSeason"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_fourthSeason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="四季度"
+                android:textColor="#000"
+                android:textSize="@dimen/s_16" />
+
+            <View
+                android:id="@+id/view_fourthSeason"
+                android:layout_width="@dimen/d_50"
+                android:layout_height="@dimen/d_2"
+                android:layout_marginTop="@dimen/d_5"
+                android:background="@color/colorFF52A7F9"
+                android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_average"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="平均分"
+                android:textColor="#000"
+                android:textSize="@dimen/s_16" />
+
+            <View
+                android:id="@+id/view_average"
+                android:layout_width="@dimen/d_50"
+                android:layout_height="@dimen/d_2"
+                android:layout_marginTop="@dimen/d_5"
+                android:background="@color/colorFF52A7F9"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_marginTop="@dimen/d_10"
+        android:id="@+id/main_switch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

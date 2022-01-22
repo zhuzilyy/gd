@@ -1,13 +1,10 @@
 package com.gd.form.activity;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-
 import androidx.annotation.Nullable;
-
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
@@ -97,7 +94,7 @@ public class LoginActivity extends BaseActivity {
                             SPUtil.put(LoginActivity.this, "telNumber", loginModel.getTelenumber());
                             SPUtil.put(LoginActivity.this, "mail", loginModel.getMail());
                             SPUtil.put(LoginActivity.this, "roleId", loginModel.getRoleid());
-                            SPUtil.put(LoginActivity.this, "departmentId", loginModel.getDptid()+"");
+                            SPUtil.put(LoginActivity.this, "departmentId", loginModel.getDptid() + "");
                             ToastUtil.show("登录成功");
                             openActivity(MainActivity.class);
                             finish();

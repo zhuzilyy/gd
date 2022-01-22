@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -90,7 +89,6 @@ public class ProjectRecordListActivity extends BaseActivity {
     private void getData(String projectId) {
         JsonObject params = new JsonObject();
         params.addProperty("projectid", projectId);
-        Log.i("tag","params===="+params);
         Net.create(Api.class).getProjectProgressList(token, params)
                 .enqueue(new NetCallback<List<ProgressModel>>(this, true) {
                     @Override

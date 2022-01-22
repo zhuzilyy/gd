@@ -52,6 +52,7 @@ import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
+import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
@@ -77,8 +78,12 @@ public class AddProjectRecordActivity extends BaseActivity {
     TextView tvRight;
     @BindView(R.id.tv_fileName)
     TextView tvFileName;
+    @BindView(R.id.tv_status)
+    TextView tvStatus;
     @BindView(R.id.et_progressDetail)
     EditText etProgressDetail;
+    @BindView(R.id.et_distance)
+    EditText etDistance;
     @BindView(R.id.rvResultPhoto)
     RecyclerView rvResultPhoto;
     private String projectId, token, userId;
@@ -96,6 +101,8 @@ public class AddProjectRecordActivity extends BaseActivity {
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 101;
     private String selectFileName;
     private String selectFilePath;
+    private ListDialog statusDialog;
+    private List<String> statusList;
 
     @Override
     protected void setStatusBar() {
@@ -110,6 +117,13 @@ public class AddProjectRecordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tvTime.setText(TimeUtil.getCurrentTimeYYmmdd());
+        statusList = new ArrayList<>();
+        statusList.add("正在施工");
+        statusList.add("完成");
+        statusList.add("暂停");
+        statusDialog = new ListDialog(this);
+        statusDialog.setData(statusList);
         nameList = new ArrayList<>();
         tvTitle.setText("进度新增");
         tvRight.setVisibility(View.VISIBLE);
@@ -193,11 +207,20 @@ public class AddProjectRecordActivity extends BaseActivity {
             R.id.tv_right,
             R.id.rl_selectImage,
             R.id.ll_upload,
+            R.id.ll_status,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_status:
+                statusDialog.show();
+                statusDialog.setListItemClick(positionM -> {
+                    tvStatus.setText(statusList.get(positionM));
+                    statusDialog.dismiss();
+                });
+                break;
             case R.id.rl_selectImage:
                 initPermissions();
                 break;
@@ -221,6 +244,7 @@ public class AddProjectRecordActivity extends BaseActivity {
 
         }
     }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -244,6 +268,7 @@ public class AddProjectRecordActivity extends BaseActivity {
             }
         }
     }
+
     private void commit() {
         StringBuilder photoSb = new StringBuilder();
         if (nameList.size() > 0) {
@@ -261,6 +286,16 @@ public class AddProjectRecordActivity extends BaseActivity {
         params.addProperty("constructionprocess", etProgress.getText().toString());
         params.addProperty("processdesc", etProgressDetail.getText().toString());
         params.addProperty("creator", userId);
+        params.addProperty("pipedistance", etDistance.getText().toString());
+        String status;
+        if(tvStatus.getText().toString().equals("正在施工")){
+            status = "1";
+        }else if(tvStatus.getText().toString().equals("完成")){
+            status = "2";
+        }else {
+            status = "3";
+        }
+        params.addProperty("projectstatus", status);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
         if (!TextUtils.isEmpty(photoSb.toString())) {
             params.addProperty("uploadpicture", photoSb.toString());
@@ -300,6 +335,18 @@ public class AddProjectRecordActivity extends BaseActivity {
         }
         if (!NumberUtil.isNumber(etProgress.getText().toString())) {
             ToastUtil.show("进度格式输入不正确");
+            return true;
+        }
+        if (TextUtils.isEmpty(etDistance.getText().toString())) {
+            ToastUtil.show("请输入最近施工点与管道间距");
+            return true;
+        }
+        if (TextUtils.isEmpty(tvStatus.getText().toString())) {
+            ToastUtil.show("请选择当前施工状态");
+            return true;
+        }
+        if (!NumberUtil.isNumber(etDistance.getText().toString())) {
+            ToastUtil.show("间距格式输入不正确");
             return true;
         }
         if (TextUtils.isEmpty(etProgressDetail.getText().toString())) {
@@ -391,6 +438,7 @@ public class AddProjectRecordActivity extends BaseActivity {
                     WeiboDialogUtils.closeDialog(mWeiboDialog);
                 }
             }
+
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
                 ToastUtil.show("上传失败请重试");

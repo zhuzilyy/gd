@@ -7,6 +7,15 @@ public class ProjectModel {
     private String projectid;
     private String projectname;
     private int projectstatus;
+    private String pipedistance;
+
+    public String getPipedistance() {
+        return pipedistance;
+    }
+
+    public void setPipedistance(String pipedistance) {
+        this.pipedistance = pipedistance;
+    }
 
     public int getDepartmentid() {
         return departmentid;

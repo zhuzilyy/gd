@@ -77,18 +77,6 @@ public class TaskStatusActivity extends BaseActivity {
                 openActivity(ApproveWaterProtectionActivity.class);
             }
         });
-//        if (TextUtils.isEmpty(other)) {
-//            llNoData.setVisibility(View.VISIBLE);
-//            refreshLayout.setVisibility(View.GONE);
-//        } else {
-//            llNoData.setVisibility(View.GONE);
-//            refreshLayout.setVisibility(View.VISIBLE);
-//            String[] stationsArr = other.split(";");
-//            for (int i = 0; i < stationsArr.length; i++) {
-//                otherList.add(stationsArr[i]);
-//                adapter.notifyDataSetChanged();
-//            }
-//        }
     }
     @OnClick({R.id.iv_back})
     public void click(View view){

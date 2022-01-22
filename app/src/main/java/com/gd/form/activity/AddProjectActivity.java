@@ -83,6 +83,8 @@ public class AddProjectActivity extends BaseActivity {
     EditText etRemark;
     @BindView(R.id.tv_projectType)
     TextView tvProjectType;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_STATION = 101;
     private String selectFileName;
@@ -94,14 +96,16 @@ public class AddProjectActivity extends BaseActivity {
     private String ossFilePath;
     private String pipeId, stationId;
     private TimePickerView pvTime;
-    private String tag, projectId;
+    private String tag, projectId, location;
     private ProjectDetailModel projectDetailModel;
     private ListDialog projectTypeDialog;
     private List<String> typeList;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
+
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_add_project;
@@ -153,6 +157,7 @@ public class AddProjectActivity extends BaseActivity {
                             etBaseInfo.setText(result.getConstructiondesc());
                             etRemark.setText(result.getRemark());
                             stationId = result.getStakeid() + "";
+                            tvAddress.setText(result.getConstructionlocation());
                             pipeId = "0";
                             if (!result.getUploadfile().equals("00")) {
                                 if (result.getFilename().contains("_")) {
@@ -181,7 +186,7 @@ public class AddProjectActivity extends BaseActivity {
             case R.id.ll_projectType:
                 projectTypeDialog.show();
                 projectTypeDialog.setListItemClick(positionM -> {
-                      tvProjectType.setText(typeList.get(positionM));
+                    tvProjectType.setText(typeList.get(positionM));
                     projectTypeDialog.dismiss();
                 });
                 break;
@@ -216,8 +221,8 @@ public class AddProjectActivity extends BaseActivity {
                 break;
             case R.id.tv_right:
                 Bundle bundle = new Bundle();
-                bundle.putString("projectId",projectId);
-                openActivity(AddProjectRecordActivity.class,bundle);
+                bundle.putString("projectId", projectId);
+                openActivity(AddProjectRecordActivity.class, bundle);
                 break;
         }
     }
@@ -237,6 +242,8 @@ public class AddProjectActivity extends BaseActivity {
         params.addProperty("creator", userId);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
         params.addProperty("uploadfile", "00");
+        params.addProperty("constructionlocation", location);
+        Log.i("tag","params===="+params);
         Net.create(Api.class).addProject(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -263,13 +270,14 @@ public class AddProjectActivity extends BaseActivity {
         params.addProperty("constructionname", etProjectName.getText().toString());
         params.addProperty("constructionunit", etConstructName.getText().toString());
         params.addProperty("constructiondesc", etBaseInfo.getText().toString());
-        params.addProperty("construcitondate",TimeUtil.getCurrentTimeYYmmdd());
+        params.addProperty("construcitondate", TimeUtil.getCurrentTimeYYmmdd());
         params.addProperty("constructionprocess", "0");
         params.addProperty("processdesc", tvProjectType.getText().toString());
         params.addProperty("remark", etRemark.getText().toString());
         params.addProperty("creator", userId);
         params.addProperty("creatime", TimeUtil.getCurrentTime());
         params.addProperty("uploadfile", "00");
+        params.addProperty("constructionlocation", tvAddress.getText().toString());
         Net.create(Api.class).updateProject(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -340,8 +348,9 @@ public class AddProjectActivity extends BaseActivity {
             String stationName = data.getStringExtra("stationName");
             pipeId = data.getStringExtra("pipeId");
             stationId = data.getStringExtra("stationId");
-            Log.i("tag", "");
+            location = data.getStringExtra("location");
             tvStationNo.setText(stationName);
+            tvAddress.setText(location);
         }
     }
 

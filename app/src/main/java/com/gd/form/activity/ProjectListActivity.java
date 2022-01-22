@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,12 +65,10 @@ public class ProjectListActivity extends BaseActivity {
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
-
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_project_list;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +109,6 @@ public class ProjectListActivity extends BaseActivity {
         JsonObject params = new JsonObject();
         params.addProperty("departmentid", departmentId);
         params.addProperty("projecttype", type);
-        Log.i("tag","params===="+params);
         Net.create(Api.class).getProjectList(token, params)
                 .enqueue(new NetCallback<List<ProjectModel>>(this, true) {
                     @Override
@@ -134,7 +130,6 @@ public class ProjectListActivity extends BaseActivity {
     private void pipeDepartmentInfoGetList() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
-        Log.i("tag","params===="+params);
         Net.create(Api.class).getDepartmentById(token, params)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override

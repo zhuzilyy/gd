@@ -1,8 +1,10 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
-import android.widget.ProgressBar;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -31,19 +33,28 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectModel> {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void bindData(BaseViewHolder viewHolder, ProjectModel progress, int position) {
-        TextView tvProgress = viewHolder.getView(R.id.tv_progress);
-        ProgressBar progressBar = viewHolder.getView(R.id.progressBar);
+        View viewStatus = viewHolder.getView(R.id.view_status);
+        LinearLayout llBg = viewHolder.getView(R.id.ll_bg);
+        TextView tvStatus = viewHolder.getView(R.id.tv_status);
+        TextView tvDistance = viewHolder.getView(R.id.tv_distance);
+        TextView tvProgressData = viewHolder.getView(R.id.tv_progressData);
         TextView tvName = viewHolder.getView(R.id.tv_name);
         tvName.setText(progress.getProjectname());
-        tvProgress.setText("当前进度"+progress.getConstructionprocess()+"%");
+        tvDistance.setText(progress.getPipedistance());
+        tvProgressData.setText(progress.getConstructionprocess()+"%");
         if(progress.getProjectstatus() == 1){
-            progressBar.setProgressDrawable(context.getDrawable(R.drawable.progress_bg));
+            viewStatus.setBackgroundColor(Color.parseColor("#8000ff00"));
+            llBg.setBackgroundColor(Color.parseColor("#4000ff00"));
+            tvStatus.setText("正在施工");
         }else if(progress.getProjectstatus() == 2){
-            progressBar.setProgressDrawable(context.getDrawable(R.drawable.progress_bg1));
+            viewStatus.setBackgroundColor(Color.parseColor("#80ff0000"));
+            llBg.setBackgroundColor(Color.parseColor("#40ff0000"));
+            tvStatus.setText("完成");
         }else{
-            progressBar.setProgressDrawable(context.getDrawable(R.drawable.progress_bg2));
+            viewStatus.setBackgroundColor(Color.parseColor("#80ffff00"));
+            llBg.setBackgroundColor(Color.parseColor("#40ffff00"));
+            tvStatus.setText("暂停");
         }
-//        progressBar.setProgress(Integer.parseInt(progress.getConstructionprocess()));
         viewHolder.getContentView().setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());

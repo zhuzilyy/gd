@@ -17,8 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceGenerator {
 
     private static String BASE_URL = UrlConstant.getInstance().getServerUrl();
-
-
     public static <T> T createServiceFrom(Class<T> serviceClass) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

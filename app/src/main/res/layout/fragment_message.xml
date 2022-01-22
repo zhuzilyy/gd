@@ -223,6 +223,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <RelativeLayout
+                    android:id="@+id/rl_station_approve"
                     android:padding="@dimen/d_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

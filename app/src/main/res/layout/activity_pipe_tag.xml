@@ -447,6 +447,7 @@
 
             <!--桩名序号-->
             <LinearLayout
+                android:id="@+id/ll_stationNameNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80FFFFFF"
@@ -486,6 +487,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/view_stationNameNo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"

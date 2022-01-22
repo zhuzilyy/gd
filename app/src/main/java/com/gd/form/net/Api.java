@@ -10,6 +10,7 @@ import com.gd.form.model.ElectricityRecordDetailModel;
 import com.gd.form.model.EventDetailModel;
 import com.gd.form.model.EventHistoryDetailModel;
 import com.gd.form.model.EventHistoryModel;
+import com.gd.form.model.FileDetailModel;
 import com.gd.form.model.FormModel;
 import com.gd.form.model.HiddenDetailModel;
 import com.gd.form.model.HighZoneDetailModel;
@@ -17,6 +18,7 @@ import com.gd.form.model.HighZoneModel;
 import com.gd.form.model.HikingDetailModel;
 import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.model.Jobs;
+import com.gd.form.model.KpiModel;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
 import com.gd.form.model.NextStationModel;
@@ -30,6 +32,7 @@ import com.gd.form.model.ProgressModel;
 import com.gd.form.model.ProjectDetailModel;
 import com.gd.form.model.ProjectModel;
 import com.gd.form.model.ResultMsg;
+import com.gd.form.model.ScoreModel;
 import com.gd.form.model.SearchArea;
 import com.gd.form.model.SearchBuildingModel;
 import com.gd.form.model.SearchForm;
@@ -39,6 +42,8 @@ import com.gd.form.model.SearchPipeModel;
 import com.gd.form.model.SearchStationModel;
 import com.gd.form.model.ServerModel;
 import com.gd.form.model.StakeModel;
+import com.gd.form.model.StandardFileModel;
+import com.gd.form.model.StationApproveModel;
 import com.gd.form.model.StationDetailInfo;
 import com.gd.form.model.StationNoApproveModel;
 import com.gd.form.model.StationNoModel;
@@ -1045,7 +1050,7 @@ public interface Api {
     Call<ServerModel> finishTask(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     *任务查询
+     * 任务查询
      *
      * @return
      */
@@ -1269,8 +1274,9 @@ public interface Api {
      */
     @POST("projectRecordAdd.html")
     Call<ServerModel> addProjectRecord(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
     /**
-     *获取待审批的管道桩列表
+     * 获取待审批的管道桩列表
      *
      * @return
      */
@@ -1278,12 +1284,100 @@ public interface Api {
     Call<List<StationNoApproveModel>> getNoApproveStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     *审批管道桩台账
+     * 审批管道桩台账
      *
      * @return
      */
     @POST("pipestakeapprovalHandle.html")
     Call<ServerModel> approveStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 审批管道桩台账
+     *
+     * @return
+     */
+    @POST("pipestakeapprovalWaitCount.html")
+    Call<StationApproveModel> approveStationCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取标准化文件类型
+     *
+     * @return
+     */
+    @POST("standardfiletypeGetAll.html")
+    Call<List<StandardFileModel>> getStandardFiles(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取标准化文件列表
+     *
+     * @return
+     */
+    @POST("standardfileGetAllByType.html")
+    Call<List<FileDetailModel>> getStandardFilesList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除文件
+     *
+     * @return
+     */
+    @POST("standardfileDelete.html")
+    Call<ServerModel> deleteFile(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 新增文件
+     *
+     * @return
+     */
+    @POST("standardfileAdd.html")
+    Call<ServerModel> addFile(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 新增考核录入
+     *
+     * @return
+     */
+    @POST("kpiassessmentAdd.html")
+    Call<ServerModel> addKpi(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取季度分数
+     *
+     * @return
+     */
+    @POST("selectKPIsummary.html")
+    Call<List<ScoreModel>> getSeasonScore(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取平均分数
+     *
+     * @return
+     */
+    @POST("selectKPIagv.html")
+    Call<List<ScoreModel>> getAverageScore(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取kpi列表
+     *
+     * @return
+     */
+    @POST("kpiassessmentGetKPIforSeason.html")
+    Call<List<KpiModel>> getKpiList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除kpi
+     *
+     * @return
+     */
+    @POST("kpiassessmentDelete.html")
+    Call<ServerModel> deleteKpi(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除kpi
+     *
+     * @return
+     */
+    @POST("kpiassessmentUpdate.html")
+    Call<ServerModel> updateKpi(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

@@ -35,7 +35,6 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     @BindView(R.id.rg_tab_bar)
     RadioGroup rg_tab_bar;
-
     @BindView(R.id.rb_work)
     RadioButton rb_work;
     @BindView(R.id.rb_message)
@@ -58,28 +57,24 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
-
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_main;
     }
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         rb_work.setChecked(true);
-
         vpager.setAdapter(mAdapter);
         vpager.setCurrentItem(PAGE_TWO);
         vpager.addOnPageChangeListener(this);
         token = (String) SPUtil.get(this, "token", "");
-        manager = DownloadManager.getInstance(MainActivity.this);
+        manager = DownloadManager.getInstance(getApplicationContext());
         getOssData();
         updateApp();
     }
-
     private void updateApp() {
         configuration = new UpdateConfiguration()
                 //输出错误日志

@@ -21,6 +21,7 @@ import com.gd.form.activity.StationWaitingApproveActivity;
 import com.gd.form.activity.WaitingActivity;
 import com.gd.form.activity.WaitingHandleTaskActivity;
 import com.gd.form.base.BaseFragment;
+import com.gd.form.model.StationApproveModel;
 import com.gd.form.model.TaskCountModel;
 import com.gd.form.model.WaitingTakModel;
 import com.gd.form.net.Api;
@@ -55,6 +56,8 @@ public class MessageFragment extends BaseFragment {
     RelativeLayout rlTaskWaitingHandle;
     @BindView(R.id.rl_refuse)
     RelativeLayout rlRefuse;
+    @BindView(R.id.rl_station_approve)
+    RelativeLayout rlStationApprove;
     List<Badge> badges;
     private String token, userId;
     private MyReceiver myReceiver;
@@ -69,6 +72,7 @@ public class MessageFragment extends BaseFragment {
         badges.add(new QBadgeView(getActivity()).bindTarget(rlNoApprove));
         badges.add(new QBadgeView(getActivity()).bindTarget(rlTaskWaitingHandle));
         badges.add(new QBadgeView(getActivity()).bindTarget(rlRefuse));
+        badges.add(new QBadgeView(getActivity()).bindTarget(rlStationApprove));
         myReceiver = new MyReceiver();
         IntentFilter filterWaitingTask = new IntentFilter();
         filterWaitingTask.addAction("com.action.update.waitingTask");
@@ -81,8 +85,12 @@ public class MessageFragment extends BaseFragment {
         IntentFilter filterTask = new IntentFilter();
         filterTask.addAction("com.action.update.task");
         getActivity().registerReceiver(myReceiver, filterTask);
-        getWaitingTaskCount();
 
+        IntentFilter filterStationApprove = new IntentFilter();
+        filterStationApprove.addAction("com.action.update.approve");
+        getActivity().registerReceiver(myReceiver, filterStationApprove);
+        getWaitingTaskCount();
+        getApproveStationCount();
     }
 
     @Override
@@ -176,6 +184,21 @@ public class MessageFragment extends BaseFragment {
                     }
                 });
     }
+    private void getApproveStationCount() {
+        JsonObject params = new JsonObject();
+        params.addProperty("appempid", userId);
+        Net.create(Api.class).approveStationCount(token, params)
+                .enqueue(new NetCallback<StationApproveModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(StationApproveModel result) {
+                        if (result.getCount() > 0) {
+                            badges.get(5).setShowShadow(false).setBadgeNumber(result.getCount());
+                        } else {
+                            badges.get(5).hide(true);
+                        }
+                    }
+                });
+    }
 
     @OnClick({
             R.id.ll_waiting,
@@ -216,6 +239,8 @@ public class MessageFragment extends BaseFragment {
                     || action.equals("com.action.updateApprove")
                     || action.equals("com.action.update.task")) {
                 getWaitingTaskCount();
+            }else if(action.equals("com.action.update.approve")){
+                getApproveStationCount();
             }
         }
     }

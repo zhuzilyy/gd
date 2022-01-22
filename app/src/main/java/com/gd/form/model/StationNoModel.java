@@ -17,6 +17,7 @@ public class StationNoModel {
     private String staketype;
     private String standardeep;
     private String topagraphy;
+
     public int getLineid() {
         return lineid;
     }
