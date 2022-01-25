@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="电子化管道记录表单系统"
+            android:text="北分管道"
             android:textColor="@color/write"
             android:textSize="30sp" />
 

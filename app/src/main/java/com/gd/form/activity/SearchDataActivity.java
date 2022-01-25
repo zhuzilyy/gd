@@ -254,7 +254,7 @@ public class SearchDataActivity extends BaseActivity {
     //获取作业区
     private void getArea() {
         JsonObject params = new JsonObject();
-        params.addProperty("employid", Integer.valueOf(userId));
+        params.addProperty("employid", Long.valueOf(userId));
         Net.create(Api.class).getSearchArea(token, params)
                 .enqueue(new NetCallback<List<SearchArea>>(this, true) {
                     @Override

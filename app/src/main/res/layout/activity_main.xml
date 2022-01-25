@@ -12,22 +12,19 @@
         android:background="@color/write"
         android:orientation="horizontal">
 
-
-        <RadioButton
+        <com.gd.form.view.AppRadioButton
             android:id="@+id/rb_message"
             style="@style/tab_menu_item"
             android:drawableTop="@drawable/tab_menu_message"
             android:text="@string/tab_menu_message" />
-
-
-        <RadioButton
+        <com.gd.form.view.AppRadioButton
             android:id="@+id/rb_work"
             style="@style/tab_menu_item"
             android:drawableTop="@drawable/tab_menu_work"
             android:text="@string/tab_menu_work" />
 
 
-        <RadioButton
+        <com.gd.form.view.AppRadioButton
             android:id="@+id/rb_user"
             style="@style/tab_menu_item"
             android:drawableTop="@drawable/tab_menu_user"

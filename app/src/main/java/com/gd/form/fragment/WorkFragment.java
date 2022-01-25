@@ -28,6 +28,7 @@ import com.jaeger.library.StatusBarUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.gd.form.constants.Constant.CORRODE_DEPARTMENT;
 import static com.gd.form.constants.Constant.PIPE_DEPARTMENT;
 
 
@@ -38,6 +39,9 @@ public class WorkFragment extends BaseFragment {
     LinearLayout llTask;
     @BindView(R.id.ll_kpi_add)
     LinearLayout llKpiAdd;
+    @BindView(R.id.ll_job_ffgl)
+    LinearLayout llCorrode;
+
     @Override
     protected void initView(Bundle bundle) {
         StatusBarUtil.setTranslucentForImageView(getActivity(), 0, null);
@@ -50,6 +54,11 @@ public class WorkFragment extends BaseFragment {
                 llTaskDispatch.setVisibility(View.GONE);
                 llTask.setVisibility(View.GONE);
                 llKpiAdd.setVisibility(View.GONE);
+            }
+            if(Integer.parseInt(departmentId) == CORRODE_DEPARTMENT){
+                llCorrode.setVisibility(View.VISIBLE);
+            }else{
+                llCorrode.setVisibility(View.INVISIBLE);
             }
         }
     }

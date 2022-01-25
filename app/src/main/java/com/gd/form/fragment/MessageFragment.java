@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,6 +60,7 @@ public class MessageFragment extends BaseFragment {
     List<Badge> badges;
     private String token, userId;
     private MyReceiver myReceiver;
+    private int msgCount;
 
     @Override
     protected void initView(Bundle bundle) {
@@ -90,7 +90,6 @@ public class MessageFragment extends BaseFragment {
         filterStationApprove.addAction("com.action.update.approve");
         getActivity().registerReceiver(myReceiver, filterStationApprove);
         getWaitingTaskCount();
-        getApproveStationCount();
     }
 
     @Override
@@ -112,12 +111,12 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(WaitingTakModel result) {
                         if (result.getMsg() > 0) {
+                            msgCount += result.getMsg();
                             badges.get(3).setShowShadow(false).setBadgeNumber(result.getMsg());
                         } else {
                             badges.get(3).hide(true);
                         }
                         getNoApproveCount();
-
                     }
                 });
     }
@@ -131,11 +130,38 @@ public class MessageFragment extends BaseFragment {
                     public void onResponse(TaskCountModel model) {
                         int noApprove = model.getApproval2();
                         if (noApprove > 0) {
+                            msgCount += noApprove;
                             badges.get(2).setShowShadow(false).setBadgeNumber(noApprove);
                         } else {
                             badges.get(2).hide(true);
                         }
                         getTaskTotal(model.getApproval1());
+                    }
+                });
+    }
+
+    private void getTaskTotal(int noApproveCount) {
+        JsonObject params = new JsonObject();
+        params.addProperty("empid", userId);
+        Net.create(Api.class).getTaskTotal(token, params)
+                .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(TaskCountModel model) {
+                        int waitingTask = model.getWaitCount();
+                        waitingTask += noApproveCount;
+                        if (waitingTask > 0) {
+                            msgCount += waitingTask;
+                            badges.get(0).setShowShadow(false).setBadgeNumber(waitingTask);
+                        } else {
+                            badges.get(0).hide(true);
+                        }
+                        int overTimeTask = model.getOverCount();
+                        if (overTimeTask > 0) {
+                            msgCount +=overTimeTask;
+                            badges.get(1).setShowShadow(false).setBadgeNumber(overTimeTask);
+                        } else {
+                            badges.get(1).hide(true);
+                        }
                         getRefuseCount();
                     }
                 });
@@ -151,39 +177,16 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(WaitingTakModel result) {
                         if (result.getMsg() > 0) {
+                            msgCount+=result.getMsg();
                             badges.get(4).setShowShadow(false).setBadgeNumber(result.getMsg());
                         } else {
                             badges.get(4).hide(true);
                         }
+                        getApproveStationCount();
                     }
                 });
     }
 
-    private void getTaskTotal(int noApproveCount) {
-        JsonObject params = new JsonObject();
-        params.addProperty("empid", userId);
-        Log.i("tag", "params===" + params);
-        Net.create(Api.class).getTaskTotal(token, params)
-                .enqueue(new NetCallback<TaskCountModel>(getActivity(), false) {
-                    @Override
-                    public void onResponse(TaskCountModel model) {
-                        int waitingTask = model.getWaitCount();
-                        waitingTask += noApproveCount;
-                        if (waitingTask > 0) {
-                            badges.get(0).setShowShadow(false).setBadgeNumber(waitingTask);
-                        } else {
-                            badges.get(0).hide(true);
-                        }
-                        int overTimeTask = model.getOverCount();
-                        if (overTimeTask > 0) {
-                            badges.get(1).setShowShadow(false).setBadgeNumber(overTimeTask);
-                        } else {
-                            badges.get(1).hide(true);
-                        }
-
-                    }
-                });
-    }
     private void getApproveStationCount() {
         JsonObject params = new JsonObject();
         params.addProperty("appempid", userId);
@@ -192,12 +195,25 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(StationApproveModel result) {
                         if (result.getCount() > 0) {
+                            msgCount+=result.getCount();
                             badges.get(5).setShowShadow(false).setBadgeNumber(result.getCount());
                         } else {
                             badges.get(5).hide(true);
                         }
+                        sendMsgBroadCast(msgCount);
                     }
                 });
+    }
+
+    private void sendMsgBroadCast(int msgCount) {
+        Intent intent = new Intent();
+        if(msgCount>0){
+            intent.setAction("com.action.showMessageDot");
+        }else{
+            intent.setAction("com.action.hideMessageDot.=");
+        }
+        intent.putExtra("count",msgCount);
+        getActivity().sendBroadcast(intent);
     }
 
     @OnClick({
@@ -237,11 +253,14 @@ public class MessageFragment extends BaseFragment {
             String action = intent.getAction();
             if (action.equals("com.action.update.waitingTask")
                     || action.equals("com.action.updateApprove")
-                    || action.equals("com.action.update.task")) {
+                    || action.equals("com.action.update.task")
+                    ||action.equals("com.action.update.approve")) {
+                msgCount = 0;
                 getWaitingTaskCount();
-            }else if(action.equals("com.action.update.approve")){
-                getApproveStationCount();
             }
+//            else if (action.equals("com.action.update.approve")) {
+//                getApproveStationCount();
+//            }
         }
     }
 

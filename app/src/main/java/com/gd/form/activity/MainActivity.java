@@ -1,11 +1,14 @@
 package com.gd.form.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -26,21 +29,25 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.view.AppRadioButton;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import q.rorbin.badgeview.Badge;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     @BindView(R.id.rg_tab_bar)
     RadioGroup rg_tab_bar;
     @BindView(R.id.rb_work)
-    RadioButton rb_work;
+    AppRadioButton rb_work;
     @BindView(R.id.rb_message)
-    RadioButton rb_message;
+    AppRadioButton rb_message;
     @BindView(R.id.rb_user)
-    RadioButton rb_user;
+    AppRadioButton rb_user;
     @BindView(R.id.vpager)
     ViewPager vpager;
     private MyFragmentPagerAdapter mAdapter;
@@ -52,7 +59,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private String token, userId;
     private UpdateConfiguration configuration;
     private long exitTime = 0;//根据连续点击之间时间判断 是否退出
-
+    private MyReceiver myReceiver;
+    private List<Badge> badges;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -74,6 +82,17 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         manager = DownloadManager.getInstance(getApplicationContext());
         getOssData();
         updateApp();
+
+        myReceiver = new MyReceiver();
+        IntentFilter filterShowDot = new IntentFilter();
+        filterShowDot.addAction("com.action.showMessageDot");
+        registerReceiver(myReceiver,filterShowDot);
+
+        IntentFilter filterHideDot = new IntentFilter();
+        filterHideDot.addAction("com.action.hideMessageDot");
+        registerReceiver(myReceiver,filterHideDot);
+
+
     }
     private void updateApp() {
         configuration = new UpdateConfiguration()
@@ -216,6 +235,18 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         } else {
             finish();
             System.exit(0);
+        }
+    }
+    class MyReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null){
+                if(intent.getAction().equals("com.action.showMessageDot")){
+                    rb_message.setShowSmallDot(true);
+                }else if(intent.getAction().equals("com.action.hideMessageDot")){
+                    rb_message.setShowSmallDot(false);
+                }
+            }
         }
     }
 }

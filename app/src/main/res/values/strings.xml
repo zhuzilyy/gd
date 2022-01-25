@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">管道表单系统</string>
+    <string name="app_name">北分管道</string>
     <string name="app_name1">管道记录系统</string>
     <string name="loading">请稍后......</string>
     <string name="timeout">请求超时</string>

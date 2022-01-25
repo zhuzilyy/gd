@@ -140,6 +140,7 @@ public class AddProjectActivity extends BaseActivity {
     private void getDetail(String projectId) {
         JsonObject params = new JsonObject();
         params.addProperty("id", projectId);
+        Log.i("tag","params==="+params);
         Net.create(Api.class).getProjectDetail(token, params)
                 .enqueue(new NetCallback<ProjectDetailModel>(this, true) {
                     @Override
@@ -151,7 +152,9 @@ public class AddProjectActivity extends BaseActivity {
                             etDistance.setText(result.getStakefrom());
                             etProjectName.setText(result.getConstructionname());
                             etConstructName.setText(result.getConstructionunit());
-                            tvTime.setText(TimeUtil.longToFormatTime(result.getConstructiondate().getTime()));
+                            if(result.getConstructiondate()!=null){
+                                tvTime.setText(TimeUtil.longToFormatTime(result.getConstructiondate().getTime()));
+                            }
                             etProgress.setText(result.getConstructionprocess());
                             etProgressDetail.setText(result.getConstructiondesc());
                             etBaseInfo.setText(result.getConstructiondesc());
@@ -159,11 +162,13 @@ public class AddProjectActivity extends BaseActivity {
                             stationId = result.getStakeid() + "";
                             tvAddress.setText(result.getConstructionlocation());
                             pipeId = "0";
-                            if (!result.getUploadfile().equals("00")) {
-                                if (result.getFilename().contains("_")) {
-                                    tvFileName.setText(result.getFilename().split("_")[2]);
-                                }
+                            if (result.getUploadfile()!=null) {
+                                if (!result.getUploadfile().equals("00")) {
+                                    if (result.getFilename().contains("_")) {
+                                        tvFileName.setText(result.getFilename().split("_")[2]);
+                                    }
 
+                                }
                             }
                         }
                     }
