@@ -154,6 +154,15 @@ public interface Api {
 
 
     /**
+     * 新增水工保护的桩号搜索
+     *
+     * @return
+     */
+    @POST("GetPipestakeinfoForWaterProject.html")
+    Call<List<StationNoModel>> waterStation(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
+    /**
      * 获取所有用户信息
      *
      * @return

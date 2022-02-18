@@ -452,6 +452,9 @@
             android:name=".activity.KpiUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.StationWaterActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

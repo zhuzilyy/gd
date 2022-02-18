@@ -4,7 +4,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
 import androidx.annotation.Nullable;
+
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;

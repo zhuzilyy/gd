@@ -68,7 +68,6 @@ public class StandardFileListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("文件列表");
-        tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("新增");
         deleteDialog = new DeleteDialog(this);
         Intent intent = getIntent();
@@ -79,6 +78,12 @@ public class StandardFileListActivity extends BaseActivity {
         standardFileModels = new ArrayList<>();
         token = (String) SPUtil.get(StandardFileListActivity.this, "token", "");
         userId = (String) SPUtil.get(StandardFileListActivity.this, "userId", "");
+        String departmentId = (String) SPUtil.get(StandardFileListActivity.this, "departmentId", "");
+        if(!TextUtils.isEmpty(departmentId)){
+            if(Integer.parseInt(departmentId) == Constant.PIPE_DEPARTMENT){
+                tvRight.setVisibility(View.VISIBLE);
+            }
+        }
         initViews();
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();

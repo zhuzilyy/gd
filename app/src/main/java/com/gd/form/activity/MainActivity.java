@@ -33,11 +33,8 @@ import com.gd.form.view.AppRadioButton;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import q.rorbin.badgeview.Badge;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     @BindView(R.id.rg_tab_bar)
@@ -60,7 +57,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private UpdateConfiguration configuration;
     private long exitTime = 0;//根据连续点击之间时间判断 是否退出
     private MyReceiver myReceiver;
-    private List<Badge> badges;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));

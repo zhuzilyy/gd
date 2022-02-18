@@ -122,6 +122,7 @@ public class AddProjectRecordActivity extends BaseActivity {
         statusList.add("正在施工");
         statusList.add("完成");
         statusList.add("暂停");
+        statusList.add("前期介入");
         statusDialog = new ListDialog(this);
         statusDialog.setData(statusList);
         nameList = new ArrayList<>();
@@ -292,8 +293,10 @@ public class AddProjectRecordActivity extends BaseActivity {
             status = "1";
         }else if(tvStatus.getText().toString().equals("完成")){
             status = "2";
-        }else {
+        }else if(tvStatus.getText().toString().equals("暂停")){
             status = "3";
+        }else{
+            status = "4";
         }
         params.addProperty("projectstatus", status);
         params.addProperty("creatime", TimeUtil.getCurrentTime());

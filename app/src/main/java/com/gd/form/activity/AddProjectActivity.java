@@ -140,7 +140,6 @@ public class AddProjectActivity extends BaseActivity {
     private void getDetail(String projectId) {
         JsonObject params = new JsonObject();
         params.addProperty("id", projectId);
-        Log.i("tag","params==="+params);
         Net.create(Api.class).getProjectDetail(token, params)
                 .enqueue(new NetCallback<ProjectDetailModel>(this, true) {
                     @Override

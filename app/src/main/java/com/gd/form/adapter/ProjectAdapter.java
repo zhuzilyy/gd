@@ -50,10 +50,14 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectModel> {
             viewStatus.setBackgroundColor(Color.parseColor("#80ff0000"));
             llBg.setBackgroundColor(Color.parseColor("#40ff0000"));
             tvStatus.setText("完成");
-        }else{
+        }else if(progress.getProjectstatus() == 3){
             viewStatus.setBackgroundColor(Color.parseColor("#80ffff00"));
             llBg.setBackgroundColor(Color.parseColor("#40ffff00"));
             tvStatus.setText("暂停");
+        }else{
+            viewStatus.setBackgroundColor(Color.parseColor("#8052A7F9"));
+            llBg.setBackgroundColor(Color.parseColor("#4052A7F9"));
+            tvStatus.setText("前期介入");
         }
         viewHolder.getContentView().setOnClickListener(view -> {
             if (onItemClickListener != null) {

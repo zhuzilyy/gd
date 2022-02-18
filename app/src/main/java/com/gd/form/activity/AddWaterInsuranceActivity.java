@@ -430,7 +430,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.ll_station:
-                Intent intentStartStation = new Intent(this, StationActivity.class);
+                Intent intentStartStation = new Intent(this, StationWaterActivity.class);
                 startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
         }
