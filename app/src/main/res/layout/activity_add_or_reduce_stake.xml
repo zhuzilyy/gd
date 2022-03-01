@@ -138,6 +138,7 @@
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="@dimen/d_18"
                     android:layout_height="@dimen/d_18"
                     android:layout_gravity="center"

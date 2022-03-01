@@ -22,6 +22,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     private Context context;
     private LayoutInflater mLayoutInflater;
     private List<String> result;
+    private picClickListener picClickListener;
     public PhotoAdapter(Context context, List<String> result) {
         mLayoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -30,7 +31,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mLayoutInflater.inflate(R.layout.item_photo, parent, false));
+        ViewHolder viewHolder = new ViewHolder(mLayoutInflater.inflate(R.layout.item_photo, parent, false));
+        return viewHolder;
     }
 
     @Override
@@ -39,6 +41,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 .load(result.get(position))
                 .centerCrop()
                 .into(holder.ivPhoto);
+        holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(picClickListener!=null){
+                    picClickListener.click(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -52,30 +62,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
+
         }
 
     }
-
+    public interface picClickListener{
+        void click(int position);
+    }
+    public void setPicClickListener(picClickListener picClickListener){
+        this.picClickListener = picClickListener;
+    }
 
 }
-/*
- *   ┏┓　　　┏┓
- * ┏┛┻━━━┛┻┓
- * ┃　　　　　　　┃
- * ┃　　　━　　　┃
- * ┃　┳┛　┗┳　┃
- * ┃　　　　　　　┃
- * ┃　　　┻　　　┃
- * ┃　　　　　　　┃
- * ┗━┓　　　┏━┛
- *     ┃　　　┃
- *     ┃　　　┃
- *     ┃　　　┗━━━┓
- *     ┃　　　　　　　┣┓
- *     ┃　　　　　　　┏┛
- *     ┗┓┓┏━┳┓┏┛
- *       ┃┫┫　┃┫┫
- *       ┗┻┛　┗┻┛
- *        神兽保佑
- *        代码无BUG!
- */

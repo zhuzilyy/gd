@@ -209,7 +209,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
         }
         initGallery();
         initConfig();
-        getLocation();
+//        getLocation();
         initTimePicker();
     }
 
@@ -611,7 +611,9 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
             stationId = Integer.parseInt(data.getStringExtra("stationId"));
             pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
             String stationName = data.getStringExtra("stationName");
+            String location = data.getStringExtra("location");
             tvStationNo.setText(stationName);
+            etLocation.setText(location);
         } else if (requestCode == SELECT_ADDRESS) {
             String area = data.getStringExtra("area");
             etLocation.setText(area);

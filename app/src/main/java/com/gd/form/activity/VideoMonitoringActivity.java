@@ -182,7 +182,7 @@ public class VideoMonitoringActivity extends BaseActivity {
     private List<String> nameList;
     private int pipeId;
     private String col1 = "否", col2 = "否", col3 = "否", col4 = "否", col5 = "否", col6 = "是", col7 = "是", col8 = "否";
-
+    private boolean selectInit = true;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -212,6 +212,7 @@ public class VideoMonitoringActivity extends BaseActivity {
         initTimePicker();
         getPipelineInfoListRequest();
         iniListener();
+        getDefaultManager();
     }
 
     private void getDefaultManager() {
@@ -229,7 +230,11 @@ public class VideoMonitoringActivity extends BaseActivity {
                                 nameList.add(departmentPerson.getName());
                                 idList.add(departmentPerson.getId());
                             }
-                            if (dialog == null) {
+                            if(selectInit){
+                                tvSpr.setText(nameList.get(0));
+                                approverId = idList.get(0);
+                            }else{
+                                 if (dialog == null) {
                                 dialog = new ListDialog(mContext);
                             }
                             dialog.setData(nameList);
@@ -239,6 +244,8 @@ public class VideoMonitoringActivity extends BaseActivity {
                                 approverId = idList.get(positionM);
                                 dialog.dismiss();
                             });
+                            }
+
                         }
                     }
                 });
@@ -512,6 +519,7 @@ public class VideoMonitoringActivity extends BaseActivity {
                 startActivityForResult(intent, SELECT_ADDRESS);
                 break;
             case R.id.ll_spr:
+                selectInit = false;
                 getDefaultManager();
                 break;
             case R.id.ll_pipeName:

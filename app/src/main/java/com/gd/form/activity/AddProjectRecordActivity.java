@@ -289,13 +289,13 @@ public class AddProjectRecordActivity extends BaseActivity {
         params.addProperty("creator", userId);
         params.addProperty("pipedistance", etDistance.getText().toString());
         String status;
-        if(tvStatus.getText().toString().equals("正在施工")){
+        if (tvStatus.getText().toString().equals("正在施工")) {
             status = "1";
-        }else if(tvStatus.getText().toString().equals("完成")){
+        } else if (tvStatus.getText().toString().equals("完成")) {
             status = "2";
-        }else if(tvStatus.getText().toString().equals("暂停")){
+        } else if (tvStatus.getText().toString().equals("暂停")) {
             status = "3";
-        }else{
+        } else {
             status = "4";
         }
         params.addProperty("projectstatus", status);
@@ -338,6 +338,11 @@ public class AddProjectRecordActivity extends BaseActivity {
         }
         if (!NumberUtil.isNumber(etProgress.getText().toString())) {
             ToastUtil.show("进度格式输入不正确");
+            return true;
+        }
+        if (Double.parseDouble(etProgress.getText().toString()) > 100 ||
+                Double.parseDouble(etProgress.getText().toString()) < 0) {
+            ToastUtil.show("进度应在0-100之间");
             return true;
         }
         if (TextUtils.isEmpty(etDistance.getText().toString())) {

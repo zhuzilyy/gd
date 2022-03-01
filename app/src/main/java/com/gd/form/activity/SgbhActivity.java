@@ -126,6 +126,7 @@ public class SgbhActivity extends BaseActivity {
     private Dialog mWeiboDialog;
     private String formId;
     private boolean isFirstShowStationNo = true;
+    private boolean selectInitManager = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +144,7 @@ public class SgbhActivity extends BaseActivity {
         initListener();
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+        getDefaultManager();
 
     }
 
@@ -308,6 +310,7 @@ public class SgbhActivity extends BaseActivity {
                 initPermissions();
                 break;
             case R.id.ll_spr:
+                selectInitManager = false;
                 getDefaultManager();
                 break;
         }
@@ -587,16 +590,22 @@ public class SgbhActivity extends BaseActivity {
                                 nameList.add(departmentPerson.getName());
                                 idList.add(departmentPerson.getId());
                             }
-                            if (dialog == null) {
-                                dialog = new ListDialog(mContext);
+                            if(selectInitManager){
+                                tv_spr.setText(nameList.get(0));
+                                approverId = idList.get(0);
+                            }else{
+                                if (dialog == null) {
+                                    dialog = new ListDialog(mContext);
+                                }
+                                dialog.setData(nameList);
+                                dialog.show();
+                                dialog.setListItemClick(positionM -> {
+                                    tv_spr.setText(nameList.get(positionM));
+                                    approverId = idList.get(positionM);
+                                    dialog.dismiss();
+                                });
                             }
-                            dialog.setData(nameList);
-                            dialog.show();
-                            dialog.setListItemClick(positionM -> {
-                                tv_spr.setText(nameList.get(positionM));
-                                approverId = idList.get(positionM);
-                                dialog.dismiss();
-                            });
+
                         }
                     }
                 });

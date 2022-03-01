@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.gd.form.adapter.HackyViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_marginBottom="20dp"
+            android:id="@+id/ll_bottom_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <TextView
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:id="@+id/tv_viewpager"
+                android:textColor="#FFFFFF"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_shape_save_pic"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:background="@drawable/bg_shape_save_pic"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/tv_savePhoto"
+                android:text="保存"
+                android:layout_width="60dp"
+                android:layout_height="30dp" />
+            <LinearLayout
+                android:id="@+id/ll_dots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"></LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

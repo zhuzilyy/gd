@@ -462,12 +462,20 @@ public interface Api {
     Call<List<BuildingModel>> getBuildingData(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
-     * 添加违章违建
+     * 更新违章违建
      *
      * @return
      */
     @POST("lllegalconstructionsinfoUpdate.html")
     Call<ServerModel> updateBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 添加违章违建
+     *
+     * @return
+     */
+    @POST("lllegalconstructionsinfoAdd.html")
+    Call<ServerModel> addBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 查询违章建筑

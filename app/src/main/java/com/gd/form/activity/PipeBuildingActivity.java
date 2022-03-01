@@ -149,12 +149,15 @@ public class PipeBuildingActivity extends BaseActivity {
     LinearLayout llLocation;
     @BindView(R.id.tv_totalLevel)
     TextView tvTotalLevel;
+    @BindView(R.id.tv_highZone)
+    TextView tvHighZone;
     @BindView(R.id.flow_layout)
     TagFlowLayout mFlowLayout;
     private String isHighZone = "是";
     private TimePickerView pvTime;
     private String token, userId, buildingId;
     private final int SEARCH_BUILDING = 100;
+    private final int SELECT_STATION = 101;
     private int SELECT_AREA = 104;
     private int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
     private List<Pipelineinfo> pipelineInfoList;
@@ -174,6 +177,7 @@ public class PipeBuildingActivity extends BaseActivity {
     private String[] dataSource = {"房屋(有人居住)", "房屋(无人居住)", "简易结构(简易厕所、杂货房、车棚等)", "厂房", "大棚", "围墙", "动物棚圈", "重物占压"};
     private Set<Integer> selectedIndex;
     private String selectPressureName;
+    private List<String> highZoneList;
 
     @Override
     protected void setStatusBar() {
@@ -199,6 +203,7 @@ public class PipeBuildingActivity extends BaseActivity {
         riskEvaluateList = new ArrayList<>();
         riskResultList = new ArrayList<>();
         riskTypeList = new ArrayList<>();
+        highZoneList = new ArrayList<>();
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         if (getIntent() != null) {
@@ -206,6 +211,8 @@ public class PipeBuildingActivity extends BaseActivity {
             buildingId = getIntent().getExtras().getString("buildingId");
             if (!TextUtils.isEmpty(buildingId)) {
                 getBuildingData(buildingId);
+            } else {
+                tvTitle.setText("增加违规违建");
             }
             if ("add".equals(tag)) {
                 btnCommit.setVisibility(View.VISIBLE);
@@ -365,6 +372,8 @@ public class PipeBuildingActivity extends BaseActivity {
         riskTypeList.add("一般");
         riskTypeList.add("较大");
         riskTypeList.add("重大");
+        highZoneList.add("是");
+        highZoneList.add("否");
     }
 
     private void getPipelineInfoListRequest() {
@@ -577,11 +586,25 @@ public class PipeBuildingActivity extends BaseActivity {
             R.id.ll_riskResult,
             R.id.ll_riskType,
             R.id.rl_selectImage,
+            R.id.ll_highZone,
+            R.id.ll_stationNo,
     })
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.ll_stationNo:
+                Intent intentStartStation = new Intent(this, StationWaterActivity.class);
+                startActivityForResult(intentStartStation, SELECT_STATION);
+                break;
+            case R.id.ll_highZone:
+                dialog.setData(highZoneList);
+                dialog.show();
+                dialog.setListItemClick(positionM -> {
+                    tvHighZone.setText(highZoneList.get(positionM));
+                    dialog.dismiss();
+                });
                 break;
             case R.id.rl_selectImage:
                 initPermissions();
@@ -635,8 +658,8 @@ public class PipeBuildingActivity extends BaseActivity {
                 });
                 break;
             case R.id.ll_location:
-                Intent intentArea = new Intent(this, MapActivity.class);
-                startActivityForResult(intentArea, SELECT_AREA);
+//                Intent intentArea = new Intent(this, MapActivity.class);
+//                startActivityForResult(intentArea, SELECT_AREA);
                 break;
             case R.id.ll_pipeName:
                 List<String> pipeList = new ArrayList<>();
@@ -657,7 +680,11 @@ public class PipeBuildingActivity extends BaseActivity {
                 break;
             case R.id.btn_commit:
                 if (paramsComplete()) {
-                    updateBuilding();
+                    if (TextUtils.isEmpty(buildingId)) {
+                        addBuilding();
+                    } else {
+                        updateBuilding();
+                    }
                 }
                 break;
             case R.id.ll_time:
@@ -668,6 +695,59 @@ public class PipeBuildingActivity extends BaseActivity {
                 startActivityForResult(intent, SEARCH_BUILDING);
                 break;
         }
+    }
+
+    private void addBuilding() {
+        StringBuilder photoSb = new StringBuilder();
+        if (nameList.size() > 0) {
+            for (int i = 0; i < nameList.size(); i++) {
+                if (i != nameList.size() - 1) {
+                    photoSb.append(nameList.get(i) + ";");
+                } else {
+                    photoSb.append(nameList.get(i));
+                }
+            }
+        }
+        JsonObject params = new JsonObject();
+        params.addProperty("appempid", userId);
+        params.addProperty("id", 0);
+        params.addProperty("stakeid", stationId);
+        params.addProperty("pipeid", pipeId);
+        params.addProperty("locationdesc", etLocation.getText().toString());
+        params.addProperty("overpropety", tvPipeProperty.getText().toString());
+        params.addProperty("overtype", selectPressureName);
+        params.addProperty("overname", etName.getText().toString());
+        params.addProperty("genernaldate", tvTime.getText().toString());
+        params.addProperty("highareasflag", tvHighZone.getText().toString());
+        params.addProperty("shortlength", Double.parseDouble(etMissLength.getText().toString()));
+        params.addProperty("minspacing", Double.parseDouble(etMinDistance.getText().toString()));
+        params.addProperty("shortareas", Double.parseDouble(etMissArea.getText().toString()));
+        params.addProperty("peractives", etPersonActivity.getText().toString());
+        params.addProperty("dangerdesc", etDes.getText().toString());
+        params.addProperty("riskevaluation1", tvRiskEvaluate.getText().toString());
+        params.addProperty("riskevaluation2", tvRiskResult.getText().toString());
+        params.addProperty("riskevaluation3", tvTotalLevel.getText().toString());
+        params.addProperty("dangertype", tvRiskType.getText().toString());
+        params.addProperty("presolution", etBeforeChangeMethod.getText().toString());
+        params.addProperty("aftsolution", etChangeMethod.getText().toString());
+        if (!TextUtils.isEmpty(photoSb.toString())) {
+            params.addProperty("uploadpicture", photoSb.toString());
+        } else {
+            params.addProperty("uploadpicture", "00");
+        }
+        Log.i("tag","params===="+params);
+        Net.create(Api.class).addBuilding(token, params)
+                .enqueue(new NetCallback<ServerModel>(this, true) {
+                    @Override
+                    public void onResponse(ServerModel result) {
+                        if (result.getCode() == Constant.SUCCESS_CODE) {
+                            ToastUtil.show("保存成功");
+                            finish();
+                        } else {
+                            ToastUtil.show("保存失败");
+                        }
+                    }
+                });
     }
 
     private void updateBuilding() {
@@ -685,12 +765,13 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("id", Integer.parseInt(buildingId));
         params.addProperty("stakeid", stationId);
         params.addProperty("pipeid", pipeId);
+        params.addProperty("appempid", userId);
         params.addProperty("locationdesc", etLocation.getText().toString());
         params.addProperty("overpropety", tvPipeProperty.getText().toString());
         params.addProperty("overtype", selectPressureName);
         params.addProperty("overname", etName.getText().toString());
         params.addProperty("genernaldate", tvTime.getText().toString());
-        params.addProperty("highareasflag", isHighZone);
+        params.addProperty("highareasflag", tvHighZone.getText().toString());
         params.addProperty("shortlength", Double.parseDouble(etMissLength.getText().toString()));
         params.addProperty("minspacing", Double.parseDouble(etMinDistance.getText().toString()));
         params.addProperty("shortareas", Double.parseDouble(etMissArea.getText().toString()));
@@ -842,6 +923,12 @@ public class PipeBuildingActivity extends BaseActivity {
         } else if (requestCode == SELECT_AREA) {
             String area = data.getStringExtra("area");
             etLocation.setText(area);
+        }else if(requestCode == SELECT_STATION){
+            stationId = Integer.parseInt(data.getStringExtra("stationId"));
+            pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
+            String stationName = data.getStringExtra("stationName");
+            String location = data.getStringExtra("location");
+            etLocation.setText(location);
         }
     }
 

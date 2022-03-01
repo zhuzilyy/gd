@@ -43,6 +43,58 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+
+            <!--桩号-->
+            <LinearLayout
+                android:id="@+id/ll_stationNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="桩号"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_stationNo"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
             <!--管道名称-->
             <LinearLayout
                 android:id="@+id/ll_pipeName"
@@ -438,6 +490,61 @@
                 android:background="#FFE5E5E5" />
 
 
+            <!--是否是高后果区-->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_highZone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80FFFFFF"
+                android:gravity="center"
+                android:paddingTop="@dimen/d_12"
+                android:paddingBottom="@dimen/d_12">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:text="是否是高后果区"
+                    android:textColor="#FF000000"
+                    android:textSize="@dimen/s_16" />
+
+                <TextView
+                    android:id="@+id/tv_highZone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_18"
+                    android:layout_height="@dimen/d_18"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/d_10"
+                    android:layout_marginRight="@dimen/d_10"
+                    android:src="@mipmap/ic_next" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_1"
+                android:layout_marginStart="@dimen/d_12"
+                android:layout_marginLeft="@dimen/d_12"
+                android:background="#FFE5E5E5" />
+
+
+
             <!--是否高后果区-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -446,7 +553,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -502,7 +609,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5"
-                android:visibility="gone" />
+                 />
 
 
             <!--占压或安全距离不足长度(m)-->
@@ -513,7 +620,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -551,7 +658,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5"
-                android:visibility="gone" />
+                />
 
             <!--与管道最小间距(m)-->
             <LinearLayout
@@ -561,7 +668,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -599,7 +706,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5"
-                android:visibility="gone" />
+                 />
 
             <!--占压或安全距离不足面积(㎡)-->
             <LinearLayout
@@ -609,7 +716,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -647,7 +754,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5"
-                android:visibility="gone" />
+                />
 
             <!--人员活动情况-->
             <LinearLayout
@@ -657,7 +764,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/d_12"
                 android:paddingBottom="@dimen/d_12"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -693,7 +800,7 @@
                 android:layout_marginStart="@dimen/d_12"
                 android:layout_marginLeft="@dimen/d_12"
                 android:background="#FFE5E5E5"
-                android:visibility="gone" />
+                />
 
             <!--隐患内容描述-->
             <LinearLayout

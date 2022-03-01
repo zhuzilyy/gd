@@ -169,7 +169,7 @@ public class SdwbActivity extends BaseActivity {
     private String col8 = "无异响、异味现象";
     private String col9 = "检测合格";
     private String col10 = "外观完好";
-
+    private boolean selectInit = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,6 +189,7 @@ public class SdwbActivity extends BaseActivity {
         initListener();
         initGallery();
         initConfig();
+        getDefaultManager();
     }
 
     private void initGallery() {
@@ -522,6 +523,7 @@ public class SdwbActivity extends BaseActivity {
 //                startActivityForResult(intent, 1);
                 break;
             case R.id.ll_spr:
+                selectInit = false;
                 getDefaultManager();
                 break;
         }
@@ -802,16 +804,22 @@ public class SdwbActivity extends BaseActivity {
                                 nameList.add(departmentPerson.getName());
                                 idList.add(departmentPerson.getId());
                             }
-                            if (dialog == null) {
-                                dialog = new ListDialog(mContext);
+                            if(selectInit){
+                                tv_spr.setText(nameList.get(0));
+                                approverId = idList.get(0);
+                            }else{
+                                if (dialog == null) {
+                                    dialog = new ListDialog(mContext);
+                                }
+                                dialog.setData(nameList);
+                                dialog.show();
+                                dialog.setListItemClick(positionM -> {
+                                    tv_spr.setText(nameList.get(positionM));
+                                    approverId = idList.get(positionM);
+                                    dialog.dismiss();
+                                });
                             }
-                            dialog.setData(nameList);
-                            dialog.show();
-                            dialog.setListItemClick(positionM -> {
-                                tv_spr.setText(nameList.get(positionM));
-                                approverId = idList.get(positionM);
-                                dialog.dismiss();
-                            });
+
                         }
                     }
                 });

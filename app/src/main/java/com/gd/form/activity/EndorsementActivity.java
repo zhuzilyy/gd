@@ -101,7 +101,7 @@ public class EndorsementActivity extends BaseActivity {
     private List<String> nameList;
     private ListDialog dialog;
     private String formId;
-
+    private boolean selectInit = true;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -130,6 +130,7 @@ public class EndorsementActivity extends BaseActivity {
         }
         ossCredentialProvider = new OSSPlainTextAKSKCredentialProvider(Constant.ACCESSKEYID, Constant.ACCESSKEYSECRET);
         oss = new OSSClient(mContext.getApplicationContext(), Constant.ENDPOINT, ossCredentialProvider);
+        getDefaultManager();
     }
 
     private void initConfig() {
@@ -215,6 +216,7 @@ public class EndorsementActivity extends BaseActivity {
                 startActivityForResult(intentAddress, FILE_REQUEST_CODE);
                 break;
             case R.id.ll_spr:
+                selectInit = false;
                 getDefaultManager();
                 break;
             case R.id.ll_location:
@@ -435,16 +437,22 @@ public class EndorsementActivity extends BaseActivity {
                                 nameList.add(departmentPerson.getName());
                                 idList.add(departmentPerson.getId());
                             }
-                            if (dialog == null) {
-                                dialog = new ListDialog(mContext);
+                            if(selectInit){
+                                tv_spr.setText(nameList.get(0));
+                                approverId = idList.get(0);
+                            }else{
+                                if (dialog == null) {
+                                    dialog = new ListDialog(mContext);
+                                }
+                                dialog.setData(nameList);
+                                dialog.show();
+                                dialog.setListItemClick(positionM -> {
+                                    tv_spr.setText(nameList.get(positionM));
+                                    approverId = idList.get(positionM);
+                                    dialog.dismiss();
+                                });
                             }
-                            dialog.setData(nameList);
-                            dialog.show();
-                            dialog.setListItemClick(positionM -> {
-                                tv_spr.setText(nameList.get(positionM));
-                                approverId = idList.get(positionM);
-                                dialog.dismiss();
-                            });
+
                         }
                     }
                 });

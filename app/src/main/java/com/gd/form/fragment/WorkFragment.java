@@ -12,6 +12,7 @@ import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
 import com.gd.form.activity.KpiAddActivity;
 import com.gd.form.activity.KpiDisplayActivity;
+import com.gd.form.activity.PipeBuildingActivity;
 import com.gd.form.activity.PipeTagActivity;
 import com.gd.form.activity.ProjectListActivity;
 import com.gd.form.activity.SearchDataActivity;
@@ -55,9 +56,9 @@ public class WorkFragment extends BaseFragment {
                 llTask.setVisibility(View.GONE);
                 llKpiAdd.setVisibility(View.GONE);
             }
-            if(Integer.parseInt(departmentId) == CORRODE_DEPARTMENT){
+            if (Integer.parseInt(departmentId) == CORRODE_DEPARTMENT) {
                 llCorrode.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 llCorrode.setVisibility(View.INVISIBLE);
             }
         }
@@ -84,13 +85,19 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_upload_record,
             R.id.ll_standard_file,
             R.id.ll_kpi_add,
-            R.id.ll_kpi_display
+            R.id.ll_kpi_display,
+            R.id.ll_building
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.ll_jobs:
                 openActivity(JobsActivity.class);
+                break;
+            case R.id.ll_building:
+                bundle.putString("tag", "add");
+                bundle.putString("buildingId", "");
+                openActivity(PipeBuildingActivity.class,bundle);
                 break;
             case R.id.ll_kpi_display:
                 openActivity(KpiDisplayActivity.class);

@@ -113,7 +113,7 @@ public class UploadEventActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tvTitle.setText("事件上报");
+        tvTitle.setText("事件记录");
         if (getIntent() != null) {
             formId = getIntent().getStringExtra("formId");
             tag = getIntent().getStringExtra("tag");
