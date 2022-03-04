@@ -9,10 +9,7 @@ public class Constant {
     public static final int SUCCESS_CODE = 200;
     public static final int PIPE_DEPARTMENT = 400;
     public static final int CORRODE_DEPARTMENT = 100;
-    public static String ENDPOINT = "https://oss-cn-beijing.aliyuncs.com";
-    public static String ACCESSKEYID = "LTAI5t6GvrwQ4TnLLSvP78DA";
-    public static String ACCESSKEYSECRET = "ptx8dILUl3YHyaMXLOJUgkgUFePJTw";
-    public static String BUCKETSTRING = "tianran-beijing";
+
 //    public static String ENDPOINT;
 //    public static String ACCESSKEYID;
 //    public static String ACCESSKEYSECRET;
