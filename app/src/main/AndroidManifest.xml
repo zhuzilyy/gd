@@ -458,6 +458,9 @@
             android:name=".activity.LookBigPicActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.BuildingApproveActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

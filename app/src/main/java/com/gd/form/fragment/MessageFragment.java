@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 
 import com.gd.form.R;
+import com.gd.form.activity.BuildingApproveActivity;
 import com.gd.form.activity.NoApproveActivity;
 import com.gd.form.activity.OverTimeTaskActivity;
 import com.gd.form.activity.RefuseTaskActivity;
@@ -51,12 +52,16 @@ public class MessageFragment extends BaseFragment {
     LinearLayout llWaiting;
     @BindView(R.id.ll_task_waiting_handle)
     LinearLayout llTaskWaitingHandle;
+    @BindView(R.id.ll_building_approve)
+    LinearLayout llBuildingApprove;
     @BindView(R.id.rl_task_waiting_handle)
     RelativeLayout rlTaskWaitingHandle;
     @BindView(R.id.rl_refuse)
     RelativeLayout rlRefuse;
     @BindView(R.id.rl_station_approve)
     RelativeLayout rlStationApprove;
+    @BindView(R.id.rl_building_approve)
+    RelativeLayout rlBuildingApprove;
     List<Badge> badges;
     private String token, userId;
     private MyReceiver myReceiver;
@@ -73,6 +78,7 @@ public class MessageFragment extends BaseFragment {
         badges.add(new QBadgeView(getActivity()).bindTarget(rlTaskWaitingHandle));
         badges.add(new QBadgeView(getActivity()).bindTarget(rlRefuse));
         badges.add(new QBadgeView(getActivity()).bindTarget(rlStationApprove));
+        badges.add(new QBadgeView(getActivity()).bindTarget(rlBuildingApprove));
         myReceiver = new MyReceiver();
         IntentFilter filterWaitingTask = new IntentFilter();
         filterWaitingTask.addAction("com.action.update.waitingTask");
@@ -89,6 +95,10 @@ public class MessageFragment extends BaseFragment {
         IntentFilter filterStationApprove = new IntentFilter();
         filterStationApprove.addAction("com.action.update.approve");
         getActivity().registerReceiver(myReceiver, filterStationApprove);
+
+        IntentFilter filterBuildingApprove = new IntentFilter();
+        filterBuildingApprove.addAction("com.action.approve.building");
+        getActivity().registerReceiver(myReceiver, filterBuildingApprove);
         getWaitingTaskCount();
     }
 
@@ -157,7 +167,7 @@ public class MessageFragment extends BaseFragment {
                         }
                         int overTimeTask = model.getOverCount();
                         if (overTimeTask > 0) {
-                            msgCount +=overTimeTask;
+                            msgCount += overTimeTask;
                             badges.get(1).setShowShadow(false).setBadgeNumber(overTimeTask);
                         } else {
                             badges.get(1).hide(true);
@@ -177,7 +187,7 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(WaitingTakModel result) {
                         if (result.getMsg() > 0) {
-                            msgCount+=result.getMsg();
+                            msgCount += result.getMsg();
                             badges.get(4).setShowShadow(false).setBadgeNumber(result.getMsg());
                         } else {
                             badges.get(4).hide(true);
@@ -195,10 +205,29 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onResponse(StationApproveModel result) {
                         if (result.getCount() > 0) {
-                            msgCount+=result.getCount();
+                            msgCount += result.getCount();
                             badges.get(5).setShowShadow(false).setBadgeNumber(result.getCount());
                         } else {
                             badges.get(5).hide(true);
+                        }
+                        getApproveBuildingCount();
+                    }
+                });
+    }
+
+    private void getApproveBuildingCount() {
+        JsonObject params = new JsonObject();
+        params.addProperty("appempid", userId);
+        params.addProperty("devicetype", 2);
+        Net.create(Api.class).approveBuildingCount(token, params)
+                .enqueue(new NetCallback<StationApproveModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(StationApproveModel result) {
+                        if (result.getCount() > 0) {
+                            msgCount += result.getCount();
+                            badges.get(6).setShowShadow(false).setBadgeNumber(result.getCount());
+                        } else {
+                            badges.get(6).hide(true);
                         }
                         sendMsgBroadCast(msgCount);
                     }
@@ -207,12 +236,12 @@ public class MessageFragment extends BaseFragment {
 
     private void sendMsgBroadCast(int msgCount) {
         Intent intent = new Intent();
-        if(msgCount>0){
+        if (msgCount > 0) {
             intent.setAction("com.action.showMessageDot");
-        }else{
-            intent.setAction("com.action.hideMessageDot.=");
+        } else {
+            intent.setAction("com.action.hideMessageDot");
         }
-        intent.putExtra("count",msgCount);
+        intent.putExtra("count", msgCount);
         getActivity().sendBroadcast(intent);
     }
 
@@ -223,11 +252,15 @@ public class MessageFragment extends BaseFragment {
             R.id.ll_task_waiting_handle,
             R.id.ll_refuse,
             R.id.ll_station_approve,
+            R.id.ll_building_approve
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.ll_waiting:
                 openActivity(WaitingActivity.class);
+                break;
+            case R.id.ll_building_approve:
+                openActivity(BuildingApproveActivity.class);
                 break;
             case R.id.ll_station_approve:
                 openActivity(StationWaitingApproveActivity.class);
@@ -254,13 +287,11 @@ public class MessageFragment extends BaseFragment {
             if (action.equals("com.action.update.waitingTask")
                     || action.equals("com.action.updateApprove")
                     || action.equals("com.action.update.task")
-                    ||action.equals("com.action.update.approve")) {
+                    || action.equals("com.action.update.approve")
+                    || action.equals("com.action.approve.building")) {
                 msgCount = 0;
                 getWaitingTaskCount();
             }
-//            else if (action.equals("com.action.update.approve")) {
-//                getApproveStationCount();
-//            }
         }
     }
 

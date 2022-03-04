@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:id="@+id/label_expand_child"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textSize="16sp"
-          android:paddingTop="8dp"
-          android:paddingBottom="8dp"
-           android:paddingLeft="60dp"
-         android:background="@color/write"
-         android:textColor="#A6000000"
-          tools:text="测试数据"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:id="@+id/ll_departmentName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:gravity="center_vertical"
+            android:id="@+id/tv_departmentName"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/d_40"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/d_20"
+            android:textColor="#FF000000"
+            android:textSize="@dimen/s_16"
+            tools:text="测试数据" />
+        <CheckBox
+            android:clickable="false"
+            android:enabled="false"
+            android:checked="false"
+            android:layout_marginRight="@dimen/d_20"
+            android:button="@null"
+            android:background="@drawable/approve_selector"
+            android:id="@+id/cb_select"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_15"/>
+    </LinearLayout>
+
+    <View
+        android:background="#ececec"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"/>
+</LinearLayout>

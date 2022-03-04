@@ -1,5 +1,6 @@
 package com.gd.form.net;
 
+import com.gd.form.model.BuildingApproveModel;
 import com.gd.form.model.BuildingDetailModel;
 import com.gd.form.model.BuildingModel;
 import com.gd.form.model.Department;
@@ -462,6 +463,14 @@ public interface Api {
     Call<List<BuildingModel>> getBuildingData(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
+     * 审批违章违建时查看详情
+     *
+     * @return
+     */
+    @POST("approvalAccountinfoForPrimaryKey.html")
+    Call<BuildingModel> getArrpoveBuildingData(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
      * 更新违章违建
      *
      * @return
@@ -655,6 +664,16 @@ public interface Api {
     @POST("DataFormMultiGetApprovalList.html")
     Call<List<WaitingApproveModel>> waitingApproveList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+
+    /**
+     * 违章违建待审批
+     *
+     * @return
+     */
+    @POST("accountapprovalWait.html")
+    Call<List<BuildingApproveModel>> buildingWaitingApproveList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+
     /**
      * 超期未批
      *
@@ -670,6 +689,14 @@ public interface Api {
      */
     @POST("dataformapprovalUpdate.html")
     Call<ServerModel> approve(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 审批
+     *
+     * @return
+     */
+    @POST("accountapprovalHandle.html")
+    Call<ServerModel> approveBuilding(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 超期任务
@@ -1315,6 +1342,14 @@ public interface Api {
      */
     @POST("pipestakeapprovalWaitCount.html")
     Call<StationApproveModel> approveStationCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 违章违建待审批数量
+     *
+     * @return
+     */
+    @POST("accountapprovalWaitCount.html")
+    Call<StationApproveModel> approveBuildingCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 获取标准化文件类型

@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:gravity="center"
         android:layout_width="match_parent"
@@ -238,14 +237,53 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="台账待审批"
+                    android:text="管道桩台账待审批"
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/s_16" />
 
             </LinearLayout>
 
 
+
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/d_20"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:weightSum="3"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:gravity="center"
+                android:id="@+id/ll_building_approve"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/rl_building_approve"
+                    android:padding="@dimen/d_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="@dimen/d_32"
+                        android:layout_height="@dimen/d_32"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/building_approval" />
+                </RelativeLayout>
+                <TextView
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/d_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="违章违建待审批"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/s_16" />
+
+            </LinearLayout>
+        </LinearLayout>
+
 
 
     </LinearLayout>

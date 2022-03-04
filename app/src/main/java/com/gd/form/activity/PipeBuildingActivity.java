@@ -83,6 +83,8 @@ import butterknife.OnClick;
 public class PipeBuildingActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_stationNo)
+    TextView tvStationNo;
     @BindView(R.id.btn_commit)
     Button btnCommit;
     @BindView(R.id.et_startStationNo)
@@ -207,10 +209,15 @@ public class PipeBuildingActivity extends BaseActivity {
         path = new ArrayList<>();
         nameList = new ArrayList<>();
         if (getIntent() != null) {
+            String stakeStatus = getIntent().getExtras().getString("stakeStatus");
             String tag = getIntent().getExtras().getString("tag");
             buildingId = getIntent().getExtras().getString("buildingId");
             if (!TextUtils.isEmpty(buildingId)) {
-                getBuildingData(buildingId);
+                if (tag.equals("detail")) {
+                    getBuildingDetail(stakeStatus, buildingId);
+                } else {
+                    getBuildingData(buildingId);
+                }
             } else {
                 tvTitle.setText("增加违规违建");
             }
@@ -244,7 +251,8 @@ public class PipeBuildingActivity extends BaseActivity {
                 llRiskResult.setEnabled(true);
                 llRiskType.setEnabled(true);
                 rlSelectImage.setEnabled(true);
-            } else if (("check".equals(tag))) {
+            } else if (("check".equals(tag)) ||
+                    "detail".equals(tag)) {
                 btnCommit.setVisibility(View.GONE);
                 llSearch.setVisibility(View.GONE);
                 llPipeName.setEnabled(false);
@@ -484,86 +492,27 @@ public class PipeBuildingActivity extends BaseActivity {
                 .enqueue(new NetCallback<List<BuildingModel>>(this, true) {
                     @Override
                     public void onResponse(List<BuildingModel> result) {
-                        if (result != null && result.size() > 0) {
+                        if(result != null && result.size() > 0){
                             BuildingModel buildingModel = result.get(0);
-                            String pipeDesc = buildingModel.getPipedesc();
-                            if (!TextUtils.isEmpty(pipeDesc)) {
-                                String[] descArr = pipeDesc.split(":");
-                                tvPipeName.setText(descArr[0]);
-                            }
-                            etLocation.setText(buildingModel.getLocationdesc());
-                            tvPipeProperty.setText(buildingModel.getOverpropety());
-                            Set<Integer> set = new HashSet<>();
-                            StringBuilder selectedTagBuilder = new StringBuilder();
-                            if (!TextUtils.isEmpty(buildingModel.getOvertype())) {
-                                String[] arrayName = buildingModel.getOvertype().split(":");
-                                for (int i = 0; i < dataSource.length; i++) {
-                                    for (int j = 0; j < arrayName.length; j++) {
-                                        if (dataSource[i].equals(arrayName[j])) {
-                                            set.add(i);
-                                            selectedTagBuilder.append(dataSource[i]);
-                                            selectedTagBuilder.append(":");
-                                        }
-                                    }
-                                }
-                                selectPressureName = selectedTagBuilder.toString();
-                                mAdapter.setSelectedList(set);
-                            }
-                            etName.setText(buildingModel.getOvername());
-                            tvTime.setText(buildingModel.getGenernaldate());
-                            if (buildingModel.getHighareasflag().equals("是")) {
-                                rbYes.setChecked(true);
-                            } else {
-                                rbNo.setChecked(true);
-                            }
-                            etMissLength.setText(buildingModel.getShortareas() + "");
-                            etMinDistance.setText(buildingModel.getMinspacing() + "");
-                            etMissArea.setText(buildingModel.getShortareas() + "");
-                            etPersonActivity.setText(buildingModel.getPeractives());
-                            etDes.setText(buildingModel.getDangerdesc());
-                            tvRiskEvaluate.setText(buildingModel.getRiskevaluation());
-                            tvRiskType.setText(buildingModel.getDangertype());
-                            etBeforeChangeMethod.setText(buildingModel.getPresolution().trim());
-                            etChangeMethod.setText(buildingModel.getAftsolution());
-                            stationId = buildingModel.getStakeid();
-                            pipeId = buildingModel.getPipeid();
-                            tvRiskEvaluate.setText(buildingModel.getRiskevaluation1());
-                            tvRiskResult.setText(buildingModel.getRiskevaluation2());
-                            tvTotalLevel.setText(buildingModel.getRiskevaluation3());
-                            if (!TextUtils.isEmpty(buildingModel.getUploadpicture()) &&
-                                    !buildingModel.getUploadpicture().equals("00")) {
-                                if (buildingModel.getUploadpicture().contains(";")) {
-                                    String[] pathArr = buildingModel.getUploadpicture().split(";");
-                                    for (int i = 0; i < pathArr.length; i++) {
-                                        path.add(pathArr[i]);
-                                        photoAdapter.notifyDataSetChanged();
-                                    }
-                                } else {
-                                    path.add(buildingModel.getUploadpicture());
-                                    photoAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            if (!TextUtils.isEmpty((buildingModel.getRiskevaluation1())) &&
-                                    NumberUtil.isNumber(buildingModel.getRiskevaluation1())) {
-                                rateLevel = Double.parseDouble(buildingModel.getRiskevaluation1());
-                            }
-                            switch (buildingModel.getRiskevaluation2()) {
-                                case "I":
-                                    resultLevel = 1;
-                                    break;
-                                case "II":
-                                    resultLevel = 2;
-                                    break;
-                                case "III":
-                                    resultLevel = 3;
-                                    break;
-                                case "IV":
-                                    resultLevel = 4;
-                                    break;
-                                case "V":
-                                    resultLevel = 5;
-                                    break;
-                            }
+                            setDefaultValue(buildingModel);
+                        }
+                    }
+                });
+    }
+
+
+    private void getBuildingDetail(String status, String buildingId) {
+        JsonObject params = new JsonObject();
+        params.addProperty("appempid", userId);
+        params.addProperty("id", buildingId);
+        params.addProperty("stakestatus", Integer.parseInt(status));
+        params.addProperty("devicetype", 2);
+        Net.create(Api.class).getArrpoveBuildingData(token, params)
+                .enqueue(new NetCallback<BuildingModel>(this, true) {
+                    @Override
+                    public void onResponse(BuildingModel result) {
+                        if (result != null) {
+                            setDefaultValue(result);
                         }
                         if (rateLevel != 0 && resultLevel != 0) {
                             tvTotalLevel.setText(rateLevel * resultLevel + "");
@@ -571,6 +520,93 @@ public class PipeBuildingActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+
+    private void setDefaultValue(BuildingModel buildingModel){
+            String pipeDesc = buildingModel.getPipedesc();
+            if (!TextUtils.isEmpty(pipeDesc)) {
+                String[] descArr = pipeDesc.split(":");
+                tvPipeName.setText(descArr[0]);
+            }
+            tvStationNo.setText(buildingModel.getStakename());
+            etLocation.setText(buildingModel.getLocationdesc());
+            tvPipeProperty.setText(buildingModel.getOverpropety());
+            Set<Integer> set = new HashSet<>();
+            StringBuilder selectedTagBuilder = new StringBuilder();
+            if (!TextUtils.isEmpty(buildingModel.getOvertype())) {
+                String[] arrayName = buildingModel.getOvertype().split(":");
+                for (int i = 0; i < dataSource.length; i++) {
+                    for (int j = 0; j < arrayName.length; j++) {
+                        if (dataSource[i].equals(arrayName[j])) {
+                            set.add(i);
+                            selectedTagBuilder.append(dataSource[i]);
+                            selectedTagBuilder.append(":");
+                        }
+                    }
+                }
+                selectPressureName = selectedTagBuilder.toString();
+                mAdapter.setSelectedList(set);
+            }
+            etName.setText(buildingModel.getOvername());
+            tvTime.setText(buildingModel.getGenernaldate());
+            if (buildingModel.getHighareasflag().equals("是")) {
+                rbYes.setChecked(true);
+            } else {
+                rbNo.setChecked(true);
+            }
+            etMissLength.setText(buildingModel.getShortareas() + "");
+            etMinDistance.setText(buildingModel.getMinspacing() + "");
+            etMissArea.setText(buildingModel.getShortareas() + "");
+            etPersonActivity.setText(buildingModel.getPeractives());
+            etDes.setText(buildingModel.getDangerdesc());
+            tvRiskEvaluate.setText(buildingModel.getRiskevaluation());
+            tvRiskType.setText(buildingModel.getDangertype());
+            etBeforeChangeMethod.setText(buildingModel.getPresolution().trim());
+            etChangeMethod.setText(buildingModel.getAftsolution());
+            stationId = buildingModel.getStakeid();
+            pipeId = buildingModel.getPipeid();
+            tvRiskEvaluate.setText(buildingModel.getRiskevaluation1());
+            tvRiskResult.setText(buildingModel.getRiskevaluation2());
+            tvTotalLevel.setText(buildingModel.getRiskevaluation3());
+            if (!TextUtils.isEmpty(buildingModel.getUploadpicture()) &&
+                    !buildingModel.getUploadpicture().equals("00")) {
+                if (buildingModel.getUploadpicture().contains(";")) {
+                    String[] pathArr = buildingModel.getUploadpicture().split(";");
+                    for (int i = 0; i < pathArr.length; i++) {
+                        path.add(pathArr[i]);
+                        photoAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    path.add(buildingModel.getUploadpicture());
+                    photoAdapter.notifyDataSetChanged();
+                }
+            }
+            if (!TextUtils.isEmpty((buildingModel.getRiskevaluation1())) &&
+                    NumberUtil.isNumber(buildingModel.getRiskevaluation1())) {
+                rateLevel = Double.parseDouble(buildingModel.getRiskevaluation1());
+            }
+            switch (buildingModel.getRiskevaluation2()) {
+                case "I":
+                    resultLevel = 1;
+                    break;
+                case "II":
+                    resultLevel = 2;
+                    break;
+                case "III":
+                    resultLevel = 3;
+                    break;
+                case "IV":
+                    resultLevel = 4;
+                    break;
+                case "V":
+                    resultLevel = 5;
+                    break;
+            }
+        if (rateLevel != 0 && resultLevel != 0) {
+            tvTotalLevel.setText(rateLevel * resultLevel + "");
+        }
+
     }
 
     @OnClick({
@@ -735,7 +771,6 @@ public class PipeBuildingActivity extends BaseActivity {
         } else {
             params.addProperty("uploadpicture", "00");
         }
-        Log.i("tag","params===="+params);
         Net.create(Api.class).addBuilding(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -923,11 +958,12 @@ public class PipeBuildingActivity extends BaseActivity {
         } else if (requestCode == SELECT_AREA) {
             String area = data.getStringExtra("area");
             etLocation.setText(area);
-        }else if(requestCode == SELECT_STATION){
+        } else if (requestCode == SELECT_STATION) {
             stationId = Integer.parseInt(data.getStringExtra("stationId"));
             pipeId = Integer.parseInt(data.getStringExtra("pipeId"));
             String stationName = data.getStringExtra("stationName");
             String location = data.getStringExtra("location");
+            tvStationNo.setText(stationName);
             etLocation.setText(location);
         }
     }

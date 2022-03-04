@@ -1,43 +1,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@android:color/white"
-              android:orientation="horizontal"
-              android:padding="8dp">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:id="@+id/ll_departmentName"
+    >
     <TextView
-        android:id="@+id/label_group_indicator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:id="@+id/tv_departmentName"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:paddingLeft="32dp"
+        android:paddingLeft="@dimen/d_20"
         android:textColor="#FF000000"
-        android:textSize="20sp"
-        tools:text="测试数据"/>
-    <Button
-        android:visibility="gone"
-        android:text="修改"
-        android:focusable="false"
-        android:id="@+id/bt_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:visibility="gone"
-        android:text="删除"
-        android:focusable="false"
-        android:id="@+id/bt_del"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/iv_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_expand_more"
-        />
+        android:textSize="@dimen/s_16"
+        tools:text="测试数据" />
+    <View
+        android:background="#ececec"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_0_5"/>
 </LinearLayout>

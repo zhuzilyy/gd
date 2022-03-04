@@ -1,7 +1,8 @@
 package com.gd.form.model;
 
-public class Pipemploys
-{
+import java.io.Serializable;
+
+public class Pipemploys implements Serializable {
     /**
      * 用户id
      */
@@ -41,6 +42,15 @@ public class Pipemploys
     /**
      * 电话
      */
+    private boolean isSelected;
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     private String telenumber;
     public String getId() {
         return id;

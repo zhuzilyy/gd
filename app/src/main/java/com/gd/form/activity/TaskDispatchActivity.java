@@ -23,6 +23,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
+import com.gd.form.model.Pipemploys;
 import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
@@ -34,6 +35,7 @@ import com.jaeger.library.StatusBarUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,7 +53,6 @@ public class TaskDispatchActivity extends BaseActivity {
     private int SELECT_APPROVER = 103;
     private String approverId;
     private String token, userId;
-
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -75,7 +76,7 @@ public class TaskDispatchActivity extends BaseActivity {
             R.id.iv_back,
             R.id.btn_commit,
             R.id.ll_receivePerson,
-            R.id.ll_finishTime,
+            R.id.ll_finishTime
     })
     public void click(View view) {
         switch (view.getId()) {
@@ -99,6 +100,7 @@ public class TaskDispatchActivity extends BaseActivity {
                 break;
             case R.id.ll_receivePerson:
                 Intent intentApprover = new Intent(this, ApproverActivity.class);
+                intentApprover.putExtra("ids",approverId);
                 startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
             case R.id.ll_finishTime:
@@ -184,10 +186,19 @@ public class TaskDispatchActivity extends BaseActivity {
             return;
         }
         if (requestCode == SELECT_APPROVER) {
-            String personName = data.getStringExtra("name");
-            approverId = data.getStringExtra("id");
-            if (!TextUtils.isEmpty(personName)) {
-                tvReceivePerson.setText(personName);
+            List<Pipemploys> selectList = (List<Pipemploys>) data.getSerializableExtra("selectedList");
+            StringBuffer nameSb = new StringBuffer();
+            StringBuffer selectIds = new StringBuffer();
+            for (int i = 0; i < selectList.size(); i++) {
+                Pipemploys pipemploys =  selectList.get(i);
+                nameSb.append(pipemploys.getName());
+                nameSb.append("、");
+                selectIds.append(pipemploys.getId());
+                selectIds.append(";");
+            }
+            approverId = selectIds.toString();
+            if (!TextUtils.isEmpty(nameSb.toString())) {
+                tvReceivePerson.setText(nameSb.substring(0,nameSb.toString().length()-1));
             }
         }
 
