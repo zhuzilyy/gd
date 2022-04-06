@@ -142,7 +142,6 @@ public class StandingBookActivity extends BaseActivity {
     }
 
     private void getPipeInfoByStationId(JsonObject params) {
-        Log.i("tag","params==="+params);
         Net.create(Api.class).getPipeInfoByStationId(token, params)
                 .enqueue(new NetCallback<SearchPipeModel>(this, true) {
                     @Override
@@ -154,14 +153,12 @@ public class StandingBookActivity extends BaseActivity {
     }
 
     private void getPipeInfo(JsonObject params) {
-        Log.i("tag","params=="+params);
         Net.create(Api.class).getPipeInfo(token, params)
                 .enqueue(new NetCallback<SearchPipeModel>(this, true) {
                     @Override
                     public void onResponse(SearchPipeModel searchPipeModel) {
                         resultSearchPipeModel = searchPipeModel;
                         setData(searchPipeModel);
-
                     }
                 });
     }
@@ -329,6 +326,7 @@ public class StandingBookActivity extends BaseActivity {
             case R.id.ll_illegalBuilding:
                 if (resultSearchPipeModel.getLlegalCount() > 0) {
                     bundle.putSerializable("buildings", (Serializable) resultSearchPipeModel.getLlegaList());
+                    bundle.putString("departmentId",departmentId);
                 }
                 openActivity(BuildingListActivity.class, bundle);
                 break;

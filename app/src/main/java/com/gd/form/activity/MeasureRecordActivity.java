@@ -1,7 +1,6 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -84,7 +83,6 @@ public class MeasureRecordActivity extends BaseActivity {
         //获取测量数据
         JsonObject params = new JsonObject();
         params.addProperty("stakeid", Integer.parseInt(stationId));
-        Log.i("tag","params==="+params);
         Net.create(Api.class).getMeasureRecords(token, params)
                 .enqueue(new NetCallback<List<MeasureModel>>(this, true) {
                     @Override

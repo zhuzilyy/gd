@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,8 @@ public class EndorsementActivity extends BaseActivity {
     EditText etDes;
     @BindView(R.id.et_record)
     EditText etRecord;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
     private int FILE_REQUEST_CODE = 100;
     private int SELECT_STATION = 101;
     private int SELECT_ADDRESS = 102;
@@ -102,6 +105,7 @@ public class EndorsementActivity extends BaseActivity {
     private ListDialog dialog;
     private String formId;
     private boolean selectInit = true;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -118,11 +122,12 @@ public class EndorsementActivity extends BaseActivity {
         tvTitle.setText("现有违章违建记录");
         path = new ArrayList<>();
         nameList = new ArrayList<>();
+        llLocation.setVisibility(View.GONE);
         initGallery();
         initConfig();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");
-        if(getIntent().getExtras()!=null){
+        if (getIntent().getExtras() != null) {
             formId = getIntent().getExtras().getString("formId");
             if (!TextUtils.isEmpty(formId)) {
                 getBuildingData(formId);
@@ -241,7 +246,7 @@ public class EndorsementActivity extends BaseActivity {
     private void getBuildings() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("empid", userId);
-        Log.i("tag","jsonObject==="+jsonObject);
+        Log.i("tag", "jsonObject===" + jsonObject);
         Net.create(Api.class).getBuildings(token, jsonObject)
                 .enqueue(new NetCallback<List<SearchBuildingModel>>(this, true) {
                     @Override
@@ -269,7 +274,7 @@ public class EndorsementActivity extends BaseActivity {
     private void getBuildingData(String id) {
         JsonObject params = new JsonObject();
         params.addProperty("id", id);
-        Log.i("tag","params===="+params);
+        Log.i("tag", "params====" + params);
         Net.create(Api.class).getBuildingData(token, params)
                 .enqueue(new NetCallback<List<BuildingModel>>(this, true) {
                     @Override
@@ -278,8 +283,8 @@ public class EndorsementActivity extends BaseActivity {
                             BuildingModel buildingModel = result.get(0);
                             tvStationNo.setText(buildingModel.getOvername());
                             etDes.setText(buildingModel.getDangerdesc());
-                            buildId = buildingModel.getId()+"";
-                            stakeId = buildingModel.getStakeid()+"";
+                            buildId = buildingModel.getId() + "";
+                            stakeId = buildingModel.getStakeid() + "";
                         }
                     }
                 });
@@ -298,10 +303,10 @@ public class EndorsementActivity extends BaseActivity {
             ToastUtil.show("请输入处理记录");
             return false;
         }
-        if (TextUtils.isEmpty(tv_location.getText().toString())) {
-            ToastUtil.show("请选择坐标");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tv_location.getText().toString())) {
+//            ToastUtil.show("请选择坐标");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tv_spr.getText().toString())) {
             ToastUtil.show("请选择审批人");
             return false;
@@ -325,7 +330,7 @@ public class EndorsementActivity extends BaseActivity {
         jsonObject.addProperty("stakeid", Integer.valueOf(stakeId));
         jsonObject.addProperty("conditiondesc", etDes.getText().toString());
         jsonObject.addProperty("solutionrecord", etRecord.getText().toString());
-        jsonObject.addProperty("locate", location);
+        jsonObject.addProperty("locate", "00");
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         jsonObject.addProperty("approvalid", approverId);
@@ -339,7 +344,7 @@ public class EndorsementActivity extends BaseActivity {
         } else {
             jsonObject.addProperty("filepath", "00");
         }
-        Log.i("tag","jsonObject==="+jsonObject);
+        Log.i("tag", "jsonObject===" + jsonObject);
         Net.create(Api.class).commitIllegalBuilding(token, jsonObject)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -429,30 +434,34 @@ public class EndorsementActivity extends BaseActivity {
                 .enqueue(new NetCallback<List<DepartmentPerson>>(this, true) {
                     @Override
                     public void onResponse(List<DepartmentPerson> list) {
-                        List<String> nameList = new ArrayList<>();
-                        List<String> idList = new ArrayList<>();
-                        if (list != null && list.size() > 0) {
-                            for (int i = 0; i < list.size(); i++) {
-                                DepartmentPerson departmentPerson = list.get(i);
-                                nameList.add(departmentPerson.getName());
-                                idList.add(departmentPerson.getId());
-                            }
-                            if(selectInit){
-                                tv_spr.setText(nameList.get(0));
-                                approverId = idList.get(0);
-                            }else{
-                                if (dialog == null) {
-                                    dialog = new ListDialog(mContext);
+                        if(list.size()>0){
+                            List<String> nameList = new ArrayList<>();
+                            List<String> idList = new ArrayList<>();
+                            if (list != null && list.size() > 0) {
+                                for (int i = 0; i < list.size(); i++) {
+                                    DepartmentPerson departmentPerson = list.get(i);
+                                    nameList.add(departmentPerson.getName());
+                                    idList.add(departmentPerson.getId());
                                 }
-                                dialog.setData(nameList);
-                                dialog.show();
-                                dialog.setListItemClick(positionM -> {
-                                    tv_spr.setText(nameList.get(positionM));
-                                    approverId = idList.get(positionM);
-                                    dialog.dismiss();
-                                });
-                            }
+                                if (selectInit) {
+                                    tv_spr.setText(nameList.get(0));
+                                    approverId = idList.get(0);
+                                } else {
+                                    if (dialog == null) {
+                                        dialog = new ListDialog(mContext);
+                                    }
+                                    dialog.setData(nameList);
+                                    dialog.show();
+                                    dialog.setListItemClick(positionM -> {
+                                        tv_spr.setText(nameList.get(positionM));
+                                        approverId = idList.get(positionM);
+                                        dialog.dismiss();
+                                    });
+                                }
 
+                            }
+                        }else{
+                            ToastUtil.show("暂无审批人");
                         }
                     }
                 });

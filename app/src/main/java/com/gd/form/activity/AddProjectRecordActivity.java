@@ -219,6 +219,27 @@ public class AddProjectRecordActivity extends BaseActivity {
                 statusDialog.show();
                 statusDialog.setListItemClick(positionM -> {
                     tvStatus.setText(statusList.get(positionM));
+                    switch (positionM){
+                        case 0:
+                            etProgress.setText("");
+                            etProgress.setEnabled(true);
+                            etDistance.setText("");
+                            etDistance.setEnabled(true);
+                            break;
+                        case 1:
+                            etProgress.setText("100");
+                            etProgress.setEnabled(false);
+                            etDistance.setText("0");
+                            etDistance.setEnabled(false);
+                            break;
+                        case 2:
+                        case 3:
+                            etProgress.setText("0");
+                            etProgress.setEnabled(false);
+                            etDistance.setText("0");
+                            etDistance.setEnabled(false);
+                            break;
+                    }
                     statusDialog.dismiss();
                 });
                 break;

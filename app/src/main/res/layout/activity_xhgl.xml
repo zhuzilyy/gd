@@ -264,6 +264,7 @@
                 android:layout_marginStart="@dimen/d_12"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_wzwj"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -484,6 +485,7 @@
 
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

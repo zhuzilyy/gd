@@ -103,6 +103,8 @@ public class ApproveBuildingActivity extends BaseActivity {
     LinearLayout llApproveStatus;
     @BindView(R.id.ll_chooseImages)
     LinearLayout llChooseImages;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
     private String formId;
     private String token, userId;
     private MarkerOptions markerOption;
@@ -139,6 +141,7 @@ public class ApproveBuildingActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("现有违章违建记录");
+        llLocation.setVisibility(View.GONE);
         Util.activityList.add(this);
         // 此方法必须重写
         mapView.onCreate(savedInstanceState);

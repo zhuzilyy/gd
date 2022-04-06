@@ -130,7 +130,7 @@ public class ProjectListActivity extends BaseActivity {
     private void pipeDepartmentInfoGetList() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
-        Net.create(Api.class).getDepartmentById(token, params)
+        Net.create(Api.class).getProjectDepartmentById(token, params)
                 .enqueue(new NetCallback<List<Department>>(this, false) {
                     @Override
                     public void onResponse(List<Department> list) {

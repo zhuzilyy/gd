@@ -72,6 +72,7 @@ public class StationWaterActivity extends BaseActivity {
                 intent.putExtra("stationName", stationNoModelList.get(position).getName());
                 intent.putExtra("stationId", stationNoModelList.get(position).getId() + "");
                 intent.putExtra("pipeId", stationNoModelList.get(position).getPipeid() + "");
+                intent.putExtra("lineId", stationNoModelList.get(position).getPipeid() + "");
                 intent.putExtra("location", stationNoModelList.get(position).getLocationdesc());
                 setResult(RESULT_OK, intent);
                 finish();

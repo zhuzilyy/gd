@@ -1,5 +1,8 @@
 package com.gd.form.fragment;
 
+import static com.gd.form.constants.Constant.CORRODE_DEPARTMENT;
+import static com.gd.form.constants.Constant.PIPE_DEPARTMENT;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.gd.form.R;
 import com.gd.form.activity.AddWaterInsuranceActivity;
+import com.gd.form.activity.EndorsementActivity;
 import com.gd.form.activity.FfglActivity;
 import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
@@ -20,6 +24,7 @@ import com.gd.form.activity.SearchStationActivity;
 import com.gd.form.activity.SearchTaskActivity;
 import com.gd.form.activity.StandardFileActivity;
 import com.gd.form.activity.TaskDispatchActivity;
+import com.gd.form.activity.UploadEventActivity;
 import com.gd.form.activity.UploadRecordActivity;
 import com.gd.form.activity.XhglActivity;
 import com.gd.form.base.BaseFragment;
@@ -28,9 +33,6 @@ import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.gd.form.constants.Constant.CORRODE_DEPARTMENT;
-import static com.gd.form.constants.Constant.PIPE_DEPARTMENT;
 
 
 public class WorkFragment extends BaseFragment {
@@ -86,18 +88,27 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_standard_file,
             R.id.ll_kpi_add,
             R.id.ll_kpi_display,
-            R.id.ll_building
+            R.id.ll_building,
+            R.id.ll_wzwj,
+            R.id.ll_upload,
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
+            case R.id.ll_wzwj:
+                openActivity(EndorsementActivity.class);
+                break;
+            case R.id.ll_upload:
+                bundle.putString("tag", "add");
+                openActivity(UploadEventActivity.class, bundle);
+                break;
             case R.id.ll_jobs:
                 openActivity(JobsActivity.class);
                 break;
             case R.id.ll_building:
                 bundle.putString("tag", "add");
                 bundle.putString("buildingId", "");
-                openActivity(PipeBuildingActivity.class,bundle);
+                openActivity(PipeBuildingActivity.class, bundle);
                 break;
             case R.id.ll_kpi_display:
                 openActivity(KpiDisplayActivity.class);

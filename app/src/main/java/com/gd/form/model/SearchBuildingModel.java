@@ -7,8 +7,17 @@ public class SearchBuildingModel implements Serializable {
     private String llegalname;
     private String maintain;
     private int stakeid;
+    private int departmentId;
     private String stakename;
     private String select;
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public int getId() {
         return id;
     }

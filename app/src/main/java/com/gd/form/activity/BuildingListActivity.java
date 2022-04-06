@@ -35,8 +35,9 @@ public class BuildingListActivity extends BaseActivity {
     private BuildingListAdapter adapter;
     @BindView(R.id.ll_no_data)
     LinearLayout llNoData;
-    private String token, userId;
+    private String token, userId, departmentId;
     private List<SearchBuildingModel> resultBuildingList;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -53,18 +54,20 @@ public class BuildingListActivity extends BaseActivity {
         tvTitle.setText("违章违建");
         token = (String) SPUtil.get(BuildingListActivity.this, "token", "");
         userId = (String) SPUtil.get(BuildingListActivity.this, "userId", "");
-        if(getIntent()!=null){
-            List<SearchBuildingModel> buildingModelList = (List<SearchBuildingModel>)getIntent().getExtras().getSerializable("buildings");
-            if(buildingModelList!=null && buildingModelList.size()>0){
+        if (getIntent() != null) {
+            List<SearchBuildingModel> buildingModelList = (List<SearchBuildingModel>) getIntent().getExtras().getSerializable("buildings");
+            departmentId = getIntent().getExtras().getString("departmentId");
+            if (buildingModelList != null && buildingModelList.size() > 0) {
                 resultBuildingList = buildingModelList;
                 llNoData.setVisibility(View.GONE);
-            }else{
+            } else {
                 llNoData.setVisibility(View.VISIBLE);
             }
         }
         initViews();
         initData();
     }
+
     private void initViews() {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
 
@@ -75,6 +78,7 @@ public class BuildingListActivity extends BaseActivity {
             refreshLayout.finishLoadMore(2000);
         });
     }
+
     private void initData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new BuildingListAdapter(mContext, resultBuildingList, R.layout.adapter_item_building_list);
@@ -83,12 +87,26 @@ public class BuildingListActivity extends BaseActivity {
             @Override
             public void onItemClickListener(View v, int position) {
                 SearchBuildingModel searchBuildingModel = resultBuildingList.get(position);
-                Intent intent = new Intent();
-                intent.putExtra("name",searchBuildingModel.getLlegalname());
-                intent.putExtra("buildId",searchBuildingModel.getId()+"");
-                intent.putExtra("stakeId",searchBuildingModel.getStakeid()+"");
-                setResult(RESULT_OK,intent);
-                finish();
+                if (v.getId() == R.id.btn_update) {
+                    Intent intent = new Intent(BuildingListActivity.this, PipeBuildingActivity.class);
+                    intent.putExtra("tag", "add");
+                    intent.putExtra("buildingId", searchBuildingModel.getId() + "");
+                    startActivity(intent);
+                } else if (v.getId() == R.id.btn_check) {
+                    Intent intent = new Intent(BuildingListActivity.this, PipeBuildingActivity.class);
+                    intent.putExtra("tag", "check");
+                    intent.putExtra("departmentId", departmentId);
+                    intent.putExtra("stakeId", searchBuildingModel.getStakeid()+"");
+                    intent.putExtra("buildingId", searchBuildingModel.getId() + "");
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra("name", searchBuildingModel.getLlegalname());
+                    intent.putExtra("buildId", searchBuildingModel.getId() + "");
+                    intent.putExtra("stakeId", searchBuildingModel.getStakeid() + "");
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }

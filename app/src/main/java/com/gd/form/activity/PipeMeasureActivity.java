@@ -28,6 +28,7 @@ import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
@@ -60,18 +61,17 @@ public class PipeMeasureActivity extends BaseActivity {
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
-
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_pipe_measure;
     }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tvTitle.setText("管道埋深测量");
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("记录");
+        tvTime.setText(TimeUtil.getCurrentTimeYYmmdd());
         initTimePicker();
         token = (String) SPUtil.get(this, "token", "");
         userId = (String) SPUtil.get(this, "userId", "");

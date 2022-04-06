@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.tv_versionName)
     TextView tvVersionName;
     private DeleteDialog dialog;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -59,7 +61,7 @@ public class SettingActivity extends BaseActivity {
         tvDepartmentName.setText(dptName);
         tvTel.setText(telNumber);
         tvMail.setText(mail);
-        tvVersionName.setText("当前版本:V"+ BuildConfig.VERSION_NAME);
+        tvVersionName.setText("当前版本:V" + BuildConfig.VERSION_NAME);
         dialog = new DeleteDialog(this);
         dialog.setContent("确定退出");
         dialog.setOnClickBottomListener(new DeleteDialog.OnClickBottomListener() {
@@ -67,7 +69,9 @@ public class SettingActivity extends BaseActivity {
             public void onPositiveClick() {
                 ActivityCollectorUtil.finishAllActivity();
                 openActivity(LoginActivity.class);
+                dialog.dismiss();
             }
+
             @Override
             public void onNegativeClick() {
                 dialog.dismiss();
@@ -79,12 +83,20 @@ public class SettingActivity extends BaseActivity {
     @OnClick({
             R.id.iv_back,
             R.id.ll_changePwd,
-            R.id.btn_quit
+            R.id.btn_quit,
+            R.id.btn_selectFile,
+            R.id.tv_versionName,
     })
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.tv_versionName:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent,1);
                 break;
             case R.id.btn_quit:
                 dialog.show();

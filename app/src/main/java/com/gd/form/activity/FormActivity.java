@@ -1,5 +1,7 @@
 package com.gd.form.activity;
 
+import static com.gd.form.utils.Util.activityList;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +31,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.gd.form.utils.Util.activityList;
 
 public class FormActivity extends BaseActivity {
     @BindView(R.id.tv_title)
@@ -65,18 +65,65 @@ public class FormActivity extends BaseActivity {
         userId = (String) SPUtil.get(FormActivity.this, "userId", "");
         formModelList = new ArrayList<>();
         if (getIntent() != null) {
-            Bundle bundle = getIntent().getExtras();
             params = new JsonObject();
-            params.addProperty("departmentid", bundle.getInt("departmentid"));
-            params.addProperty("profeid", bundle.getInt("profeid"));
-            params.addProperty("employname", bundle.getString("employid"));
-            params.addProperty("startime", bundle.getString("startime"));
-            params.addProperty("endtime", bundle.getString("endtime"));
-            params.addProperty("basecode", bundle.getString("basecode"));
+            Bundle bundle = getIntent().getExtras();
+            if ("illegal".equals(bundle.getString("tag"))) {
+                params.addProperty("departmentid", bundle.getInt("departmentId"));
+                params.addProperty("stakeid", bundle.getInt("stakeId"));
+                params.addProperty("empid", userId);
+                params.addProperty("basecode", "W005");
+                Log.i("tag","params==="+params);
+                getIllegalData();
+            } else {
+                params.addProperty("departmentid", bundle.getInt("departmentid"));
+                params.addProperty("profeid", bundle.getInt("profeid"));
+                params.addProperty("employname", bundle.getString("employid"));
+                params.addProperty("startime", bundle.getString("startime"));
+                params.addProperty("endtime", bundle.getString("endtime"));
+                params.addProperty("basecode", bundle.getString("basecode"));
+                getAllTypeData();
+            }
+
         }
         initViews();
         initData();
+    }
+    private void getIllegalData() {
+        Net.create(Api.class).getIllegalForms(token, params)
+                .enqueue(new NetCallback<List<FormModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<FormModel> result) {
+                        if (result != null && result.size() > 0) {
+                            formModelList.addAll(result);
+                            formAdapter.notifyDataSetChanged();
+                            refreshLayout.setVisibility(View.VISIBLE);
+                            llNoData.setVisibility(View.GONE);
+                        } else {
+                            refreshLayout.setVisibility(View.GONE);
+                            llNoData.setVisibility(View.VISIBLE);
+                        }
 
+                    }
+                });
+    }
+
+    private void getAllTypeData() {
+        Net.create(Api.class).getAllForms(token, params)
+                .enqueue(new NetCallback<List<FormModel>>(this, true) {
+                    @Override
+                    public void onResponse(List<FormModel> result) {
+                        if (result != null && result.size() > 0) {
+                            formModelList.addAll(result);
+                            formAdapter.notifyDataSetChanged();
+                            refreshLayout.setVisibility(View.VISIBLE);
+                            llNoData.setVisibility(View.GONE);
+                        } else {
+                            refreshLayout.setVisibility(View.GONE);
+                            llNoData.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                });
     }
 
     private void initViews() {
@@ -101,8 +148,6 @@ public class FormActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
-                Log.i("tag", "formId==" + formModelList.get(position).getFormid());
-                Log.i("tag", "formName=="+formName);
                 switch (formName) {
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
@@ -146,24 +191,6 @@ public class FormActivity extends BaseActivity {
                 }
             }
         });
-        Net.create(Api.class).getAllForms(token, params)
-                .enqueue(new NetCallback<List<FormModel>>(this, true) {
-                    @Override
-                    public void onResponse(List<FormModel> result) {
-                        if (result != null && result.size() > 0) {
-                            formModelList.addAll(result);
-                            formAdapter.notifyDataSetChanged();
-                            refreshLayout.setVisibility(View.VISIBLE);
-                            llNoData.setVisibility(View.GONE);
-                        } else {
-                            refreshLayout.setVisibility(View.GONE);
-                            llNoData.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                });
-
-
     }
 
     @OnClick({

@@ -65,6 +65,7 @@
     <dimen name="s_13">13sp</dimen>
     <!--列表多行字体-->
     <dimen name="s_14">14sp</dimen>
+    <dimen name="s_15">15sp</dimen>
     <!--正常字体大小-->
     <dimen name="s_16">16sp</dimen>
     <!--标题字体大小-->

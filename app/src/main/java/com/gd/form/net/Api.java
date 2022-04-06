@@ -560,6 +560,14 @@ public interface Api {
     Call<List<FormModel>> getAllForms(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
+     * 获取所有类型的工作单
+     *
+     * @return
+     */
+    @POST("DataFormMultiGetListByStakeId.html")
+    Call<List<FormModel>> getIllegalForms(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
      * 水工保护巡检表
      *
      * @return
@@ -737,6 +745,14 @@ public interface Api {
      */
     @POST("PipedepartmentinfoGetByemployid.html")
     Call<List<Department>> getDepartmentById(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 工程管理部分获取作业区
+     *
+     * @return
+     */
+    @POST("departmentinfoGetByemployidForProject.html")
+    Call<List<Department>> getProjectDepartmentById(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
     /**
@@ -1116,6 +1132,14 @@ public interface Api {
      */
     @POST("DataFormMultiWaitStatusListCount.html")
     Call<WaitingTakModel> refuseTaskCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 未完成事件
+     *
+     * @return
+     */
+    @POST("EventMultiGetListCount.html")
+    Call<WaitingTakModel> unFinishCount(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
     /**
      * 更新app

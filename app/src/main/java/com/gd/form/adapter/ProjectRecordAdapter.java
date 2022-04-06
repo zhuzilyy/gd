@@ -44,12 +44,14 @@ public class ProjectRecordAdapter extends BaseRecyclerViewAdapter<ProgressModel>
     @Override
     protected void bindData(BaseViewHolder viewHolder, ProgressModel progress, int position) {
         TextView tvTime = viewHolder.getView(R.id.tv_time);
+        TextView tvCreator = viewHolder.getView(R.id.tv_creator);
         TextView tvProgress = viewHolder.getView(R.id.tv_progress);
         TextView tvDetail = viewHolder.getView(R.id.tv_detail);
         LinearLayout llSelectImages = viewHolder.getView(R.id.ll_selectImage);
         RecyclerView rvResultPhoto = viewHolder.getView(R.id.rvResultPhoto);
         LinearLayout llUpload = viewHolder.getView(R.id.ll_upload);
         TextView tvFileName = viewHolder.getView(R.id.tv_fileName);
+        tvCreator.setText(progress.getCreatorame());
         if (progress.getUploadpicture().equals("00") || TextUtils.isEmpty(progress.getUploadpicture())) {
             llSelectImages.setVisibility(View.GONE);
         }else{

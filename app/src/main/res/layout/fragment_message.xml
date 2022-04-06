@@ -79,7 +79,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="待办任务"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -108,9 +108,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/d_10"
-                    android:text="超期任务"
+                    android:text="未完成事件"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -141,7 +141,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="超期未批"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -179,7 +179,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="审核未通过"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
             <LinearLayout
@@ -208,7 +208,7 @@
                     android:layout_gravity="center"
                     android:text="接收任务待处理"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -239,7 +239,7 @@
                     android:layout_gravity="center"
                     android:text="管道桩台账待审批"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -279,7 +279,7 @@
                     android:layout_height="wrap_content"
                     android:text="违章违建待审批"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
         </LinearLayout>

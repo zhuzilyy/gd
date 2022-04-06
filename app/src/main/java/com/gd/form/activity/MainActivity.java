@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -16,15 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.azhon.appupdate.BuildConfig;
-import com.azhon.appupdate.config.UpdateConfiguration;
-import com.azhon.appupdate.manager.DownloadManager;
 import com.gd.form.R;
 import com.gd.form.adapter.MyFragmentPagerAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.constants.Constant;
 import com.gd.form.model.OssModel;
-import com.gd.form.model.UpdateModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
@@ -48,19 +42,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @BindView(R.id.vpager)
     ViewPager vpager;
     private MyFragmentPagerAdapter mAdapter;
-    private DownloadManager manager;
+//    private DownloadManager manager;
     //几个代表页面的常量
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
     private String token, userId;
-    private UpdateConfiguration configuration;
+//    private UpdateConfiguration configuration;
     private long exitTime = 0;//根据连续点击之间时间判断 是否退出
     private MyReceiver myReceiver;
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
+
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_main;
@@ -75,77 +71,75 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         vpager.setCurrentItem(PAGE_TWO);
         vpager.addOnPageChangeListener(this);
         token = (String) SPUtil.get(this, "token", "");
-        manager = DownloadManager.getInstance(getApplicationContext());
+//        manager = DownloadManager.getInstance(getApplicationContext());
         getOssData();
-        updateApp();
+//        updateApp();
 
         myReceiver = new MyReceiver();
         IntentFilter filterShowDot = new IntentFilter();
         filterShowDot.addAction("com.action.showMessageDot");
-        registerReceiver(myReceiver,filterShowDot);
+        registerReceiver(myReceiver, filterShowDot);
 
         IntentFilter filterHideDot = new IntentFilter();
         filterHideDot.addAction("com.action.hideMessageDot");
-        registerReceiver(myReceiver,filterHideDot);
+        registerReceiver(myReceiver, filterHideDot);
 
 
     }
-    private void updateApp() {
-        configuration = new UpdateConfiguration()
-                //输出错误日志
-                .setEnableLog(true)
-                //设置自定义的下载
-                //.setHttpManager()
-                //下载完成自动跳动安装页面
-                .setJumpInstallPage(true)
-                //设置对话框背景图片 (图片规范参照demo中的示例图)
-                //.setDialogImage(R.drawable.ic_dialog)
-                //设置按钮的颜色
-                //.setDialogButtonColor(Color.parseColor("#E743DA"))
-                //设置对话框强制更新时进度条和文字的颜色
-                //.setDialogProgressBarColor(Color.parseColor("#E743DA"))
-                //设置按钮的文字颜色
-                .setDialogButtonTextColor(Color.WHITE)
-                //设置是否显示通知栏进度
-                .setShowNotification(true)
-                //设置是否提示后台下载toast
-                .setShowBgdToast(false)
-                //设置是否上报数据
-                .setUsePlatform(true);
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", 1);
-        Net.create(Api.class).appUpdate(token, jsonObject)
-                .enqueue(new NetCallback<UpdateModel>(this, true) {
-                    @Override
-                    public void onResponse(UpdateModel model) {
-                        if (model != null) {
-                            if (BuildConfig.VERSION_CODE < model.getVersioncode()) {
-                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion(), model.getVersioncode());
-                            }
-                        }
-                    }
-                });
-    }
 
-    private void down(String apkUrl, String content, String appVersion, int versionCode) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (!TextUtils.isEmpty(content)) {
-            String[] split = content.split(",");
-            for (int i = 0; i < split.length; i++) {
-                stringBuilder.append(split[i] + "\n");
-            }
-        }
-        manager.setApkName("gd.apk")
-                .setApkUrl(apkUrl)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setShowNewerToast(true)
-                .setConfiguration(configuration)
-                .setApkVersionCode(versionCode)
-                .setApkVersionName(appVersion)
-                .setApkDescription(content)
-                .download();
+//    private void updateApp() {
+//        configuration = new UpdateConfiguration()
+//                //输出错误日志
+//                .setEnableLog(true)
+//                //设置自定义的下载
+//                //.setHttpManager()
+//                //下载完成自动跳动安装页面
+//                .setJumpInstallPage(true)
+//                //设置对话框背景图片 (图片规范参照demo中的示例图)
+//                //.setDialogImage(R.drawable.ic_dialog)
+//                //设置按钮的颜色
+//                //.setDialogButtonColor(Color.parseColor("#E743DA"))
+//                //设置对话框强制更新时进度条和文字的颜色
+//                //.setDialogProgressBarColor(Color.parseColor("#E743DA"))
+//                //设置按钮的文字颜色
+//                .setDialogButtonTextColor(Color.WHITE)
+//                //设置是否显示通知栏进度
+//                .setShowNotification(true)
+//                //设置是否提示后台下载toast
+//                .setShowBgdToast(false);
+//        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty("id", 1);
+//        Net.create(Api.class).appUpdate(token, jsonObject)
+//                .enqueue(new NetCallback<UpdateModel>(this, true) {
+//                    @Override
+//                    public void onResponse(UpdateModel model) {
+//                        if (model != null) {
+//                            if (BuildConfig.VERSION_CODE < model.getVersioncode()) {
+//                                down(model.getDownloadpath(), model.getUpdatecomment(), model.getAppversion(), model.getVersioncode());
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
-    }
+//    private void down(String apkUrl, String content, String appVersion, int versionCode) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        if (!TextUtils.isEmpty(content)) {
+//            String[] split = content.split(",");
+//            for (int i = 0; i < split.length; i++) {
+//                stringBuilder.append(split[i] + "\n");
+//            }
+//        }
+//        manager.setApkName("gd.apk")
+//                .setApkUrl(apkUrl)
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setShowNewerToast(true)
+//                .setConfiguration(configuration)
+//                .setApkVersionCode(versionCode)
+//                .setApkVersionName(appVersion)
+//                .setApkDescription(content)
+//                .download();
+//    }
 
     private void getOssData() {
         JsonObject jsonObject = new JsonObject();
@@ -221,9 +215,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
         return super.onKeyDown(keyCode, event);
     }
-   /*
-    根据点击时间判断
-    */
+
+    /*
+     根据点击时间判断
+     */
     private void exit() {
         if (System.currentTimeMillis() - exitTime > 2000) {
             Toast.makeText(getApplicationContext(), "再点击一次退出", Toast.LENGTH_SHORT).show();
@@ -233,16 +228,25 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             System.exit(0);
         }
     }
-    class MyReceiver extends BroadcastReceiver{
+
+    class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent!=null){
-                if(intent.getAction().equals("com.action.showMessageDot")){
+            if (intent != null) {
+                if (intent.getAction().equals("com.action.showMessageDot")) {
                     rb_message.setShowSmallDot(true);
-                }else if(intent.getAction().equals("com.action.hideMessageDot")){
+                } else if (intent.getAction().equals("com.action.hideMessageDot")) {
                     rb_message.setShowSmallDot(false);
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (myReceiver != null) {
+            unregisterReceiver(myReceiver);
         }
     }
 }

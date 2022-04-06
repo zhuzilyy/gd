@@ -26,11 +26,11 @@ public class MeasureRecordAdapter extends BaseRecyclerViewAdapter<MeasureModel> 
 
     @Override
     protected void bindData(BaseViewHolder viewHolder, MeasureModel value, int position) {
-        TextView tvName = viewHolder.getView(R.id.tv_name);
         TextView tvTime = viewHolder.getView(R.id.tv_time);
-        String time = TimeUtil.longToFormatTime(value.getMeasuredate().getTime());
-        tvName.setText("测量人: "+value.getTester());
-        tvTime.setText("测量时间: "+time);
+        TextView tvDeep = viewHolder.getView(R.id.tv_deep);
+        String deep =value.getPipedeep()+"米";
+        tvTime.setText("测量时间: "+ TimeUtil.longToFormatTime(value.getMeasuredate().getTime()));
+        tvDeep.setText("管道埋深: "+deep);
         viewHolder.getContentView().setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());

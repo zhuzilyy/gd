@@ -86,7 +86,7 @@ public class UsersExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expand_users_1, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expand_users_3, parent, false);
             groupViewHolder = new GroupViewHolder();
             groupViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.label_group_indicator);
             groupViewHolder.ivIndicator = (ImageView) convertView.findViewById(R.id.iv_indicator);
@@ -110,7 +110,7 @@ public class UsersExpandableListAdapter extends BaseExpandableListAdapter {
             convertView, ViewGroup parent) {
         ChildViewHolder childViewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expand_users_2, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expand_users_4, parent, false);
             childViewHolder = new ChildViewHolder();
             childViewHolder.tvTitle = (TextView) convertView.findViewById(R.id.label_expand_child);
             convertView.setTag(childViewHolder);

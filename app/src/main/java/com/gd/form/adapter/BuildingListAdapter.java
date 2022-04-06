@@ -1,14 +1,12 @@
 package com.gd.form.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gd.form.R;
-import com.gd.form.activity.PipeBuildingActivity;
 import com.gd.form.model.SearchBuildingModel;
 
 import java.util.List;
@@ -38,39 +36,39 @@ public class BuildingListAdapter extends BaseRecyclerViewAdapter<SearchBuildingM
         tvStationNo.setText(model.getStakename());
         Button btnUpdate = viewHolder.getView(R.id.btn_update);
         Button btnCheck = viewHolder.getView(R.id.btn_check);
-        if(model.getMaintain().equals("1")){
+        if (model.getMaintain().equals("1")) {
             btnUpdate.setVisibility(View.VISIBLE);
-        }else if(model.getMaintain().equals("0")){
+        } else if (model.getMaintain().equals("0")) {
             btnUpdate.setVisibility(View.GONE);
         }
-        if("select".equals(model.getSelect())){
+        if ("select".equals(model.getSelect())) {
             llUpdate.setVisibility(View.GONE);
-        }else{
+        } else {
             llUpdate.setVisibility(View.VISIBLE);
             viewUpdate.setVisibility(View.VISIBLE);
         }
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, PipeBuildingActivity.class);
-                intent.putExtra("tag","add");
-                intent.putExtra("buildingId",model.getId()+"");
-                context.startActivity(intent);
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
+                }
             }
         });
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, PipeBuildingActivity.class);
-                intent.putExtra("tag", "check");
-                intent.putExtra("buildingId",model.getId()+"");
-                context.startActivity(intent);
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
+                }
             }
         });
         viewHolder.getContentView().setOnClickListener(view -> {
-            if(onItemClickListener!=null){
-                onItemClickListener.onItemClickListener(view,viewHolder.getLayoutPosition());
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClickListener(view, viewHolder.getLayoutPosition());
             }
         });
+
+
     }
 }

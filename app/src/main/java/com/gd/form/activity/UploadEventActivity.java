@@ -146,7 +146,6 @@ public class UploadEventActivity extends BaseActivity {
     private void getEventDetail(String formId) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("eventid", formId);
-        Log.i("tag", "jsonObject==" + jsonObject);
         Net.create(Api.class).getEventDetail(token, jsonObject)
                 .enqueue(new NetCallback<EventDetailModel>(this, true) {
                     @Override
@@ -217,7 +216,9 @@ public class UploadEventActivity extends BaseActivity {
                 startActivityForResult(intentArea, SELECT_AREA);
                 break;
             case R.id.ll_stationNo:
-                Intent intentStartStation = new Intent(this, UploadEventStakeActivity.class);
+//                Intent intentStartStation = new Intent(this, UploadEventStakeActivity.class);
+//                startActivityForResult(intentStartStation, SELECT_STATION);
+                Intent intentStartStation = new Intent(this, StationWaterActivity.class);
                 startActivityForResult(intentStartStation, SELECT_STATION);
                 break;
         }
@@ -247,7 +248,7 @@ public class UploadEventActivity extends BaseActivity {
             jsonObject.addProperty("picturepath", "00");
         }
         jsonObject.addProperty("eventstatus", 0);
-        jsonObject.addProperty("locate", tvAddress.getText().toString());
+        jsonObject.addProperty("locate", "00");
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         Log.i("tag", "jsonObject==" + jsonObject);
@@ -289,10 +290,10 @@ public class UploadEventActivity extends BaseActivity {
             ToastUtil.show("事件描述不能为空");
             return false;
         }
-        if (TextUtils.isEmpty(tvAddress.getText().toString())) {
-            ToastUtil.show("地址描述不能为空");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvAddress.getText().toString())) {
+//            ToastUtil.show("地址描述不能为空");
+//            return false;
+//        }
         return true;
     }
 
@@ -320,7 +321,7 @@ public class UploadEventActivity extends BaseActivity {
             jsonObject.addProperty("picturepath", "00");
         }
         jsonObject.addProperty("eventstatus", 0);
-        jsonObject.addProperty("locate", tvAddress.getText().toString());
+        jsonObject.addProperty("locate","00");
         jsonObject.addProperty("creator", userId);
         jsonObject.addProperty("creatime", TimeUtil.getCurrentTime());
         Log.i("tag", "jsonObject==" + jsonObject);

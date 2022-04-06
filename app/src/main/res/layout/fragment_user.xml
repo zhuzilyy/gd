@@ -72,7 +72,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="岗位维护"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -97,7 +97,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="人员维护"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 
@@ -123,7 +123,7 @@
                     android:layout_marginTop="@dimen/d_10"
                     android:text="设置"
                     android:textColor="@color/colorText"
-                    android:textSize="@dimen/s_16" />
+                    android:textSize="@dimen/s_15" />
 
             </LinearLayout>
 

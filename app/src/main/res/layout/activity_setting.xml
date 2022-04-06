@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -287,6 +288,23 @@
         android:layout_marginBottom="@dimen/d_30"
         android:background="@drawable/button_ship"
         android:text="退出登录"
+        android:textColor="@color/write"
+        android:textSize="@dimen/s_18" />
+
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_selectFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/d_30"
+        android:layout_marginLeft="@dimen/d_30"
+        android:layout_marginTop="@dimen/d_30"
+        android:layout_marginEnd="@dimen/d_30"
+        android:layout_marginRight="@dimen/d_30"
+        android:layout_marginBottom="@dimen/d_30"
+        android:background="@drawable/button_ship"
+        android:text="选择文件"
         android:textColor="@color/write"
         android:textSize="@dimen/s_18" />
     <TextView

@@ -92,6 +92,7 @@ public class SearchTaskActivity extends BaseActivity {
         taskStatusList.add("下发任务待完成");
         taskStatusList.add("下发任务已完成");
         taskStatusList.add("下发任务超期未完成");
+        taskStatusList.add("下发任务超期完成");
     }
 
     @OnClick({

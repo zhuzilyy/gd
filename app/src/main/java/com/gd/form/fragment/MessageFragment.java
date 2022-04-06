@@ -15,9 +15,9 @@ import androidx.annotation.Nullable;
 import com.gd.form.R;
 import com.gd.form.activity.BuildingApproveActivity;
 import com.gd.form.activity.NoApproveActivity;
-import com.gd.form.activity.OverTimeTaskActivity;
 import com.gd.form.activity.RefuseTaskActivity;
 import com.gd.form.activity.StationWaitingApproveActivity;
+import com.gd.form.activity.UploadEventListActivity;
 import com.gd.form.activity.WaitingActivity;
 import com.gd.form.activity.WaitingHandleTaskActivity;
 import com.gd.form.base.BaseFragment;
@@ -28,6 +28,7 @@ import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
 import com.gd.form.utils.SPUtil;
+import com.gd.form.utils.TimeUtil;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.rl_building_approve)
     RelativeLayout rlBuildingApprove;
     List<Badge> badges;
-    private String token, userId;
+    private String token, userId,departmentId;
     private MyReceiver myReceiver;
     private int msgCount;
 
@@ -71,6 +72,7 @@ public class MessageFragment extends BaseFragment {
     protected void initView(Bundle bundle) {
         token = (String) SPUtil.get(getActivity(), "token", "");
         userId = (String) SPUtil.get(getActivity(), "userId", "");
+        departmentId = (String) SPUtil.get(getActivity(), "departmentId", "");
         badges = new ArrayList<>();
         badges.add(new QBadgeView(getActivity()).bindTarget(rlWaitingHandle));
         badges.add(new QBadgeView(getActivity()).bindTarget(rlOverTime));
@@ -165,10 +167,25 @@ public class MessageFragment extends BaseFragment {
                         } else {
                             badges.get(0).hide(true);
                         }
-                        int overTimeTask = model.getOverCount();
-                        if (overTimeTask > 0) {
-                            msgCount += overTimeTask;
-                            badges.get(1).setShowShadow(false).setBadgeNumber(overTimeTask);
+                        getUnFinishCount();
+                    }
+                });
+    }
+    private void getUnFinishCount(){
+        JsonObject params = new JsonObject();
+        params.addProperty("departmentid", departmentId);
+        params.addProperty("eventstatus", 0);
+        params.addProperty("employname", userId);
+        params.addProperty("startime", TimeUtil.getLastYear());
+        params.addProperty("endtime", TimeUtil.getCurrentTimeYYmmdd());
+        Net.create(Api.class).unFinishCount(token, params)
+                .enqueue(new NetCallback<WaitingTakModel>(getActivity(), false) {
+                    @Override
+                    public void onResponse(WaitingTakModel model) {
+                        int unFinishCount = model.getMsg();
+                        if (unFinishCount > 0) {
+                            msgCount += unFinishCount;
+                            badges.get(1).setShowShadow(false).setBadgeNumber(unFinishCount);
                         } else {
                             badges.get(1).hide(true);
                         }
@@ -176,7 +193,6 @@ public class MessageFragment extends BaseFragment {
                     }
                 });
     }
-
     private void getRefuseCount() {
         JsonObject params = new JsonObject();
         params.addProperty("employid", userId);
@@ -269,7 +285,13 @@ public class MessageFragment extends BaseFragment {
                 openActivity(WaitingHandleTaskActivity.class);
                 break;
             case R.id.ll_overTime:
-                openActivity(OverTimeTaskActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("departmentId",departmentId);
+                bundle.putString("employId",userId);
+                bundle.putString("startTime",TimeUtil.getLastYear());
+                bundle.putString("endTime", TimeUtil.getCurrentTimeYYmmdd());
+                bundle.putString("eventStatus","0");
+                openActivity(UploadEventListActivity.class,bundle);
                 break;
             case R.id.ll_noApprove:
                 openActivity(NoApproveActivity.class);

@@ -7,7 +7,15 @@ public class ProgressModel {
     private String filename;
     private String uploadfile;
     private String uploadpicture;
+    private String creatorame;
     private CreateTime recorddate;
+    public String getCreatorame() {
+        return creatorame;
+    }
+
+    public void setCreatorame(String creatorame) {
+        this.creatorame = creatorame;
+    }
 
     public String getConstructionprocess() {
         return constructionprocess;
