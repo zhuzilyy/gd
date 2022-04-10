@@ -31,11 +31,15 @@ import com.gd.form.R;
 import com.gd.form.adapter.PhotoAdapter;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.model.GlideImageLoader;
+import com.gd.form.utils.ToastUtil;
 import com.gd.form.view.ListDialog;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -220,8 +224,14 @@ public class PipelineDepthActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_scfj:
-                Intent intentAddress = new Intent(PipelineDepthActivity.this, SelectFileActivity.class);
-                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                Intent intentAddress = new Intent(PipelineDepthActivity.this, SelectFileActivity.class);
+//                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+
+//                Intent intentAddress = new Intent(Intent.ACTION_GET_CONTENT);
+//                intentAddress.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                intentAddress.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intentAddress,FILE_REQUEST_CODE);
+                getPermission();
                 break;
             case R.id.ll_tbrq:
                 pvTime.show(view);
@@ -280,6 +290,26 @@ public class PipelineDepthActivity extends BaseActivity {
                 });
                 break;
         }
+    }
+    private void getPermission(){
+        AndPermission
+                .with(this)
+                .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        //拒绝权限
+                        ToastUtil.show("请赋予必要权限");
+                    }
+                }).onGranted(new Action() {
+            @Override
+            public void onAction(List<String> permissions) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent,FILE_REQUEST_CODE);
+            }
+        }).start();
     }
 
     // 授权管理

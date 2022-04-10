@@ -1,7 +1,10 @@
 package com.gd.form.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,6 +15,7 @@ import com.gd.form.BuildConfig;
 import com.gd.form.R;
 import com.gd.form.base.BaseActivity;
 import com.gd.form.utils.ActivityCollectorUtil;
+import com.gd.form.utils.ContentUriUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.view.DeleteDialog;
 import com.jaeger.library.StatusBarUtil;
@@ -104,6 +108,18 @@ public class SettingActivity extends BaseActivity {
             case R.id.ll_changePwd:
                 openActivity(ChangePwdActivity.class);
                 break;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                String path = ContentUriUtil.getPath(this, uri);
+                String[] splitPaht = path.split("/");
+                Log.i("filepath", " = " + splitPaht[splitPaht.length-1]);
+            }
         }
     }
 }

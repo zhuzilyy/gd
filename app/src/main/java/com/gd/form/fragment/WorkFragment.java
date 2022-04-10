@@ -16,6 +16,7 @@ import com.gd.form.activity.GhgActivity;
 import com.gd.form.activity.JobsActivity;
 import com.gd.form.activity.KpiAddActivity;
 import com.gd.form.activity.KpiDisplayActivity;
+import com.gd.form.activity.LogActivity;
 import com.gd.form.activity.PipeBuildingActivity;
 import com.gd.form.activity.PipeTagActivity;
 import com.gd.form.activity.ProjectListActivity;
@@ -55,13 +56,12 @@ public class WorkFragment extends BaseFragment {
                 llTask.setVisibility(View.VISIBLE);
             } else {
                 llTaskDispatch.setVisibility(View.GONE);
-                llTask.setVisibility(View.GONE);
                 llKpiAdd.setVisibility(View.GONE);
             }
             if (Integer.parseInt(departmentId) == CORRODE_DEPARTMENT) {
                 llCorrode.setVisibility(View.VISIBLE);
             } else {
-                llCorrode.setVisibility(View.INVISIBLE);
+                llCorrode.setVisibility(View.GONE);
             }
         }
     }
@@ -91,12 +91,16 @@ public class WorkFragment extends BaseFragment {
             R.id.ll_building,
             R.id.ll_wzwj,
             R.id.ll_upload,
+            R.id.ll_log,
     })
     public void onClick(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.ll_wzwj:
                 openActivity(EndorsementActivity.class);
+                break;
+            case R.id.ll_log:
+                openActivity(LogActivity.class);
                 break;
             case R.id.ll_upload:
                 bundle.putString("tag", "add");

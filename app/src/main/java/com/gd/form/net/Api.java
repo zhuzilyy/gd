@@ -20,6 +20,7 @@ import com.gd.form.model.HikingDetailModel;
 import com.gd.form.model.InsulationDetailModel;
 import com.gd.form.model.Jobs;
 import com.gd.form.model.KpiModel;
+import com.gd.form.model.LogBean;
 import com.gd.form.model.LoginModel;
 import com.gd.form.model.MeasureModel;
 import com.gd.form.model.NextStationModel;
@@ -1454,6 +1455,38 @@ public interface Api {
      */
     @POST("kpiassessmentUpdate.html")
     Call<ServerModel> updateKpi(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 提交日志记录
+     *
+     * @return
+     */
+    @POST("dailyreportAdd.html")
+    Call<ServerModel> addLog(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取日志记录
+     *
+     * @return
+     */
+    @POST("dailyreportGetMultiByDptid.html")
+    Call<List<LogBean>> getLogList(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 删除日志
+     *
+     * @return
+     */
+    @POST("dailyreportDelete.html")
+    Call<ServerModel> deleteLog(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
+    /**
+     * 获取日志详情
+     *
+     * @return
+     */
+    @POST("selectDailyByKey.html")
+    Call<LogBean> logDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
 
 }

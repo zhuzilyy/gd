@@ -46,11 +46,13 @@
         <service android:name="com.amap.api.location.APSService" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="com.gd.form.fileprovider"
             android:exported="false"
+            tools:replace="android:authorities"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
+                tools:replace="android:resource"
                 android:resource="@xml/file_paths" />
         </provider>
 
@@ -459,6 +461,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BuildingApproveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LogListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LogDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"

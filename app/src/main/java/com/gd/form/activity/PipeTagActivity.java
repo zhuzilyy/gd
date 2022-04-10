@@ -57,7 +57,6 @@ import com.gd.form.model.StationDetailInfo;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
-import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -211,6 +210,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     private GalleryConfig galleryConfig;
     private PhotoAdapter photoAdapter;
     private List<String> nameList;
+    private int startStationId,endStationId;
     /**
      * 需要进行检测的权限数组
      */
@@ -720,6 +720,7 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
     private void getPipelineInfoListRequest() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("dptid", departmentId);
+        Log.i("tag","jsonObject===="+jsonObject);
         Net.create(Api.class).pipelineinfosgetById(token, jsonObject)
                 .enqueue(new NetCallback<List<Pipelineinfo>>(this, false) {
                     @Override
@@ -941,13 +942,19 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
+        jsonObject.addProperty("prixstakeid", startStationId);
+        jsonObject.addProperty("nextstakeid", endStationId);
         jsonObject.addProperty("pipeid", pipeId);
         jsonObject.addProperty("appempid", userId);
         jsonObject.addProperty("id", Integer.parseInt(id));
         jsonObject.addProperty("name", tvUpStationNo.getText().toString());
         jsonObject.addProperty("desc", tvArea.getText().toString() + ":" + tvPipeName.getText().toString());
         jsonObject.addProperty("staketype", tvGroundTagType.getText().toString());
-        jsonObject.addProperty("mileageinfo", etKgInfo.getText().toString());
+        if(TextUtils.isEmpty(etKgInfo.getText().toString())){
+            jsonObject.addProperty("mileageinfo", "0");
+        }else{
+            jsonObject.addProperty("mileageinfo", etKgInfo.getText().toString());
+        }
         jsonObject.addProperty("cornerinfo", etCorner.getText().toString());
         jsonObject.addProperty("eastlongitude", etLongitude.getText().toString());
         jsonObject.addProperty("northlatitude", etLatitude.getText().toString());
@@ -1001,12 +1008,18 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
         }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("departmentid", departmentId);
+        jsonObject.addProperty("prixstakeid", startStationId);
+        jsonObject.addProperty("nextstakeid", endStationId);
         jsonObject.addProperty("pipeid", pipeId);
         jsonObject.addProperty("appempid", userId);
         jsonObject.addProperty("prixname", prefixName);
         jsonObject.addProperty("tailname", etStationNameNo.getText().toString());
         jsonObject.addProperty("staketype", tvGroundTagType.getText().toString());
-        jsonObject.addProperty("mileageinfo", etKgInfo.getText().toString());
+        if(TextUtils.isEmpty(etKgInfo.getText().toString())){
+            jsonObject.addProperty("mileageinfo", "0");
+        }else{
+            jsonObject.addProperty("mileageinfo", etKgInfo.getText().toString());
+        }
         jsonObject.addProperty("cornerinfo", etCorner.getText().toString());
         jsonObject.addProperty("eastlongitude", etLongitude.getText().toString());
         jsonObject.addProperty("northlatitude", etLatitude.getText().toString());
@@ -1075,21 +1088,21 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
             return false;
         }
 
-        if (TextUtils.isEmpty(etKgInfo.getText().toString())) {
-            ToastUtil.show("请输入里程信息");
-            return false;
-        }
-        if (!NumberUtil.isNumber(etKgInfo.getText().toString())) {
-            ToastUtil.show("里程信息输入不正确");
-            return false;
-        }
-        double kgInfo = Double.parseDouble(etKgInfo.getText().toString());
-        double upStationKm = Double.parseDouble(tvUpStationKm.getText().toString());
-        double downStationKm = Double.parseDouble(tvDownStationKm.getText().toString());
-        if (kgInfo < upStationKm || kgInfo > downStationKm) {
-            ToastUtil.show("里程信息要介于上游桩和下游桩之间");
-            return false;
-        }
+//        if (TextUtils.isEmpty(etKgInfo.getText().toString())) {
+//            ToastUtil.show("请输入里程信息");
+//            return false;
+//        }
+//        if (!NumberUtil.isNumber(etKgInfo.getText().toString())) {
+//            ToastUtil.show("里程信息输入不正确");
+//            return false;
+//        }
+//        double kgInfo = Double.parseDouble(etKgInfo.getText().toString());
+//        double upStationKm = Double.parseDouble(tvUpStationKm.getText().toString());
+//        double downStationKm = Double.parseDouble(tvDownStationKm.getText().toString());
+//        if (kgInfo < upStationKm || kgInfo > downStationKm) {
+//            ToastUtil.show("里程信息要介于上游桩和下游桩之间");
+//            return false;
+//        }
 
         if (TextUtils.isEmpty(etCorner.getText().toString())) {
             ToastUtil.show("请输入转角信息");
@@ -1174,6 +1187,8 @@ public class PipeTagActivity extends BaseActivity implements AMapLocationListene
                             tunnelId = model.getPipeaccountid();
                             approverId = model.getOwnerid();
                             prefixName = model.getPrixname();
+                            startStationId = model.getStakeid();
+                            endStationId = model.getNextid();
                             tvUpStationKm.setText(model.getStakemile() + "");
                             tvDownStationNo.setText(model.getNextname());
                             tvDownStationKm.setText(model.getNextmile() + "");

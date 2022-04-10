@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+            storeFile file('/Users/Shared/gd/keys.jks')
             storePassword '123456'
             keyAlias = 'keys'
             keyPassword '123456'
         }
         release {
-            storeFile file('/Users/jinzhuxue/Desktop/gd/keys.jks')
+            storeFile file('/Users/Shared/gd/keys.jks')
             storePassword '123456'
             keyAlias = 'keys'
             keyPassword '123456'
@@ -25,7 +25,7 @@ android {
     defaultConfig {
         multiDexEnabled true
         applicationId "com.gd.form"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 4
         versionName "1.2"
@@ -91,6 +91,9 @@ dependencies {
     api project(path: ':flowlayout-lib')
 //    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.android.support:multidex:1.0.3'
-//    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+//    implementation 'com.king.ui:fileselector:1.0.3'
+    implementation 'com.leon:lfilepickerlibrary:1.8.0'
+//    implementation 'com.github.ZLYang110:MyPermission:1.0'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc2'
 
 }

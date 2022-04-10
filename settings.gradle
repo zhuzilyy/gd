@@ -1,3 +1,4 @@
 include ':app', ':pickerview', ':wheelview', ':gallerypick', ':flowlayout-lib'
 
 include ':myapplication'
+include ':filepicker'

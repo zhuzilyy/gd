@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.ContentUriUtil;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.ToastUtil;
@@ -43,6 +45,9 @@ import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -413,8 +418,13 @@ public class PipeHighZoneActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 } else {
-                    Intent intentSelectFile1 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                    startActivityForResult(intentSelectFile1, FILE_REQUEST_CODE1);
+//                    Intent intentSelectFile1 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+//                    startActivityForResult(intentSelectFile1, FILE_REQUEST_CODE1);
+//                    Intent intentSelectFile1 = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intentSelectFile1.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                    intentSelectFile1.addCategory(Intent.CATEGORY_OPENABLE);
+//                    startActivityForResult(intentSelectFile1,FILE_REQUEST_CODE1);
+                    getPermission(FILE_REQUEST_CODE1);
                 }
 
                 break;
@@ -426,8 +436,15 @@ public class PipeHighZoneActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 } else {
-                    Intent intentSelectFile2 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                    startActivityForResult(intentSelectFile2, FILE_REQUEST_CODE2);
+//                    Intent intentSelectFile2 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+//                    startActivityForResult(intentSelectFile2, FILE_REQUEST_CODE2);
+
+//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    startActivityForResult(intent,FILE_REQUEST_CODE2);
+
+                    getPermission(FILE_REQUEST_CODE2);
                 }
 
                 break;
@@ -439,8 +456,15 @@ public class PipeHighZoneActivity extends BaseActivity {
                         startActivity(intent);
                     }
                 } else {
-                    Intent intentSelectFile3 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
-                    startActivityForResult(intentSelectFile3, FILE_REQUEST_CODE3);
+//                    Intent intentSelectFile3 = new Intent(PipeHighZoneActivity.this, SelectFileActivity.class);
+//                    startActivityForResult(intentSelectFile3, FILE_REQUEST_CODE3);
+
+//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    startActivityForResult(intent,FILE_REQUEST_CODE3);
+
+                    getPermission(FILE_REQUEST_CODE3);
                 }
                 break;
             case R.id.ll_influence:
@@ -527,6 +551,26 @@ public class PipeHighZoneActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+    private void getPermission(int requestCode){
+        AndPermission
+                .with(this)
+                .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        //拒绝权限
+                        ToastUtil.show("请赋予必要权限");
+                    }
+                }).onGranted(new Action() {
+            @Override
+            public void onAction(List<String> permissions) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent,requestCode);
+            }
+        }).start();
     }
 
     private void updateHighZone() {
@@ -679,30 +723,40 @@ public class PipeHighZoneActivity extends BaseActivity {
             }
             tvDeath.setText(highZoneModel.getArearadius());
             tvInfluence.setText(highZoneModel.getFluentionareas());
-        } else if (requestCode == FILE_REQUEST_CODE1) {
-            selectFileName1 = data.getStringExtra("fileName");
-            selectFilePath1 = data.getStringExtra("selectFilePath");
-            tvFileName1.setText(selectFileName1);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName1, selectFilePath1, 1);
-            uploadOffice("highaccount/"+selectFileName1, selectFilePath1, 1);
-        } else if (requestCode == FILE_REQUEST_CODE2) {
-            selectFileName2 = data.getStringExtra("fileName");
-            selectFilePath2 = data.getStringExtra("selectFilePath");
-            tvFileName2.setText(selectFileName2);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName2, selectFilePath2, 2);
-            uploadOffice("highaccount/"+selectFileName2, selectFilePath2, 2);
-        } else if (requestCode == FILE_REQUEST_CODE3) {
-            selectFileName3 = data.getStringExtra("fileName");
-            selectFilePath3 = data.getStringExtra("selectFilePath");
-            tvFileName3.setText(selectFileName3);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-//            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName3, selectFilePath3, 3);
-            uploadOffice("highaccount/"+selectFileName3, selectFilePath3, 3);
+        } else if (requestCode == FILE_REQUEST_CODE1 && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath1= ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath1.split("/");
+                selectFileName1= splitPath[splitPath.length-1];
+                tvFileName1.setText(selectFileName1);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice("highaccount/"+selectFileName1, selectFilePath1, 1);
+            }
+
+        } else if (requestCode == FILE_REQUEST_CODE2 && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath2 = ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath2.split("/");
+                selectFileName2 = splitPath[splitPath.length-1];
+                tvFileName2.setText(selectFileName2);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice("highaccount/"+selectFileName2, selectFilePath2, 2);
+            }
+        } else if (requestCode == FILE_REQUEST_CODE3 && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath3 = ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath3.split("/");
+                selectFileName3 = splitPath[splitPath.length-1];
+                tvFileName3.setText(selectFileName3);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice("highaccount/"+selectFileName3, selectFilePath3, 3);
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 package com.gd.form.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,6 +40,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.ContentUriUtil;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
@@ -47,6 +49,9 @@ import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -151,7 +156,7 @@ public class AddProjectActivity extends BaseActivity {
                             etDistance.setText(result.getStakefrom());
                             etProjectName.setText(result.getConstructionname());
                             etConstructName.setText(result.getConstructionunit());
-                            if(result.getConstructiondate()!=null){
+                            if (result.getConstructiondate() != null) {
                                 tvTime.setText(TimeUtil.longToFormatTime(result.getConstructiondate().getTime()));
                             }
                             etProgress.setText(result.getConstructionprocess());
@@ -161,7 +166,7 @@ public class AddProjectActivity extends BaseActivity {
                             stationId = result.getStakeid() + "";
                             tvAddress.setText(result.getConstructionlocation());
                             pipeId = "0";
-                            if (result.getUploadfile()!=null) {
+                            if (result.getUploadfile() != null) {
                                 if (!result.getUploadfile().equals("00")) {
                                     if (result.getFilename().contains("_")) {
                                         tvFileName.setText(result.getFilename().split("_")[2]);
@@ -219,8 +224,13 @@ public class AddProjectActivity extends BaseActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                 } else {
-                    Intent intentAddress = new Intent(AddProjectActivity.this, SelectFileActivity.class);
-                    startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                    Intent intentAddress = new Intent(AddProjectActivity.this, SelectFileActivity.class);
+//                    startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    startActivityForResult(intent,FILE_REQUEST_CODE);
+                    getPermission();
                 }
                 break;
             case R.id.tv_right:
@@ -229,6 +239,27 @@ public class AddProjectActivity extends BaseActivity {
                 openActivity(AddProjectRecordActivity.class, bundle);
                 break;
         }
+    }
+
+    private void getPermission() {
+        AndPermission
+                .with(this)
+                .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        //拒绝权限
+                        ToastUtil.show("请赋予必要权限");
+                    }
+                }).onGranted(new Action() {
+            @Override
+            public void onAction(List<String> permissions) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, FILE_REQUEST_CODE);
+            }
+        }).start();
     }
 
     private void commit() {
@@ -247,7 +278,7 @@ public class AddProjectActivity extends BaseActivity {
         params.addProperty("creatime", TimeUtil.getCurrentTime());
         params.addProperty("uploadfile", "00");
         params.addProperty("constructionlocation", location);
-        Log.i("tag","params===="+params);
+        Log.i("tag", "params====" + params);
         Net.create(Api.class).addProject(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -341,13 +372,17 @@ public class AddProjectActivity extends BaseActivity {
         if (data == null) {
             return;
         }
-        if (requestCode == FILE_REQUEST_CODE) {
-            selectFileName = data.getStringExtra("fileName");
-            selectFilePath = data.getStringExtra("selectFilePath");
-            tvFileName.setText(selectFileName);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice("projectfile/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+        if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath = ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath.split("/");
+                selectFileName = splitPath[splitPath.length - 1];
+                tvFileName.setText(selectFileName);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice("projectfile/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            }
         } else if (requestCode == SELECT_STATION) {
             String stationName = data.getStringExtra("stationName");
             pipeId = data.getStringExtra("pipeId");

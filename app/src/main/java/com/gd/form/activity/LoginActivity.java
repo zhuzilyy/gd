@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -83,6 +84,7 @@ public class LoginActivity extends BaseActivity {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", userName);
         jsonObject.addProperty("password", pwd);
+        Log.i("tag","jsonObject===="+jsonObject);
         Net.create(Api.class).login(jsonObject)
                 .enqueue(new NetCallback<LoginModel>(this, true) {
                     @Override

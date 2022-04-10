@@ -84,8 +84,12 @@ public class MonitoringRepairActivity extends BaseActivity {
                 startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
             case R.id.ll_scfj:
-                Intent intentAddress = new Intent(this, SelectFileActivity.class);
-                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                Intent intentAddress = new Intent(this, SelectFileActivity.class);
+//                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+                Intent intentAddress = new Intent(Intent.ACTION_GET_CONTENT);
+                intentAddress.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intentAddress.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intentAddress,FILE_REQUEST_CODE);
                 break;
         }
     }

@@ -16,7 +16,6 @@ import butterknife.OnClick;
 
 
 public class UserFragment extends BaseFragment {
-
     @BindView(R.id.ll_gwwh)
     LinearLayout llWorking;
     @BindView(R.id.ll_rywh)
@@ -32,6 +31,7 @@ public class UserFragment extends BaseFragment {
             llWorking.setVisibility(View.VISIBLE);
             llPerson.setVisibility(View.VISIBLE);
         }
+
 
     }
 
@@ -55,6 +55,20 @@ public class UserFragment extends BaseFragment {
                 break;
             case R.id.ll_setting:
                 openActivity(SettingActivity.class);
+//                ArrayList<String> filters = new ArrayList<String>();
+//                filters.add(FileSelectorActivity.FILE_TYPE_IMAGE);//图片
+//                filters.add(FileSelectorActivity.FILE_TYPE_VIDEO);//视频
+//                filters.add(FileSelectorActivity.FILE_TYPE_DOC);//文档
+//                filters.add(FileSelectorActivity.FILE_TYPE_AUDIO);//音频
+//
+//                FileSelector.Builder builder = new FileSelector.Builder(getActivity());
+//                Intent intent = builder.setFileRoot("")//初始路径  init file root
+//                        .setIsMultiple(true)//是否多选模式 whether is multiple select
+//                        .setMaxCount(3)//限定文件选择数 max file count
+//                        .setFilters(filters)//筛选文件类型  file filter
+//                        .getIntent();
+//                startActivityForResult(intent, 100);
+
                 break;
 
         }

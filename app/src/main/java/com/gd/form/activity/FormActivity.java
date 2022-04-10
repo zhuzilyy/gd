@@ -3,7 +3,6 @@ package com.gd.form.activity;
 import static com.gd.form.utils.Util.activityList;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,7 +71,6 @@ public class FormActivity extends BaseActivity {
                 params.addProperty("stakeid", bundle.getInt("stakeId"));
                 params.addProperty("empid", userId);
                 params.addProperty("basecode", "W005");
-                Log.i("tag","params==="+params);
                 getIllegalData();
             } else {
                 params.addProperty("departmentid", bundle.getInt("departmentid"));

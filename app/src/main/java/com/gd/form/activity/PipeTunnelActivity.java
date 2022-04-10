@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -53,6 +54,7 @@ import com.gd.form.model.TunnelModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.ContentUriUtil;
 import com.gd.form.utils.NumberUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
@@ -64,6 +66,9 @@ import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -399,8 +404,14 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
                 break;
             case R.id.ll_selectFile:
                 if(tag.equals("update")){
-                    Intent intentFile = new Intent(PipeTunnelActivity.this, SelectFileActivity.class);
-                    startActivityForResult(intentFile, FILE_REQUEST_CODE);
+//                    Intent intentFile = new Intent(PipeTunnelActivity.this, SelectFileActivity.class);
+//                    startActivityForResult(intentFile, FILE_REQUEST_CODE);
+
+//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    startActivityForResult(intent,FILE_REQUEST_CODE);
+                    getPermission();
                 }else{
                     if (!uploadFilePath.equals("00")) {
                         Uri uri = Uri.parse(uploadFilePath);
@@ -446,6 +457,26 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         }
     }
 
+    private void getPermission(){
+        AndPermission
+                .with(this)
+                .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        //拒绝权限
+                        ToastUtil.show("请赋予必要权限");
+                    }
+                }).onGranted(new Action() {
+            @Override
+            public void onAction(List<String> permissions) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent,FILE_REQUEST_CODE);
+            }
+        }).start();
+    }
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -562,13 +593,17 @@ public class PipeTunnelActivity extends BaseActivity implements AMapLocationList
         if (requestCode == INPUT_STATUS) {
             String content = data.getStringExtra("content");
             tvStatus.setText(content);
-        } else if (requestCode == FILE_REQUEST_CODE) {
-            selectFileName = data.getStringExtra("fileName");
-            selectFilePath = data.getStringExtra("selectFilePath");
-            tvFileName.setText(selectFileName);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice("pipeaccount/" + selectFileName, selectFilePath);
+        } else if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath = ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath.split("/");
+                selectFileName = splitPath[splitPath.length-1];
+                tvFileName.setText(selectFileName);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice("pipeaccount/" + selectFileName, selectFilePath);
+            }
         }else if (requestCode == SELECT_STATION) {
             String selectTag = data.getStringExtra("selectTag");
             String stationName = data.getStringExtra("stationName");

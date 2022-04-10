@@ -1,9 +1,11 @@
 package com.gd.form.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +42,7 @@ import com.gd.form.model.ServerModel;
 import com.gd.form.net.Api;
 import com.gd.form.net.Net;
 import com.gd.form.net.NetCallback;
+import com.gd.form.utils.ContentUriUtil;
 import com.gd.form.utils.SPUtil;
 import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
@@ -49,6 +52,9 @@ import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,14 +235,41 @@ public class ConcealedWorkActivity extends BaseActivity {
                 startActivityForResult(intent, SELECT_STATION);
                 break;
             case R.id.ll_scfj:
-                Intent intentAddress = new Intent(this, SelectFileActivity.class);
-                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                Intent intentAddress = new Intent(this, SelectFileActivity.class);
+//                startActivityForResult(intentAddress, FILE_REQUEST_CODE);
+//                Intent intentAddress = new Intent(Intent.ACTION_GET_CONTENT);
+//                intentAddress.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+//                intentAddress.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(intentAddress,FILE_REQUEST_CODE);
+                getPermission();
+
                 break;
             case R.id.ll_spr:
                 Intent intentApprover = new Intent(this, ApproverActivity.class);
                 startActivityForResult(intentApprover, SELECT_APPROVER);
                 break;
         }
+    }
+
+    private void getPermission() {
+        AndPermission
+                .with(this)
+                .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
+                .onDenied(new Action() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        //拒绝权限
+                        ToastUtil.show("请赋予必要权限");
+                    }
+                }).onGranted(new Action() {
+            @Override
+            public void onAction(List<String> permissions) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, FILE_REQUEST_CODE);
+            }
+        }).start();
     }
 
     private void commit() {
@@ -368,13 +401,17 @@ public class ConcealedWorkActivity extends BaseActivity {
         if (data == null) {
             return;
         }
-        if (requestCode == FILE_REQUEST_CODE) {
-            selectFileName = data.getStringExtra("fileName");
-            selectFilePath = data.getStringExtra("selectFilePath");
-            tvFileName.setText(selectFileName);
-            mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
-            mWeiboDialog.getWindow().setDimAmount(0f);
-            uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+        if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            if (null != uri) {
+                selectFilePath = ContentUriUtil.getPath(this, uri);
+                String[] splitPath = selectFilePath.split("/");
+                selectFileName = splitPath[splitPath.length - 1];
+                tvFileName.setText(selectFileName);
+                mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
+                mWeiboDialog.getWindow().setDimAmount(0f);
+                uploadOffice(userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+            }
             //选择桩号
         } else if (requestCode == SELECT_STATION) {
             stationId = data.getStringExtra("stationId");
