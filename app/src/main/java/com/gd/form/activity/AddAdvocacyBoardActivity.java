@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class AddAdvocacyBoardActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("tag","master");
         tvTitle.setText("添加宣教栏");
         token = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "token", "");
         userId = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "userId", "");
