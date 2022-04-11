@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -154,6 +155,7 @@ public class UploadStandardFileActivity extends BaseActivity {
             Uri uri = data.getData();
             if (null != uri) {
                 selectFilePath = ContentUriUtil.getPath(this, uri);
+                Log.i("tag","selectFilePath===="+selectFilePath);
                 String[] splitPath = selectFilePath.split("/");
                 selectFileName = splitPath[splitPath.length-1];
                 tvFileName.setText(selectFileName);

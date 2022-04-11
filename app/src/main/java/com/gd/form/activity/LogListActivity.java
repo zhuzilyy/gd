@@ -186,7 +186,6 @@ public class LogListActivity extends BaseActivity {
                             }
                             tvDepartmentName.setText(departmentList.get(0).getName());
                             departmentId = departmentList.get(0).getId()+"";
-                            getLogList();
                         }
                     }
                 });
