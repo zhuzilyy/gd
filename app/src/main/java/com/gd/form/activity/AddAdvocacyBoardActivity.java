@@ -48,6 +48,7 @@ public class AddAdvocacyBoardActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("tag","master");
+        Log.i("tag","devvvvvv");
         tvTitle.setText("添加宣教栏");
         token = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "token", "");
         userId = (String) SPUtil.get(AddAdvocacyBoardActivity.this, "userId", "");
