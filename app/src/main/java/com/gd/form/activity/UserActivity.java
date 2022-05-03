@@ -189,14 +189,14 @@ public class UserActivity extends BaseActivity {
 
     private void addRequest(){
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", Integer.valueOf(et_user_id.getText().toString()));
+        jsonObject.addProperty("id", et_user_id.getText().toString());
         jsonObject.addProperty("name",et_user_name.getText().toString());
         jsonObject.addProperty("professionalid",professionalid);
         jsonObject.addProperty("departmentid",departmentid);
         jsonObject.addProperty("password",et_user_pwd.getText().toString());
         jsonObject.addProperty("mail",et_user_mail.getText().toString());
         jsonObject.addProperty("telenumber",et_user_tel.getText().toString());
-        jsonObject.addProperty("roleid","");
+        jsonObject.addProperty("roleid","200");
         Net.create(Api.class).pipemploysAdd(token,jsonObject)
                 .enqueue(new NetCallback<ResultMsg>(this,true) {
                     @Override
