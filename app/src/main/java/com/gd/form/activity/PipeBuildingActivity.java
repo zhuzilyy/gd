@@ -157,7 +157,14 @@ public class PipeBuildingActivity extends BaseActivity {
     TagFlowLayout mFlowLayout;
     @BindView(R.id.tv_right)
     TextView tvRight;
+    @BindView(R.id.rg_property)
+    RadioGroup rgProperty;
+    @BindView(R.id.rb_direct)
+    RadioButton rbDirect;
+    @BindView(R.id.rb_distance)
+    RadioButton rbDistance;
     private String isHighZone = "是";
+    private String property = "直接占压";
     private TimePickerView pvTime;
     private String token, userId, buildingId;
     private final int SEARCH_BUILDING = 100;
@@ -227,6 +234,7 @@ public class PipeBuildingActivity extends BaseActivity {
                     getBuildingData(buildingId);
                 }
             } else {
+                tvRight.setVisibility(View.GONE);
                 tvTitle.setText("增加违规违建");
             }
             if ("add".equals(tag)) {
@@ -235,7 +243,9 @@ public class PipeBuildingActivity extends BaseActivity {
                 llPipeName.setEnabled(true);
                 etStartStationNo.setEnabled(true);
                 etLocation.setEnabled(true);
-                tvPipeProperty.setEnabled(true);
+                rgProperty.setEnabled(true);
+                rbDirect.setEnabled(true);
+                rbDistance.setEnabled(true);
                 tvType.setEnabled(true);
                 etName.setEnabled(true);
                 tvTime.setEnabled(true);
@@ -267,6 +277,9 @@ public class PipeBuildingActivity extends BaseActivity {
                 etStartStationNo.setEnabled(false);
                 etLocation.setEnabled(false);
                 tvPipeProperty.setEnabled(false);
+                rgProperty.setEnabled(false);
+                rbDirect.setEnabled(false);
+                rbDistance.setEnabled(false);
                 tvType.setEnabled(false);
                 etName.setEnabled(false);
                 tvTime.setEnabled(false);
@@ -464,6 +477,19 @@ public class PipeBuildingActivity extends BaseActivity {
                 }
             }
         });
+        rgProperty.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_direct:
+                        property = "直接占压";
+                        break;
+                    case R.id.rb_no:
+                        property = "距离不足";
+                        break;
+                }
+            }
+        });
 
         final LayoutInflater mInflater = LayoutInflater.from(this);
         mFlowLayout.setAdapter(mAdapter = new com.zhy.view.flowlayout.TagAdapter<String>(dataSource) {
@@ -641,10 +667,10 @@ public class PipeBuildingActivity extends BaseActivity {
                 break;
             case R.id.tv_right:
                 Bundle bundle = new Bundle();
-                bundle.putInt("departmentId",Integer.parseInt(departmentId));
-                bundle.putInt("stakeId",Integer.parseInt(stakeId));
-                bundle.putString("tag","illegal");
-                openActivity(FormActivity.class,bundle);
+                bundle.putString("departmentId", departmentId+"");
+                bundle.putInt("stakeId", Integer.parseInt(stakeId));
+                bundle.putString("tag", "illegal");
+                openActivity(FormActivity.class, bundle);
                 break;
             case R.id.ll_stationNo:
                 Intent intentStartStation = new Intent(this, StationWaterActivity.class);
@@ -701,14 +727,14 @@ public class PipeBuildingActivity extends BaseActivity {
                     dialog.dismiss();
                 });
                 break;
-            case R.id.ll_pipeProperty:
-                dialog.setData(pipePropertyList);
-                dialog.show();
-                dialog.setListItemClick(positionM -> {
-                    tvPipeProperty.setText(pipePropertyList.get(positionM));
-                    dialog.dismiss();
-                });
-                break;
+//            case R.id.ll_pipeProperty:
+//                dialog.setData(pipePropertyList);
+//                dialog.show();
+//                dialog.setListItemClick(positionM -> {
+//                    tvPipeProperty.setText(pipePropertyList.get(positionM));
+//                    dialog.dismiss();
+//                });
+//                break;
             case R.id.ll_location:
 //                Intent intentArea = new Intent(this, MapActivity.class);
 //                startActivityForResult(intentArea, SELECT_AREA);
@@ -766,7 +792,7 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("stakeid", stationId);
         params.addProperty("pipeid", pipeId);
         params.addProperty("locationdesc", etLocation.getText().toString());
-        params.addProperty("overpropety", tvPipeProperty.getText().toString());
+        params.addProperty("overpropety", property);
         params.addProperty("overtype", selectPressureName);
         params.addProperty("overname", etName.getText().toString());
         params.addProperty("genernaldate", tvTime.getText().toString());
@@ -818,7 +844,7 @@ public class PipeBuildingActivity extends BaseActivity {
         params.addProperty("pipeid", pipeId);
         params.addProperty("appempid", userId);
         params.addProperty("locationdesc", etLocation.getText().toString());
-        params.addProperty("overpropety", tvPipeProperty.getText().toString());
+        params.addProperty("overpropety", property);
         params.addProperty("overtype", selectPressureName);
         params.addProperty("overname", etName.getText().toString());
         params.addProperty("genernaldate", tvTime.getText().toString());
@@ -867,10 +893,10 @@ public class PipeBuildingActivity extends BaseActivity {
             ToastUtil.show("请输入行政位置");
             return false;
         }
-        if (TextUtils.isEmpty(tvPipeProperty.getText().toString())) {
-            ToastUtil.show("请选择占据性质");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvPipeProperty.getText().toString())) {
+//            ToastUtil.show("请选择占据性质");
+//            return false;
+//        }
         if (TextUtils.isEmpty(selectPressureName)) {
             ToastUtil.show("请选择占压类型");
             return false;
@@ -912,17 +938,17 @@ public class PipeBuildingActivity extends BaseActivity {
             return false;
         }
         if (TextUtils.isEmpty(etDes.getText().toString())) {
-            ToastUtil.show("请输入隐患内容描述");
+            ToastUtil.show("请输入占压物描述");
             return false;
         }
-        if (TextUtils.isEmpty(tvRiskEvaluate.getText().toString())) {
-            ToastUtil.show("风险评价-事故概率");
-            return false;
-        }
-        if (TextUtils.isEmpty(tvRiskResult.getText().toString())) {
-            ToastUtil.show("风险评价-事故后果");
-            return false;
-        }
+//        if (TextUtils.isEmpty(tvRiskEvaluate.getText().toString())) {
+//            ToastUtil.show("风险评价-事故概率");
+//            return false;
+//        }
+//        if (TextUtils.isEmpty(tvRiskResult.getText().toString())) {
+//            ToastUtil.show("风险评价-事故后果");
+//            return false;
+//        }
         if (TextUtils.isEmpty(tvRiskType.getText().toString())) {
             ToastUtil.show("请选择隐患类型");
             return false;

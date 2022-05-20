@@ -102,6 +102,7 @@ public class LogListActivity extends BaseActivity {
                         bundle.putString("creatorName",creatorName);
                         bundle.putInt("departmentId",departmentId);
                         bundle.putString("time",time);
+                        bundle.putString("tag","logList");
                         openActivity(LogDetailActivity.class,bundle);
                         break;
                     case R.id.btn_delete:

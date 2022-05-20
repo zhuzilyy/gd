@@ -142,6 +142,7 @@
             android:gravity="end"
             android:hint="进度(%)"
             android:inputType="number"
+            android:digits="1234567890."
             android:singleLine="true"
             android:textColor="#A6000000"
             android:textSize="@dimen/s_16" />

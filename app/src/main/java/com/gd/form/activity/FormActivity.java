@@ -3,6 +3,7 @@ package com.gd.form.activity;
 import static com.gd.form.utils.Util.activityList;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,7 +68,7 @@ public class FormActivity extends BaseActivity {
             params = new JsonObject();
             Bundle bundle = getIntent().getExtras();
             if ("illegal".equals(bundle.getString("tag"))) {
-                params.addProperty("departmentid", bundle.getInt("departmentId"));
+                params.addProperty("departmentid", bundle.getString("departmentId"));
                 params.addProperty("stakeid", bundle.getInt("stakeId"));
                 params.addProperty("empid", userId);
                 params.addProperty("basecode", "W005");
@@ -87,6 +88,7 @@ public class FormActivity extends BaseActivity {
         initData();
     }
     private void getIllegalData() {
+        Log.i("tag","params===="+params);
         Net.create(Api.class).getIllegalForms(token, params)
                 .enqueue(new NetCallback<List<FormModel>>(this, true) {
                     @Override
@@ -147,6 +149,10 @@ public class FormActivity extends BaseActivity {
                 bundle.putString("tag", "detail");
                 bundle.putString("formId", formModelList.get(position).getFormid());
                 switch (formName) {
+                    case "工作日志记录":
+                        bundle.putString("formType", formModelList.get(position).getFormtype());
+                        openActivity(LogDetailActivity.class,bundle);
+                        break;
                     case "水工保护巡检表":
                         openActivity(ApproveWaterProtectionActivity.class, bundle);
                         break;
