@@ -229,6 +229,7 @@ public class PipeBuildingActivity extends BaseActivity {
             stakeId = getIntent().getExtras().getString("stakeId");
             if (!TextUtils.isEmpty(buildingId)) {
                 if (tag.equals("detail")) {
+                    tvRight.setVisibility(View.GONE);
                     getBuildingDetail(stakeStatus, buildingId);
                 } else {
                     getBuildingData(buildingId);
@@ -484,7 +485,7 @@ public class PipeBuildingActivity extends BaseActivity {
                     case R.id.rb_direct:
                         property = "直接占压";
                         break;
-                    case R.id.rb_no:
+                    case R.id.rb_distance:
                         property = "距离不足";
                         break;
                 }
@@ -565,7 +566,13 @@ public class PipeBuildingActivity extends BaseActivity {
         }
         tvStationNo.setText(buildingModel.getStakename());
         etLocation.setText(buildingModel.getLocationdesc());
-        tvPipeProperty.setText(buildingModel.getOverpropety());
+        if(buildingModel.getOverpropety().equals("距离不足")){
+            property = "距离不足";
+            rbDistance.setChecked(true);
+        }else if(buildingModel.getOverpropety().equals("直接占压")){
+            property = "直接占压";
+            rbDirect.setChecked(true);
+        }
         Set<Integer> set = new HashSet<>();
         StringBuilder selectedTagBuilder = new StringBuilder();
         if (!TextUtils.isEmpty(buildingModel.getOvertype())) {
@@ -813,6 +820,7 @@ public class PipeBuildingActivity extends BaseActivity {
         } else {
             params.addProperty("uploadpicture", "00");
         }
+        Log.i("tag","params======="+params);
         Net.create(Api.class).addBuilding(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -958,7 +966,7 @@ public class PipeBuildingActivity extends BaseActivity {
             return false;
         }
         if (TextUtils.isEmpty(etChangeMethod.getText().toString())) {
-            ToastUtil.show("请输入整改控制措施");
+            ToastUtil.show("请输入整改计划");
             return false;
         }
         return true;
