@@ -358,7 +358,7 @@ public class UploadEventActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("revent/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("revent/" + tvStationNo.getText().toString() + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }

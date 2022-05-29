@@ -232,7 +232,9 @@ public class PipeBuildingActivity extends BaseActivity {
                     tvRight.setVisibility(View.GONE);
                     getBuildingDetail(stakeStatus, buildingId);
                 } else {
+                    Log.i("tag","1111");
                     getBuildingData(buildingId);
+                    tvRight.setVisibility(View.GONE);
                 }
             } else {
                 tvRight.setVisibility(View.GONE);
@@ -334,7 +336,7 @@ public class PipeBuildingActivity extends BaseActivity {
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
 //                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
-                    uploadFiles("llegalaccount/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("llegalaccount/" + buildingId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }

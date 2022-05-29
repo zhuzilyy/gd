@@ -183,7 +183,7 @@ public class EndorsementActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("W005/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("W005/" + tvStationNo.getText().toString() + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -431,7 +431,7 @@ public class EndorsementActivity extends BaseActivity {
                 tv_fileName.setText(selectFileName);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("W005/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+                uploadOffice("W005/" + tvStationNo.getText().toString() + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             }
 
             //选择桩号
