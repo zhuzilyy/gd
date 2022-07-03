@@ -638,7 +638,7 @@ public class AddWaterInsuranceActivity extends BaseActivity implements AMapLocat
                 tvFileName.setText(selectFileName);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("wateracount/" + selectFileName, selectFilePath);
+                uploadOffice("wateracount/" + tvStationNo.getText().toString()+"_"+selectFileName, selectFilePath);
             }
             //选择桩号
         } else if (requestCode == SELECT_STATION) {

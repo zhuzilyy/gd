@@ -192,6 +192,7 @@ public class UploadEventActivity extends BaseActivity {
             case R.id.tv_right:
                 Bundle bundle = new Bundle();
                 bundle.putString("eventId", formId);
+                bundle.putString("stationName", tvStationNo.getText().toString());
                 if (tag.equals("update")) {
                     openActivity(AddEventRecordActivity.class, bundle);
                 } else {

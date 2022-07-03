@@ -1,0 +1,27 @@
+com.contrarywind.view
+attr wheelview_dividerColor
+attr wheelview_dividerWidth
+attr wheelview_gravity
+attr wheelview_lineSpacingMultiplier
+attr wheelview_textColorCenter
+attr wheelview_textColorOut
+attr wheelview_textSize
+color pickerview_bgColor_default
+color pickerview_bgColor_overlay
+color pickerview_bg_topbar
+color pickerview_timebtn_nor
+color pickerview_timebtn_pre
+color pickerview_topbar_title
+color pickerview_wheelview_textcolor_center
+color pickerview_wheelview_textcolor_divider
+color pickerview_wheelview_textcolor_out
+dimen pickerview_textsize
+dimen pickerview_topbar_btn_textsize
+dimen pickerview_topbar_height
+dimen pickerview_topbar_padding
+dimen pickerview_topbar_title_textsize
+id center
+id left
+id right
+string app_name
+styleable pickerview wheelview_dividerColor wheelview_dividerWidth wheelview_gravity wheelview_lineSpacingMultiplier wheelview_textColorCenter wheelview_textColorOut wheelview_textSize

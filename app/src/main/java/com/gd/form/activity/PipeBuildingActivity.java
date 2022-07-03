@@ -336,7 +336,7 @@ public class PipeBuildingActivity extends BaseActivity {
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
 //                    uploadFiles(userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
-                    uploadFiles("llegalaccount/" + buildingId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("llegalaccount/" + tvStationNo.getText().toString() + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }

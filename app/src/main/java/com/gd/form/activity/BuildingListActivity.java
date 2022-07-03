@@ -104,6 +104,7 @@ public class BuildingListActivity extends BaseActivity {
                     intent.putExtra("name", searchBuildingModel.getLlegalname());
                     intent.putExtra("buildId", searchBuildingModel.getId() + "");
                     intent.putExtra("stakeId", searchBuildingModel.getStakeid() + "");
+                    intent.putExtra("stakeName", searchBuildingModel.getStakename());
                     setResult(RESULT_OK, intent);
                     finish();
                 }
