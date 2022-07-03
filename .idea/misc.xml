@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_add_project.xml" value="0.23796296296296296" />
+        <entry key="app/src/main/res/layout/activity_add_project_record.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_approve_building.xml" value="0.22436534740306713" />
+        <entry key="app/src/main/res/layout/activity_building.xml" value="0.26461825900607644" />
+        <entry key="app/src/main/res/layout/activity_building_list.xml" value="0.15138888888888888" />
+        <entry key="app/src/main/res/layout/activity_endorsement.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_log.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_log_detail.xml" value="0.1763888888888889" />
+        <entry key="app/src/main/res/layout/activity_log_list.xml" value="0.17037037037037037" />
+        <entry key="app/src/main/res/layout/activity_pipe_high_zone.xml" value="0.4976794207537616" />
+        <entry key="app/src/main/res/layout/activity_pipe_measure.xml" value="0.23935185185185184" />
+        <entry key="app/src/main/res/layout/activity_pipe_tag.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_project_list.xml" value="0.1763888888888889" />
+        <entry key="app/src/main/res/layout/activity_project_record_list.xml" value="0.11388888888888889" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.19212962962962962" />
+        <entry key="app/src/main/res/layout/activity_standing_book.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/activity_upload_event.xml" value="0.23935185185185184" />
+        <entry key="app/src/main/res/layout/activity_xhgl.xml" value="0.23935185185185184" />
+        <entry key="app/src/main/res/layout/adapter_item_building_approve.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/adapter_item_building_list.xml" value="0.15138888888888888" />
+        <entry key="app/src/main/res/layout/adapter_item_kpi.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/adapter_item_measure_record.xml" value="0.24592391304347827" />
+        <entry key="app/src/main/res/layout/adapter_item_score.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/adapter_item_upload_event.xml" value="0.18611111111111112" />
+        <entry key="app/src/main/res/layout/adapter_item_wind_vane_list.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/adapter_log_list.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/adapter_project_record.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/ativity_log_list.xml" value="0.20277777777777778" />
+        <entry key="app/src/main/res/layout/fragment_message.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.11944444444444445" />
+        <entry key="app/src/main/res/layout/fragment_waiting_approve.xml" value="0.20277777777777778" />
+        <entry key="app/src/main/res/layout/fragment_work.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/item_expand_user3.xml" value="0.17844202898550723" />
+        <entry key="app/src/main/res/layout/item_expand_users_1.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/item_expand_users_2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_expand_users_3.xml" value="0.17844202898550723" />
+        <entry key="app/src/main/res/layout/item_expand_users_4.xml" value="0.19021739130434784" />
+        <entry key="app/src/main/res/layout/layout_approval_common.xml" value="0.22546296296296298" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>
