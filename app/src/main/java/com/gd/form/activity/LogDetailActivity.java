@@ -1,6 +1,7 @@
 package com.gd.form.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,11 +50,37 @@ public class LogDetailActivity extends BaseActivity {
         token = (String) SPUtil.get(LogDetailActivity.this, "token", "");
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
-            String creatorName = extras.getString("creatorName");
-            String time = extras.getString("time");
-            int departmentId = extras.getInt("departmentId");
-            getDetail(creatorName,time,departmentId);
+            String tag = extras.getString("tag");
+            if("logList".equals(tag)){
+                String creatorName = extras.getString("creatorName");
+                String time = extras.getString("time");
+                int departmentId = extras.getInt("departmentId");
+                getDetail(creatorName,time,departmentId);
+            }else if("detail".equals(tag)){
+                String formId = extras.getString("formId");
+                String formType = extras.getString("formType");
+                getLogDetail(formId,formType);
+            }
+
         }
+    }
+
+    private void getLogDetail(String formId, String formType) {
+        JsonObject params = new JsonObject();
+        params.addProperty("formid",formId);
+        params.addProperty("formtype",formType);
+        Log.i("tag","params====="+params);
+        Net.create(Api.class).logFormDetail(token, params)
+                .enqueue(new NetCallback<LogBean>(this, true) {
+                    @Override
+                    public void onResponse(LogBean result) {
+                        if (result!=null) {
+                            tvName.setText(result.getCreatorname());
+                            tvTime.setText(TimeUtil.longToFormatTime(result.getCreatime().getTime()));
+                            etContent.setText(result.getDailycontent());
+                        }
+                    }
+                });
     }
 
     private void getDetail(String creatorName, String time, int departmentId) {

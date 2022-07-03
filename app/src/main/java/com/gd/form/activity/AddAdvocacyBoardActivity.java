@@ -32,17 +32,14 @@ public class AddAdvocacyBoardActivity extends BaseActivity {
     EditText etName;
     private String stationId, pipeId, advocacyBoard;
     private String token, userId;
-
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
     }
-
     @Override
     protected int getActLayoutId() {
         return R.layout.activity_add_advocacy_board;
     }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -56,6 +56,7 @@ import com.gd.form.utils.TimeUtil;
 import com.gd.form.utils.ToastUtil;
 import com.gd.form.utils.WeiboDialogUtils;
 import com.gd.form.view.ListDialog;
+import com.gd.form.view.MoneyTextWatcher;
 import com.google.gson.JsonObject;
 import com.jaeger.library.StatusBarUtil;
 import com.yancy.gallerypick.config.GalleryConfig;
@@ -144,6 +145,7 @@ public class AddProjectRecordActivity extends BaseActivity {
         initGallery();
         initConfig();
         initTimePicker();
+        etProgress.addTextChangedListener(new MoneyTextWatcher(etProgress));
     }
 
     private void initGallery() {
@@ -164,7 +166,7 @@ public class AddProjectRecordActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("projectfile/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("projectfile/" + projectId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
             }
 
@@ -225,7 +227,7 @@ public class AddProjectRecordActivity extends BaseActivity {
                 statusDialog.show();
                 statusDialog.setListItemClick(positionM -> {
                     tvStatus.setText(statusList.get(positionM));
-                    switch (positionM){
+                    switch (positionM) {
                         case 0:
                             etProgress.setText("");
                             etProgress.setEnabled(true);
@@ -277,7 +279,8 @@ public class AddProjectRecordActivity extends BaseActivity {
 
         }
     }
-    private void getPermission(){
+
+    private void getPermission() {
         AndPermission
                 .with(this)
                 .permission(Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
@@ -293,10 +296,11 @@ public class AddProjectRecordActivity extends BaseActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent,FILE_REQUEST_CODE);
+                startActivityForResult(intent, FILE_REQUEST_CODE);
             }
         }).start();
     }
+
     // 授权管理
     private void initPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -361,6 +365,7 @@ public class AddProjectRecordActivity extends BaseActivity {
         } else {
             params.addProperty("uploadfile", "00");
         }
+        Log.i("tag","params===="+params);
         Net.create(Api.class).addProjectRecord(token, params)
                 .enqueue(new NetCallback<ServerModel>(this, true) {
                     @Override
@@ -480,11 +485,11 @@ public class AddProjectRecordActivity extends BaseActivity {
             if (null != uri) {
                 selectFilePath = ContentUriUtil.getPath(this, uri);
                 String[] splitPath = selectFilePath.split("/");
-                selectFileName = splitPath[splitPath.length-1];
+                selectFileName = splitPath[splitPath.length - 1];
                 tvFileName.setText(selectFileName);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("projectfile/" + userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+                uploadOffice("projectfile/" + projectId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             }
 
         }

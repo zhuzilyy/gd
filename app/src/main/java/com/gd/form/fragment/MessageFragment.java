@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -175,9 +176,10 @@ public class MessageFragment extends BaseFragment {
         JsonObject params = new JsonObject();
         params.addProperty("departmentid", departmentId);
         params.addProperty("eventstatus", 0);
-        params.addProperty("employname", userId);
+        params.addProperty("employname", "ALL");
         params.addProperty("startime", TimeUtil.getLastYear());
         params.addProperty("endtime", TimeUtil.getCurrentTimeYYmmdd());
+        Log.i("tag","params===="+params);
         Net.create(Api.class).unFinishCount(token, params)
                 .enqueue(new NetCallback<WaitingTakModel>(getActivity(), false) {
                     @Override

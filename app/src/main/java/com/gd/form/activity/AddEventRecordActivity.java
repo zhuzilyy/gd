@@ -86,7 +86,7 @@ public class AddEventRecordActivity extends BaseActivity {
     private PhotoAdapter photoAdapter;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> nameList;
-
+    private String stationName;
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -113,6 +113,7 @@ public class AddEventRecordActivity extends BaseActivity {
         initConfig();
         if (getIntent() != null) {
             eventId = getIntent().getExtras().getString("eventId");
+            stationName = getIntent().getExtras().getString("stationName");
         }
     }
 
@@ -133,7 +134,7 @@ public class AddEventRecordActivity extends BaseActivity {
                 mWeiboDialog.getWindow().setDimAmount(0f);
                 for (int i = 0; i < path.size(); i++) {
                     String suffix = path.get(i).substring(path.get(i).length() - 4);
-                    uploadFiles("revent/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
+                    uploadFiles("revent/"+stationName + "_" + TimeUtil.getFileNameTime() + "_" + i + suffix, path.get(i));
                 }
 
             }
@@ -314,7 +315,7 @@ public class AddEventRecordActivity extends BaseActivity {
                 tvFileName.setText(selectFileName);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("revent/"+userId + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
+                uploadOffice("revent/"+stationName + "_" + TimeUtil.getFileNameTime() + "_" + selectFileName, selectFilePath);
             }
 
         }

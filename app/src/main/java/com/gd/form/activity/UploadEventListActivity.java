@@ -45,7 +45,7 @@ public class UploadEventListActivity extends BaseActivity {
     private String token, userId;
     private List<UploadEventModel> uploadEventModelList;
     private UploadEventAdapter adapter;
-
+    private String employId = "ALL";
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setColorNoTranslucent(this, ContextCompat.getColor(mContext, R.color.colorFF52A7F9));
@@ -68,7 +68,7 @@ public class UploadEventListActivity extends BaseActivity {
         if (getIntent() != null) {
             Bundle bundle = getIntent().getExtras();
             String departmentId = bundle.getString("departmentId");
-            String employId = bundle.getString("employId");
+//            employId = bundle.getString("employId");
             String startTime = bundle.getString("startTime");
             String endTime = bundle.getString("endTime");
             String eventStatus = bundle.getString("eventStatus");
@@ -136,7 +136,7 @@ public class UploadEventListActivity extends BaseActivity {
         params.addProperty("startime", startTime);
         params.addProperty("endtime", endTime);
         params.addProperty("eventstatus", Integer.parseInt(eventStatus));
-        Log.i("tag", "params==" + params);
+        Log.i("tag","params====="+params);
         Net.create(Api.class).getEventList(token, params)
                 .enqueue(new NetCallback<List<UploadEventModel>>(this, true) {
                     @Override

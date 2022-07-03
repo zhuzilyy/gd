@@ -284,6 +284,7 @@
                     android:textSize="@dimen/s_16" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_pipeProperty"
                     android:layout_width="@dimen/d_0"
                     android:layout_height="match_parent"
@@ -297,14 +298,42 @@
                     android:singleLine="true"
                     android:textColor="#A6000000"
                     android:textSize="@dimen/s_16" />
+                <RadioGroup
+                    android:id="@+id/rg_property"
+                    android:layout_width="@dimen/d_0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d_15"
+                    android:layout_marginLeft="@dimen/d_15"
+                    android:layout_marginEnd="@dimen/d_15"
+                    android:layout_marginRight="@dimen/d_15"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:textColor="#A6000000"
+                    android:textSize="@dimen/s_16">
 
-                <ImageView
-                    android:layout_width="@dimen/d_18"
-                    android:layout_height="@dimen/d_18"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/d_10"
-                    android:layout_marginRight="@dimen/d_10"
-                    android:src="@mipmap/ic_next" />
+                    <RadioButton
+                        android:id="@+id/rb_direct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="直接占压" />
+
+                    <RadioButton
+                        android:id="@+id/rb_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/d_5"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn"
+                        android:text="距离不足" />
+                </RadioGroup>
             </LinearLayout>
 
             <View
@@ -537,6 +566,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -807,7 +837,9 @@
                 android:background="#80FFFFFF"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/d_12"
+                >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -819,7 +851,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/d_15"
                     android:layout_marginLeft="@dimen/d_15"
-                    android:text="隐患内容描述"
+                    android:text="占压物描述"
                     android:textColor="#FF000000"
                     android:textSize="@dimen/s_16" />
             </LinearLayout>
@@ -834,7 +866,7 @@
                 android:paddingBottom="@dimen/d_5"
                 android:paddingTop="@dimen/d_5"
                 android:background="@null"
-                android:hint="隐患内容描述"
+                android:hint="占压物描述"
                 android:textColor="#A6000000"
                 android:textSize="@dimen/s_16" />
             </LinearLayout>
@@ -848,6 +880,7 @@
 
             <!--风险评价-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_riskEvaluate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -892,6 +925,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -901,6 +935,7 @@
 
             <!--风险评价事故后果-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_riskResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -945,6 +980,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"
@@ -952,6 +988,7 @@
                 android:background="#FFE5E5E5" />
             <!--风险评价综合评价-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/ll_totalLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -996,6 +1033,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d_1"
                 android:layout_marginStart="@dimen/d_12"

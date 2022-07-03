@@ -732,7 +732,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 tvFileName1.setText(selectFileName1);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("highaccount/"+selectFileName1, selectFilePath1, 1);
+                uploadOffice("highaccount/"+etHighZoneName.getText().toString()+selectFileName1, selectFilePath1, 1);
             }
 
         } else if (requestCode == FILE_REQUEST_CODE2 && resultCode == Activity.RESULT_OK) {
@@ -744,7 +744,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 tvFileName2.setText(selectFileName2);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("highaccount/"+selectFileName2, selectFilePath2, 2);
+                uploadOffice("highaccount/"+etHighZoneName.getText().toString()+selectFileName2, selectFilePath2, 2);
             }
         } else if (requestCode == FILE_REQUEST_CODE3 && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
@@ -755,7 +755,7 @@ public class PipeHighZoneActivity extends BaseActivity {
                 tvFileName3.setText(selectFileName3);
                 mWeiboDialog = WeiboDialogUtils.createLoadingDialog(this, "加载中...");
                 mWeiboDialog.getWindow().setDimAmount(0f);
-                uploadOffice("highaccount/"+selectFileName3, selectFilePath3, 3);
+                uploadOffice("highaccount/"+etHighZoneName.getText().toString()+selectFileName3, selectFilePath3, 3);
             }
         }
 

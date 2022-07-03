@@ -1488,6 +1488,14 @@ public interface Api {
     @POST("selectDailyByKey.html")
     Call<LogBean> logDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
 
+    /**
+     * 获取日志详情
+     *
+     * @return
+     */
+    @POST("DataFormGetdataByKey.html")
+    Call<LogBean> logFormDetail(@Header("TokenValue") String token, @Body JsonObject jsonObject);
+
 
 }
 
